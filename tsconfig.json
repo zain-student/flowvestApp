@@ -1,17 +1,51 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["ESNext"],
+    "jsx": "react-native",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
     "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "noEmit": true,
+    "incremental": true,
+    "tsBuildInfoFile": ".tsbuildinfo",
+    "allowJs": true,
+    "types": ["react", "react-native"],
+    "baseUrl": "./",
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["src/*"],
+      "@app/*": ["src/app/*"],
+      "@modules/*": ["src/modules/*"],
+      "@shared/*": ["src/shared/*"],
+      "@config/*": ["src/config/*"],
+      "@assets/*": ["src/assets/*"],
+      "@components/*": ["src/shared/components/*"],
+      "@hooks/*": ["src/shared/hooks/*"],
+      "@services/*": ["src/shared/services/*"],
+      "@store/*": ["src/shared/store/*"],
+      "@utils/*": ["src/shared/utils/*"],
+      "@theme/*": ["src/shared/theme/*"],
+      "@types/*": ["src/shared/types/*"]
     }
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "babel.config.js",
+    "metro.config.js",
+    "jest.config.js"
   ]
 }

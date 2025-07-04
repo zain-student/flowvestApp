@@ -5,13 +5,13 @@
 
 import React, { useState } from 'react';
 import {
-    StyleSheet,
-    Text,
-    TextInput,
-    TextInputProps,
-    TouchableOpacity,
-    View,
-    ViewStyle,
+  StyleSheet,
+  Text,
+  TextInput,
+  TextInputProps,
+  TouchableOpacity,
+  View,
+  ViewStyle,
 } from 'react-native';
 
 interface InputProps extends Omit<TextInputProps, 'style'> {
@@ -173,11 +173,11 @@ const styles = StyleSheet.create({
   
   inputContainerFocused: {
     borderColor: '#2563EB',
-    shadowColor: '#2563EB',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    // shadowColor: '#2563EB',
+    // shadowOffset: { width: 0, height: 0 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 4,
+    // elevation: 2,
   },
   
   inputContainerError: {

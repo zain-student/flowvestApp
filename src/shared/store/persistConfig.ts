@@ -3,35 +3,13 @@
  * Configures which parts of state to persist
  */
 
-import { MMKV } from 'react-native-mmkv';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { PersistConfig } from 'redux-persist';
 import { RootState } from './rootReducer';
 
-// Create MMKV storage instance for Redux Persist
-const storage = new MMKV({
-  id: 'redux-persist',
-  encryptionKey: 'flowvest-redux-key',
-});
-
-// Redux Persist MMKV adapter
-const reduxStorage = {
-  setItem: (key: string, value: string) => {
-    storage.set(key, value);
-    return Promise.resolve(true);
-  },
-  getItem: (key: string) => {
-    const value = storage.getString(key);
-    return Promise.resolve(value);
-  },
-  removeItem: (key: string) => {
-    storage.delete(key);
-    return Promise.resolve();
-  },
-};
-
 export const persistConfig: PersistConfig<RootState> = {
   key: 'flowvest',
-  storage: reduxStorage,
+  storage: AsyncStorage,
   version: 1,
   // Whitelist - Only persist these reducers
   whitelist: [

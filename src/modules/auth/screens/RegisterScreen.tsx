@@ -188,14 +188,14 @@ export const RegisterScreen: React.FC = () => {
         required
         options={[
           {
-            label: 'Admin',
+            label: 'Investment Manager',
             value: 'admin',
-            description: 'Manage investments and invite users',
+            description: 'Manage company investments, invite team members, and oversee payouts.',
           },
           {
-            label: 'User',
+            label: 'Investor / Partner',
             value: 'user',
-            description: 'Participate in investments',
+            description: 'Invest in opportunities and track your payouts.',
           },
         ]}
       />

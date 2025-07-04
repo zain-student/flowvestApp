@@ -1,22 +1,16 @@
 /**
  * Storage Service
- * Wrapper for secure storage using MMKV for performance
+ * Wrapper for secure storage using Async Storage for persistence
  */
 
-import { MMKV } from 'react-native-mmkv';
-
-// Initialize MMKV instance
-const mmkv = new MMKV({
-  id: 'flowvest-storage',
-  encryptionKey: 'flowvest-encryption-key', // In production, use a secure key
-});
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const storage = {
   // Set item
   setItem: async (key: string, value: any): Promise<void> => {
     try {
       const jsonValue = JSON.stringify(value);
-      mmkv.set(key, jsonValue);
+      await AsyncStorage.setItem(key, jsonValue);
     } catch (error) {
       console.error('Storage setItem error:', error);
       throw error;
@@ -26,7 +20,7 @@ export const storage = {
   // Get item
   getItem: async (key: string): Promise<any> => {
     try {
-      const jsonValue = mmkv.getString(key);
+      const jsonValue = await AsyncStorage.getItem(key);
       return jsonValue ? JSON.parse(jsonValue) : null;
     } catch (error) {
       console.error('Storage getItem error:', error);
@@ -37,7 +31,7 @@ export const storage = {
   // Remove item
   removeItem: async (key: string): Promise<void> => {
     try {
-      mmkv.delete(key);
+      await AsyncStorage.removeItem(key);
     } catch (error) {
       console.error('Storage removeItem error:', error);
       throw error;
@@ -47,7 +41,7 @@ export const storage = {
   // Clear all storage
   clear: async (): Promise<void> => {
     try {
-      mmkv.clearAll();
+      await AsyncStorage.clear();
     } catch (error) {
       console.error('Storage clear error:', error);
       throw error;
@@ -57,7 +51,7 @@ export const storage = {
   // Get all keys
   getAllKeys: async (): Promise<string[]> => {
     try {
-      return mmkv.getAllKeys();
+      return [...(await AsyncStorage.getAllKeys())];
     } catch (error) {
       console.error('Storage getAllKeys error:', error);
       return [];
@@ -67,7 +61,8 @@ export const storage = {
   // Check if key exists
   hasKey: async (key: string): Promise<boolean> => {
     try {
-      return mmkv.contains(key);
+      const keys = await AsyncStorage.getAllKeys();
+      return keys.includes(key);
     } catch (error) {
       console.error('Storage hasKey error:', error);
       return false;
@@ -77,9 +72,8 @@ export const storage = {
   // Set multiple items
   multiSet: async (keyValuePairs: Array<[string, any]>): Promise<void> => {
     try {
-      for (const [key, value] of keyValuePairs) {
-        await storage.setItem(key, value);
-      }
+      const pairs: [string, string][] = keyValuePairs.map(([key, value]) => [key, JSON.stringify(value)]);
+      await AsyncStorage.multiSet(pairs);
     } catch (error) {
       console.error('Storage multiSet error:', error);
       throw error;
@@ -89,12 +83,8 @@ export const storage = {
   // Get multiple items
   multiGet: async (keys: string[]): Promise<Array<[string, any]>> => {
     try {
-      const results: Array<[string, any]> = [];
-      for (const key of keys) {
-        const value = await storage.getItem(key);
-        results.push([key, value]);
-      }
-      return results;
+      const result = await AsyncStorage.multiGet(keys);
+      return result.map(([key, value]) => [key, value ? JSON.parse(value) : null]);
     } catch (error) {
       console.error('Storage multiGet error:', error);
       return [];
@@ -104,9 +94,7 @@ export const storage = {
   // Remove multiple items
   multiRemove: async (keys: string[]): Promise<void> => {
     try {
-      for (const key of keys) {
-        await storage.removeItem(key);
-      }
+      await AsyncStorage.multiRemove(keys);
     } catch (error) {
       console.error('Storage multiRemove error:', error);
       throw error;

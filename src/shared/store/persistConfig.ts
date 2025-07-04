@@ -65,6 +65,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { PersistConfig } from 'redux-persist';
 import { RootState } from './rootReducer';
 
+<<<<<<< HEAD
+=======
 // Redux Persist AsyncStorage adapter (drop-in replacement for MMKV)
 const reduxStorage = {
   setItem: (key: string, value: string) => {
@@ -78,9 +80,10 @@ const reduxStorage = {
   },
 };
 
+>>>>>>> 8a5f9a241678cee3a552c4f2bf8c754d9b1bb990
 export const persistConfig: PersistConfig<RootState> = {
   key: 'flowvest',
-  storage: reduxStorage,
+  storage: AsyncStorage,
   version: 1,
   whitelist: [
     'auth',      // Authentication state

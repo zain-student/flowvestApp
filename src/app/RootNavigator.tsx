@@ -18,6 +18,8 @@ export type RootStackParamList = {
   AuthStack: undefined;
   AppTabs: undefined;
   Loading: undefined;
+  InvestmentDetails: { id: number };
+  PayoutDetails: { id: number };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -64,20 +66,28 @@ export const RootNavigator: React.FC = () => {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {isAuthenticated ? (
-          <Stack.Screen 
-            name="AppTabs" 
-            component={AppTabNavigator}
-            options={{
-              animationTypeForReplace: 'push',
-            }}
-          />
+          <>
+            <Stack.Screen 
+              name="AppTabs" 
+              component={AppTabNavigator}
+              options={{ animationTypeForReplace: 'push' }}
+            />
+            <Stack.Screen
+              name="InvestmentDetails"
+              component={require('../modules/investments/screens/InvestmentDetailsScreen').default}
+              options={{ presentation: 'modal', headerShown: true, title: 'Investment Details' }}
+            />
+            <Stack.Screen
+              name="PayoutDetails"
+              component={require('../modules/payouts/screens/PayoutDetailsScreen').default}
+              options={{ presentation: 'modal', headerShown: true, title: 'Payout Details' }}
+            />
+          </>
         ) : (
           <Stack.Screen 
             name="AuthStack" 
             component={AuthStack}
-            options={{
-              animationTypeForReplace: 'pop',
-            }}
+            options={{ animationTypeForReplace: 'pop' }}
           />
         )}
       </Stack.Navigator>

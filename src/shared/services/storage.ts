@@ -1,6 +1,150 @@
+// /**
+//  * Storage Service
+//  * Wrapper for secure storage using MMKV for performance
+//  */
+
+// import { MMKV } from 'react-native-mmkv';
+
+// // Initialize MMKV instance
+// const mmkv = new MMKV({
+//   id: 'flowvest-storage',
+//   encryptionKey: 'flowvest-encryption-key', // In production, use a secure key
+// });
+
+// export const storage = {
+//   // Set item
+//   setItem: async (key: string, value: any): Promise<void> => {
+//     try {
+//       const jsonValue = JSON.stringify(value);
+//       mmkv.set(key, jsonValue);
+//     } catch (error) {
+//       console.error('Storage setItem error:', error);
+//       throw error;
+//     }
+//   },
+
+//   // Get item
+//   getItem: async (key: string): Promise<any> => {
+//     try {
+//       const jsonValue = mmkv.getString(key);
+//       return jsonValue ? JSON.parse(jsonValue) : null;
+//     } catch (error) {
+//       console.error('Storage getItem error:', error);
+//       return null;
+//     }
+//   },
+
+//   // Remove item
+//   removeItem: async (key: string): Promise<void> => {
+//     try {
+//       mmkv.delete(key);
+//     } catch (error) {
+//       console.error('Storage removeItem error:', error);
+//       throw error;
+//     }
+//   },
+
+//   // Clear all storage
+//   clear: async (): Promise<void> => {
+//     try {
+//       mmkv.clearAll();
+//     } catch (error) {
+//       console.error('Storage clear error:', error);
+//       throw error;
+//     }
+//   },
+
+//   // Get all keys
+//   getAllKeys: async (): Promise<string[]> => {
+//     try {
+//       return mmkv.getAllKeys();
+//     } catch (error) {
+//       console.error('Storage getAllKeys error:', error);
+//       return [];
+//     }
+//   },
+
+//   // Check if key exists
+//   hasKey: async (key: string): Promise<boolean> => {
+//     try {
+//       return mmkv.contains(key);
+//     } catch (error) {
+//       console.error('Storage hasKey error:', error);
+//       return false;
+//     }
+//   },
+
+//   // Set multiple items
+//   multiSet: async (keyValuePairs: Array<[string, any]>): Promise<void> => {
+//     try {
+//       for (const [key, value] of keyValuePairs) {
+//         await storage.setItem(key, value);
+//       }
+//     } catch (error) {
+//       console.error('Storage multiSet error:', error);
+//       throw error;
+//     }
+//   },
+
+//   // Get multiple items
+//   multiGet: async (keys: string[]): Promise<Array<[string, any]>> => {
+//     try {
+//       const results: Array<[string, any]> = [];
+//       for (const key of keys) {
+//         const value = await storage.getItem(key);
+//         results.push([key, value]);
+//       }
+//       return results;
+//     } catch (error) {
+//       console.error('Storage multiGet error:', error);
+//       return [];
+//     }
+//   },
+
+//   // Remove multiple items
+//   multiRemove: async (keys: string[]): Promise<void> => {
+//     try {
+//       for (const key of keys) {
+//         await storage.removeItem(key);
+//       }
+//     } catch (error) {
+//       console.error('Storage multiRemove error:', error);
+//       throw error;
+//     }
+//   },
+// };
+
+// // Storage keys constants
+// export const StorageKeys = {
+//   // Authentication
+//   AUTH_TOKEN: '@flowvest:token',
+//   REFRESH_TOKEN: '@flowvest:refresh_token',
+//   USER_DATA: '@flowvest:user_data',
+  
+//   // User preferences
+//   THEME: '@flowvest:theme',
+//   LANGUAGE: '@flowvest:language',
+//   BIOMETRICS_ENABLED: '@flowvest:biometrics_enabled',
+//   NOTIFICATIONS_ENABLED: '@flowvest:notifications_enabled',
+  
+//   // App state
+//   ONBOARDING_COMPLETED: '@flowvest:onboarding_completed',
+//   LAST_SYNC: '@flowvest:last_sync',
+  
+//   // Cache
+//   INVESTMENTS_CACHE: '@flowvest:investments_cache',
+//   PORTFOLIO_CACHE: '@flowvest:portfolio_cache',
+//   PAYOUTS_CACHE: '@flowvest:payouts_cache',
+// }; 
+
+
 /**
  * Storage Service
+<<<<<<< HEAD
  * Wrapper for secure storage using Async Storage for persistence
+=======
+ * Wrapper for secure storage using AsyncStorage (Expo-compatible)
+>>>>>>> 8a5f9a241678cee3a552c4f2bf8c754d9b1bb990
  */
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -51,7 +195,11 @@ export const storage = {
   // Get all keys
   getAllKeys: async (): Promise<string[]> => {
     try {
+<<<<<<< HEAD
       return [...(await AsyncStorage.getAllKeys())];
+=======
+      return await AsyncStorage.getAllKeys();
+>>>>>>> 8a5f9a241678cee3a552c4f2bf8c754d9b1bb990
     } catch (error) {
       console.error('Storage getAllKeys error:', error);
       return [];
@@ -72,8 +220,13 @@ export const storage = {
   // Set multiple items
   multiSet: async (keyValuePairs: Array<[string, any]>): Promise<void> => {
     try {
+<<<<<<< HEAD
       const pairs: [string, string][] = keyValuePairs.map(([key, value]) => [key, JSON.stringify(value)]);
       await AsyncStorage.multiSet(pairs);
+=======
+      const jsonPairs = keyValuePairs.map(([key, value]) => [key, JSON.stringify(value)]);
+      await AsyncStorage.multiSet(jsonPairs);
+>>>>>>> 8a5f9a241678cee3a552c4f2bf8c754d9b1bb990
     } catch (error) {
       console.error('Storage multiSet error:', error);
       throw error;
@@ -83,8 +236,13 @@ export const storage = {
   // Get multiple items
   multiGet: async (keys: string[]): Promise<Array<[string, any]>> => {
     try {
+<<<<<<< HEAD
       const result = await AsyncStorage.multiGet(keys);
       return result.map(([key, value]) => [key, value ? JSON.parse(value) : null]);
+=======
+      const raw = await AsyncStorage.multiGet(keys);
+      return raw.map(([key, value]) => [key, value ? JSON.parse(value) : null]);
+>>>>>>> 8a5f9a241678cee3a552c4f2bf8c754d9b1bb990
     } catch (error) {
       console.error('Storage multiGet error:', error);
       return [];
@@ -108,19 +266,19 @@ export const StorageKeys = {
   AUTH_TOKEN: '@flowvest:token',
   REFRESH_TOKEN: '@flowvest:refresh_token',
   USER_DATA: '@flowvest:user_data',
-  
+
   // User preferences
   THEME: '@flowvest:theme',
   LANGUAGE: '@flowvest:language',
   BIOMETRICS_ENABLED: '@flowvest:biometrics_enabled',
   NOTIFICATIONS_ENABLED: '@flowvest:notifications_enabled',
-  
+
   // App state
   ONBOARDING_COMPLETED: '@flowvest:onboarding_completed',
   LAST_SYNC: '@flowvest:last_sync',
-  
+
   // Cache
   INVESTMENTS_CACHE: '@flowvest:investments_cache',
   PORTFOLIO_CACHE: '@flowvest:portfolio_cache',
   PAYOUTS_CACHE: '@flowvest:payouts_cache',
-}; 
+};

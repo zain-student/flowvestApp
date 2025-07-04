@@ -135,7 +135,7 @@ export const DashboardScreen: React.FC = () => {
             <Text style={styles.emptyText}>No upcoming payouts.</Text>
           ) : dashboardData.upcoming_payouts.map(up => (
             <View key={up.id} style={styles.activityItem}>
-              <Feather name={up.icon as any} size={20} color="#2563EB" style={styles.activityIcon} />
+              <Feather name={up.icon as any} size={20} color="#18181B" style={styles.activityIcon} />
               <View style={{ flex: 1 }}>
                 <Text style={styles.activityText}>{up.text}</Text>
                 <Text style={styles.activityDate}>{up.date}</Text>
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
   signOutText: { fontSize: 22, color: '#EF4444' },
   scrollContent: { padding: 0, paddingBottom: 100, backgroundColor: '#fff' },
   balanceCardDark: {
-    backgroundColor: '#18181B', borderRadius: 32, padding: 24, paddingTop: 36,
+    backgroundColor: '#18181B', borderBottomLeftRadius: 32, borderBottomRightRadius: 32,padding: 24, paddingTop: 36,
     shadowColor: '#000', shadowOpacity: 0.08, shadowRadius: 12, elevation: 6, marginBottom: 18,
   },
   balanceLabelDark: { color: '#A1A1AA', fontSize: 15, fontFamily: 'Inter_400Regular' },
@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
   activityIcon: { marginRight: 12 },
   activityText: { color: '#18181B', fontSize: 15, fontFamily: 'Inter_700Bold', fontWeight: '700' },
   activityDate: { color: '#A1A1AA', fontSize: 13, fontFamily: 'Inter_400Regular' },
-  activityAmount: { color: '#2563EB', fontSize: 15, fontFamily: 'Inter_700Bold', fontWeight: '700' },
+  activityAmount: { color: '#18181B', fontSize: 15, fontFamily: 'Inter_700Bold', fontWeight: '700' },
   emptyText: { color: '#A1A1AA', fontSize: 15, fontFamily: 'Inter_400Regular', textAlign: 'center', paddingVertical: 16 },
   tabBar: {
     flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center',

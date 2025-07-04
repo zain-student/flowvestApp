@@ -10,7 +10,7 @@ export default function App() {
   useEffect(() => {
     const prepare = async () => {
       // Wait 10 seconds (10000 ms)
-      await new Promise(resolve => setTimeout(resolve, 10000));
+      await new Promise(resolve => setTimeout(resolve));
       setAppReady(true);
       await SplashScreen.hideAsync();
     };

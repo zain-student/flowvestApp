@@ -44,7 +44,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
             <Avatar />
           </TouchableOpacity>
           <TouchableOpacity onPress={handleSignOut} style={styles.signOutBtn} accessibilityLabel="Sign Out">
-            <Feather name="log-out" size={22} color="#18181B" />
+            <Feather name="log-out" size={22} color="#fff" />
           </TouchableOpacity>
         </View>
       </View>
@@ -62,11 +62,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 10,
     paddingBottom: 8,
-    backgroundColor: '#fff',
+    backgroundColor: '#18181B',
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: '#18181B',
   },
-  logo: { fontSize: 22, fontWeight: 'bold', color: '#18181B' },
+  logo: { fontSize: 22, fontWeight: 'bold', color: '#fff' },
   headerRight: { flexDirection: 'row', alignItems: 'center' },
   avatar: {
     width: 36, height: 36, borderRadius: 18, backgroundColor: '#18181B',

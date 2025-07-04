@@ -1,3 +1,4 @@
+import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
@@ -25,6 +26,16 @@ export const InvestmentsScreen: React.FC = () => {
           <Text style={styles.cardTitle}>Total Invested</Text>
           <Text style={styles.cardValue}>$12,500.00</Text>
           <Text style={styles.cardSubtitle}>+8.2% this year</Text>
+          <View style={styles.balanceActionsRow}>
+        <TouchableOpacity style={styles.balanceActionBtnDark}>
+                      <Feather name="plus" size={18} color="#fff" />
+                      <Text style={styles.balanceActionTextDark}>Top Up</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.balanceActionBtnDark}>
+                      <Feather name="arrow-up-right" size={18} color="#fff" />
+                      <Text style={styles.balanceActionTextDark}>Send Money</Text>
+                    </TouchableOpacity>
+                    </View>
         </View>
         <View style={styles.filterRow}>
           {FILTERS.map(f => (
@@ -60,12 +71,17 @@ export const InvestmentsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   scrollContent: { padding: 20, paddingBottom: 100 },
   card: {
-    backgroundColor: '#fff', borderRadius: 12, padding: 20, marginBottom: 20,
+    backgroundColor: '#18181B', borderRadius: 12, padding: 20, marginBottom: 20,
     shadowColor: '#000', shadowOpacity: 0.04, shadowRadius: 8, elevation: 2,
   },
   cardTitle: { fontSize: 16, color: '#6B7280', marginBottom: 6 },
-  cardValue: { fontSize: 32, fontWeight: 'bold', color: '#111827', marginBottom: 4 },
-  cardSubtitle: { fontSize: 14, color: '#2563EB' },
+  cardValue: { fontSize: 32, fontWeight: 'bold', color: '#fff', marginBottom: 4 },
+  cardSubtitle: { fontSize: 14, color: '#22C55E' },
+  balanceActionBtnDark: {
+    flexDirection: 'row', alignItems: 'center', backgroundColor: '#232326', borderRadius: 18, paddingHorizontal: 18, paddingVertical: 8, marginRight: 12,
+  },
+  balanceActionTextDark: { color: '#fff', fontSize: 15, fontFamily: 'Inter_600SemiBold', marginLeft: 7 }, 
+  balanceActionsRow: { flexDirection: 'row', marginTop: 18 },
   sectionTitle: { fontSize: 16, fontWeight: '600', color: '#374151', marginBottom: 10 },
   investmentCard: {
     backgroundColor: '#F9FAFB', borderRadius: 10, padding: 16, marginBottom: 14, flexDirection: 'row', alignItems: 'center',

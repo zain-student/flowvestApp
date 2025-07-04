@@ -140,11 +140,7 @@
 
 /**
  * Storage Service
-<<<<<<< HEAD
- * Wrapper for secure storage using Async Storage for persistence
-=======
  * Wrapper for secure storage using AsyncStorage (Expo-compatible)
->>>>>>> 8a5f9a241678cee3a552c4f2bf8c754d9b1bb990
  */
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -195,11 +191,7 @@ export const storage = {
   // Get all keys
   getAllKeys: async (): Promise<string[]> => {
     try {
-<<<<<<< HEAD
       return [...(await AsyncStorage.getAllKeys())];
-=======
-      return await AsyncStorage.getAllKeys();
->>>>>>> 8a5f9a241678cee3a552c4f2bf8c754d9b1bb990
     } catch (error) {
       console.error('Storage getAllKeys error:', error);
       return [];
@@ -220,13 +212,8 @@ export const storage = {
   // Set multiple items
   multiSet: async (keyValuePairs: Array<[string, any]>): Promise<void> => {
     try {
-<<<<<<< HEAD
-      const pairs: [string, string][] = keyValuePairs.map(([key, value]) => [key, JSON.stringify(value)]);
-      await AsyncStorage.multiSet(pairs);
-=======
-      const jsonPairs = keyValuePairs.map(([key, value]) => [key, JSON.stringify(value)]);
+      const jsonPairs = keyValuePairs.map(([key, value]) => [key, JSON.stringify(value)]) as [string, string][];
       await AsyncStorage.multiSet(jsonPairs);
->>>>>>> 8a5f9a241678cee3a552c4f2bf8c754d9b1bb990
     } catch (error) {
       console.error('Storage multiSet error:', error);
       throw error;
@@ -236,13 +223,8 @@ export const storage = {
   // Get multiple items
   multiGet: async (keys: string[]): Promise<Array<[string, any]>> => {
     try {
-<<<<<<< HEAD
-      const result = await AsyncStorage.multiGet(keys);
-      return result.map(([key, value]) => [key, value ? JSON.parse(value) : null]);
-=======
       const raw = await AsyncStorage.multiGet(keys);
       return raw.map(([key, value]) => [key, value ? JSON.parse(value) : null]);
->>>>>>> 8a5f9a241678cee3a552c4f2bf8c754d9b1bb990
     } catch (error) {
       console.error('Storage multiGet error:', error);
       return [];

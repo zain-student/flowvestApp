@@ -9,7 +9,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { authService } from '@services/authService';
 import { useAppDispatch, useAppSelector } from '@store/index';
 import React, { useEffect, useState } from 'react';
-import { AuthStack } from '../modules/auth/AuthStack';
+import { AuthStack } from '../navigation/AuthStack';
 import { AppTabNavigator } from './AppTabNavigator';
 import { LoadingScreen } from './LoadingScreen';
 

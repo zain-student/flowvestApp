@@ -53,6 +53,6 @@ const styles = StyleSheet.create({
   infoLabel: { fontSize: 13, color: '#6B7280', marginTop: 8 },
   infoValue: { fontSize: 15, color: '#111827', marginTop: 2 },
   settingBtn: { paddingVertical: 10 },
-  settingText: { color: '#2563EB', fontSize: 15, fontWeight: '500' },
+  settingText: { color: '#18181B', fontSize: 15, fontWeight: '500' },
 });
 export default ProfileScreen; 

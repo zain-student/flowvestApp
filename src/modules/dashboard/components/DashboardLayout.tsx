@@ -54,7 +54,9 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
+  container: { flex: 1,
+     backgroundColor: '#fff' 
+    },
   header: {
     flexDirection: 'row',
     alignItems: 'center',

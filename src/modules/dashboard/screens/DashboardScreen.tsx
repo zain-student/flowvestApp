@@ -178,7 +178,9 @@ const styles = StyleSheet.create({
   },
   balanceLabelDark: { color: '#A1A1AA', fontSize: 15, fontFamily: 'Inter_400Regular' },
   balanceValueDark: { color: '#fff', fontSize: 36, fontFamily: 'Inter_700Bold', fontWeight: '700', marginVertical: 2 },
-  balanceChangeDark: { color: '#22C55E', fontSize: 14, fontFamily: 'Inter_600SemiBold', marginBottom: 8 },
+  balanceChangeDark: { color: '#22C55E', fontSize: 14, fontFamily: 'Inter_600SemiBold', 
+    // marginBottom: 8 
+  },
   balanceActionsRow: { flexDirection: 'row', marginTop: 18 },
   balanceActionBtnDark: {
     flexDirection: 'row', alignItems: 'center', backgroundColor: '#232326', borderRadius: 18, paddingHorizontal: 18, paddingVertical: 8, marginRight: 12,

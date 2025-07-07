@@ -5,12 +5,12 @@
 
 import React from 'react';
 import {
-    ActivityIndicator,
-    StyleSheet,
-    Text,
-    TextStyle,
-    TouchableOpacity,
-    ViewStyle,
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TextStyle,
+  TouchableOpacity,
+  ViewStyle,
 } from 'react-native';
 
 interface ButtonProps {
@@ -89,8 +89,8 @@ const styles = StyleSheet.create({
   
   // Variants
   primary: {
-    backgroundColor: '#2563EB',
-    borderColor: '#2563EB',
+    backgroundColor: '#18181B',
+    borderColor: '#18181B',
   },
   primaryText: {
     color: '#FFFFFF',

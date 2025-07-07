@@ -5,9 +5,9 @@
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import { ForgotPasswordScreen } from './screens/ForgotPasswordScreen';
-import { LoginScreen } from './screens/LoginScreen';
-import { RegisterScreen } from './screens/RegisterScreen';
+import { ForgotPasswordScreen } from '../modules/auth/screens/ForgotPasswordScreen';
+import { LoginScreen } from '../modules/auth/screens/LoginScreen';
+import { RegisterScreen } from '../modules/auth/screens/RegisterScreen';
 
 // Auth navigation types
 export type AuthStackParamList = {

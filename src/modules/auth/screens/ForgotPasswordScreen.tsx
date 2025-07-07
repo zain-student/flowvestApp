@@ -9,17 +9,17 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 import {
-    Alert,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { AuthStackParamList } from '../AuthStack';
+import { AuthStackParamList } from '../../../navigation/AuthStack';
 import { ForgotPasswordFormData, forgotPasswordSchema, validateFormData } from '../utils/authValidation';
 
 type ForgotPasswordScreenNavigationProp = NativeStackNavigationProp<AuthStackParamList, 'ForgotPassword'>;
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
   
   backText: {
     fontSize: 14,
-    color: '#2563EB',
+    color: '#18181B',
     fontWeight: '500',
   },
   
@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
   
   footerLink: {
     fontSize: 14,
-    color: '#2563EB',
+    color: '#18181B',
     fontWeight: '600',
   },
   
@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
   
   resendText: {
     fontSize: 14,
-    color: '#2563EB',
+    color: '#18181B',
     fontWeight: '500',
   },
 }); 

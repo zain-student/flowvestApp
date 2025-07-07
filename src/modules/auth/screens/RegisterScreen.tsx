@@ -11,21 +11,21 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAppDispatch, useAppSelector } from '@store/index';
 import React, { useState } from 'react';
 import {
-    Alert,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { AuthStackParamList } from '../AuthStack';
+import { AuthStackParamList } from '../../../navigation/AuthStack';
 import { clearError, registerUser, selectAuthError, selectIsLoading } from '../store/authSlice';
 import {
-    createRegistrationSchema,
-    validateFormData
+  createRegistrationSchema,
+  validateFormData
 } from '../utils/authValidation';
 
 type RegisterScreenNavigationProp = NativeStackNavigationProp<AuthStackParamList, 'Register'>;
@@ -506,7 +506,7 @@ const styles = StyleSheet.create({
   
   progressFill: {
     height: '100%',
-    backgroundColor: '#2563EB',
+    backgroundColor: '#18181B',
     borderRadius: 2,
   },
   
@@ -545,7 +545,7 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderWidth: 2,
-    borderColor: '#D1D5DB',
+    borderColor: '#18181B',
     borderRadius: 4,
     marginRight: 12,
     alignItems: 'center',
@@ -554,8 +554,8 @@ const styles = StyleSheet.create({
   },
   
   checkboxChecked: {
-    borderColor: '#2563EB',
-    backgroundColor: '#2563EB',
+    borderColor: '#18181B',
+    backgroundColor: '#18181B',
   },
   
   checkmark: {
@@ -605,7 +605,7 @@ const styles = StyleSheet.create({
   
   backButtonText: {
     fontSize: 14,
-    color: '#2563EB',
+    color: '#18181B',
     fontWeight: '500',
   },
   
@@ -625,7 +625,7 @@ const styles = StyleSheet.create({
   
   footerLink: {
     fontSize: 14,
-    color: '#2563EB',
+    color: '#18181B',
     fontWeight: '600',
   },
 }); 

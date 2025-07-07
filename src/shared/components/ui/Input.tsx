@@ -172,7 +172,8 @@ const styles = StyleSheet.create({
   },
   
   inputContainerFocused: {
-    borderColor: '#2563EB',
+    // borderColor: '#2563EB',
+    borderColor:"#18181B"
     // shadowColor: '#2563EB',
     // shadowOffset: { width: 0, height: 0 },
     // shadowOpacity: 0.1,

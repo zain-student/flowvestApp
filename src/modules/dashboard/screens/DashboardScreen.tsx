@@ -1,4 +1,4 @@
-import type { AppTabParamList } from '@app/AppTabNavigator';
+import type { AppTabParamList } from '@/navigation/AppTabNavigator';
 import { Inter_400Regular, Inter_600SemiBold, Inter_700Bold, useFonts } from '@expo-google-fonts/inter';
 import { Feather } from '@expo/vector-icons';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';

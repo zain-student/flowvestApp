@@ -10,10 +10,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { authService } from '@services/authService';
 import { useAppDispatch, useAppSelector } from '@store/index';
 import React, { useEffect, useState } from 'react';
-import { AuthStack } from '../navigation/AuthStack';
-import { InvestmentStack } from '../navigation/InvestmentStack';
+import { LoadingScreen } from '../app/LoadingScreen';
 import { AppTabNavigator } from './AppTabNavigator';
-import { LoadingScreen } from './LoadingScreen';
+import { AuthStack } from './AuthStack';
+import { InvestmentStack } from './InvestmentStack';
 
 // Navigation types
 export type RootStackParamList = {

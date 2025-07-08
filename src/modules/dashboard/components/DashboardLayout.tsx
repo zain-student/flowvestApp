@@ -1,4 +1,4 @@
-import type { AppTabParamList } from '@app/AppTabNavigator';
+import type { AppTabParamList } from '@/navigation/AppTabNavigator';
 import { Feather } from '@expo/vector-icons';
 import { logoutUser } from '@modules/auth/store/authSlice';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';

@@ -1,15 +1,15 @@
+import { PayoutStackParamList } from "@/navigation/PayoutStack";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useState } from "react";
 import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import type { RootStackParamList } from "../../../navigation/RootNavigator";
 import { DashboardLayout } from "../../dashboard/components/DashboardLayout";
 const mockPayouts = [
   {
@@ -36,11 +36,11 @@ const mockPayouts = [
 ];
 
 const FILTERS = ["All", "Upcoming", "Completed"];
-
+type props = NativeStackNavigationProp<PayoutStackParamList, "PayoutsScreen">
 export const PayoutsScreen: React.FC = () => {
   const [filter, setFilter] = useState("All");
   const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+    useNavigation<NativeStackNavigationProp<PayoutStackParamList>>();
   const filtered =
     filter === "All"
       ? mockPayouts
@@ -124,14 +124,6 @@ export const PayoutsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   scrollContent: { padding: 0, paddingBottom: 100, },
   card: {
-    // backgroundColor: "#18181B",
-    // borderRadius: 12,
-    // padding: 20,
-    // marginBottom: 20,
-    // shadowColor: "#000",
-    // shadowOpacity: 0.04,
-    // shadowRadius: 8,
-    // elevation: 2,
     backgroundColor: "#18181B",
     borderBottomLeftRadius: 32, borderBottomRightRadius: 32,
     padding: 24,

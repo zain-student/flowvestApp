@@ -11,7 +11,7 @@ export type InvestmentStackParamList = {
 
 const Stack = createNativeStackNavigator<InvestmentStackParamList>();
 
-const InvestmentStack = () => {
+export const InvestmentStack = () => {
   return (
     <Stack.Navigator
       initialRouteName="InvestmentScreen"

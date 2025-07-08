@@ -1,7 +1,7 @@
+import { PayoutStackParamList } from '@/navigation/PayoutStack';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import type { RootStackParamList } from '../../../app/RootNavigator';
 const mockPayout = {
   id: 1,
   date: '2024-07-15',
@@ -15,7 +15,7 @@ const mockPayout = {
     { id: 3, label: 'Processing', date: '2024-07-14' },
   ],
 };
-type Props = NativeStackScreenProps<RootStackParamList, 'PayoutDetails'>;
+type Props = NativeStackScreenProps<PayoutStackParamList, 'PayoutDetails'>;
 export const PayoutDetailsScreen = ({ navigation }:Props) => {
   return (
     <View style={styles.container}>

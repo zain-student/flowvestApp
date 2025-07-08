@@ -8,12 +8,18 @@ export type PayoutStackParamList={
   PayoutDetails:{id :number}
 }
 const Stack=createNativeStackNavigator<PayoutStackParamList>();
-const PayoutStack = () => {
+export const PayoutStack = () => {
   return (
     <Stack.Navigator
     initialRouteName='PayoutsScreen'>
-      <Stack.Screen name='PayoutsScreen' component={PayoutsScreen}/>
-      <Stack.Screen name='PayoutDetails' component={PayoutDetailsScreen}/>
+      <Stack.Screen name='PayoutsScreen' component={PayoutsScreen}
+      options={{
+        headerShown:false
+      }}
+      />
+      <Stack.Screen name='PayoutDetails' component={PayoutDetailsScreen} options={{
+        title:"Payout Details"
+      }}/>
     </Stack.Navigator>
   )
 }

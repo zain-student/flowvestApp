@@ -3,6 +3,7 @@
  * Main navigation component that switches between Auth and App flows
  */
 
+import PayoutStack from '@/navigation/PayoutStack';
 import { selectIsAuthenticated, selectIsLoading } from '@modules/auth/store/authSlice';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -10,7 +11,7 @@ import { authService } from '@services/authService';
 import { useAppDispatch, useAppSelector } from '@store/index';
 import React, { useEffect, useState } from 'react';
 import { AuthStack } from '../navigation/AuthStack';
-import InvestmentStack from '../navigation/InvestmentStack';
+import { InvestmentStack } from '../navigation/InvestmentStack';
 import { AppTabNavigator } from './AppTabNavigator';
 import { LoadingScreen } from './LoadingScreen';
 
@@ -18,10 +19,12 @@ import { LoadingScreen } from './LoadingScreen';
 export type RootStackParamList = {
   AuthStack: undefined;
   InvestmentStack:undefined;
+  PayoutStack: undefined;
   AppTabs: undefined;
   Loading: undefined;
+
   // InvestmentDetails: { id: number };
-  PayoutDetails: { id: number };
+  // PayoutDetails: { id: number };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -75,16 +78,17 @@ export const RootNavigator: React.FC = () => {
               options={{ animationTypeForReplace: 'push' }}
             />
             <Stack.Screen name="InvestmentStack" component={InvestmentStack}/>
+            <Stack.Screen name='PayoutStack' component={PayoutStack}/>
             {/* <Stack.Screen
               name="InvestmentDetails"
               component={require('../modules/investments/screens/InvestmentDetailsScreen').default}
               options={{ presentation: 'modal', headerShown: true, title: 'Investment Details' }}
             /> */}
-            <Stack.Screen
+            {/* <Stack.Screen
               name="PayoutDetails"
               component={require('../modules/payouts/screens/PayoutDetailsScreen').default}
               options={{ presentation: 'modal', headerShown: true, title: 'Payout Details' }}
-            />
+            /> */}
           </>
         ) : (
           <Stack.Screen 

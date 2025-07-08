@@ -4,40 +4,15 @@
  */
 
 import InvestmentStack from '@/navigation/InvestmentStack';
+import PayoutStack from '@/navigation/PayoutStack';
 import { Feather } from '@expo/vector-icons';
 import { DashboardScreen } from '@modules/dashboard/screens/DashboardScreen';
-import { PayoutsScreen } from '@modules/payouts/screens';
 import { PortfolioScreen } from '@modules/portfolio/screens';
 import { ProfileScreen } from '@modules/profile/screens';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
-// Placeholder screen components (will be replaced with actual screens)
-// const InvestmentsScreen = () => (
-//   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-//     <Text>Investments Screen</Text>
-//   </View>
-// );
-
-// const PayoutsScreen = () => (
-//   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-//     <Text>Payouts Screen</Text>
-//   </View>
-// );
-
-// const PortfolioScreen = () => (
-//   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-//     <Text>Portfolio Screen</Text>
-//   </View>
-// );
-
-// const ProfileScreen = () => (
-//   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-//     <Text>Profile Screen</Text>
-//   </View>
-// );
 
 // Tab navigation types
 export type AppTabParamList = {
@@ -124,7 +99,7 @@ export const AppTabNavigator: React.FC = () => {
     >
       <Tab.Screen name="Dashboard" component={DashboardScreen} />
       <Tab.Screen name="Investments" component={InvestmentStack} />
-      <Tab.Screen name="Payouts" component={PayoutsScreen} />
+      <Tab.Screen name="Payouts" component={PayoutStack} />
       <Tab.Screen name="Portfolio" component={PortfolioScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>

@@ -3,9 +3,9 @@
  * Main navigation for authenticated users with bottom tabs
  */
 
+import InvestmentStack from '@/navigation/InvestmentStack';
 import { Feather } from '@expo/vector-icons';
 import { DashboardScreen } from '@modules/dashboard/screens/DashboardScreen';
-import { InvestmentsScreen } from '@modules/investments/screens';
 import { PayoutsScreen } from '@modules/payouts/screens';
 import { PortfolioScreen } from '@modules/portfolio/screens';
 import { ProfileScreen } from '@modules/profile/screens';
@@ -123,7 +123,7 @@ export const AppTabNavigator: React.FC = () => {
       screenOptions={{ headerShown: false }}
     >
       <Tab.Screen name="Dashboard" component={DashboardScreen} />
-      <Tab.Screen name="Investments" component={InvestmentsScreen} />
+      <Tab.Screen name="Investments" component={InvestmentStack} />
       <Tab.Screen name="Payouts" component={PayoutsScreen} />
       <Tab.Screen name="Portfolio" component={PortfolioScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />

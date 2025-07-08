@@ -10,15 +10,17 @@ import { authService } from '@services/authService';
 import { useAppDispatch, useAppSelector } from '@store/index';
 import React, { useEffect, useState } from 'react';
 import { AuthStack } from '../navigation/AuthStack';
+import InvestmentStack from '../navigation/InvestmentStack';
 import { AppTabNavigator } from './AppTabNavigator';
 import { LoadingScreen } from './LoadingScreen';
 
 // Navigation types
 export type RootStackParamList = {
   AuthStack: undefined;
+  InvestmentStack:undefined;
   AppTabs: undefined;
   Loading: undefined;
-  InvestmentDetails: { id: number };
+  // InvestmentDetails: { id: number };
   PayoutDetails: { id: number };
 };
 
@@ -72,11 +74,12 @@ export const RootNavigator: React.FC = () => {
               component={AppTabNavigator}
               options={{ animationTypeForReplace: 'push' }}
             />
-            <Stack.Screen
+            <Stack.Screen name="InvestmentStack" component={InvestmentStack}/>
+            {/* <Stack.Screen
               name="InvestmentDetails"
               component={require('../modules/investments/screens/InvestmentDetailsScreen').default}
               options={{ presentation: 'modal', headerShown: true, title: 'Investment Details' }}
-            />
+            /> */}
             <Stack.Screen
               name="PayoutDetails"
               component={require('../modules/payouts/screens/PayoutDetailsScreen').default}

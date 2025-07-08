@@ -1,6 +1,7 @@
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
+import type { RootStackParamList } from '../../../app/RootNavigator';
 const mockPayout = {
   id: 1,
   date: '2024-07-15',
@@ -14,8 +15,8 @@ const mockPayout = {
     { id: 3, label: 'Processing', date: '2024-07-14' },
   ],
 };
-
-const PayoutDetailsScreen = ({ navigation }) => {
+type Props = NativeStackScreenProps<RootStackParamList, 'PayoutDetails'>;
+export const PayoutDetailsScreen = ({ navigation }:Props) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.closeBtn} onPress={() => navigation.goBack()}>
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
   closeBtn: { position: 'absolute', top: 32, right: 24, zIndex: 10, backgroundColor: '#F3F4F6', borderRadius: 16, padding: 8 },
   closeText: { fontSize: 22, color: '#6B7280' },
   scrollContent: { padding: 24, paddingTop: 60, paddingBottom: 40 },
-  title: { fontSize: 24, fontWeight: 'bold', color: '#2563EB', marginBottom: 18 },
+  title: { fontSize: 24, fontWeight: 'bold', color: '#18181B', marginBottom: 18 },
   summaryCard: { backgroundColor: '#F9FAFB', borderRadius: 14, padding: 18, marginBottom: 24 },
   label: { fontSize: 13, color: '#6B7280', marginTop: 8 },
   value: { fontSize: 16, color: '#111827', fontWeight: '600' },
@@ -61,7 +62,7 @@ const styles = StyleSheet.create({
   statusCompleted: { color: '#22C55E' },
   sectionTitle: { fontSize: 16, fontWeight: '600', color: '#374151', marginBottom: 10 },
   timelineItem: { backgroundColor: '#fff', borderRadius: 10, padding: 14, marginBottom: 12, shadowColor: '#000', shadowOpacity: 0.02, shadowRadius: 4, elevation: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  timelineLabel: { fontSize: 15, color: '#2563EB', fontWeight: '600' },
+  timelineLabel: { fontSize: 15, color: '#18181B', fontWeight: '600' },
   timelineDate: { fontSize: 13, color: '#6B7280' },
 });
 export default PayoutDetailsScreen; 

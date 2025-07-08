@@ -1,3 +1,4 @@
+import { InvestmentStackParamList } from "@/navigation/InvestmentStack";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -9,7 +10,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import type { RootStackParamList } from "../../../app/RootNavigator";
 import { DashboardLayout } from "../../dashboard/components/DashboardLayout";
 
 const mockInvestments = [
@@ -40,11 +40,11 @@ const mockInvestments = [
 ];
 
 const FILTERS = ["All", "Active", "Pending", "Completed"];
-
+type Props= NativeStackNavigationProp<InvestmentStackParamList, 'InvestmentScreen'>
 export const InvestmentsScreen: React.FC = () => {
   const [filter, setFilter] = useState("All");
   const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+    useNavigation<NativeStackNavigationProp<InvestmentStackParamList>>();
   const filtered =
     filter === "All"
       ? mockInvestments

@@ -1,8 +1,7 @@
+import { InvestmentStackParamList } from '@/navigation/InvestmentStack';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import type { RootStackParamList } from '../../../app/RootNavigator';
-
 const mockInvestment = {
   id: 1,
   name: 'Tech Growth Fund',
@@ -18,9 +17,9 @@ const mockInvestment = {
   ],
 };
 
-type Props = NativeStackScreenProps<RootStackParamList, 'InvestmentDetails'>;
+type Props = NativeStackScreenProps<InvestmentStackParamList, 'InvestmentDetails'>;
 
-const InvestmentDetailsScreen = ({ navigation }: Props) => {
+export const InvestmentDetailsScreen = ({ navigation }: Props) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.closeBtn} onPress={() => navigation.goBack()}>
@@ -58,17 +57,17 @@ const styles = StyleSheet.create({
   closeBtn: { position: 'absolute', top: 32, right: 24, zIndex: 10, backgroundColor: '#F3F4F6', borderRadius: 16, padding: 8 },
   closeText: { fontSize: 22, color: '#6B7280' },
   scrollContent: { padding: 24, paddingTop: 60, paddingBottom: 40 },
-  title: { fontSize: 24, fontWeight: 'bold', color: '#2563EB', marginBottom: 18 },
+  title: { fontSize: 24, fontWeight: 'bold', color: '#18181B', marginBottom: 18 },
   summaryCard: { backgroundColor: '#F9FAFB', borderRadius: 14, padding: 18, marginBottom: 24 },
   label: { fontSize: 13, color: '#6B7280', marginTop: 8 },
   value: { fontSize: 16, color: '#111827', fontWeight: '600' },
   status: { fontSize: 15, fontWeight: '600', marginTop: 2 },
   statusActive: { color: '#22C55E' },
   statusCompleted: { color: '#6B7280' },
-  returns: { fontSize: 15, color: '#2563EB', fontWeight: '600', marginTop: 2 },
+  returns: { fontSize: 15, color: '#22C55E', fontWeight: '600', marginTop: 2 },
   sectionTitle: { fontSize: 16, fontWeight: '600', color: '#374151', marginBottom: 10 },
   txCard: { backgroundColor: '#fff', borderRadius: 10, padding: 14, marginBottom: 12, shadowColor: '#000', shadowOpacity: 0.02, shadowRadius: 4, elevation: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  txType: { fontSize: 15, color: '#2563EB', fontWeight: '600' },
+  txType: { fontSize: 15, color: '#18181B', fontWeight: '600' },
   txAmount: { fontSize: 15, color: '#111827', fontWeight: '500' },
   txDate: { fontSize: 13, color: '#6B7280' },
 });

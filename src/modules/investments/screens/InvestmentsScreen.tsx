@@ -200,19 +200,19 @@ const styles = StyleSheet.create({
   statusActive: { color: "#22C55E" },
   statusClosed: { color: "#6B7280" },
   investmentDate: { fontSize: 13, color: "#A1A1AA" },
-  filterRow: { flexDirection: "row", marginBottom: 10 ,marginHorizontal:12},
-  filterBtn: { 
-    padding: 12,
-    borderWidth: 1,
-    borderColor: "#232326",
-    borderRadius: 8,
-    marginRight: 8,
+
+filterRow: { flexDirection: "row", marginBottom: 16, gap: 10,marginHorizontal:12 },
+  filterBtn: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    backgroundColor: "#F3F4F6",
   },
-  filterBtnActive: {
-    backgroundColor: "#232326",
-  },
-  filterText: { fontSize: 14, color: "#232326" },
-  filterTextActive: { fontWeight: "bold", color: "#fff" },
+  filterBtnActive: { backgroundColor: "#18181B" },
+  filterText: { color: "#6B7280", fontWeight: "500" },
+  filterTextActive: { color: "#fff" },
+
+  
   emptyState: {
     flex: 1,
     justifyContent: "center",

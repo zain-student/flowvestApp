@@ -1,34 +1,57 @@
-import { PayoutStackParamList } from '@/navigation/PayoutStack';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { PayoutStackParamList } from "@/navigation/PayoutStack";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import React from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 const mockPayout = {
   id: 1,
-  date: '2024-07-15',
+  date: "2024-07-15",
   amount: 1200,
-  status: 'Upcoming',
-  recipient: 'You',
-  method: 'Bank Transfer',
+  status: "Upcoming",
+  recipient: "You",
+  method: "Bank Transfer",
   timeline: [
-    { id: 1, label: 'Requested', date: '2024-07-01' },
-    { id: 2, label: 'Scheduled', date: '2024-07-10' },
-    { id: 3, label: 'Processing', date: '2024-07-14' },
+    { id: 1, label: "Requested", date: "2024-07-01" },
+    { id: 2, label: "Scheduled", date: "2024-07-10" },
+    { id: 3, label: "Processing", date: "2024-07-14" },
   ],
 };
-type Props = NativeStackScreenProps<PayoutStackParamList, 'PayoutDetails'>;
-export const PayoutDetailsScreen = ({ navigation }:Props) => {
+type Props = NativeStackScreenProps<PayoutStackParamList, "PayoutDetails">;
+export const PayoutDetailsScreen = ({ navigation }: Props) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.closeBtn} onPress={() => navigation.goBack()}>
+      <TouchableOpacity
+        style={styles.closeBtn}
+        onPress={() => navigation.goBack()}
+      >
         <Text style={styles.closeText}>✕</Text>
       </TouchableOpacity>
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         <Text style={styles.title}>Payout Details</Text>
         <View style={styles.summaryCard}>
           <Text style={styles.label}>Amount</Text>
-          <Text style={styles.value}>${mockPayout.amount.toLocaleString()}</Text>
+          <Text style={styles.value}>
+            ${mockPayout.amount.toLocaleString()}
+          </Text>
           <Text style={styles.label}>Status</Text>
-          <Text style={[styles.status, mockPayout.status === 'Upcoming' ? styles.statusUpcoming : styles.statusCompleted]}>{mockPayout.status}</Text>
+          <Text
+            style={[
+              styles.status,
+              mockPayout.status === "Upcoming"
+                ? styles.statusUpcoming
+                : styles.statusCompleted,
+            ]}
+          >
+            {mockPayout.status}
+          </Text>
           <Text style={styles.label}>Recipient</Text>
           <Text style={styles.value}>{mockPayout.recipient}</Text>
           <Text style={styles.label}>Method</Text>
@@ -37,7 +60,7 @@ export const PayoutDetailsScreen = ({ navigation }:Props) => {
           <Text style={styles.value}>{mockPayout.date}</Text>
         </View>
         <Text style={styles.sectionTitle}>Timeline</Text>
-        {mockPayout.timeline.map(item => (
+        {mockPayout.timeline.map((item) => (
           <View key={item.id} style={styles.timelineItem}>
             <Text style={styles.timelineLabel}>{item.label}</Text>
             <Text style={styles.timelineDate}>{item.date}</Text>
@@ -49,20 +72,58 @@ export const PayoutDetailsScreen = ({ navigation }:Props) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
-  closeBtn: { position: 'absolute', top: 32, right: 24, zIndex: 10, backgroundColor: '#F3F4F6', borderRadius: 16, padding: 8 },
-  closeText: { fontSize: 22, color: '#6B7280' },
+  container: { flex: 1, backgroundColor: "#fff" },
+  closeBtn: {
+    position: "absolute",
+    top: 32,
+    right: 24,
+    zIndex: 10,
+    backgroundColor: "#F3F4F6",
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  closeText: { fontSize: 22, fontWeight: "bold", color: "#6B7280" },
   scrollContent: { padding: 24, paddingTop: 60, paddingBottom: 40 },
-  title: { fontSize: 24, fontWeight: 'bold', color: '#18181B', marginBottom: 18 },
-  summaryCard: { backgroundColor: '#F9FAFB', borderRadius: 14, padding: 18, marginBottom: 24 },
-  label: { fontSize: 13, color: '#6B7280', marginTop: 8 },
-  value: { fontSize: 16, color: '#111827', fontWeight: '600' },
-  status: { fontSize: 15, fontWeight: '600', marginTop: 2 },
-  statusUpcoming: { color: '#F59E42' },
-  statusCompleted: { color: '#22C55E' },
-  sectionTitle: { fontSize: 16, fontWeight: '600', color: '#374151', marginBottom: 10 },
-  timelineItem: { backgroundColor: '#fff', borderRadius: 10, padding: 14, marginBottom: 12, shadowColor: '#000', shadowOpacity: 0.02, shadowRadius: 4, elevation: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  timelineLabel: { fontSize: 15, color: '#18181B', fontWeight: '600' },
-  timelineDate: { fontSize: 13, color: '#6B7280' },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#18181B",
+    marginBottom: 18,
+  },
+  summaryCard: {
+    backgroundColor: "#18181B",
+    borderRadius: 14,
+    padding: 18,
+    marginBottom: 24,
+  },
+  label: { fontSize: 13, color: "#6B7280", marginTop: 8 },
+  value: { fontSize: 16, color: "#fff", fontWeight: "600" },
+  status: { fontSize: 15, fontWeight: "600", marginTop: 2 },
+  statusUpcoming: { color: "#F59E42" },
+  statusCompleted: { color: "#22C55E" },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#374151",
+    marginBottom: 10,
+  },
+  timelineItem: {
+    backgroundColor: "#18181B",
+    borderRadius: 10,
+    padding: 14,
+    marginBottom: 12,
+    shadowColor: "#000",
+    shadowOpacity: 0.02,
+    shadowRadius: 4,
+    elevation: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  timelineLabel: { fontSize: 15, color: "#fff", fontWeight: "600" },
+  timelineDate: { fontSize: 13, color: "#6B7280" },
 });
-export default PayoutDetailsScreen; 
+export default PayoutDetailsScreen;

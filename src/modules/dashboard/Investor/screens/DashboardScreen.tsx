@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as SplashScreen from 'expo-splash-screen';
 import React, { useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { DashboardLayout } from '../components/DashboardLayout';
+import { DashboardLayout } from "../../components/DashboardLayout";
 
 SplashScreen.preventAutoHideAsync(); // Keep splash visible
 

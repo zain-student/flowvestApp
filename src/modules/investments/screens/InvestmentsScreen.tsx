@@ -40,7 +40,10 @@ const mockInvestments = [
 ];
 
 const FILTERS = ["All", "Active", "Pending", "Completed"];
-type Props= NativeStackNavigationProp<InvestmentStackParamList, 'InvestmentScreen'>
+type Props = NativeStackNavigationProp<
+  InvestmentStackParamList,
+  "InvestmentScreen"
+>;
 export const InvestmentsScreen: React.FC = () => {
   const [filter, setFilter] = useState("All");
   const navigation =
@@ -59,7 +62,19 @@ export const InvestmentsScreen: React.FC = () => {
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Total Invested</Text>
           <Text style={styles.cardValue}>$12,500.00</Text>
-          <Text style={styles.cardSubtitle}>+8.2% this year</Text>
+          <Text style={styles.cardSubtitle}>
+            +8.2%{" "}
+            <Text
+              style={{
+                color: "#A1A1AA",
+                fontWeight: "400",
+                fontFamily: "Inter_400Regular",
+              }}
+            >
+              this year
+            </Text>{" "}
+          </Text>
+
           <View style={styles.balanceActionsRow}>
             <TouchableOpacity style={styles.balanceActionBtnDark}>
               <Feather name="plus" size={18} color="#fff" />
@@ -103,7 +118,7 @@ export const InvestmentsScreen: React.FC = () => {
                 navigation.navigate("InvestmentDetails", { id: i.id })
               }
             >
-              <View style={{ flex: 1 }}>
+              <View style={{ flex: 1  }}>
                 <Text style={styles.investmentName}>{i.name}</Text>
                 <Text style={styles.investmentAmount}>
                   ${i.amount.toLocaleString()}
@@ -133,20 +148,18 @@ export const InvestmentsScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  
-  
   scrollContent: { padding: 0, paddingBottom: 100 },
   card: {
     backgroundColor: "#18181B",
-    borderBottomLeftRadius: 32, borderBottomRightRadius: 32,
+    borderBottomLeftRadius: 32,
+    borderBottomRightRadius: 32,
     padding: 24,
-    paddingTop:36,
+    paddingTop: 36,
     marginBottom: 18,
     shadowColor: "#000",
     shadowOpacity: 0.08,
     shadowRadius: 12,
     elevation: 6,
-    
   },
   cardTitle: { fontSize: 15, color: "#A1A1AA", marginBottom: 6 },
   cardValue: {
@@ -179,14 +192,14 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#374151",
     marginBottom: 10,
-    marginHorizontal:12
+    marginHorizontal: 12,
   },
   investmentCard: {
-    backgroundColor: "#F9FAFB",
+    backgroundColor: "#18181B",
     borderRadius: 10,
     padding: 16,
     marginBottom: 14,
-    marginHorizontal:12,
+    marginHorizontal: 12,
     flexDirection: "row",
     alignItems: "center",
     shadowColor: "#000",
@@ -194,14 +207,23 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 1,
   },
-  investmentName: { fontSize: 16, fontWeight: "600", color: "#18181B" },
-  investmentAmount: { fontSize: 15, color: "#111827", marginTop: 2 },
+  investmentName: { fontSize: 16, fontWeight: "600", color: "#fff" },
+  investmentAmount: { fontSize: 15, color: "#A1A1AA", marginTop: 2 },
   investmentStatus: { fontSize: 13, fontWeight: "500", marginBottom: 2 },
   statusActive: { color: "#22C55E" },
   statusClosed: { color: "#6B7280" },
   investmentDate: { fontSize: 13, color: "#A1A1AA" },
 
-filterRow: { flexDirection: "row", marginBottom: 16, gap: 10,marginHorizontal:12 },
+  filterRow: {
+    flexDirection: "row",
+    marginBottom: 16,
+    gap: 10,
+    marginHorizontal: 12,
+    backgroundColor: "#F3F4F6",
+    borderRadius: 20,
+    padding: 4,
+    justifyContent: "space-around",
+  },
   filterBtn: {
     paddingHorizontal: 16,
     paddingVertical: 8,
@@ -212,7 +234,6 @@ filterRow: { flexDirection: "row", marginBottom: 16, gap: 10,marginHorizontal:12
   filterText: { color: "#6B7280", fontWeight: "500" },
   filterTextActive: { color: "#fff" },
 
-  
   emptyState: {
     flex: 1,
     justifyContent: "center",

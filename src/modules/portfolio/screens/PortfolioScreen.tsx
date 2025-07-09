@@ -64,9 +64,7 @@ export const PortfolioScreen: React.FC = () => {
 const styles = StyleSheet.create({
   scrollContent: { padding: 0, paddingBottom: 100 },
   card: {
-
-
-       backgroundColor: "#18181B",
+    backgroundColor: "#18181B",
     borderBottomLeftRadius: 32, borderBottomRightRadius: 32,
     padding: 24,
     paddingTop:36,
@@ -76,14 +74,15 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 6,
   },
-  cardTitle: { fontSize: 15, color: "#6B7280", marginBottom: 6 },
+  cardTitle: { fontSize: 15, color: "#A1A1AA", marginBottom: 6 },
   cardValue: {
     fontSize: 36,
     fontWeight: "bold",
     color: "#fff",
     marginBottom: 4,
   },
-  cardSubtitle: { fontSize: 14, color: "#22C55E" },
+  
+  cardSubtitle: { fontSize: 14, color: "#A1A1AA" },
   balanceActionBtnDark: {
     flexDirection: "row",
     alignItems: "center",
@@ -117,7 +116,7 @@ const styles = StyleSheet.create({
     marginHorizontal:12
   },
   assetCard: {
-    backgroundColor: "#F9FAFB",
+    backgroundColor: "#18181B",
     borderRadius: 10,
     padding: 16,
     marginBottom: 14,
@@ -129,8 +128,8 @@ const styles = StyleSheet.create({
     elevation: 1,
     marginHorizontal:12
   },
-  assetName: { fontSize: 16, fontWeight: "600", color: "#18181B" },
-  assetValue: { fontSize: 15, color: "#111827", marginTop: 2 },
+  assetName: { fontSize: 16, fontWeight: "600", color: "#fff" },
+  assetValue: { fontSize: 15, color: "#A1A1AA", marginTop: 2 },
   assetGrowth: { fontSize: 15, color: "#22C55E", fontWeight: "600" },
   fab: {
     position: "absolute",

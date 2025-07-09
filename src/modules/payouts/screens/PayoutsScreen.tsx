@@ -36,7 +36,7 @@ const mockPayouts = [
 ];
 
 const FILTERS = ["All", "Upcoming", "Completed"];
-type props = NativeStackNavigationProp<PayoutStackParamList, "PayoutsScreen">
+type props = NativeStackNavigationProp<PayoutStackParamList, "PayoutsScreen">;
 export const PayoutsScreen: React.FC = () => {
   const [filter, setFilter] = useState("All");
   const navigation =
@@ -55,7 +55,18 @@ export const PayoutsScreen: React.FC = () => {
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Total Payouts</Text>
           <Text style={styles.cardValue}>$2,900.00</Text>
-          <Text style={styles.cardSubtitle}>Next payout: July 15, 2024</Text>
+          <Text style={styles.cardSubtitle}>
+            <Text
+              style={{
+                color: "#A1A1AA",
+                fontWeight: "400",
+                fontFamily: "Inter_400Regular",
+              }}
+            >
+              Next payout:{" "}
+            </Text>
+            July 15, 2024
+          </Text>
           <View style={styles.balanceActionsRow}>
             <TouchableOpacity style={styles.balanceActionBtnDark}>
               <Feather name="plus" size={18} color="#fff" />
@@ -122,12 +133,13 @@ export const PayoutsScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  scrollContent: { padding: 0, paddingBottom: 100, },
+  scrollContent: { padding: 0, paddingBottom: 100 },
   card: {
     backgroundColor: "#18181B",
-    borderBottomLeftRadius: 32, borderBottomRightRadius: 32,
+    borderBottomLeftRadius: 32,
+    borderBottomRightRadius: 32,
     padding: 24,
-    paddingTop:36,
+    paddingTop: 36,
     marginBottom: 18,
     shadowColor: "#000",
     shadowOpacity: 0.08,
@@ -158,7 +170,16 @@ const styles = StyleSheet.create({
     marginLeft: 7,
   },
   balanceActionsRow: { flexDirection: "row", marginTop: 18 },
-  filterRow: { flexDirection: "row", marginBottom: 16, gap: 10,marginHorizontal:12 },
+  filterRow: {
+    flexDirection: "row",
+    marginBottom: 16,
+    gap: 10,
+    marginHorizontal: 12,
+    backgroundColor: "#F3F4F6",
+    borderRadius: 20,
+    padding: 4,
+    justifyContent: "space-around",
+  },
   filterBtn: {
     paddingHorizontal: 16,
     paddingVertical: 8,
@@ -173,10 +194,10 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#374151",
     marginBottom: 10,
-    marginHorizontal:12
+    marginHorizontal: 12,
   },
   payoutCard: {
-    backgroundColor: "#F9FAFB",
+    backgroundColor: "#18181B",
     borderRadius: 10,
     padding: 16,
     marginBottom: 14,
@@ -186,9 +207,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.02,
     shadowRadius: 4,
     elevation: 1,
-    marginHorizontal:12
+    marginHorizontal: 12,
   },
-  payoutAmount: { fontSize: 16, fontWeight: "600", color: "#18181B" },
+  payoutAmount: { fontSize: 16, fontWeight: "600", color: "#fff" },
   payoutDate: { fontSize: 15, color: "#A1A1AA", marginTop: 2 },
   payoutStatus: { fontSize: 13, fontWeight: "500", marginLeft: 12 },
   statusUpcoming: { color: "#F59E42" },

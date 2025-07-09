@@ -3,10 +3,10 @@
  * Main navigation for authenticated users with bottom tabs
  */
 
+import { DashboardScreen } from '@/modules/dashboard/Investor/screens/DashboardScreen';
 import InvestmentStack from '@/navigation/InvestmentStack';
 import PayoutStack from '@/navigation/PayoutStack';
 import { Feather } from '@expo/vector-icons';
-import { DashboardScreen } from '@modules/dashboard/screens/DashboardScreen';
 import { PortfolioScreen } from '@modules/portfolio/screens';
 import { ProfileScreen } from '@modules/profile/screens';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';

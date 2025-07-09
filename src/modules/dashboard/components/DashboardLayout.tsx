@@ -1,17 +1,17 @@
-import type { AppTabParamList } from '@/navigation/AppTabNavigator';
-import { Feather } from '@expo/vector-icons';
-import { logoutUser } from '@modules/auth/store/authSlice';
-import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import { useNavigation } from '@react-navigation/native';
-import { storage } from '@shared/services/storage';
-import { useAppDispatch } from '@store/index';
-import React from 'react';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import type { AppTabParamList } from "@/navigation/AppTabNavigator";
+import { Feather } from "@expo/vector-icons";
+import { logoutUser } from "@modules/auth/store/authSlice";
+import type { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { useNavigation } from "@react-navigation/native";
+import { storage } from "@shared/services/storage";
+import { useAppDispatch } from "@store/index";
+import React from "react";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
-  headerStyle?: 'dark' | 'light';
+  headerStyle?: "dark" | "light";
 }
 
 const Avatar = () => (
@@ -20,8 +20,11 @@ const Avatar = () => (
   </View>
 );
 
-export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
-  const navigation = useNavigation<BottomTabNavigationProp<AppTabParamList, 'Dashboard'>>();
+export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
+  children,
+}) => {
+  const navigation =
+    useNavigation<BottomTabNavigationProp<AppTabParamList, "Dashboard">>();
   const dispatch = useAppDispatch();
 
   // Sign out handler
@@ -29,9 +32,9 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
     try {
       await dispatch(logoutUser());
       await storage.clear();
-      navigation.navigate('Profile'); // Or use navigation.reset if you have a root stack
+      navigation.navigate("Profile"); // Or use navigation.reset if you have a root stack
     } catch (error) {
-      Alert.alert('Error', 'Failed to sign out. Please try again.');
+      Alert.alert("Error", "Failed to sign out. Please try again.");
     }
   };
 
@@ -40,10 +43,14 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
       <View style={styles.header}>
         <Text style={styles.logo}>FlowVest</Text>
         <View style={styles.headerRight}>
-          <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+          <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
             <Avatar />
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleSignOut} style={styles.signOutBtn} accessibilityLabel="Sign Out">
+          <TouchableOpacity
+            onPress={handleSignOut}
+            style={styles.signOutBtn}
+            accessibilityLabel="Sign Out"
+          >
             <Feather name="log-out" size={22} color="#fff" />
           </TouchableOpacity>
         </View>
@@ -54,27 +61,30 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1,
-     backgroundColor: '#fff' 
-    },
+  container: { flex: 1, backgroundColor: "#fff" },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingHorizontal: 20,
     paddingTop: 10,
     paddingBottom: 8,
-    backgroundColor: '#18181B',
+    backgroundColor: "#18181B", 
     borderBottomWidth: 1,
-    borderBottomColor: '#18181B',
+    borderBottomColor: "#18181B",
   },
-  logo: { fontSize: 22, fontWeight: 'bold', color: '#fff' },
-  headerRight: { flexDirection: 'row', alignItems: 'center' },
+  logo: { fontSize: 22, fontWeight: "bold", color: "#fff" },
+  headerRight: { flexDirection: "row", alignItems: "center" },
   avatar: {
-    width: 36, height: 36, borderRadius: 18, backgroundColor: '#18181B',
-    alignItems: 'center', justifyContent: 'center', marginRight: 12,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: "#18181B",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 12,
   },
-  avatarText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
+  avatarText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
   signOutBtn: { padding: 6 },
-  signOutText: { fontSize: 22, color: '#EF4444' },
-}); 
+  signOutText: { fontSize: 22, color: "#EF4444" },
+});

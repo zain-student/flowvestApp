@@ -3,6 +3,7 @@
  * User authentication login form with validation
  */
 
+import Colors from '@/shared/colors/Colors';
 import { Button } from '@components/ui/Button';
 import { Input } from '@components/ui/Input';
 import { useNavigation } from '@react-navigation/native';
@@ -188,7 +189,7 @@ export const LoginScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Colors.background,
   },
   
   keyboardAvoid: {
@@ -220,7 +221,7 @@ const styles = StyleSheet.create({
   
   subtitle: {
     fontSize: 16,
-    color: '#6B7280',
+    color: Colors.gray,
     textAlign: 'center',
   },
   
@@ -238,7 +239,7 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderWidth: 2,
-    borderColor: '#18181B',
+    borderColor: Colors.secondary,
     borderRadius: 4,
     marginRight: 12,
     alignItems: 'center',
@@ -246,19 +247,19 @@ const styles = StyleSheet.create({
   },
   
   checkboxChecked: {
-    borderColor: '#18181B',
-    backgroundColor: '#18181B',
+    borderColor: Colors.secondary,
+    backgroundColor: Colors.secondary,
   },
   
   checkmark: {
-    color: '#FFFFFF',
+    color: Colors.white,
     fontSize: 12,
     fontWeight: 'bold',
   },
   
   rememberText: {
     fontSize: 14,
-    color: '#374151',
+    color: Colors.secondary,
   },
   
   errorContainer: {
@@ -288,7 +289,7 @@ const styles = StyleSheet.create({
   forgotPasswordText: {
     fontSize: 14,
     // color: '#2563EB',
-    color:"18181B",
+    color: Colors.secondary,
     fontWeight: '500',
   },
   
@@ -298,17 +299,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 20,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: Colors.lightGray,
   },
   
   footerText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: Colors.gray,
   },
   
   footerLink: {
     fontSize: 14,
-    color: '#18181B',
+    color: Colors.secondary,
     fontWeight: '600',
   },
 }); 

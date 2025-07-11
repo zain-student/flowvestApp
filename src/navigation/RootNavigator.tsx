@@ -14,11 +14,13 @@ import React, { useEffect, useState } from 'react';
 import { LoadingScreen } from '../app/LoadingScreen';
 import { AppTabNavigator } from './AppTabNavigator';
 import { AuthStack } from './AuthStack';
+import InvestorDashboardStack from './InvestorStacks/InvestorDashboardStack';
 
 // Navigation types
 export type RootStackParamList = {
   AuthStack: undefined;
   InvestmentStack:undefined;
+  InvestorDashboardStack: undefined;
   PayoutStack: undefined;
   AppTabs: undefined;
   Loading: undefined;
@@ -75,6 +77,11 @@ export const RootNavigator: React.FC = () => {
             <Stack.Screen 
               name="AppTabs" 
               component={AppTabNavigator}
+              options={{ animationTypeForReplace: 'push' }}
+            />
+            <Stack.Screen 
+              name="InvestorDashboardStack" 
+              component={InvestorDashboardStack}
               options={{ animationTypeForReplace: 'push' }}
             />
             <Stack.Screen name="InvestmentStack" component={InvestmentStack}/>

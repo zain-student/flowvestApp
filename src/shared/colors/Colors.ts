@@ -7,6 +7,7 @@ const Colors = {
     white: "#fff", // White for values
    green: "#22C55E", // Green for accents like returns 
    darkButton:"#232326", // Dark button background
+   lightGray: "#E5E7EB", // Light gray for backgrounds
     success: "#28a745",
     danger: "#dc3545",
     warning: "#ffc107",

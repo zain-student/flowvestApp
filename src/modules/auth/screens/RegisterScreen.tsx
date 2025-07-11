@@ -6,8 +6,10 @@
 import { Button } from '@components/ui/Button';
 import { Input } from '@components/ui/Input';
 import { Select, SelectOption } from '@components/ui/Select';
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import Colors from '@shared/colors/Colors';
 import { useAppDispatch, useAppSelector } from '@store/index';
 import React, { useState } from 'react';
 import {
@@ -387,7 +389,8 @@ export const RegisterScreen: React.FC = () => {
           style={styles.backButton}
           onPress={() => setCurrentStep(formData.role === 'admin' ? 1 : 2)}
         >
-          <Text style={styles.backButtonText}>← Back</Text>
+          <Ionicons name="arrow-back" size={20} color={Colors.secondary} />
+          <Text style={styles.backButtonText}>Back</Text>
         </TouchableOpacity>
       </View>
     );
@@ -457,7 +460,7 @@ export const RegisterScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Colors.background, // Light background color
   },
   
   keyboardAvoid: {
@@ -483,13 +486,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#111827',
+    color: Colors.secondary,
     marginBottom: 8,
   },
   
   subtitle: {
     fontSize: 16,
-    color: '#6B7280',
+    color: Colors.gray,
     textAlign: 'center',
   },
   
@@ -499,20 +502,20 @@ const styles = StyleSheet.create({
   
   progressBar: {
     height: 4,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: Colors.lightGray,
     borderRadius: 2,
     marginBottom: 8,
   },
   
   progressFill: {
     height: '100%',
-    backgroundColor: '#18181B',
+    backgroundColor: Colors.secondary,
     borderRadius: 2,
   },
   
   progressText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: Colors.gray,
     textAlign: 'center',
   },
   
@@ -523,14 +526,14 @@ const styles = StyleSheet.create({
   stepTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#111827',
+    color: Colors.secondary,
     marginBottom: 8,
     textAlign: 'center',
   },
   
   stepDescription: {
     fontSize: 14,
-    color: '#6B7280',
+    color: Colors.gray,
     textAlign: 'center',
     marginBottom: 24,
   },
@@ -545,7 +548,7 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderWidth: 2,
-    borderColor: '#18181B',
+    borderColor: Colors.secondary,
     borderRadius: 4,
     marginRight: 12,
     alignItems: 'center',
@@ -554,19 +557,19 @@ const styles = StyleSheet.create({
   },
   
   checkboxChecked: {
-    borderColor: '#18181B',
-    backgroundColor: '#18181B',
+    borderColor: Colors.secondary,
+    backgroundColor: Colors.secondary,
   },
   
   checkmark: {
-    color: '#FFFFFF',
+    color: Colors.white,
     fontSize: 12,
     fontWeight: 'bold',
   },
   
   termsText: {
     fontSize: 14,
-    color: '#374151',
+    color: Colors.secondary, 
     flex: 1,
     lineHeight: 20,
   },
@@ -601,11 +604,12 @@ const styles = StyleSheet.create({
   backButton: {
     alignItems: 'center',
     marginBottom: 24,
+     flexDirection: 'row',
   },
   
   backButtonText: {
     fontSize: 14,
-    color: '#18181B',
+    color: Colors.secondary,
     fontWeight: '500',
   },
   
@@ -615,17 +619,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 20,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: Colors.lightGray,
   },
   
   footerText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: Colors.gray,
   },
   
   footerLink: {
     fontSize: 14,
-    color: '#18181B',
+    color: Colors.secondary,
     fontWeight: '600',
   },
 }); 

@@ -3,8 +3,10 @@
  * Password reset request form
  */
 
+import Colors from '@/shared/colors/Colors';
 import { Button } from '@components/ui/Button';
 import { Input } from '@components/ui/Input';
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
@@ -174,7 +176,8 @@ export const ForgotPasswordScreen: React.FC = () => {
               style={styles.backContainer}
               onPress={navigateToLogin}
             >
-              <Text style={styles.backText}>← Back to Login</Text>
+<Ionicons name="arrow-back" size={20} color={Colors.secondary} />
+              <Text style={styles.backText}>Back to Login</Text>
             </TouchableOpacity>
           </View>
 
@@ -194,7 +197,7 @@ export const ForgotPasswordScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Colors.background,
   },
   
   keyboardAvoid: {
@@ -220,13 +223,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#111827',
+    color: Colors.secondary,
     marginBottom: 12,
   },
   
   subtitle: {
     fontSize: 16,
-    color: '#6B7280',
+    color: Colors.gray,
     textAlign: 'center',
     lineHeight: 24,
   },
@@ -242,11 +245,13 @@ const styles = StyleSheet.create({
   backContainer: {
     alignItems: 'center',
     marginBottom: 32,
+    flexDirection: 'row',
+    // justifyContent: 'center',
   },
   
   backText: {
     fontSize: 14,
-    color: '#18181B',
+    color: Colors.secondary,
     fontWeight: '500',
   },
   
@@ -256,17 +261,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 20,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: Colors.lightGray,
   },
   
   footerText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: Colors.gray,
   },
   
   footerLink: {
     fontSize: 14,
-    color: '#18181B',
+    color: Colors.secondary,
     fontWeight: '600',
   },
   
@@ -282,7 +287,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: '#F0F9FF',
+    backgroundColor: Colors.background,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 24,
@@ -295,14 +300,14 @@ const styles = StyleSheet.create({
   successTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#111827',
+    color: Colors.secondary,
     marginBottom: 12,
     textAlign: 'center',
   },
   
   successMessage: {
     fontSize: 16,
-    color: '#6B7280',
+    color: Colors.gray,
     textAlign: 'center',
     lineHeight: 24,
     marginBottom: 32,
@@ -318,7 +323,7 @@ const styles = StyleSheet.create({
   
   resendText: {
     fontSize: 14,
-    color: '#18181B',
+    color: Colors.secondary,
     fontWeight: '500',
   },
 }); 

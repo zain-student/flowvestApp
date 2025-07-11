@@ -149,7 +149,7 @@ export const InvestmentsScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  scrollContent: {flex:1, padding: 0, backgroundColor: Colors.background },
+  scrollContent: {paddingBottom:100, padding: 0, backgroundColor: Colors.background },
   card: {
     backgroundColor: Colors.secondary,
     borderBottomLeftRadius: 32,

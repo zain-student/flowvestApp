@@ -1,3 +1,4 @@
+import Colors from '@/shared/colors/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -34,11 +35,11 @@ export const ProfileScreen: React.FC = () => {
           <Text style={styles.sectionTitle}>Settings</Text>
           <View style={styles.buttonGroup}>
             <TouchableOpacity style={styles.buttonItem}>
-               <Ionicons name='lock-closed-outline' color={"#6B7280"} size={20} />
+               <Ionicons name='lock-closed-outline' color={"#000"} size={20} />
               <Text style={styles.buttonText}>Change Password</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.buttonItem}>
-              <Ionicons name='notifications-outline' color={"#6B7280"} size={20} />
+              <Ionicons name='notifications-outline' color={"#000"} size={20} />
               <Text style={styles.buttonText}> Notifications</Text>
             </TouchableOpacity>
           </View>
@@ -50,7 +51,7 @@ export const ProfileScreen: React.FC = () => {
           <Text style={styles.infoValue}>1.0.0</Text>
           <View style={styles.buttonGroup}>
             <TouchableOpacity style={styles.buttonItem}>
-               <Ionicons name='call-outline' color={"#6B7280"} size={20} />
+               <Ionicons name='call-outline' color={"#000"} size={20} />
               <Text style={styles.buttonText}>Contact Support</Text>
             </TouchableOpacity>
           </View>
@@ -63,6 +64,8 @@ export const ProfileScreen: React.FC = () => {
 const styles = StyleSheet.create({
   scrollContent: {
     padding: 20,
+    // flex:1,
+    backgroundColor: Colors.background, // Light background color
     paddingBottom: 100,
   },
   avatarContainer: {
@@ -74,29 +77,29 @@ const styles = StyleSheet.create({
     height: 72,
     borderRadius: 36,
     // backgroundColor: '#2563EB',
-    backgroundColor:"#18181B",
+    backgroundColor:Colors.secondary,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 10,
   },
   avatarText: {
-    color: '#fff',
+    color: Colors.white,
     fontWeight: 'bold',
     fontSize: 32,
   },
   name: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#111827',
+    color: Colors.secondary,
     marginBottom: 2,
   },
   role: {
     fontSize: 15,
-    color: '#6B7280',
+    color: Colors.gray,
     marginBottom: 8,
   },
   card: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: Colors.white,
     padding: 16,
     borderRadius: 12,
     marginBottom: 20,
@@ -110,30 +113,30 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#374151',
+    color: Colors.secondary,
     marginBottom: 10,
   },
   infoLabel: {
     fontSize: 13,
-    color: '#18181B',
+    color: Colors.secondary,
     marginTop: 8,
   },
   infoValue: {
     fontSize: 15,
-    color: '#6B7280',
+    color: Colors.gray,
     marginTop: 2,
   },
   buttonGroup: {
     marginTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: Colors.gray,
     paddingTop: 12,
     gap: 10,
   },
   buttonItem: {
     // backgroundColor: '#E5E7EB',
     flexDirection:'row',
-    backgroundColor:"#fff",
+    backgroundColor:Colors.gray,
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 8,
@@ -146,8 +149,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 15,
-    color: '#18181B',
-    // color:'#fff',
+    // color: Colors.secondary,
+    color:Colors.white,
     fontWeight: '500',
     marginLeft:5
   },

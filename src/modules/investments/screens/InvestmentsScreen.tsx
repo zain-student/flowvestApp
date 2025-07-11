@@ -1,4 +1,5 @@
-import { InvestmentStackParamList } from "@/navigation/InvestmentStack";
+import { InvestmentStackParamList } from "@/navigation/InvestorStacks/InvestmentStack";
+import Colors from '@/shared/colors/Colors';
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -66,7 +67,7 @@ export const InvestmentsScreen: React.FC = () => {
             +8.2%{" "}
             <Text
               style={{
-                color: "#A1A1AA",
+                color: Colors.gray,
                 fontWeight: "400",
                 fontFamily: "Inter_400Regular",
               }}
@@ -77,11 +78,11 @@ export const InvestmentsScreen: React.FC = () => {
 
           <View style={styles.balanceActionsRow}>
             <TouchableOpacity style={styles.balanceActionBtnDark}>
-              <Feather name="plus" size={18} color="#fff" />
+              <Feather name="plus" size={18} color= '#fff' />
               <Text style={styles.balanceActionTextDark}>Top Up</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.balanceActionBtnDark}>
-              <Feather name="arrow-up-right" size={18} color="#fff" />
+              <Feather name="arrow-up-right" size={18} color='#fff' />
               <Text style={styles.balanceActionTextDark}>Send Money</Text>
             </TouchableOpacity>
           </View>
@@ -148,9 +149,9 @@ export const InvestmentsScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  scrollContent: { padding: 0, paddingBottom: 100 },
+  scrollContent: {flex:1, padding: 0, backgroundColor: Colors.background },
   card: {
-    backgroundColor: "#18181B",
+    backgroundColor: Colors.secondary,
     borderBottomLeftRadius: 32,
     borderBottomRightRadius: 32,
     padding: 24,
@@ -161,18 +162,18 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 6,
   },
-  cardTitle: { fontSize: 15, color: "#A1A1AA", marginBottom: 6 },
+  cardTitle: { fontSize: 15, color: Colors.gray, marginBottom: 6 },
   cardValue: {
     fontSize: 36,
     fontWeight: "bold",
-    color: "#fff",
+    color: Colors.white,
     marginBottom: 4,
   },
-  cardSubtitle: { fontSize: 14, color: "#22C55E" },
+  cardSubtitle: { fontSize: 14, color: Colors.green },
   balanceActionBtnDark: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#232326",
+    backgroundColor: Colors.darkButton,
     borderRadius: 18,
     paddingHorizontal: 18,
     paddingVertical: 8,
@@ -180,7 +181,7 @@ const styles = StyleSheet.create({
     // marginTop:18
   },
   balanceActionTextDark: {
-    color: "#fff",
+    color: Colors.white,
     fontSize: 15,
     fontFamily: "Inter_600SemiBold",
     marginLeft: 7,
@@ -195,7 +196,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
   },
   investmentCard: {
-    backgroundColor: "#18181B",
+    backgroundColor: Colors.secondary,
     borderRadius: 10,
     padding: 16,
     marginBottom: 14,
@@ -207,19 +208,19 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 1,
   },
-  investmentName: { fontSize: 16, fontWeight: "600", color: "#fff" },
-  investmentAmount: { fontSize: 15, color: "#A1A1AA", marginTop: 2 },
+  investmentName: { fontSize: 16, fontWeight: "600", color: Colors.white },
+  investmentAmount: { fontSize: 15, color: Colors.gray, marginTop: 2 },
   investmentStatus: { fontSize: 13, fontWeight: "500", marginBottom: 2 },
-  statusActive: { color: "#22C55E" },
+  statusActive: { color: Colors.green },
   statusClosed: { color: "#6B7280" },
-  investmentDate: { fontSize: 13, color: "#A1A1AA" },
+  investmentDate: { fontSize: 13, color: Colors.gray },
 
   filterRow: {
     flexDirection: "row",
     marginBottom: 16,
     gap: 10,
     marginHorizontal: 12,
-    backgroundColor: "#F3F4F6",
+    backgroundColor: Colors.white,
     borderRadius: 20,
     padding: 4,
     justifyContent: "space-around",
@@ -228,11 +229,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: "#F3F4F6",
+    backgroundColor: Colors.white,
   },
-  filterBtnActive: { backgroundColor: "#18181B" },
+  filterBtnActive: { backgroundColor: Colors.secondary },
   filterText: { color: "#6B7280", fontWeight: "500" },
-  filterTextActive: { color: "#fff" },
+  filterTextActive: { color: Colors.white },
 
   emptyState: {
     flex: 1,
@@ -244,7 +245,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 24,
     bottom: 80,
-    backgroundColor: "#F97316",
+    backgroundColor: Colors.green,
     borderRadius: 24,
     flexDirection: "row",
     alignItems: "center",
@@ -255,7 +256,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 4,
   },
-  fabIcon: { fontSize: 22, color: "#fff", marginRight: 6 },
-  fabLabel: { color: "#fff", fontWeight: "bold", fontSize: 15 },
+  fabIcon: { fontSize: 22, color: Colors.white, marginRight: 6 },
+  fabLabel: { color: Colors.white, fontWeight: "bold", fontSize: 15 },
 });
 export default InvestmentsScreen;

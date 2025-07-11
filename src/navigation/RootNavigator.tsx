@@ -3,7 +3,8 @@
  * Main navigation component that switches between Auth and App flows
  */
 
-import PayoutStack from '@/navigation/PayoutStack';
+import { InvestmentStack } from '@/navigation/InvestorStacks/InvestmentStack';
+import PayoutStack from '@/navigation/InvestorStacks/PayoutStack';
 import { selectIsAuthenticated, selectIsLoading } from '@modules/auth/store/authSlice';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -13,7 +14,6 @@ import React, { useEffect, useState } from 'react';
 import { LoadingScreen } from '../app/LoadingScreen';
 import { AppTabNavigator } from './AppTabNavigator';
 import { AuthStack } from './AuthStack';
-import { InvestmentStack } from './InvestmentStack';
 
 // Navigation types
 export type RootStackParamList = {

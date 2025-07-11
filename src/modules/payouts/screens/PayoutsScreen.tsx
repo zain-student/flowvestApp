@@ -1,4 +1,5 @@
-import { PayoutStackParamList } from "@/navigation/PayoutStack";
+import { PayoutStackParamList } from "@/navigation/InvestorStacks/PayoutStack";
+import Colors from "@/shared/colors/Colors";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -58,7 +59,7 @@ export const PayoutsScreen: React.FC = () => {
           <Text style={styles.cardSubtitle}>
             <Text
               style={{
-                color: "#A1A1AA",
+                color: Colors.gray,
                 fontWeight: "400",
                 fontFamily: "Inter_400Regular",
               }}
@@ -133,9 +134,9 @@ export const PayoutsScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  scrollContent: { padding: 0, paddingBottom: 100 },
+  scrollContent: { padding: 0,flex:1, backgroundColor: Colors.background },
   card: {
-    backgroundColor: "#18181B",
+    backgroundColor: Colors.secondary,
     borderBottomLeftRadius: 32,
     borderBottomRightRadius: 32,
     padding: 24,
@@ -146,25 +147,25 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 6,
   },
-  cardTitle: { fontSize: 15, color: "#A1A1AA", marginBottom: 6 },
+  cardTitle: { fontSize: 15, color: Colors.gray, marginBottom: 6 },
   cardValue: {
     fontSize: 36,
     fontWeight: "bold",
-    color: "#fff",
+    color: Colors.white,
     marginBottom: 4,
   },
-  cardSubtitle: { fontSize: 14, color: "#22C55E" },
+  cardSubtitle: { fontSize: 14, color: Colors.green },
   balanceActionBtnDark: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#232326",
+    backgroundColor: Colors.darkButton,
     borderRadius: 18,
     paddingHorizontal: 18,
     paddingVertical: 8,
     marginRight: 12,
   },
   balanceActionTextDark: {
-    color: "#fff",
+    color: Colors.white,
     fontSize: 15,
     fontFamily: "Inter_600SemiBold",
     marginLeft: 7,
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     gap: 10,
     marginHorizontal: 12,
-    backgroundColor: "#F3F4F6",
+    backgroundColor: Colors.white,
     borderRadius: 20,
     padding: 4,
     justifyContent: "space-around",
@@ -184,11 +185,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: "#F3F4F6",
+    backgroundColor: Colors.white,
   },
-  filterBtnActive: { backgroundColor: "#18181B" },
+  filterBtnActive: { backgroundColor: Colors.secondary },
   filterText: { color: "#6B7280", fontWeight: "500" },
-  filterTextActive: { color: "#fff" },
+  filterTextActive: { color: Colors.white },
   sectionTitle: {
     fontSize: 16,
     fontWeight: "600",
@@ -197,7 +198,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
   },
   payoutCard: {
-    backgroundColor: "#18181B",
+    backgroundColor: Colors.secondary,
     borderRadius: 10,
     padding: 16,
     marginBottom: 14,
@@ -209,11 +210,11 @@ const styles = StyleSheet.create({
     elevation: 1,
     marginHorizontal: 12,
   },
-  payoutAmount: { fontSize: 16, fontWeight: "600", color: "#fff" },
-  payoutDate: { fontSize: 15, color: "#A1A1AA", marginTop: 2 },
+  payoutAmount: { fontSize: 16, fontWeight: "600", color: Colors.white },
+  payoutDate: { fontSize: 15, color: Colors.gray, marginTop: 2 },
   payoutStatus: { fontSize: 13, fontWeight: "500", marginLeft: 12 },
-  statusUpcoming: { color: "#F59E42" },
-  statusCompleted: { color: "#22C55E" },
+  statusUpcoming: { color: Colors.green },
+  statusCompleted: { color: Colors.green },
   emptyState: { alignItems: "center", marginTop: 32 },
   emptyText: { color: "#6B7280", fontSize: 15 },
 });

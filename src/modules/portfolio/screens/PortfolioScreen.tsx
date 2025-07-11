@@ -1,3 +1,4 @@
+import Colors from "@/shared/colors/Colors";
 import { Feather } from "@expo/vector-icons";
 import React from "react";
 import {
@@ -62,9 +63,9 @@ export const PortfolioScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  scrollContent: { padding: 0, paddingBottom: 100 },
+  scrollContent: { padding: 0,flex:1,backgroundColor: Colors.background },
   card: {
-    backgroundColor: "#18181B",
+    backgroundColor: Colors.secondary,
     borderBottomLeftRadius: 32, borderBottomRightRadius: 32,
     padding: 24,
     paddingTop:36,
@@ -74,26 +75,26 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 6,
   },
-  cardTitle: { fontSize: 15, color: "#A1A1AA", marginBottom: 6 },
+  cardTitle: { fontSize: 15, color: Colors.gray, marginBottom: 6 },
   cardValue: {
     fontSize: 36,
     fontWeight: "bold",
-    color: "#fff",
+    color: Colors.white,
     marginBottom: 4,
   },
   
-  cardSubtitle: { fontSize: 14, color: "#A1A1AA" },
+  cardSubtitle: { fontSize: 14, color: Colors.gray },
   balanceActionBtnDark: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#232326",
+    backgroundColor: Colors.darkButton,
     borderRadius: 18,
     paddingHorizontal: 18,
     paddingVertical: 8,
     marginRight: 12,
   },
   balanceActionTextDark: {
-    color: "#fff",
+    color: Colors.white,
     fontSize: 15,
     fontFamily: "Inter_600SemiBold",
     marginLeft: 7,
@@ -107,16 +108,16 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     marginBottom: 8,
   },
-  chartLabel: { color: "#F59E42", fontWeight: "600", fontSize: 13 },
+  chartLabel: { color: Colors.green, fontWeight: "600", fontSize: 13 },
   sectionTitle: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#374151",
+    color: Colors.secondary,
     marginBottom: 10,
     marginHorizontal:12
   },
   assetCard: {
-    backgroundColor: "#18181B",
+    backgroundColor: Colors.secondary,
     borderRadius: 10,
     padding: 16,
     marginBottom: 14,
@@ -128,14 +129,14 @@ const styles = StyleSheet.create({
     elevation: 1,
     marginHorizontal:12
   },
-  assetName: { fontSize: 16, fontWeight: "600", color: "#fff" },
-  assetValue: { fontSize: 15, color: "#A1A1AA", marginTop: 2 },
-  assetGrowth: { fontSize: 15, color: "#22C55E", fontWeight: "600" },
+  assetName: { fontSize: 16, fontWeight: "600", color: Colors.white },
+  assetValue: { fontSize: 15, color: Colors.gray, marginTop: 2 },
+  assetGrowth: { fontSize: 15, color: Colors.green, fontWeight: "600" },
   fab: {
     position: "absolute",
     right: 24,
     bottom: 80,
-    backgroundColor: "#F97316",
+    backgroundColor: Colors.green,
     borderRadius: 24,
     flexDirection: "row",
     alignItems: "center",
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 4,
   },
-  fabIcon: { fontSize: 22, color: "#fff", marginRight: 6 },
-  fabLabel: { color: "#fff", fontWeight: "bold", fontSize: 15 },
+  fabIcon: { fontSize: 22, color: Colors.white, marginRight: 6 },
+  fabLabel: { color: Colors.white, fontWeight: "bold", fontSize: 15 },
 });
 export default PortfolioScreen;

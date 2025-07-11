@@ -1,4 +1,5 @@
-import { InvestmentStackParamList } from '@/navigation/InvestmentStack';
+import { InvestmentStackParamList } from '@/navigation/InvestorStacks/InvestmentStack';
+import Colors from '@/shared/colors/Colors';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -53,31 +54,31 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
+  container: { flex: 1, backgroundColor: Colors.background },
   closeBtn: {  position: "absolute",
     top: 32,
     right: 24,
     zIndex: 10,
-    backgroundColor: "#F3F4F6",
+    backgroundColor: Colors.white,
     width: 50,
     height: 50,
     borderRadius: 25,
     alignItems: "center",
     justifyContent: "center",},
-  closeText: { fontSize: 22,fontWeight: "bold", color: '#6B7280' },
+  closeText: { fontSize: 22,fontWeight: "bold", color: Colors.secondary },
   scrollContent: { padding: 24, paddingTop: 60, paddingBottom: 40 },
-  title: { fontSize: 24, fontWeight: 'bold', color: '#18181B', marginBottom: 18 },
-  summaryCard: { backgroundColor: '#18181B', borderRadius: 14, padding: 18, marginBottom: 24 },
-  label: { fontSize: 13, color: '#6B7280', marginTop: 8 },
-  value: { fontSize: 16, color: '#fff', fontWeight: '600' },
+  title: { fontSize: 24, fontWeight: 'bold', color: Colors.secondary, marginBottom: 18 },
+  summaryCard: { backgroundColor: Colors.secondary, borderRadius: 14, padding: 18, marginBottom: 24 },
+  label: { fontSize: 13, color: Colors.gray, marginTop: 8 },
+  value: { fontSize: 16, color: Colors.white, fontWeight: '600' },
   status: { fontSize: 15, fontWeight: '600', marginTop: 2 },
-  statusActive: { color: '#22C55E' },
-  statusCompleted: { color: '#6B7280' },
-  returns: { fontSize: 15, color: '#22C55E', fontWeight: '600', marginTop: 2 },
-  sectionTitle: { fontSize: 16, fontWeight: '600', color: '#374151', marginBottom: 10 },
-  txCard: { backgroundColor: '#18181B', borderRadius: 10, padding: 14, marginBottom: 12, shadowColor: '#000', shadowOpacity: 0.02, shadowRadius: 4, elevation: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  txType: { fontSize: 15, color: '#fff', fontWeight: '600' },
-  txAmount: { fontSize: 15, color: '#fff', fontWeight: '500' },
-  txDate: { fontSize: 13, color: '#6B7280' },
+  statusActive: { color: Colors.green },
+  statusCompleted: { color: Colors.gray },
+  returns: { fontSize: 15, color: Colors.green, fontWeight: '600', marginTop: 2 },
+  sectionTitle: { fontSize: 16, fontWeight: '600', color: Colors.secondary, marginBottom: 10 },
+  txCard: { backgroundColor: Colors.secondary, borderRadius: 10, padding: 14, marginBottom: 12, shadowColor: '#000', shadowOpacity: 0.02, shadowRadius: 4, elevation: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  txType: { fontSize: 15, color: Colors.white, fontWeight: '600' },
+  txAmount: { fontSize: 15, color: Colors.white, fontWeight: '500' },
+  txDate: { fontSize: 13, color: Colors.gray },
 });
 export default InvestmentDetailsScreen; 

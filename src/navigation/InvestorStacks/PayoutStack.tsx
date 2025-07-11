@@ -2,8 +2,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
-import { PayoutDetailsScreen } from "../modules/payouts/screens/PayoutDetailsScreen";
-import { PayoutsScreen } from "../modules/payouts/screens/PayoutsScreen";
+import { PayoutDetailsScreen } from "../../modules/payouts/screens/PayoutDetailsScreen";
+import { PayoutsScreen } from "../../modules/payouts/screens/PayoutsScreen";
 export type PayoutStackParamList={
   PayoutsScreen: undefined,
   PayoutDetails:{id :number}

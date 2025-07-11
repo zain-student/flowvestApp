@@ -1,4 +1,5 @@
 import type { AppTabParamList } from '@/navigation/AppTabNavigator';
+import Colors from '@/shared/colors/Colors';
 import { Inter_400Regular, Inter_600SemiBold, Inter_700Bold, useFonts } from '@expo-google-fonts/inter';
 import { Feather } from '@expo/vector-icons';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
@@ -7,7 +8,6 @@ import * as SplashScreen from 'expo-splash-screen';
 import React, { useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { DashboardLayout } from "../../components/DashboardLayout";
-
 SplashScreen.preventAutoHideAsync(); // Keep splash visible
 
 // Mock dashboard data (structure matches backend)
@@ -81,7 +81,7 @@ export const DashboardScreen: React.FC = () => {
         <View style={styles.balanceCardDark}>
           <Text style={styles.balanceLabelDark}>Total Payout Amount</Text>
           <Text style={styles.balanceValueDark}>${dashboardData.stats.total_payout_amount.toLocaleString()}</Text>
-          <Text style={styles.balanceChangeDark}>+${11915.28.toLocaleString()} <Text style={{ color: '#A1A1AA', fontWeight: '400', fontFamily: 'Inter_400Regular' }}>than last month</Text></Text>
+          <Text style={styles.balanceChangeDark}>+${11915.28.toLocaleString()} <Text style={{ color: Colors.gray, fontWeight: '400', fontFamily: 'Inter_400Regular' }}>than last month</Text></Text>
           <View style={styles.balanceActionsRow}>
             <TouchableOpacity style={styles.balanceActionBtnDark}>
               <Feather name="plus" size={18} color="#fff" />
@@ -116,7 +116,7 @@ export const DashboardScreen: React.FC = () => {
             <Text style={styles.emptyText}>No recent activities.</Text>
           ) : dashboardData.recent_activities.map(act => (
             <View key={act.id} style={styles.activityItem}>
-              <Feather name={act.icon as any} size={20} color="#18181B" style={styles.activityIcon} />
+              <Feather name={act.icon as any} size={20} color="colors.secondary" style={styles.activityIcon} />
               <View style={{ flex: 1 }}>
                 <Text style={styles.activityText}>{act.text}</Text>
                 <Text style={styles.activityDate}>{act.date}</Text>
@@ -135,7 +135,7 @@ export const DashboardScreen: React.FC = () => {
             <Text style={styles.emptyText}>No upcoming payouts.</Text>
           ) : dashboardData.upcoming_payouts.map(up => (
             <View key={up.id} style={styles.activityItem}>
-              <Feather name={up.icon as any} size={20} color="#18181B" style={styles.activityIcon} />
+              <Feather name={up.icon as any} size={20} color="colors.secondary" style={styles.activityIcon} />
               <View style={{ flex: 1 }}>
                 <Text style={styles.activityText}>{up.text}</Text>
                 <Text style={styles.activityDate}>{up.date}</Text>
@@ -150,7 +150,7 @@ export const DashboardScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F3F4F6' },
+  container: { flex: 1, backgroundColor: Colors.background },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 10,
     paddingBottom: 8,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
     borderBottomWidth: 1,
     borderBottomColor: '#E5E7EB',
   },
@@ -168,24 +168,24 @@ const styles = StyleSheet.create({
     width: 36, height: 36, borderRadius: 18, backgroundColor: '#2563EB',
     alignItems: 'center', justifyContent: 'center', marginRight: 12,
   },
-  avatarText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
+  avatarText: { color: Colors.white, fontWeight: 'bold', fontSize: 16 },
   signOutBtn: { padding: 6 },
   signOutText: { fontSize: 22, color: '#EF4444' },
-  scrollContent: { padding: 0, paddingBottom: 100, backgroundColor: '#fff' },
+  scrollContent: { padding: 0, paddingBottom: 100, backgroundColor: Colors.background },
   balanceCardDark: {
-    backgroundColor: '#18181B', borderBottomLeftRadius: 32, borderBottomRightRadius: 32,padding: 24, paddingTop: 36,
+    backgroundColor: Colors.secondary, borderBottomLeftRadius: 32, borderBottomRightRadius: 32,padding: 24, paddingTop: 36,
     shadowColor: '#000', shadowOpacity: 0.08, shadowRadius: 12, elevation: 6, marginBottom: 18,
   },
-  balanceLabelDark: { color: '#A1A1AA', fontSize: 15, fontFamily: 'Inter_400Regular' },
-  balanceValueDark: { color: '#fff', fontSize: 36, fontFamily: 'Inter_700Bold', fontWeight: '700', marginVertical: 2 },
-  balanceChangeDark: { color: '#22C55E', fontSize: 14, fontFamily: 'Inter_600SemiBold', 
+  balanceLabelDark: { color: Colors.gray, fontSize: 15, fontFamily: 'Inter_400Regular' },
+  balanceValueDark: { color: Colors.white, fontSize: 36, fontFamily: 'Inter_700Bold', fontWeight: '700', marginVertical: 2 },
+  balanceChangeDark: { color: Colors.green, fontSize: 14, fontFamily: 'Inter_600SemiBold', 
     // marginBottom: 8 
   },
   balanceActionsRow: { flexDirection: 'row', marginTop: 18 },
   balanceActionBtnDark: {
-    flexDirection: 'row', alignItems: 'center', backgroundColor: '#232326', borderRadius: 18, paddingHorizontal: 18, paddingVertical: 8, marginRight: 12,
+    flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.darkButton, borderRadius: 18, paddingHorizontal: 18, paddingVertical: 8, marginRight: 12,
   },
-  balanceActionTextDark: { color: '#fff', fontSize: 15, fontFamily: 'Inter_600SemiBold', marginLeft: 7 },
+  balanceActionTextDark: { color: Colors.white, fontSize: 15, fontFamily: 'Inter_600SemiBold', marginLeft: 7 },
   statCardGrid: {
     flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', marginHorizontal: 12, marginTop: 8, marginBottom: 24,
   },
@@ -202,20 +202,20 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 2,
   },
-  statLabelLarge: { color: '#18181B', fontSize: 16, fontFamily: 'Inter_400Regular', marginBottom: 2 },
-  statValueLarge: { color: '#18181B', fontSize: 32, fontFamily: 'Inter_700Bold', fontWeight: '700' },
+  statLabelLarge: { color: 'colors.secondary', fontSize: 16, fontFamily: 'Inter_400Regular', marginBottom: 2 },
+  statValueLarge: { color: 'colors.secondary', fontSize: 32, fontFamily: 'Inter_700Bold', fontWeight: '700' },
   sectionRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, marginBottom: 6 },
-  sectionTitle: { fontSize: 17, fontFamily: 'Inter_700Bold', fontWeight: '700', color: '#18181B' },
+  sectionTitle: { fontSize: 17, fontFamily: 'Inter_700Bold', fontWeight: '700', color: 'colors.secondary' },
   activityList: { paddingHorizontal: 8 },
   activityItem: { flexDirection: 'row', alignItems: 'center', paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#F3F4F6' },
   activityIcon: { marginRight: 12 },
-  activityText: { color: '#18181B', fontSize: 15, fontFamily: 'Inter_700Bold', fontWeight: '700' },
-  activityDate: { color: '#A1A1AA', fontSize: 13, fontFamily: 'Inter_400Regular' },
-  activityAmount: { color: '#18181B', fontSize: 15, fontFamily: 'Inter_700Bold', fontWeight: '700' },
-  emptyText: { color: '#A1A1AA', fontSize: 15, fontFamily: 'Inter_400Regular', textAlign: 'center', paddingVertical: 16 },
+  activityText: { color: 'colors.secondary', fontSize: 15, fontFamily: 'Inter_700Bold', fontWeight: '700' },
+  activityDate: { color: Colors.gray, fontSize: 13, fontFamily: 'Inter_400Regular' },
+  activityAmount: { color: 'colors.secondary', fontSize: 15, fontFamily: 'Inter_700Bold', fontWeight: '700' },
+  emptyText: { color: Colors.gray, fontSize: 15, fontFamily: 'Inter_400Regular', textAlign: 'center', paddingVertical: 16 },
   tabBar: {
     flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center',
-    height: 60, backgroundColor: '#fff', borderTopWidth: 1, borderTopColor: '#E5E7EB',
+    height: 60, backgroundColor: Colors.white, borderTopWidth: 1, borderTopColor: '#E5E7EB',
     position: 'absolute', left: 0, right: 0, bottom: 0,
   },
   tabItem: { alignItems: 'center', flex: 1 },

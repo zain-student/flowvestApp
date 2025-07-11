@@ -4,8 +4,8 @@
  */
 
 import { DashboardScreen } from '@/modules/dashboard/Investor/screens/DashboardScreen';
-import InvestmentStack from '@/navigation/InvestmentStack';
-import PayoutStack from '@/navigation/PayoutStack';
+import InvestmentStack from '@/navigation/InvestorStacks/InvestmentStack';
+import PayoutStack from '@/navigation/InvestorStacks/PayoutStack';
 import { Feather } from '@expo/vector-icons';
 import { PortfolioScreen } from '@modules/portfolio/screens';
 import { ProfileScreen } from '@modules/profile/screens';

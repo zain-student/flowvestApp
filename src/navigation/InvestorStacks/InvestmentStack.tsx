@@ -1,9 +1,9 @@
+import { InvestmentDetailsScreen } from "@/modules/investments/screens/InvestmentDetailsScreen";
+import { InvestmentsScreen } from "@/modules/investments/screens/InvestmentsScreen";
 import { Ionicons } from "@expo/vector-icons";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import { TouchableOpacity } from "react-native";
-import { InvestmentDetailsScreen } from "../modules/investments/screens/InvestmentDetailsScreen";
-import { InvestmentsScreen } from "../modules/investments/screens/InvestmentsScreen";
 export type InvestmentStackParamList = {
   InvestmentScreen: undefined;
   InvestmentDetails: { id: number };

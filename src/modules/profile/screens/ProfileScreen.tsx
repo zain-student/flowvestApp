@@ -35,11 +35,11 @@ export const ProfileScreen: React.FC = () => {
           <Text style={styles.sectionTitle}>Settings</Text>
           <View style={styles.buttonGroup}>
             <TouchableOpacity style={styles.buttonItem}>
-               <Ionicons name='lock-closed-outline' color={"#000"} size={20} />
+               <Ionicons name='lock-closed-outline' color={"gray"} size={20} />
               <Text style={styles.buttonText}>Change Password</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.buttonItem}>
-              <Ionicons name='notifications-outline' color={"#000"} size={20} />
+              <Ionicons name='notifications-outline' color={"gray"} size={20} />
               <Text style={styles.buttonText}> Notifications</Text>
             </TouchableOpacity>
           </View>
@@ -51,7 +51,7 @@ export const ProfileScreen: React.FC = () => {
           <Text style={styles.infoValue}>1.0.0</Text>
           <View style={styles.buttonGroup}>
             <TouchableOpacity style={styles.buttonItem}>
-               <Ionicons name='call-outline' color={"#000"} size={20} />
+               <Ionicons name='call-outline' color={"gray"} size={20} />
               <Text style={styles.buttonText}>Contact Support</Text>
             </TouchableOpacity>
           </View>
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   buttonItem: {
     // backgroundColor: '#E5E7EB',
     flexDirection:'row',
-    backgroundColor:Colors.gray,
+    backgroundColor:Colors.secondary,
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 8,

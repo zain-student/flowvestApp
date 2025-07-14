@@ -33,6 +33,7 @@ export const InvestmentStack = () => {
         component={InvestmentDetailsScreen}
         options={({ navigation }) => ({
           title: "Investment Details",
+          headerTitleAlign: "center",
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => navigation.goBack()}

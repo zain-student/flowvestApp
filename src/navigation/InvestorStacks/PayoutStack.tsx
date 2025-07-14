@@ -21,6 +21,7 @@ export const PayoutStack = () => {
       <Stack.Screen name='PayoutDetails' component={PayoutDetailsScreen} 
       options={({ navigation }) => ({
           title: "Payout Details",
+          headerTitleAlign: "center",
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => navigation.goBack()}

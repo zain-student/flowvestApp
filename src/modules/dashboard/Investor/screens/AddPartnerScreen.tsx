@@ -2,6 +2,7 @@
 
 import { addPartnerSchema, validateFormData } from "@/modules/auth/utils/authValidation";
 import { Button, Input } from "@/shared/components/ui";
+import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { Picker } from "@react-native-picker/picker";
 import React, { useEffect, useState } from "react";
 import {
@@ -14,7 +15,9 @@ import {
   View,
 } from "react-native";
 import Colors from "../../../../shared/colors/Colors";
-import { PartnerDropdown } from "../../../../shared/components/ui/PartnerDropdown"; // Adjust path if needed
+import { PartnerDropdown } from "../../../../shared/components/ui/PartnerDropdown";
+import { addPartner } from "../../../../shared/store/slices/partnerSlice";
+// import uuid from "react-native-uuid";
 type Partner = {
   id: string;
   name: string;
@@ -24,15 +27,15 @@ export const AddPartnerScreen = () => {
   const [selectedPartner, setSelectedPartner] = useState<Partner>();
   const [error, setError] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedRole, setSelectedRole] = useState("Partner");
-  const [send_invitation, setSendInvitation] = useState("No");
+  // const [selectedRole, setSelectedRole] = useState("Partner");
+  // const [send_invitation, setSendInvitation] = useState<'Yes' | 'No'>('Yes');
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
     email: "",
     phone: "",
-    // role: "Partner",
-    // send_invitation: false,
+    role: "Partner",
+    send_invitation: false,
     permissions: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -42,7 +45,8 @@ export const AddPartnerScreen = () => {
     { id: "3", name: "Hassan" },
     { id: "4", name: "Ahmed" },
   ];
-
+  const dispatch = useAppDispatch();
+  const partnersList= useAppSelector((state) => state.partner.partners);
   useEffect(() => {
     // Reset form data when the modal is closed
     if (!modalVisible) {
@@ -51,8 +55,8 @@ export const AddPartnerScreen = () => {
         last_name: "",
         email: "",
         phone: "",
-        // role: "Partner",
-        // send_invitation: false,
+        role: "Partner",
+        send_invitation: false,
         permissions: "",
       });
       setErrors({});
@@ -73,17 +77,50 @@ export const AddPartnerScreen = () => {
     setSelectedPartner(partner);
     setError(""); // Clear error on selection
   };
-
+// const formValidation=() => {
+//    // Validate form data
+//     const validation = validateFormData(addPartnerSchema, formData);
+//     if (!validation.success) {
+//       setErrors(validation.errors || {});
+//       return;
+//     }
+//     console.log("Validation Success:", validation.data);
+// }
   const addPartnerData = () => {
     // Validate form data
     const validation = validateFormData(addPartnerSchema, formData);
     if (!validation.success) {
       setErrors(validation.errors || {});
-      return;
+      console.log("Validation Errors:", validation.errors);
+      return ;
     }
-
+    console.log("Validation Success:", validation.data);
+    const newPartner = {
+      id: Date.now().toString(), // Use timestamp as a simple unique ID
+      name: `${formData.first_name} ${formData.last_name}`,
+      email: formData.email,
+      phone: formData.phone,
+      role: formData.role,
+      permissions: formData.permissions,
+      invitation: formData.send_invitation ? "Yes" : "No" as "Yes" | "No",
+    };
+    console.log("Form Data to be send:", formData);
+    // Log the new partner data
+    console.log("New Partner Data:", newPartner);
+    // Dispatch action to add partner in redux store
+    dispatch(addPartner(newPartner));
+    // Reset form and close modal
+    setFormData({
+      first_name: "",
+      last_name: "",
+      email: "",
+      phone: "",
+      permissions: "",
+      role: "Partner",
+      send_invitation: false,
+    });
+    setErrors({});
     // Handle form submission logic here
-    console.log("Form Data:", formData);
     setModalVisible(false);
   };
 
@@ -93,11 +130,13 @@ export const AddPartnerScreen = () => {
         <Text style={styles.title}>Choose a Partner</Text>
 
         <PartnerDropdown
+        key={partnersList.length} // 🔁 re-renders when partner is added
           label="Select Partner"
           required
-          partners={partners}
+          partners={partnersList}
           selectedPartner={selectedPartner}
-          onSelect={handleSelect}
+          // onSelect={handleSelect}
+          onSelect={setSelectedPartner}
           error={error}
         />
 
@@ -178,9 +217,9 @@ export const AddPartnerScreen = () => {
                   <View style={styles.pickerView}>
                   
                     <Picker
-                      selectedValue={selectedRole}
+                      selectedValue={formData.role}
                       placeholder="Select Role"
-                      onValueChange={(itemValue) => setSelectedRole(itemValue)}
+                      onValueChange={(itemValue) =>  handleInputChange("role", itemValue)}
                       style={styles.picker}
                     >
                       <Picker.Item label="Partner" value="Partner" />
@@ -202,9 +241,14 @@ export const AddPartnerScreen = () => {
                   <View style={styles.pickerView}>
                    
                     <Picker
-                      selectedValue={selectedRole}
+                      selectedValue={formData.send_invitation ? "Yes" : "No"}
                       placeholder="Send Invitation"
-                      onValueChange={(itemValue) => setSelectedRole(itemValue)}
+                      onValueChange={(itemValue) => 
+                        handleInputChange(
+                          "send_invitation",
+                          itemValue === "Yes"
+                        )
+                      }
                       style={styles.picker}
                     >
                       <Picker.Item label="No" value="No" />
@@ -280,7 +324,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   modal: {
-    maxHeight: "40%",
+    // maxHeight: "40%",
     backgroundColor: Colors.lightGray,
     borderRadius: 20,
   },
@@ -295,7 +339,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     borderRadius: 20,
     padding: 16,
-    // maxHeight: "80%",
+    maxHeight: "75%",
   },
   pickerView: {
     borderWidth: 1,

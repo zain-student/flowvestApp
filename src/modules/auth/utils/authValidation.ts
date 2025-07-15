@@ -168,8 +168,10 @@ export const addPartnerSchema = z.object({
   permissions: z
     .string()
     .min(1, 'Permissions are required'),
-
-  send_invitation: z.enum(['Yes', 'No']),
+  send_invitation: z.boolean({
+    required_error: 'Please select if you want to send an invitation',
+  }),
+  // send_invitation: z.enum(['Yes', 'No']),
 });
 
 // Type exports for form data

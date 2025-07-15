@@ -85,7 +85,9 @@ export const persistConfig: PersistConfig<RootState> = {
   whitelist: [
     'auth',      // Authentication state
     'user',      // User preferences and settings
+    'partner',   // Partner management state
     'theme',     // Theme preferences
+
   ],
   blacklist: [
     'loading',   // Loading states are temporary

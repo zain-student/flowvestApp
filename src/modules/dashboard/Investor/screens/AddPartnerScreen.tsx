@@ -1,5 +1,6 @@
 // src/screens/PartnerDropdownScreen.tsx
 
+import { addPartnerSchema, validateFormData } from "@/modules/auth/utils/authValidation";
 import { Button, Input } from "@/shared/components/ui";
 import { Picker } from "@react-native-picker/picker";
 import React, { useEffect, useState } from "react";
@@ -23,8 +24,8 @@ export const AddPartnerScreen = () => {
   const [selectedPartner, setSelectedPartner] = useState<Partner>();
   const [error, setError] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedRole, setSelectedRole] = useState("");
-  const [send_invitation, setSendInvitation] = useState(false);
+  const [selectedRole, setSelectedRole] = useState("Partner");
+  const [send_invitation, setSendInvitation] = useState("No");
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -41,18 +42,7 @@ export const AddPartnerScreen = () => {
     { id: "3", name: "Hassan" },
     { id: "4", name: "Ahmed" },
   ];
-  const handleInputChange = (field: string, value: string | boolean) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
 
-    // Clear specific field error when user starts typing
-    if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: "" }));
-    }
-  };
-  const handleSelect = (partner: any) => {
-    setSelectedPartner(partner);
-    setError(""); // Clear error on selection
-  };
   useEffect(() => {
     // Reset form data when the modal is closed
     if (!modalVisible) {
@@ -70,6 +60,33 @@ export const AddPartnerScreen = () => {
     // Clear selected partner when the screen is mounted
     setSelectedPartner(undefined);
   }, [modalVisible]);
+
+  const handleInputChange = (field: string, value: string | boolean) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+
+    // Clear specific field error when user starts typing
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: "" }));
+    }
+  };
+  const handleSelect = (partner: any) => {
+    setSelectedPartner(partner);
+    setError(""); // Clear error on selection
+  };
+
+  const addPartnerData = () => {
+    // Validate form data
+    const validation = validateFormData(addPartnerSchema, formData);
+    if (!validation.success) {
+      setErrors(validation.errors || {});
+      return;
+    }
+
+    // Handle form submission logic here
+    console.log("Form Data:", formData);
+    setModalVisible(false);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
@@ -153,15 +170,13 @@ export const AddPartnerScreen = () => {
                     value={formData.phone}
                     onChangeText={(value) => handleInputChange("phone", value)}
                     error={errors.phone}
-                    // required
+                    required
                   />
                   <Text style={{ fontWeight: "500", color: Colors.secondary }}>
                     Role
                   </Text>
                   <View style={styles.pickerView}>
-                    {/* <label style={{ color: Colors.text, fontWeight: "500" }}>
-                  Role
-                </label> */}
+                  
                     <Picker
                       selectedValue={selectedRole}
                       placeholder="Select Role"
@@ -171,14 +186,6 @@ export const AddPartnerScreen = () => {
                       <Picker.Item label="Partner" value="Partner" />
                     </Picker>
                   </View>
-                  {/* <Input
-                label="Role"
-                placeholder="Enter role"
-                value={formData.role}
-                onChangeText={(value) => handleInputChange("role", value)}
-                error={errors.role}
-                required 
-              /> */}
                   <Input
                     label="Permissions"
                     placeholder="Enter permissions"
@@ -193,9 +200,7 @@ export const AddPartnerScreen = () => {
                     Invitation
                   </Text>
                   <View style={styles.pickerView}>
-                    {/* <label style={{ color: Colors.text, fontWeight: "500" }}>
-                  Role
-                </label> */}
+                   
                     <Picker
                       selectedValue={selectedRole}
                       placeholder="Send Invitation"
@@ -206,34 +211,14 @@ export const AddPartnerScreen = () => {
                       <Picker.Item label="Yes" value="Yes" />
                     </Picker>
                   </View>
-                  {/* <Input
-                label="Send Invitation"
-                placeholder="Send invitation"
-                value={formData.send_invitation ? "Yes" : "No"}
-                onChangeText={(value) =>
-                  handleInputChange("send_invitation", value === "Yes")
-                }
-                error={errors.send_invitation}
-                required
-              /> */}
                   <Button
                     title="Add"
-                    onPress={() => {
-                      // Handle form submission logic here
-                      console.log("Form Data:", formData);
-                      setModalVisible(false);
-                    }}
+                    onPress={addPartnerData}
                     style={{
                       marginTop: 0,
                       backgroundColor: Colors.secondary,
                     }}
                   />
-                  {/* <Pressable
-                style={styles.closeBtn}
-                onPress={() => setModalVisible(false)}
-              >
-                <Text style={styles.closeText}>Close</Text>
-              </Pressable> */}
                 </ScrollView>
               </View>
             </ScrollView>

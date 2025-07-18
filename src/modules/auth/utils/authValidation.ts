@@ -166,6 +166,9 @@ export const addPartnerSchema = z.object({
   role: z.string().min(1, 'Role is required'),
 
   permissions: z
+  // .boolean({
+  //   required_error: 'Permissions are required',
+  // }),
     .string()
     .min(1, 'Permissions are required'),
   send_invitation: z.boolean({

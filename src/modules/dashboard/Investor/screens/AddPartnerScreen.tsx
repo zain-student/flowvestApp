@@ -1,6 +1,9 @@
 // src/screens/PartnerDropdownScreen.tsx
 
-import { addPartnerSchema, validateFormData } from "@/modules/auth/utils/authValidation";
+import {
+  addPartnerSchema,
+  validateFormData,
+} from "@/modules/auth/utils/authValidation";
 import { Button, Input } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { Picker } from "@react-native-picker/picker";
@@ -17,10 +20,15 @@ import {
 import Colors from "../../../../shared/colors/Colors";
 import { PartnerDropdown } from "../../../../shared/components/ui/PartnerDropdown";
 import { addPartner } from "../../../../shared/store/slices/partnerSlice";
-// import uuid from "react-native-uuid";
+
 type Partner = {
   id: string;
   name: string;
+  email: string;
+  phone?: string;
+  role: string;
+  permissions: string;
+  invitation: "Yes" | "No";
 };
 
 export const AddPartnerScreen = () => {
@@ -36,7 +44,7 @@ export const AddPartnerScreen = () => {
     phone: "",
     role: "Partner",
     send_invitation: false,
-    permissions: "",
+    permissions: "View_Own_Investments" as 'view_own_investments' | 'view_payouts',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const partners = [
@@ -46,8 +54,10 @@ export const AddPartnerScreen = () => {
     { id: "4", name: "Ahmed" },
   ];
   const dispatch = useAppDispatch();
-  const partnersList= useAppSelector((state) => state.partner.partners);
+  const partnersList = useAppSelector((state) => state.partner.partners);
   useEffect(() => {
+    // Clear Partners from the redux store when the screen is mounted
+    // dispatch(clearPartner());   // If you want to clear partners on mount or want to create a button to clear partners. You can use it 
     // Reset form data when the modal is closed
     if (!modalVisible) {
       setFormData({
@@ -57,7 +67,7 @@ export const AddPartnerScreen = () => {
         phone: "",
         role: "Partner",
         send_invitation: false,
-        permissions: "",
+        permissions:"view_own_investments",
       });
       setErrors({});
     }
@@ -77,22 +87,22 @@ export const AddPartnerScreen = () => {
     setSelectedPartner(partner);
     setError(""); // Clear error on selection
   };
-// const formValidation=() => {
-//    // Validate form data
-//     const validation = validateFormData(addPartnerSchema, formData);
-//     if (!validation.success) {
-//       setErrors(validation.errors || {});
-//       return;
-//     }
-//     console.log("Validation Success:", validation.data);
-// }
+  // const formValidation=() => {
+  //    // Validate form data
+  //     const validation = validateFormData(addPartnerSchema, formData);
+  //     if (!validation.success) {
+  //       setErrors(validation.errors || {});
+  //       return;
+  //     }
+  //     console.log("Validation Success:", validation.data);
+  // }
   const addPartnerData = () => {
     // Validate form data
     const validation = validateFormData(addPartnerSchema, formData);
     if (!validation.success) {
       setErrors(validation.errors || {});
       console.log("Validation Errors:", validation.errors);
-      return ;
+      return;
     }
     console.log("Validation Success:", validation.data);
     const newPartner = {
@@ -102,7 +112,7 @@ export const AddPartnerScreen = () => {
       phone: formData.phone,
       role: formData.role,
       permissions: formData.permissions,
-      invitation: formData.send_invitation ? "Yes" : "No" as "Yes" | "No",
+      invitation: formData.send_invitation ? "Yes" : ("No" as "Yes" | "No"),
     };
     console.log("Form Data to be send:", formData);
     // Log the new partner data
@@ -115,7 +125,7 @@ export const AddPartnerScreen = () => {
       last_name: "",
       email: "",
       phone: "",
-      permissions: "",
+      permissions: "view_own_investments",
       role: "Partner",
       send_invitation: false,
     });
@@ -130,7 +140,7 @@ export const AddPartnerScreen = () => {
         <Text style={styles.title}>Choose a Partner</Text>
 
         <PartnerDropdown
-        key={partnersList.length} // 🔁 re-renders when partner is added
+          key={partnersList.length} // 🔁 re-renders when partner is added
           label="Select Partner"
           required
           partners={partnersList}
@@ -215,17 +225,37 @@ export const AddPartnerScreen = () => {
                     Role
                   </Text>
                   <View style={styles.pickerView}>
-                  
                     <Picker
                       selectedValue={formData.role}
                       placeholder="Select Role"
-                      onValueChange={(itemValue) =>  handleInputChange("role", itemValue)}
+                      onValueChange={(itemValue) =>
+                        handleInputChange("role", itemValue)
+                      }
                       style={styles.picker}
                     >
                       <Picker.Item label="Partner" value="Partner" />
                     </Picker>
                   </View>
-                  <Input
+                  <Text style={{ fontWeight: "500", color: Colors.secondary }}>
+                    Permissions
+                  </Text>
+                  <View style={styles.pickerView}>
+                    <Picker
+                      selectedValue={formData.permissions}
+                      placeholder="Select Permissions"
+                      onValueChange={(itemValue) =>
+                        handleInputChange(
+                          "permissions",
+                          itemValue 
+                        )
+                      }
+                      style={styles.picker}
+                    >
+                      <Picker.Item label="View_Own_Investments" value="view_own_investments" />
+                      <Picker.Item label="View_Payouts" value="view_payouts" />
+                    </Picker>
+                  </View>
+                  {/* <Input
                     label="Permissions"
                     placeholder="Enter permissions"
                     value={formData.permissions}
@@ -234,16 +264,15 @@ export const AddPartnerScreen = () => {
                     }
                     error={errors.permissions}
                     required
-                  />
+                  /> */}
                   <Text style={{ fontWeight: "500", color: Colors.secondary }}>
                     Invitation
                   </Text>
                   <View style={styles.pickerView}>
-                   
                     <Picker
                       selectedValue={formData.send_invitation ? "Yes" : "No"}
                       placeholder="Send Invitation"
-                      onValueChange={(itemValue) => 
+                      onValueChange={(itemValue) =>
                         handleInputChange(
                           "send_invitation",
                           itemValue === "Yes"
@@ -251,8 +280,8 @@ export const AddPartnerScreen = () => {
                       }
                       style={styles.picker}
                     >
-                      <Picker.Item label="No" value="No" />
                       <Picker.Item label="Yes" value="Yes" />
+                      <Picker.Item label="No" value="No" />
                     </Picker>
                   </View>
                   <Button
@@ -351,7 +380,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   picker: {
-    height: 49,
+    height: 51,
     width: "100%",
   },
   // closeBtn: {

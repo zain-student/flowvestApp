@@ -12,8 +12,13 @@ import {
 
 interface Partner {
   id: string;
-
   name: string;
+  email: string;
+  phone?: string;
+  role: string;
+  permissions: string;
+  invitation: 'Yes' | 'No';
+
 }
 
 interface PartnerDropdownProps {
@@ -118,7 +123,7 @@ export const PartnerDropdown: React.FC<PartnerDropdownProps> = ({
                 <Text style={styles.SelectedTick}> ✓</Text>
               )}
             </Text>
-            <Text style={styles.selectedText}>{item.id}</Text>
+            <Text style={styles.selectedText}>{item.email}</Text>
           </Pressable>
         )}
         ListEmptyComponent={

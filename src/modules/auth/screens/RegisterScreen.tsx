@@ -3,15 +3,15 @@
  * Role-based user registration with dynamic form fields
  */
 
-import { Button } from '@components/ui/Button';
-import { Input } from '@components/ui/Input';
-import { Select, SelectOption } from '@components/ui/Select';
-import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import Colors from '@shared/colors/Colors';
-import { useAppDispatch, useAppSelector } from '@store/index';
-import React, { useState } from 'react';
+import { Button } from "@components/ui/Button";
+import { Input } from "@components/ui/Input";
+import { Select, SelectOption } from "@components/ui/Select";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import Colors from "@shared/colors/Colors";
+import { useAppDispatch, useAppSelector } from "@store/index";
+import React, { useState } from "react";
 import {
   Alert,
   KeyboardAvoidingView,
@@ -19,40 +19,49 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  ToastAndroid,
   TouchableOpacity,
   View,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { AuthStackParamList } from '../../../navigation/AuthStack';
-import { clearError, registerUser, selectAuthError, selectIsLoading } from '../store/authSlice';
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { AuthStackParamList } from "../../../navigation/AuthStack";
+import {
+  clearError,
+  registerUser,
+  selectAuthError,
+  selectIsLoading,
+} from "../store/authSlice";
 import {
   createRegistrationSchema,
-  validateFormData
-} from '../utils/authValidation';
+  validateFormData,
+} from "../utils/authValidation";
 
-type RegisterScreenNavigationProp = NativeStackNavigationProp<AuthStackParamList, 'Register'>;
+type RegisterScreenNavigationProp = NativeStackNavigationProp<
+  AuthStackParamList,
+  "Register"
+>;
 
 // Company type options for independent users
 const companyTypeOptions: SelectOption[] = [
   {
-    label: 'Individual',
-    value: 'individual',
-    description: 'Personal investment account',
+    label: "Individual",
+    value: "individual",
+    description: "Personal investment account",
   },
   {
-    label: 'Private Company',
-    value: 'private',
-    description: 'Private limited company',
+    label: "Private Company",
+    value: "private",
+    description: "Private limited company",
   },
   {
-    label: 'Silent Partnership',
-    value: 'silent',
-    description: 'Silent partner investment',
+    label: "Silent Partnership",
+    value: "silent",
+    description: "Silent partner investment",
   },
   {
-    label: 'Holding Company',
-    value: 'holding',
-    description: 'Investment holding company',
+    label: "Holding Company",
+    value: "holding",
+    description: "Investment holding company",
   },
 ];
 
@@ -64,16 +73,16 @@ export const RegisterScreen: React.FC = () => {
 
   // Form state - starts with basic fields
   const [formData, setFormData] = useState({
-    first_name: '',
-    last_name: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
-    role: '',
-    registration_type: '',
-    company_name: '',
-    company_type: '',
-    invitation_token: '',
+    first_name: "",
+    last_name: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
+    role: "",
+    registration_type: "",
+    company_name: "",
+    company_type: "",
+    invitation_token: "",
     terms_accepted: false,
   });
 
@@ -85,13 +94,13 @@ export const RegisterScreen: React.FC = () => {
 
   // Handle input changes
   const handleInputChange = (field: string, value: string | boolean) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    
+    setFormData((prev) => ({ ...prev, [field]: value }));
+
     // Clear specific field error when user starts typing
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
+      setErrors((prev) => ({ ...prev, [field]: "" }));
     }
-    
+
     // Clear auth error when user makes changes
     if (authError) {
       dispatch(clearError());
@@ -104,10 +113,10 @@ export const RegisterScreen: React.FC = () => {
       ...formData,
       role: option.value,
       // Reset dependent fields when role changes
-      registration_type: '',
-      company_name: '',
-      company_type: '',
-      invitation_token: '',
+      registration_type: "",
+      company_name: "",
+      company_type: "",
+      invitation_token: "",
     };
     setFormData(newFormData);
     setCurrentStep(2);
@@ -119,9 +128,9 @@ export const RegisterScreen: React.FC = () => {
       ...formData,
       registration_type: option.value,
       // Reset dependent fields when registration type changes
-      company_name: '',
-      company_type: '',
-      invitation_token: '',
+      company_name: "",
+      company_type: "",
+      invitation_token: "",
     };
     setFormData(newFormData);
     setCurrentStep(3);
@@ -129,17 +138,20 @@ export const RegisterScreen: React.FC = () => {
 
   // Handle company type selection
   const handleCompanyTypeSelect = (option: SelectOption) => {
-    handleInputChange('company_type', option.value);
+    handleInputChange("company_type", option.value);
   };
 
   // Handle form submission
   const handleSubmit = async () => {
     // Get the appropriate schema based on role and registration type
-    const schema = createRegistrationSchema(formData.role, formData.registration_type);
-    
+    const schema = createRegistrationSchema(
+      formData.role,
+      formData.registration_type
+    );
+
     // Validate form data
     const validation = validateFormData(schema, formData);
-    
+
     if (!validation.success && validation.errors) {
       setErrors(validation.errors);
       return;
@@ -150,27 +162,28 @@ export const RegisterScreen: React.FC = () => {
     try {
       // Dispatch register action
       const result = await dispatch(registerUser(validation.data));
-      
       if (registerUser.fulfilled.match(result)) {
-        // Registration successful
-        Alert.alert(
-          'Registration Successful',
-          'Your account has been created successfully. Please check your email for verification.',
-          [{ text: 'OK', onPress: () => navigation.navigate('Login') }]
+        console.log("✅ Registration successful:", result);
+      } else {
+        console.log(
+          "❌ Registration failed:",
+          result.payload || result.error.message
         );
-      } else if (registerUser.rejected.match(result)) {
-        // Registration failed - error will be shown via authError
-        console.log('Registration failed:', result.error.message);
+        ToastAndroid.show(
+          `Registration failed: ${result.payload || result.error.message}`,
+          ToastAndroid.LONG
+        );
+        return;
       }
     } catch (error) {
-      console.error('Registration error:', error);
-      Alert.alert('Error', 'An unexpected error occurred. Please try again.');
+      console.error("Registration error1:", error);
+      Alert.alert("Error", "An unexpected error occurred. Please try again.");
     }
   };
 
   // Navigate back to login
   const navigateToLogin = () => {
-    navigation.navigate('Login');
+    navigation.navigate("Login");
   };
 
   // Render role selection step
@@ -190,14 +203,15 @@ export const RegisterScreen: React.FC = () => {
         required
         options={[
           {
-            label: 'Investment Manager',
-            value: 'admin',
-            description: 'Manage company investments, invite team members, and oversee payouts.',
+            label: "Investment Manager",
+            value: "admin",
+            description:
+              "Manage company investments, invite team members, and oversee payouts.",
           },
           {
-            label: 'Investor / Partner',
-            value: 'user',
-            description: 'Invest in opportunities and track your payouts.',
+            label: "Investor / Partner",
+            value: "user",
+            description: "Invest in opportunities and track your payouts.",
           },
         ]}
       />
@@ -221,14 +235,14 @@ export const RegisterScreen: React.FC = () => {
         required
         options={[
           {
-            label: 'Invited by Company',
-            value: 'invited',
-            description: 'I have an invitation token from a company',
+            label: "Invited by Company",
+            value: "invited",
+            description: "I have an invitation token from a company",
           },
           {
-            label: 'Independent Registration',
-            value: 'independent',
-            description: 'I want to create my own investment account',
+            label: "Independent Registration",
+            value: "independent",
+            description: "I want to create my own investment account",
           },
         ]}
       />
@@ -244,9 +258,11 @@ export const RegisterScreen: React.FC = () => {
 
   // Render main form fields
   const renderMainForm = () => {
-    const isAdmin = formData.role === 'admin';
-    const isInvitedUser = formData.role === 'user' && formData.registration_type === 'invited';
-    const isIndependentUser = formData.role === 'user' && formData.registration_type === 'independent';
+    const isAdmin = formData.role === "admin";
+    const isInvitedUser =
+      formData.role === "user" && formData.registration_type === "invited";
+    const isIndependentUser =
+      formData.role === "user" && formData.registration_type === "independent";
 
     return (
       <View style={styles.stepContent}>
@@ -260,7 +276,7 @@ export const RegisterScreen: React.FC = () => {
           label="First Name"
           placeholder="Enter your first name"
           value={formData.first_name}
-          onChangeText={(value) => handleInputChange('first_name', value)}
+          onChangeText={(value) => handleInputChange("first_name", value)}
           error={errors.first_name}
           required
         />
@@ -269,7 +285,7 @@ export const RegisterScreen: React.FC = () => {
           label="Last Name"
           placeholder="Enter your last name"
           value={formData.last_name}
-          onChangeText={(value) => handleInputChange('last_name', value)}
+          onChangeText={(value) => handleInputChange("last_name", value)}
           error={errors.last_name}
           required
         />
@@ -279,7 +295,7 @@ export const RegisterScreen: React.FC = () => {
           type="email"
           placeholder="Enter your email"
           value={formData.email}
-          onChangeText={(value) => handleInputChange('email', value)}
+          onChangeText={(value) => handleInputChange("email", value)}
           error={errors.email}
           required
         />
@@ -289,7 +305,7 @@ export const RegisterScreen: React.FC = () => {
           type="password"
           placeholder="Create a strong password"
           value={formData.password}
-          onChangeText={(value) => handleInputChange('password', value)}
+          onChangeText={(value) => handleInputChange("password", value)}
           error={errors.password}
           required
         />
@@ -299,7 +315,9 @@ export const RegisterScreen: React.FC = () => {
           type="password"
           placeholder="Confirm your password"
           value={formData.password_confirmation}
-          onChangeText={(value) => handleInputChange('password_confirmation', value)}
+          onChangeText={(value) =>
+            handleInputChange("password_confirmation", value)
+          }
           error={errors.password_confirmation}
           required
         />
@@ -310,7 +328,7 @@ export const RegisterScreen: React.FC = () => {
             label="Company Name"
             placeholder="Enter your company name"
             value={formData.company_name}
-            onChangeText={(value) => handleInputChange('company_name', value)}
+            onChangeText={(value) => handleInputChange("company_name", value)}
             error={errors.company_name}
             required
           />
@@ -322,7 +340,9 @@ export const RegisterScreen: React.FC = () => {
             label="Invitation Token"
             placeholder="Enter your invitation token"
             value={formData.invitation_token}
-            onChangeText={(value) => handleInputChange('invitation_token', value)}
+            onChangeText={(value) =>
+              handleInputChange("invitation_token", value)
+            }
             error={errors.invitation_token}
             required
           />
@@ -335,7 +355,7 @@ export const RegisterScreen: React.FC = () => {
               label="Company Name"
               placeholder="Enter your company name"
               value={formData.company_name}
-              onChangeText={(value) => handleInputChange('company_name', value)}
+              onChangeText={(value) => handleInputChange("company_name", value)}
               error={errors.company_name}
               required
             />
@@ -355,9 +375,16 @@ export const RegisterScreen: React.FC = () => {
         {/* Terms and Conditions */}
         <TouchableOpacity
           style={styles.termsContainer}
-          onPress={() => handleInputChange('terms_accepted', !formData.terms_accepted)}
+          onPress={() =>
+            handleInputChange("terms_accepted", !formData.terms_accepted)
+          }
         >
-          <View style={[styles.checkbox, formData.terms_accepted && styles.checkboxChecked]}>
+          <View
+            style={[
+              styles.checkbox,
+              formData.terms_accepted && styles.checkboxChecked,
+            ]}
+          >
             {formData.terms_accepted && <Text style={styles.checkmark}>✓</Text>}
           </View>
           <Text style={styles.termsText}>
@@ -387,7 +414,7 @@ export const RegisterScreen: React.FC = () => {
         {/* Back Button */}
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => setCurrentStep(formData.role === 'admin' ? 1 : 2)}
+          onPress={() => setCurrentStep(formData.role === "admin" ? 1 : 2)}
         >
           <Ionicons name="arrow-back" size={20} color={Colors.secondary} />
           <Text style={styles.backButtonText}>Back</Text>
@@ -401,7 +428,7 @@ export const RegisterScreen: React.FC = () => {
     if (currentStep === 1) {
       return renderRoleSelection();
     }
-    if (currentStep === 2 && formData.role === 'user') {
+    if (currentStep === 2 && formData.role === "user") {
       return renderRegistrationTypeSelection();
     }
     return renderMainForm();
@@ -411,7 +438,7 @@ export const RegisterScreen: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
         style={styles.keyboardAvoid}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <ScrollView
           style={styles.scrollView}
@@ -431,13 +458,13 @@ export const RegisterScreen: React.FC = () => {
                 style={[
                   styles.progressFill,
                   {
-                    width: `${(currentStep / (formData.role === 'user' ? 3 : 2)) * 100}%`,
+                    width: `${(currentStep / (formData.role === "user" ? 3 : 2)) * 100}%`,
                   },
                 ]}
               />
             </View>
             <Text style={styles.progressText}>
-              Step {currentStep} of {formData.role === 'user' ? 3 : 2}
+              Step {currentStep} of {formData.role === "user" ? 3 : 2}
             </Text>
           </View>
 
@@ -462,88 +489,88 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background, // Light background color
   },
-  
+
   keyboardAvoid: {
     flex: 1,
   },
-  
+
   scrollView: {
     flex: 1,
   },
-  
+
   scrollContent: {
     flexGrow: 1,
     paddingHorizontal: 24,
     paddingVertical: 20,
   },
-  
+
   header: {
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 20,
     marginBottom: 30,
   },
-  
+
   title: {
     fontSize: 28,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: Colors.secondary,
     marginBottom: 8,
   },
-  
+
   subtitle: {
     fontSize: 16,
     color: Colors.gray,
-    textAlign: 'center',
+    textAlign: "center",
   },
-  
+
   progressContainer: {
     marginBottom: 30,
   },
-  
+
   progressBar: {
     height: 4,
     backgroundColor: Colors.lightGray,
     borderRadius: 2,
     marginBottom: 8,
   },
-  
+
   progressFill: {
-    height: '100%',
+    height: "100%",
     backgroundColor: Colors.secondary,
     borderRadius: 2,
   },
-  
+
   progressText: {
     fontSize: 12,
     color: Colors.gray,
-    textAlign: 'center',
+    textAlign: "center",
   },
-  
+
   stepContent: {
     flex: 1,
   },
-  
+
   stepTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: Colors.secondary,
     marginBottom: 8,
-    textAlign: 'center',
+    textAlign: "center",
   },
-  
+
   stepDescription: {
     fontSize: 14,
     color: Colors.gray,
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 24,
   },
-  
+
   termsContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
+    flexDirection: "row",
+    alignItems: "flex-start",
     marginBottom: 16,
   },
-  
+
   checkbox: {
     width: 20,
     height: 20,
@@ -551,85 +578,85 @@ const styles = StyleSheet.create({
     borderColor: Colors.secondary,
     borderRadius: 4,
     marginRight: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginTop: 2,
   },
-  
+
   checkboxChecked: {
     borderColor: Colors.secondary,
     backgroundColor: Colors.secondary,
   },
-  
+
   checkmark: {
     color: Colors.white,
     fontSize: 12,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
-  
+
   termsText: {
     fontSize: 14,
-    color: Colors.secondary, 
+    color: Colors.secondary,
     flex: 1,
     lineHeight: 20,
   },
-  
+
   fieldError: {
     fontSize: 12,
-    color: '#EF4444',
+    color: "#EF4444",
     marginTop: -12,
     marginBottom: 16,
     marginLeft: 4,
   },
-  
+
   errorContainer: {
-    backgroundColor: '#FEF2F2',
+    backgroundColor: "#FEF2F2",
     borderWidth: 1,
-    borderColor: '#FECACA',
+    borderColor: "#FECACA",
     borderRadius: 8,
     padding: 12,
     marginBottom: 16,
   },
-  
+
   errorText: {
-    color: '#DC2626',
+    color: "#DC2626",
     fontSize: 14,
-    textAlign: 'center',
+    textAlign: "center",
   },
-  
+
   submitButton: {
     marginBottom: 16,
   },
-  
+
   backButton: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 24,
-     flexDirection: 'row',
+    flexDirection: "row",
   },
-  
+
   backButtonText: {
     fontSize: 14,
     color: Colors.secondary,
-    fontWeight: '500',
+    fontWeight: "500",
   },
-  
+
   footer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     paddingTop: 20,
     borderTopWidth: 1,
     borderTopColor: Colors.lightGray,
   },
-  
+
   footerText: {
     fontSize: 14,
     color: Colors.gray,
   },
-  
+
   footerLink: {
     fontSize: 14,
     color: Colors.secondary,
-    fontWeight: '600',
+    fontWeight: "600",
   },
-}); 
+});

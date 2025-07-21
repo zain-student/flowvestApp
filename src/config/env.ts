@@ -18,7 +18,9 @@ interface EnvironmentConfig {
 
 const ENV: EnvironmentConfig = {
   // API Configuration
-  API_BASE_URL: process.env.EXPO_PUBLIC_API_BASE_URL || 'http://localhost:8000/api',
+  API_BASE_URL: process.env.EXPO_PUBLIC_API_BASE_URL || 'https://smartpayout.outscalers.com/api', // Default to production API
+  // 'http://localhost:8000/api'
+  
   
   // App Configuration
   APP_NAME: 'FlowVest',

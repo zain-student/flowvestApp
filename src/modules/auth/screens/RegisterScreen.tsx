@@ -19,9 +19,8 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  ToastAndroid,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AuthStackParamList } from "../../../navigation/AuthStack";
@@ -164,15 +163,35 @@ export const RegisterScreen: React.FC = () => {
       const result = await dispatch(registerUser(validation.data));
       if (registerUser.fulfilled.match(result)) {
         console.log("✅ Registration successful:", result);
-      } else {
-        console.log(
-          "❌ Registration failed:",
-          result.payload || result.error.message
-        );
-        ToastAndroid.show(
-          `Registration failed: ${result.payload || result.error.message}`,
-          ToastAndroid.LONG
-        );
+        // ToastAndroid.show(
+        //   'Registration successful',
+        //   ToastAndroid.SHORT
+        // );
+        // Navigate to login screen after successful registration
+        // navigation.navigate("Login");
+      } else if (registerUser.rejected.match(result)) {
+        // Registration failed - error will be shown via authError
+        console.log("❌ Registration failed:", result.error.message);
+        // ToastAndroid.show(
+        //   `Registration failed: ${result.payload || result.error.message}`,
+        //   ToastAndroid.LONG
+        // );
+        // It will aalow the user to change the email or password and remain on the same screen
+        // Clear auth error to allow user to retry
+        dispatch(clearError());
+
+        // console.error("❌ Registration failed:", result.payload || result.error.message);
+      // Handle specific registration errors
+
+      // } else {
+      //   console.log(
+      //     "❌ Registration failed:",
+      //     result.payload || result.error.message
+      //   );
+        // ToastAndroid.show(
+        //   `Registration failed: ${result.payload || result.error.message}`,
+        //   ToastAndroid.LONG
+        // );
         return;
       }
     } catch (error) {
@@ -251,7 +270,8 @@ export const RegisterScreen: React.FC = () => {
         style={styles.backButton}
         onPress={() => setCurrentStep(1)}
       >
-        <Text style={styles.backButtonText}>← Back</Text>
+        <Ionicons name="arrow-back" size={20} color={Colors.secondary} />
+        <Text style={styles.backButtonText}>Back</Text>
       </TouchableOpacity>
     </View>
   );
@@ -396,11 +416,11 @@ export const RegisterScreen: React.FC = () => {
         )}
 
         {/* Show auth error */}
-        {authError && (
+        {/* {authError && (
           <View style={styles.errorContainer}>
             <Text style={styles.errorText}>{authError}</Text>
           </View>
-        )}
+        )} */}
 
         {/* Submit Button */}
         <Button
@@ -410,6 +430,7 @@ export const RegisterScreen: React.FC = () => {
           fullWidth
           style={styles.submitButton}
         />
+
 
         {/* Back Button */}
         <TouchableOpacity

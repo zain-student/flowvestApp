@@ -76,19 +76,54 @@ const initialState: AuthState = {
 
 // Async thunks (will be implemented with actual API calls)
 export const loginUser = createAsyncThunk(
-  "auth/login",
+  "/v1/auth/login",
   async (credentials: {
     email: string;
     password: string;
     remember?: boolean;
-  }) => {
-    // This will be implemented with actual API call
-    // For now, return mock data structure
-    return {
-      user: {} as User,
-      token: {} as AuthToken,
-      session: {} as AuthSession,
-    };
+  },{rejectWithValue}) => {
+    try {
+      const response = await api.post(API_ENDPOINTS.AUTH.LOGIN, credentials);
+      const token = response.data?.data?.token;
+      const user = response.data?.data?.user;
+      const session = response.data?.data?.session; // Assuming session is returned
+      console.log("Login response:",JSON.stringify(response));
+      if (!token || !user || !session) {
+        return rejectWithValue("Login failed: No token or user data or session returned");
+      }
+      // Save token and user data to storage
+      await storage.multiSet([
+
+        [StorageKeys.AUTH_TOKEN, token?.access_token],
+        [StorageKeys.USER_DATA, JSON.stringify(user)],
+        // Uncomment when session is available
+        [StorageKeys.SESSION, JSON.stringify(session)],
+        // [StorageKeys.REFRESH_TOKEN, token?.refresh_token],
+      ]);
+      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+      console.log("✅ User logged in successfully:", response.data.message);
+      return {
+        user,
+        token: {
+          access_token: token.access_token,
+          token_type: token.token_type,
+          expires_in: token.expires_in,
+          expires_at: token.expires_at,
+        },
+        session: {
+          issued_at: session?.issued_at,
+          refresh_available_until: session?.refresh_available_until,
+        },
+      };
+    } catch (error: any) {
+      const errMsg =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Login failed";
+      ToastAndroid.show(errMsg, ToastAndroid.SHORT);
+      console.log("❌ Login error:", errMsg);
+      return rejectWithValue(errMsg);
+    }
   }
 );
 
@@ -103,7 +138,7 @@ export const registerUser = createAsyncThunk(
       const token = response.data?.data?.token;
       const user = response.data?.data?.user;
       const session = response.data?.data?.session; // Assuming session is returned
-      console.log("Registration response:", response);
+      console.log("Registration response:", JSON.stringify(response));
       if (!token || !user) {
         return rejectWithValue(
           "Registration failed: No token or user data returned"
@@ -113,6 +148,8 @@ export const registerUser = createAsyncThunk(
       await storage.multiSet([
         [StorageKeys.AUTH_TOKEN, token?.access_token],
         [StorageKeys.USER_DATA, JSON.stringify(user)],
+        // Uncomment when session is available
+        [StorageKeys.SESSION, JSON.stringify(session)],
         // [StorageKeys.REFRESH_TOKEN, token?.refresh_token],
       ]);
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
@@ -137,7 +174,7 @@ export const registerUser = createAsyncThunk(
         error?.message ||
         "Registration failed";
       ToastAndroid.show(errMsg, ToastAndroid.SHORT);
-      console.error("❌ Registration error:", errMsg);
+      // console.error("❌ Registration error:", errMsg);
       return rejectWithValue(errMsg);
     }
   }

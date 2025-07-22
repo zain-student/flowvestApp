@@ -180,8 +180,34 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-export const logoutUser = createAsyncThunk("auth/logout", async () => {
+export const logoutUser = createAsyncThunk("/v1/auth/logout", async () => {
   // This will be implemented with actual API call
+   const response = await api.post(
+        API_ENDPOINTS.AUTH.LOGOUT,
+        {}, // No body needed for logout
+        // {
+        //   headers: {
+        //     Authorization: `Bearer ${storage.getItem(StorageKeys.AUTH_TOKEN)}`,
+        //   },
+        // }
+      );
+  // Clear storage
+  console.log("Logout response:", JSON.stringify(response));
+  // Clear all auth-related data from storage
+  await storage.multiRemove([
+    StorageKeys.AUTH_TOKEN,
+    StorageKeys.USER_DATA,
+    StorageKeys.SESSION,
+  ]);
+
+  
+  // Clear Redux state
+  console.log(response.data.message);
+
+  console.log("Logging out user...");
+  // Show success message
+  ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+  console.log("✅ User logged out successfully");
   return;
 });
 

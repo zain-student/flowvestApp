@@ -246,7 +246,8 @@ export const storage = {
 export const StorageKeys = {
   // Authentication
   AUTH_TOKEN: '@flowvest:token',
-  REFRESH_TOKEN: '@flowvest:refresh_token',
+  // REFRESH_TOKEN: '@flowvest:refresh_token',
+  EXPIRES_AT: '@flowvest:expires_at',
   USER_DATA: '@flowvest:user_data',
   SESSION: '@flowvest:session',
   // User preferences

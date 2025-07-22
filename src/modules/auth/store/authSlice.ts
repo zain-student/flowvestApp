@@ -96,6 +96,7 @@ export const loginUser = createAsyncThunk(
 
         [StorageKeys.AUTH_TOKEN, token?.access_token],
         [StorageKeys.USER_DATA, JSON.stringify(user)],
+        [StorageKeys.EXPIRES_AT, token?.expires_at], // Save expires_at
         // Uncomment when session is available
         [StorageKeys.SESSION, JSON.stringify(session)],
         // [StorageKeys.REFRESH_TOKEN, token?.refresh_token],
@@ -148,6 +149,7 @@ export const registerUser = createAsyncThunk(
       await storage.multiSet([
         [StorageKeys.AUTH_TOKEN, token?.access_token],
         [StorageKeys.USER_DATA, JSON.stringify(user)],
+        [StorageKeys.EXPIRES_AT, token?.expires_at],
         // Uncomment when session is available
         [StorageKeys.SESSION, JSON.stringify(session)],
         // [StorageKeys.REFRESH_TOKEN, token?.refresh_token],
@@ -185,11 +187,6 @@ export const logoutUser = createAsyncThunk("/v1/auth/logout", async () => {
    const response = await api.post(
         API_ENDPOINTS.AUTH.LOGOUT,
         {}, // No body needed for logout
-        // {
-        //   headers: {
-        //     Authorization: `Bearer ${storage.getItem(StorageKeys.AUTH_TOKEN)}`,
-        //   },
-        // }
       );
   // Clear storage
   console.log("Logout response:", JSON.stringify(response));
@@ -211,12 +208,47 @@ export const logoutUser = createAsyncThunk("/v1/auth/logout", async () => {
   return;
 });
 
-export const refreshToken = createAsyncThunk("auth/refresh", async () => {
-  // This will be implemented with actual API call
+export const refreshToken = createAsyncThunk("/v1/auth/refresh", async () => {
+  const response = await api.post(API_ENDPOINTS.AUTH.REFRESH, {}, {
+    headers: {
+      Authorization: `Bearer ${await storage.getItem(StorageKeys.AUTH_TOKEN)}`,
+    },
+  });
+  console.log("Refresh token response:", JSON.stringify(response));
+  if (!response.data?.data?.token) {
+
+
+    throw new Error("Failed to refresh token");
+  }
+  // Save new token and session to storage
+  await storage.multiSet([
+    [StorageKeys.AUTH_TOKEN, response.data.data.token.access_token],
+    [StorageKeys.SESSION, JSON.stringify(response.data.data.session)],
+    [StorageKeys.EXPIRES_AT, response.data.data.token.expires_at], // Save new expires_at
+    [StorageKeys.USER_DATA, JSON.stringify(response.data.data.user)],
+    [StorageKeys.SESSION, JSON.stringify(response.data.data.session)],
+
+  ]);
+  console.log("✅ Token refreshed successfully");
+  // Return new token and session
   return {
-    token: {} as AuthToken,
-    session: {} as AuthSession,
+    token: {
+      access_token: response.data.data.token.access_token,
+      token_type: response.data.data.token.token_type,
+      expires_in: response.data.data.token.expires_in,
+      expires_at: response.data.data.token.expires_at,
+    },
+    session: {
+      issued_at: response.data.data.session.issued_at,
+      refresh_available_until:
+        response.data.data.session.refresh_available_until,
+    },
   };
+  // This will be implemented with actual API call
+  // return {
+  //   token: {} as AuthToken,
+  //   session: {} as AuthSession,
+  // };
 });
 
 export const getCurrentUser = createAsyncThunk("auth/me", async () => {

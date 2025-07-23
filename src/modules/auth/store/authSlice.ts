@@ -251,9 +251,24 @@ export const refreshToken = createAsyncThunk("/v1/auth/refresh", async () => {
   // };
 });
 
-export const getCurrentUser = createAsyncThunk("auth/me", async () => {
+export const getCurrentUser = createAsyncThunk("/v1/auth/me", async () => {
+  try {
+    const response = await api.get(API_ENDPOINTS.AUTH.ME, {
+    },
+  );
+  const user= response?.data?.data;
+  console.log("Get current user response:", JSON.stringify(response));
+  return user;
+
+  }
+  catch (error: any) {
+    const errMsg = error?.response?.data?.message || error?.message || "Failed to get user profile";
+    ToastAndroid.show(errMsg, ToastAndroid.SHORT);
+    console.error("❌ Get current user error:", errMsg);
+    // return rejectWithValue(errMsg);
+  }
   // This will be implemented with actual API call
-  return {} as User;
+  // return {} as User;
 });
 
 // Auth slice
@@ -370,7 +385,11 @@ const authSlice = createSlice({
     builder
       .addCase(getCurrentUser.fulfilled, (state, action) => {
         state.user = action.payload;
+        state.isLoading = false;
       })
+    //    .addCase(getCurrentUser.pending, (state) => {
+    //   state.isLoading = true;
+    // })
       .addCase(getCurrentUser.rejected, (state) => {
         // If can't get user, probably invalid token
         return { ...initialState };

@@ -6,6 +6,7 @@
 import Colors from '@/shared/colors/Colors';
 import { Button } from '@components/ui/Button';
 import { Input } from '@components/ui/Input';
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAppDispatch, useAppSelector } from '@store/index';
@@ -147,7 +148,10 @@ export const LoginScreen: React.FC = () => {
               onPress={() => handleInputChange('remember', !formData.remember)}
             >
               <View style={[styles.checkbox, formData.remember && styles.checkboxChecked]}>
-                {formData.remember && <Text style={styles.checkmark}>✓</Text>}
+                {formData.remember &&
+                //  <Text style={styles.checkmark}>✓</Text>
+                <Ionicons name='checkmark' size={16}  color={"white"}/>
+                 }
               </View>
               <Text style={styles.rememberText}>Remember me</Text>
             </TouchableOpacity>

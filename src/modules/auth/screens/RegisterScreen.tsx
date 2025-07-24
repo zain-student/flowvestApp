@@ -405,7 +405,10 @@ export const RegisterScreen: React.FC = () => {
               formData.terms_accepted && styles.checkboxChecked,
             ]}
           >
-            {formData.terms_accepted && <Text style={styles.checkmark}>✓</Text>}
+            {formData.terms_accepted &&
+            //  <Text style={styles.checkmark}>✓</Text>
+            <Ionicons name='checkmark' size={16}  color={"white"}/>
+             }
           </View>
           <Text style={styles.termsText}>
             I agree to the Terms of Service and Privacy Policy

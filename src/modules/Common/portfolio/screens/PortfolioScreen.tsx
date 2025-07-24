@@ -1,5 +1,6 @@
 import Colors from "@/shared/colors/Colors";
 import { Feather } from "@expo/vector-icons";
+import { DashboardLayout } from "@modules/Investor/dashboard/components/DashboardLayout";
 import React from "react";
 import {
   ScrollView,
@@ -8,7 +9,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { DashboardLayout } from "../../dashboard/components/DashboardLayout";
 const mockAssets = [
   { id: 1, name: "Tech Growth Fund", value: 12000, growth: "+8.2%" },
   { id: 2, name: "Real Estate Trust", value: 5000, growth: "+2.1%" },

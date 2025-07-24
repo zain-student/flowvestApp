@@ -1,10 +1,10 @@
 import { InvestorDashboardStackParamList } from "@/navigation/InvestorStacks/InvestorDashboardStack";
 import Colors from "@/shared/colors/Colors";
 import {
-  Inter_400Regular,
-  Inter_600SemiBold,
-  Inter_700Bold,
-  useFonts,
+    Inter_400Regular,
+    Inter_600SemiBold,
+    Inter_700Bold,
+    useFonts,
 } from "@expo-google-fonts/inter";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -12,13 +12,13 @@ import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect } from "react";
 import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
 } from "react-native";
-import { DashboardLayout } from "../../components/DashboardLayout";
+import { DashboardLayout } from "../components/DashboardLayout";
 SplashScreen.preventAutoHideAsync(); // Keep splash visible
 
 // Mock dashboard data (structure matches backend)

@@ -4,14 +4,16 @@
  */
 
 // import { DashboardScreen } from '@/modules/dashboard/Investor/screens/DashboardScreen';
+import { ProfileScreen } from '@/modules/Common/profile/screens';
 import InvestmentStack from '@/navigation/InvestorStacks/InvestmentStack';
 import { InvestorDashboardStack } from '@/navigation/InvestorStacks/InvestorDashboardStack';
 import PayoutStack from '@/navigation/InvestorStacks/PayoutStack';
+import { useAppSelector } from '@/shared/store';
 import { Feather } from '@expo/vector-icons';
-import { PortfolioScreen } from '@modules/portfolio/screens';
-import { ProfileScreen } from '@modules/profile/screens';
+import { PortfolioScreen } from '@modules/Common/portfolio/screens/PortfolioScreen';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useAppDispatch } from '@store/index';
 import React from 'react';
 import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
@@ -41,6 +43,7 @@ const TAB_LABELS: Record<string, string> = {
   Portfolio: 'Portfolio',
   Profile: 'Profile',
 };
+
 
 const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigation }) => {
   return (
@@ -92,18 +95,24 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigat
 };
 
 export const AppTabNavigator: React.FC = () => {
+   const dispatch = useAppDispatch();
+    // const isAuthenticated = useAppSelector(selectIsAuthenticated);
+    // const isLoading = useAppSelector(selectIsLoading);
+    const userRole = useAppSelector((state) => state.auth.user?.roles?.[0]); // e.g. 'user' or 'admin
   return (
-    <Tab.Navigator
-      initialRouteName="Dashboard"
-      tabBar={props => <CustomTabBar {...props} />}
-      screenOptions={{ headerShown: false }}
-    >
-      <Tab.Screen name="Dashboard" component={InvestorDashboardStack} />
-      <Tab.Screen name="Investments" component={InvestmentStack} />
-      <Tab.Screen name="Payouts" component={PayoutStack} />
-      <Tab.Screen name="Portfolio" component={PortfolioScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
-    </Tab.Navigator>
+    userRole === "admin" ? (
+      <Tab.Navigator
+        initialRouteName="Dashboard"
+        tabBar={props => <CustomTabBar {...props} />}
+        screenOptions={{ headerShown: false }}
+      >
+        <Tab.Screen name="Dashboard" component={InvestorDashboardStack} />
+        <Tab.Screen name="Investments" component={InvestmentStack} />
+        <Tab.Screen name="Payouts" component={PayoutStack} />
+        <Tab.Screen name="Portfolio" component={PortfolioScreen} />
+        <Tab.Screen name="Profile" component={ProfileScreen} />
+      </Tab.Navigator>
+    ) : null
   );
 };
 

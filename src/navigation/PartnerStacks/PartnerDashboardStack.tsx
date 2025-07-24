@@ -1,32 +1,30 @@
-import { Ionicons } from '@expo/vector-icons';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
-import { AddPartnerScreen } from '../../modules/Investor/dashboard/screens/AddPartnerScreen';
-import { DashboardScreen } from '../../modules/Investor/dashboard/screens/DashboardScreen';
+// import { AddPartnerScreen } from '../../modules/dashboard/Investor/screens/AddPartnerScreen';
+import { PartnersDashboard } from '../../modules/Partner/Dashboard/screens/PartnersDashboard';
 
-export type InvestorDashboardStackParamList = {
-  InvestorDashboard: undefined;
- AddPartner: undefined;
+export type PartnerDashboardStackParamList = {
+  PartnersDashboard: undefined;
+ 
 };
-const Stack = createNativeStackNavigator<InvestorDashboardStackParamList>();
-export const InvestorDashboardStack = () => {
+const Stack = createNativeStackNavigator<PartnerDashboardStackParamList>();
+export const PartnerDashboardStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName="InvestorDashboard"
+      initialRouteName="PartnersDashboard"
       screenOptions={{
         animation: 'slide_from_right',
       }}
       >
       <Stack.Screen
-        name="InvestorDashboard"
-        component={DashboardScreen}
+        name="PartnersDashboard"
+        component={PartnersDashboard}
         options={{
           headerShown: false,
           gestureEnabled: false,
         }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="AddPartner"
         component={AddPartnerScreen}
         options={({navigation})=>({
@@ -53,10 +51,10 @@ export const InvestorDashboardStack = () => {
             </TouchableOpacity>
           ),
         })}
-      />
+      /> */}
     </Stack.Navigator>
   )
 }
 
-export default InvestorDashboardStack
+export default PartnerDashboardStack;
 

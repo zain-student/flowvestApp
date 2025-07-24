@@ -243,7 +243,7 @@ class AuthService {
    * Get stored refresh token
    */
   async getRefreshToken(): Promise<string | null> {
-    return await storage.getItem(StorageKeys.REFRESH_TOKEN);
+    return await storage.getItem(StorageKeys.EXPIRES_AT);
   }
 
   /**
@@ -259,8 +259,12 @@ class AuthService {
   private async storeAuthData(authData: AuthResponse['data']): Promise<void> {
     await Promise.all([
       storage.setItem(StorageKeys.AUTH_TOKEN, authData.token),
-      storage.setItem(StorageKeys.REFRESH_TOKEN, authData.refresh_token),
+      // Uncomment when refresh token is available
+      // storage.setItem(StorageKeys.REFRESH_TOKEN, authData.refresh_token),
       storage.setItem(StorageKeys.USER_DATA, authData.user),
+      storage.setItem(StorageKeys.EXPIRES_AT, authData.expires_at),
+
+
     ]);
   }
 
@@ -270,8 +274,11 @@ class AuthService {
   private async clearAuthData(): Promise<void> {
     await Promise.all([
       storage.removeItem(StorageKeys.AUTH_TOKEN),
-      storage.removeItem(StorageKeys.REFRESH_TOKEN),
+      // storage.removeItem(StorageKeys.REFRESH_TOKEN),
       storage.removeItem(StorageKeys.USER_DATA),
+      storage.removeItem(StorageKeys.EXPIRES_AT),
+      storage.removeItem(StorageKeys.SESSION),
+
     ]);
   }
 

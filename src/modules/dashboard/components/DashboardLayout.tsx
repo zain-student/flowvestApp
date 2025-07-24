@@ -1,14 +1,13 @@
 import type { AppTabParamList } from "@/navigation/AppTabNavigator";
+import Colors from "@/shared/colors/Colors";
 import { Feather } from "@expo/vector-icons";
 import { logoutUser } from "@modules/auth/store/authSlice";
 import type { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
-import { storage } from "@shared/services/storage";
 import { useAppDispatch } from "@store/index";
 import React from "react";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 interface DashboardLayoutProps {
   children: React.ReactNode;
   headerStyle?: "dark" | "light";
@@ -29,12 +28,25 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
   // Sign out handler
   const handleSignOut = async () => {
+    Alert.alert("Sign Out", "Are you sure you want to sign out?", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Sign Out",
+        onPress: () => signOut(),
+        style: "destructive",
+      },
+    ]);
+    const signOut = async () => {
     try {
       await dispatch(logoutUser());
-      await storage.clear();
+      // await storage.clear(); 
       navigation.navigate("Profile"); // Or use navigation.reset if you have a root stack
     } catch (error) {
       Alert.alert("Error", "Failed to sign out. Please try again.");
+    }
     }
   };
 
@@ -69,22 +81,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 10,
     paddingBottom: 8,
-    backgroundColor: "#18181B", 
+    backgroundColor: Colors.secondary, 
     borderBottomWidth: 1,
-    borderBottomColor: "#18181B",
+    borderBottomColor: Colors.secondary,
   },
-  logo: { fontSize: 22, fontWeight: "bold", color: "#fff" },
+  logo: { fontSize: 22, fontWeight: "bold", color: Colors.white },
   headerRight: { flexDirection: "row", alignItems: "center" },
   avatar: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: "#18181B",
+    backgroundColor: Colors.secondary,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12,
   },
-  avatarText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
+  avatarText: { color: Colors.white, fontWeight: "bold", fontSize: 16 },
   signOutBtn: { padding: 6 },
   signOutText: { fontSize: 22, color: "#EF4444" },
 });

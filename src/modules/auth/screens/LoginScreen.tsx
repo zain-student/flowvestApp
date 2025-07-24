@@ -18,7 +18,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AuthStackParamList } from '../../../navigation/AuthStack';
@@ -80,9 +80,13 @@ export const LoginScreen: React.FC = () => {
       } else if (loginUser.rejected.match(result)) {
         // Login failed - error will be shown via authError
         console.log('Login failed:', result.error.message);
+        // ToastAndroid.show(
+        //   `Login failed: ${result.payload || result.error.message}`,
+        //   ToastAndroid.LONG
+        // );
       }
     } catch (error) {
-      console.error('Login error:', error);
+      // console.error('Login error:', error);
       Alert.alert('Error', 'An unexpected error occurred. Please try again.');
     }
   };
@@ -149,11 +153,11 @@ export const LoginScreen: React.FC = () => {
             </TouchableOpacity>
 
             {/* Show auth error */}
-            {authError && (
+            {/* {authError && (
               <View style={styles.errorContainer}>
                 <Text style={styles.errorText}>{authError}</Text>
               </View>
-            )}
+            )} */}
 
             {/* Submit Button */}
             <Button
@@ -300,6 +304,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     borderTopWidth: 1,
     borderTopColor: Colors.lightGray,
+    
   },
   
   footerText: {

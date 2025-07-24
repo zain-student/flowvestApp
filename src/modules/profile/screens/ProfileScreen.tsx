@@ -1,6 +1,8 @@
+import { getCurrentUser, selectIsLoading } from '@/modules/auth/store/authSlice';
 import Colors from '@/shared/colors/Colors';
+import { useAppDispatch, useAppSelector } from '@/shared/store';
 import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { DashboardLayout } from '../../dashboard/components/DashboardLayout';
 
@@ -11,26 +13,53 @@ const mockUser = {
   company: 'FlowVest Inc.',
 };
 
+// const dispatch = useAppDispatch();
+// const user = useAppSelector(getCurrentUser);
 export const ProfileScreen: React.FC = () => {
+  const dispatch = useAppDispatch();
+   const { user, error } = useAppSelector((state) => state.auth); // adjust if it's profileSlice
+ const isLoading = useAppSelector(selectIsLoading);
+   useEffect(() => {
+     dispatch(getCurrentUser());
+   }, []);
+
   return (
     <DashboardLayout>
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        <View style={styles.avatarContainer}>
+        {user ?(<View style={styles.avatarContainer}>
           <View style={styles.avatar}>
-            <Text style={styles.avatarText}>N</Text>
+            <Text style={styles.avatarText}>{
+              user.name.charAt(0).toUpperCase()
+              }</Text>
           </View>
-          <Text style={styles.name}>{mockUser.name}</Text>
-          <Text style={styles.role}>{mockUser.role}</Text>
-        </View>
-
-        <View style={styles.card}>
+          <Text style={styles.name}>{user.name}</Text>
+          <Text style={styles.role}>{user.roles}</Text>
+        </View>): (
+          <View style={styles.avatarContainer}>
+            <View style={styles.avatar}>
+              <Text style={styles.avatarText}>J</Text>
+            </View>
+            <Text style={styles.name}>John Doe</Text>
+            <Text style={styles.role}>Investment Manager</Text>
+          </View>
+        ) 
+}
+       {user?(<View style={styles.card}>
+          <Text style={styles.sectionTitle}>Account Info</Text>
+          <Text style={styles.infoLabel}>Email</Text>
+          <Text style={styles.infoValue}>{user.email}</Text>
+          <Text style={styles.infoLabel}>Company</Text>
+          <Text style={styles.infoValue}>{mockUser.company}</Text>
+        </View>)
+        :
+        (<View style={styles.card}>
           <Text style={styles.sectionTitle}>Account Info</Text>
           <Text style={styles.infoLabel}>Email</Text>
           <Text style={styles.infoValue}>{mockUser.email}</Text>
           <Text style={styles.infoLabel}>Company</Text>
           <Text style={styles.infoValue}>{mockUser.company}</Text>
-        </View>
-
+        </View>)
+}
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>Settings</Text>
           <View style={styles.buttonGroup}>

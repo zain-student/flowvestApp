@@ -1,5 +1,5 @@
-import { InvestmentDetailsScreen } from "@/modules/investments/screens/InvestmentDetailsScreen";
-import { InvestmentsScreen } from "@/modules/investments/screens/InvestmentsScreen";
+import { InvestmentDetailsScreen } from "@/modules/Investor/investments/screens/InvestmentDetailsScreen";
+import { InvestmentsScreen } from "@/modules/Investor/investments/screens/InvestmentsScreen";
 import { Ionicons } from "@expo/vector-icons";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";

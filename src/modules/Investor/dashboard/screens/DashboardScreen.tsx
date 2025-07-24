@@ -1,22 +1,22 @@
 import { InvestorDashboardStackParamList } from "@/navigation/InvestorStacks/InvestorDashboardStack";
 import Colors from "@/shared/colors/Colors";
 import {
-    Inter_400Regular,
-    Inter_600SemiBold,
-    Inter_700Bold,
-    useFonts,
+  Inter_400Regular,
+  Inter_600SemiBold,
+  Inter_700Bold,
+  useFonts,
 } from "@expo-google-fonts/inter";
-import { Feather } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect } from "react";
 import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from "react-native";
 import { DashboardLayout } from "../components/DashboardLayout";
 SplashScreen.preventAutoHideAsync(); // Keep splash visible
@@ -232,7 +232,8 @@ export const DashboardScreen: React.FC = () => {
       <TouchableOpacity style={styles.fab} onPress={
         () =>navigation.navigate("AddPartner") // Adjust navigation to your stack
       }>
-        <Text style={styles.fabIcon}>＋</Text>
+        {/* <Text style={styles.fabIcon}>＋</Text> */}
+        <Ionicons name="add" size={24} color={"white"}/>
         <Text style={styles.fabLabel}>Add Partner</Text>
       </TouchableOpacity>
     </DashboardLayout>

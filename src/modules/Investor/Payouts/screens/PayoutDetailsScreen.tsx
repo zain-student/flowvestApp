@@ -1,5 +1,6 @@
 import { PayoutStackParamList } from "@/navigation/InvestorStacks/PayoutStack";
 import Colors from "@/shared/colors/Colors";
+import { Ionicons } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import {
@@ -30,7 +31,8 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
         style={styles.closeBtn}
         onPress={() => navigation.goBack()}
       >
-        <Text style={styles.closeText}>✕</Text>
+        {/* <Text style={styles.closeText}>✕</Text> */}
+        <Ionicons name="close" size={27}/>
       </TouchableOpacity>
       <ScrollView
         contentContainerStyle={styles.scrollContent}

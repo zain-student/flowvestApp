@@ -1,5 +1,5 @@
 import Colors from "@/shared/colors/Colors";
-import { Feather } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import { DashboardLayout } from "@modules/Investor/dashboard/components/DashboardLayout";
 import React from "react";
 import {
@@ -55,7 +55,8 @@ export const PortfolioScreen: React.FC = () => {
         ))}
       </ScrollView>
       <TouchableOpacity style={styles.fab}>
-        <Text style={styles.fabIcon}>⬇️</Text>
+       
+        <Ionicons name="document-outline" size={24} color={"white"}/>
         <Text style={styles.fabLabel}>Export Report</Text>
       </TouchableOpacity>
     </DashboardLayout>

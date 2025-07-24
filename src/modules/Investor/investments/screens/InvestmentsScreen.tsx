@@ -1,6 +1,6 @@
 import { InvestmentStackParamList } from "@/navigation/InvestorStacks/InvestmentStack";
 import Colors from '@/shared/colors/Colors';
-import { Feather } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useState } from "react";
@@ -141,7 +141,8 @@ export const InvestmentsScreen: React.FC = () => {
         )}
       </ScrollView>
       <TouchableOpacity style={styles.fab}>
-        <Text style={styles.fabIcon}>＋</Text>
+     
+        <Ionicons name="add" size={24} color={"white"}/>
         <Text style={styles.fabLabel}>Add Investment</Text>
       </TouchableOpacity>
     </DashboardLayout>

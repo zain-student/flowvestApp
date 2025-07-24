@@ -1,5 +1,6 @@
 import { InvestmentStackParamList } from '@/navigation/InvestorStacks/InvestmentStack';
 import Colors from '@/shared/colors/Colors';
+import { Ionicons } from '@expo/vector-icons';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -24,7 +25,8 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.closeBtn} onPress={() => navigation.goBack()}>
-        <Text style={styles.closeText}>✕</Text>
+    
+        <Ionicons name='close' size={27}/>
       </TouchableOpacity>
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>{mockInvestment.name}</Text>

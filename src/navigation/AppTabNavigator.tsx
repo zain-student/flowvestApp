@@ -100,7 +100,7 @@ export const AppTabNavigator: React.FC = () => {
     // const isLoading = useAppSelector(selectIsLoading);
     const userRole = useAppSelector((state) => state.auth.user?.roles?.[0]); // e.g. 'user' or 'admin
   return (
-    userRole === "admin" ? (
+    // userRole === "admin" ? (
       <Tab.Navigator
         initialRouteName="Dashboard"
         tabBar={props => <CustomTabBar {...props} />}
@@ -112,7 +112,7 @@ export const AppTabNavigator: React.FC = () => {
         <Tab.Screen name="Portfolio" component={PortfolioScreen} />
         <Tab.Screen name="Profile" component={ProfileScreen} />
       </Tab.Navigator>
-    ) : null
+    // ) : null
   );
 };
 

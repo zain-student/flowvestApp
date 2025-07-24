@@ -107,7 +107,7 @@ export const RootNavigator: React.FC = () => {
                 component={PartnerDashboardStack}
                 options={{ animationTypeForReplace: "push" }}
               />
-            )}
+           )} 
 
             {/* <Stack.Screen
               name="InvestmentDetails"

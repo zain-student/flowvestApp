@@ -44,6 +44,12 @@
       "image": "./assets/images/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "79a6b7af-b4d7-473e-a107-ffb4a94d37b0"
+      }
     }
   }
 }

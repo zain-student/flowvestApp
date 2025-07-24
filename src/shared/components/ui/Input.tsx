@@ -3,6 +3,7 @@
  * Reusable text input with validation states and different types
  */
 
+import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import {
   StyleSheet,
@@ -124,7 +125,8 @@ export const Input: React.FC<InputProps> = ({
                 style={styles.passwordToggle}
               >
                 <Text style={styles.passwordToggleText}>
-                  {isPasswordVisible ? '👁️' : '👁️‍🗨️'}
+                
+                  {isPasswordVisible ?<Ionicons name='eye-outline' size={24}/>: <Ionicons name='eye-off-outline' size={24}/>}
                 </Text>
               </TouchableOpacity>
             ) : (

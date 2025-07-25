@@ -1,16 +1,21 @@
-import { DashboardLayout } from '@/modules/Investor/dashboard/components/DashboardLayout';
+import { DashboardLayout } from '@/modules/Common/components/DashboardLayout';
+import Colors from '@/shared/colors/Colors';
 import React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { AssignedInvestments } from '../components/AssignedInvestments';
 import { PayoutDueThisWeek } from '../components/PayoutDueThisWeek';
 import { RecentPaymentsLog } from '../components/RecentPaymentsLog';
 export const PartnersDashboard = () => {
   return (
     <DashboardLayout>
-      <ScrollView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.container}
+        showsVerticalScrollIndicator={false}
+      >
         <AssignedInvestments />
+        <View style={styles.innerContainer} >
         <PayoutDueThisWeek />
-        <RecentPaymentsLog />
+        <RecentPaymentsLog/>
+        </View>
       </ScrollView>
    </DashboardLayout>
   );
@@ -18,9 +23,15 @@ export const PartnersDashboard = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: 0,
+    paddingBottom: 100,
+    backgroundColor: Colors.background,
   },
+  innerContainer:{
+    paddingHorizontal:8
+  }
+ 
 });
 
 export default PartnersDashboard;
+

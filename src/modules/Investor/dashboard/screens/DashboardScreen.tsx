@@ -18,7 +18,7 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import { DashboardLayout } from "../components/DashboardLayout";
+import { DashboardLayout } from "../../../Common/components/DashboardLayout";
 SplashScreen.preventAutoHideAsync(); // Keep splash visible
 
 // Mock dashboard data (structure matches backend)

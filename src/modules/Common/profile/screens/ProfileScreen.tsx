@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '@/shared/store';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { DashboardLayout } from '../../../Investor/dashboard/components/DashboardLayout';
+import { DashboardLayout } from '../../components/DashboardLayout';
 
 const mockUser = {
   name: 'Naomi Carter',

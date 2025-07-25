@@ -5,13 +5,13 @@ import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useState } from "react";
 import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
-import { DashboardLayout } from "../../dashboard/components/DashboardLayout";
+import { DashboardLayout } from "../../../Common/components/DashboardLayout";
 const mockPayouts = [
   {
     id: 1,

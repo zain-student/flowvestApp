@@ -82,13 +82,14 @@ export const RootNavigator: React.FC = () => {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {isAuthenticated ? (
           <>
-             {userRole === "admin" && (
-               <> 
-                <Stack.Screen
-                  name="AppTabs"
-                  component={AppTabNavigator}
-                  options={{ animationTypeForReplace: "push" }}
-                />
+            
+            {userRole === "admin" && (
+              <>
+              <Stack.Screen
+              name="AppTabs"
+              component={AppTabNavigator}
+              options={{ animationTypeForReplace: "push" }}
+            />
                 <Stack.Screen
                   name="InvestorDashboardStack"
                   component={InvestorDashboardStack}
@@ -102,12 +103,19 @@ export const RootNavigator: React.FC = () => {
               </>
             )}
             {userRole === "user" && (
+              <>
+              <Stack.Screen
+              name="AppTabs"
+              component={AppTabNavigator}
+              options={{ animationTypeForReplace: "push" }}
+            />
               <Stack.Screen
                 name="PartnerDashboardStack"
                 component={PartnerDashboardStack}
                 options={{ animationTypeForReplace: "push" }}
               />
-           )} 
+              </>
+            )}
 
             {/* <Stack.Screen
               name="InvestmentDetails"

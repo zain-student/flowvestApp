@@ -10,6 +10,7 @@ export const PartnersDashboard = () => {
     <DashboardLayout>
       <ScrollView contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
+        scrollEnabled={false}
       >
         <AssignedInvestments />
         <View style={styles.innerContainer} >

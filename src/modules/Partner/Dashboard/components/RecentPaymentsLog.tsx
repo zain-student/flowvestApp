@@ -82,8 +82,9 @@ const styles =StyleSheet.create({
   },
 payments:{
   // borderWidth:1,
-  height:"40%",
+  height:"35%",
   // marginBottom:20
+  // paddingBottom:40
 },
 sectionRow: {
     flexDirection: "row",

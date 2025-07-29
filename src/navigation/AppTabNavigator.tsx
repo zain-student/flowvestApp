@@ -11,6 +11,7 @@ import PayoutStack from "@/navigation/InvestorStacks/PayoutStack";
 import { useAppSelector } from "@/shared/store";
 import { Feather } from "@expo/vector-icons";
 import { PortfolioScreen } from "@modules/Common/portfolio/screens/PortfolioScreen";
+import { MyActivity } from "@modules/Partner/Activities/screens/MyActivity";
 import { PartnersDashboard } from "@modules/Partner/Dashboard/screens/PartnersDashboard";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -32,6 +33,7 @@ export type AppTabParamList = {
   Portfolio: undefined;
   Profile: undefined;
   PartnersDashboard: undefined;
+  Activity:undefined;
 };
 
 const Tab = createBottomTabNavigator<AppTabParamList>();
@@ -42,6 +44,7 @@ const TAB_ICONS: Record<string, keyof typeof Feather.glyphMap> = {
   Payouts: "dollar-sign",
   Portfolio: "folder",
   Profile: "user",
+  Activity:"activity"
 };
 
 const TAB_LABELS: Record<string, string> = {
@@ -50,6 +53,7 @@ const TAB_LABELS: Record<string, string> = {
   Payouts: "Payouts",
   Portfolio: "Portfolio",
   Profile: "Profile",
+  Activity:"MyActivities"
 };
 
 const CustomTabBar: React.FC<BottomTabBarProps> = ({
@@ -133,6 +137,7 @@ export const AppTabNavigator: React.FC = () => {
       {userRole === "user" && (
         <>
           <Tab.Screen name="Dashboard" component={PartnersDashboard} />
+          <Tab.Screen name="Activity" component={MyActivity}/>
           <Tab.Screen name="Portfolio" component={PortfolioScreen} />
           <Tab.Screen name="Profile" component={ProfileScreen} />
         </>

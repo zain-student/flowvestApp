@@ -82,12 +82,12 @@ export const loginUser = createAsyncThunk(
     password: string;
     remember?: boolean;
   },{rejectWithValue}) => {
-    try {
+    try { 
       const response = await api.post(API_ENDPOINTS.AUTH.LOGIN, credentials);
       const token = response.data?.data?.token;
       const user = response.data?.data?.user;
       const session = response.data?.data?.session; // Assuming session is returned
-      console.log("Login response:",JSON.stringify(response));
+      console.log("Login response:",JSON.stringify(response.data));
       if (!token || !user || !session) {
         return rejectWithValue("Login failed: No token or user data or session returned");
       }
@@ -139,7 +139,7 @@ export const registerUser = createAsyncThunk(
       const token = response.data?.data?.token;
       const user = response.data?.data?.user;
       const session = response.data?.data?.session; // Assuming session is returned
-      console.log("Registration response:", JSON.stringify(response));
+      console.log("Registration response:", JSON.stringify(response.data));
       if (!token || !user) {
         return rejectWithValue(
           "Registration failed: No token or user data returned"
@@ -189,7 +189,7 @@ export const logoutUser = createAsyncThunk("/v1/auth/logout", async () => {
         {}, // No body needed for logout
       );
   // Clear storage
-  console.log("Logout response:", JSON.stringify(response));
+  console.log("Logout response:", JSON.stringify(response.data));
   // Clear all auth-related data from storage
   await storage.multiRemove([
     StorageKeys.AUTH_TOKEN,
@@ -214,7 +214,7 @@ export const refreshToken = createAsyncThunk("/v1/auth/refresh", async () => {
       Authorization: `Bearer ${await storage.getItem(StorageKeys.AUTH_TOKEN)}`,
     },
   });
-  console.log("Refresh token response:", JSON.stringify(response));
+  console.log("Refresh token response:", JSON.stringify(response.data));
   if (!response.data?.data?.token) {
 
 
@@ -257,7 +257,7 @@ export const getCurrentUser = createAsyncThunk("/v1/auth/me", async () => {
     },
   );
   const user= response?.data?.data;
-  console.log("Get current user response:", JSON.stringify(response));
+  console.log("Get current user response:", JSON.stringify(response.data));
   return user;
 
   }

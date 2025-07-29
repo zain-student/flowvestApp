@@ -27,9 +27,13 @@ export const PayoutDueThisWeek: React.FC = () => {
       ) : (
         mockPayouts.map((payout) => (
           <View key={payout.id} style={styles.card}>
-            <Text style={styles.investor}>{payout.investor}</Text>
-            <Text style={styles.subtext}>Due: {payout.dueDate}</Text>
-            <Text style={styles.subtext}>Amount: {payout.amount}</Text>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <Text style={styles.investor}>{payout.investor}</Text>
+              <Text style={styles.subtext}>Due: {payout.dueDate}</Text>
+            </View>
+            <Text style={styles.subtext}>{payout.amount}</Text>
           </View>
         ))
       )}
@@ -50,28 +54,19 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   card: {
-    // backgroundColor: Colors.white,
-    // padding: 14,
-    // borderRadius: 10,
-    // borderWidth: 1,
-    // borderColor: '#E5E7EB',
-    // marginBottom: 10,
-    // elevation: 1,
-
-    //  flexDirection: "row",
-    // alignItems: "center",
-    paddingHorizontal:8,
+    paddingHorizontal: 8,
     paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: "#F3F4F6",
-    backgroundColor: Colors.white,
-    marginHorizontal:7,
+    backgroundColor: Colors.secondary,
+    marginHorizontal: 7,
     borderRadius: 8,
   },
   investor: {
     fontSize: 15,
+    fontFamily: "Inter_700Bold",
     fontWeight: "700",
-    color: Colors.secondary,
+    color: Colors.white,
   },
   subtext: {
     fontSize: 13,

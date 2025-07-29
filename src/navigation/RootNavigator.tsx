@@ -20,6 +20,7 @@ import { AuthStack } from "./AuthStack";
 import InvestorDashboardStack from "./InvestorStacks/InvestorDashboardStack";
 import { PartnerDashboardStack } from "./PartnerStacks/PartnerDashboardStack";
 import { PartnersActivityStack } from "./PartnerStacks/PartnersActivityStack";
+import { PartnersInvestmentDetailStack } from "./PartnerStacks/PartnersInvestmentDetailStack";
 
 // Navigation types
 export type RootStackParamList = {
@@ -28,6 +29,7 @@ export type RootStackParamList = {
   InvestorDashboardStack: undefined;
   PartnerDashboardStack: undefined;
   PartnersActivityStack: undefined;
+  PartnerInvestmentStack:undefined;
   PayoutStack: undefined;
   AppTabs: undefined;
   Loading: undefined;
@@ -123,6 +125,7 @@ export const RootNavigator: React.FC = () => {
                 animationTypeForReplace:'push'
               }}
               />
+              <Stack.Screen name="PartnerInvestmentStack" component={PartnersInvestmentDetailStack}/>
               </>
             )}
 

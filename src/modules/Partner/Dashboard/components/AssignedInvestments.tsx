@@ -37,13 +37,13 @@ export const AssignedInvestments = () => {
             </Text>
           </Text>
           <View style={styles.balanceActionsRow}>
-            <TouchableOpacity style={styles.balanceActionBtnDark}>
+            {/* <TouchableOpacity style={styles.balanceActionBtnDark}>
               <Feather name="plus" size={18} color="#fff" />
               <Text style={styles.balanceActionTextDark}>Top Up</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity style={styles.balanceActionBtnDark}>
               <Feather name="arrow-up-right" size={18} color="#fff" />
-              <Text style={styles.balanceActionTextDark}>Send Money</Text>
+              <Text style={styles.balanceActionTextDark}>Assigned Investments</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -88,8 +88,8 @@ const styles=StyleSheet.create({
     alignItems: "center",
     backgroundColor: Colors.darkButton,
     borderRadius: 18,
-    paddingHorizontal: 18,
-    paddingVertical: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
     marginRight: 12,
   },
   balanceActionTextDark: {

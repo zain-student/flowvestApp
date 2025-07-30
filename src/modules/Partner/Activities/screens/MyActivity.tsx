@@ -50,7 +50,9 @@ export const MyActivity = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <ScrollView style={styles.innerContainer}>
+      <ScrollView style={styles.innerContainer}
+      showsVerticalScrollIndicator={false}
+      >
         <ActivityFilters />
         <NotesAdded />
         <PayoutsHistory />
@@ -67,7 +69,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
     // paddingHorizontal: 16,
-    paddingBottom: 100,
+    paddingBottom: 80,
   },
   innerContainer:{
     paddingHorizontal:16,

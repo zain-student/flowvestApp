@@ -24,8 +24,9 @@ export const PartnersDashboard = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 0,
-    paddingBottom: 100,
+    flex:1,
+    // paddingHorizontal: 0,
+    paddingBottom: 80,
     backgroundColor: Colors.background,
   },
   innerContainer:{

@@ -5,12 +5,12 @@
 
 // import { DashboardScreen } from '@/modules/dashboard/Investor/screens/DashboardScreen';
 import { ProfileScreen } from "@/modules/Common/profile/screens";
+import { PortfolioScreen } from "@/modules/Investor/portfolio/screens/PortfolioScreen";
 import { InvestmentStack } from "@/navigation/InvestorStacks/InvestmentStack";
 import { InvestorDashboardStack } from "@/navigation/InvestorStacks/InvestorDashboardStack";
 import { PayoutStack } from "@/navigation/InvestorStacks/PayoutStack";
 import { useAppSelector } from "@/shared/store";
 import { Feather } from "@expo/vector-icons";
-import { PortfolioScreen } from "@modules/Common/portfolio/screens/PortfolioScreen";
 import { MyActivity } from "@modules/Partner/Activities/screens/MyActivity";
 import { InvestmentDetails } from "@modules/Partner/InvestmentDetails/screens/InvestmentDetails";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";

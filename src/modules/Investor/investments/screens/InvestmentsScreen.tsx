@@ -5,11 +5,11 @@ import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useState } from "react";
 import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { DashboardLayout } from "../../../Common/components/DashboardLayout";
 
@@ -56,10 +56,7 @@ export const InvestmentsScreen: React.FC = () => {
 
   return (
     <DashboardLayout>
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
+      
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Total Invested</Text>
           <Text style={styles.cardValue}>$12,500.00</Text>
@@ -87,6 +84,10 @@ export const InvestmentsScreen: React.FC = () => {
             </TouchableOpacity>
           </View>
         </View>
+        <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.filterRow}>
           {FILTERS.map((f) => (
             <TouchableOpacity
@@ -150,14 +151,18 @@ export const InvestmentsScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  scrollContent: {paddingBottom:100, padding: 0, backgroundColor: Colors.background },
+  scrollContent: {
+    flex:1,
+    paddingBottom:80,
+    //  padding: 0,
+      backgroundColor: Colors.background },
   card: {
     backgroundColor: Colors.secondary,
     borderBottomLeftRadius: 32,
     borderBottomRightRadius: 32,
     padding: 24,
     paddingTop: 36,
-    marginBottom: 18,
+    marginBottom: 1,
     shadowColor: "#000",
     shadowOpacity: 0.08,
     shadowRadius: 12,

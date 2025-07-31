@@ -115,10 +115,7 @@ export const DashboardScreen: React.FC = () => {
 
   return (
     <DashboardLayout headerStyle="dark">
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
+      
         {/* Main Balance Card (dark, rounded) */}
         <View style={styles.balanceCardDark}>
           <Text style={styles.balanceLabelDark}>Total Payout Amount</Text>
@@ -148,7 +145,10 @@ export const DashboardScreen: React.FC = () => {
             </TouchableOpacity>
           </View>
         </View>
-
+<ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         {/* Stat Cards - 2x2 Grid */}
         <View style={styles.statCardGrid}>
           {statCards.map((card, idx) => (
@@ -241,7 +241,9 @@ export const DashboardScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Colors.background },
+  container: { flex: 1,
+    paddingBottom:80
+    , backgroundColor: Colors.background },
   header: {
     flexDirection: "row",
     alignItems: "center",
@@ -282,7 +284,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 12,
     elevation: 6,
-    marginBottom: 18,
+    // marginBottom: 18,
   },
   balanceLabelDark: {
     color: Colors.gray,

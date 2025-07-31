@@ -5,11 +5,11 @@ import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useState } from "react";
 import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { DashboardLayout } from "../../../Common/components/DashboardLayout";
 const mockPayouts = [
@@ -49,10 +49,7 @@ export const PayoutsScreen: React.FC = () => {
 
   return (
     <DashboardLayout>
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
+      
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Total Payouts</Text>
           <Text style={styles.cardValue}>$2,900.00</Text>
@@ -79,6 +76,10 @@ export const PayoutsScreen: React.FC = () => {
             </TouchableOpacity>
           </View>
         </View>
+        <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.filterRow}>
           {FILTERS.map((f) => (
             <TouchableOpacity
@@ -134,7 +135,7 @@ export const PayoutsScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  scrollContent: { padding: 0,paddingBottom:100, backgroundColor: Colors.background },
+  scrollContent: { flex:1,paddingBottom:80, backgroundColor: Colors.background },
   card: {
     backgroundColor: Colors.secondary,
     borderBottomLeftRadius: 32,

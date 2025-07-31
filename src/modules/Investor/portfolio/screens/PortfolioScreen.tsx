@@ -18,10 +18,7 @@ const mockAssets = [
 export const PortfolioScreen: React.FC = () => {
   return (
     <DashboardLayout>
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
+      
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Net Worth</Text>
           <Text style={styles.cardValue}>$25,000.00</Text>
@@ -37,6 +34,10 @@ export const PortfolioScreen: React.FC = () => {
             </TouchableOpacity>
           </View>
         </View>
+        <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.chartContainer}>
           <View style={styles.chartBar} />
           <Text style={styles.chartLabel}>Performance (Mock Chart)</Text>
@@ -64,7 +65,7 @@ export const PortfolioScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  scrollContent: { padding: 0,paddingBottom:100,backgroundColor: Colors.background },
+  scrollContent: { flex:1,paddingBottom:80,backgroundColor: Colors.background },
   card: {
     backgroundColor: Colors.secondary,
     borderBottomLeftRadius: 32, borderBottomRightRadius: 32,

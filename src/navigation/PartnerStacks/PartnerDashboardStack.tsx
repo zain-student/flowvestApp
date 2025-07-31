@@ -1,11 +1,13 @@
+import { Ionicons } from '@expo/vector-icons';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
+import { TouchableOpacity } from 'react-native';
 // import { AddPartnerScreen } from '../../modules/dashboard/Investor/screens/AddPartnerScreen';
+import { AssignedInvestments } from '../../modules/Partner/Dashboard/screens/AssignedInvestments';
 import { PartnersDashboard } from '../../modules/Partner/Dashboard/screens/PartnersDashboard';
-
 export type PartnerDashboardStackParamList = {
   PartnersDashboard: undefined;
- 
+ AssignedInvestments:undefined;
 };
 const Stack = createNativeStackNavigator<PartnerDashboardStackParamList>();
 export const PartnerDashboardStack = () => {
@@ -24,12 +26,10 @@ export const PartnerDashboardStack = () => {
           gestureEnabled: false,
         }}
       />
-      {/* <Stack.Screen
-        name="AddPartner"
-        component={AddPartnerScreen}
-        options={({navigation})=>({
+      <Stack.Screen name="AssignedInvestments" component={AssignedInvestments} 
+       options={({navigation})=>({
           // gestureEnabled: false,
-          title: 'Add Partner',
+          title: 'Assigned Investments',
           headerTitleAlign: 'center',
           headerLeft: () => (
             <TouchableOpacity
@@ -51,10 +51,10 @@ export const PartnerDashboardStack = () => {
             </TouchableOpacity>
           ),
         })}
-      /> */}
+      />
     </Stack.Navigator>
   )
 }
 
-export default PartnerDashboardStack;
+// export default PartnerDashboardStack;
 

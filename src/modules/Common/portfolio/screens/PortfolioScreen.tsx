@@ -3,11 +3,11 @@ import Colors from "@/shared/colors/Colors";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import React from "react";
 import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 const mockAssets = [
   { id: 1, name: "Tech Growth Fund", value: 12000, growth: "+8.2%" },
@@ -151,4 +151,4 @@ const styles = StyleSheet.create({
   fabIcon: { fontSize: 22, color: Colors.white, marginRight: 6 },
   fabLabel: { color: Colors.white, fontWeight: "bold", fontSize: 15 },
 });
-export default PortfolioScreen;
+// export default PortfolioScreen;

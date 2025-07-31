@@ -58,5 +58,5 @@ export const InvestorDashboardStack = () => {
   )
 }
 
-export default InvestorDashboardStack
+// export default InvestorDashboardStack
 

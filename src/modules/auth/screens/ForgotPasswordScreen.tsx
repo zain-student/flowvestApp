@@ -15,10 +15,11 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AuthStackParamList } from "../../../navigation/AuthStack";
@@ -158,6 +159,10 @@ export const ForgotPasswordScreen: React.FC = () => {
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
+          <StatusBar
+                            barStyle="dark-content" // or "dark-content"
+                            // backgroundColor="#000" // set to match your theme
+                          />
           {/* Header */}
           <View style={styles.header}>
             <Text style={styles.title}>Forgot Password?</Text>

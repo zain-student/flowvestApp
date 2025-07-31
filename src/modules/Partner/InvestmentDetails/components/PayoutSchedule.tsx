@@ -66,6 +66,6 @@ const styles = StyleSheet.create({
   date: { fontSize: 14, color: Colors.secondary },
   amount: { fontSize: 13, color: Colors.gray },
   status: { fontWeight: '600', fontSize: 13 },
-  paid: { color: Colors.success },
-  pending: { color: Colors.warning },
+  paid: { color: Colors.gray },
+  pending: { color: Colors.green },
 });

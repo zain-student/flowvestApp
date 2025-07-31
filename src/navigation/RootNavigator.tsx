@@ -4,7 +4,7 @@
  */
 
 import { InvestmentStack } from "@/navigation/InvestorStacks/InvestmentStack";
-import PayoutStack from "@/navigation/InvestorStacks/PayoutStack";
+import { PayoutStack } from "@/navigation/InvestorStacks/PayoutStack";
 import {
   selectIsAuthenticated,
   selectIsLoading,
@@ -17,7 +17,7 @@ import React, { useEffect, useState } from "react";
 import { LoadingScreen } from "../app/LoadingScreen";
 import { AppTabNavigator } from "./AppTabNavigator";
 import { AuthStack } from "./AuthStack";
-import InvestorDashboardStack from "./InvestorStacks/InvestorDashboardStack";
+import { InvestorDashboardStack } from "./InvestorStacks/InvestorDashboardStack";
 import { PartnerDashboardStack } from "./PartnerStacks/PartnerDashboardStack";
 import { PartnersActivityStack } from "./PartnerStacks/PartnersActivityStack";
 import { PartnersInvestmentDetailStack } from "./PartnerStacks/PartnersInvestmentDetailStack";
@@ -29,7 +29,7 @@ export type RootStackParamList = {
   InvestorDashboardStack: undefined;
   PartnerDashboardStack: undefined;
   PartnersActivityStack: undefined;
-  PartnerInvestmentStack:undefined;
+  PartnerInvestmentStack: undefined;
   PayoutStack: undefined;
   AppTabs: undefined;
   Loading: undefined;
@@ -79,6 +79,12 @@ export const RootNavigator: React.FC = () => {
         </Stack.Navigator>
       </NavigationContainer>
     );
+  } else if (isAuthenticated && !userRole) {
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="AuthStack" component={AuthStack} />
+      </Stack.Navigator>
+    </NavigationContainer>;
   }
 
   return (
@@ -86,14 +92,13 @@ export const RootNavigator: React.FC = () => {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {isAuthenticated ? (
           <>
-            
             {userRole === "admin" && (
               <>
-              <Stack.Screen
-              name="AppTabs"
-              component={AppTabNavigator}
-              options={{ animationTypeForReplace: "push" }}
-            />
+                <Stack.Screen
+                  name="AppTabs"
+                  component={AppTabNavigator}
+                  options={{ animationTypeForReplace: "push" }}
+                />
                 <Stack.Screen
                   name="InvestorDashboardStack"
                   component={InvestorDashboardStack}
@@ -108,24 +113,27 @@ export const RootNavigator: React.FC = () => {
             )}
             {userRole === "user" && (
               <>
-              <Stack.Screen
-              name="AppTabs"
-              component={AppTabNavigator}
-              options={{ animationTypeForReplace: "push" }}
-            />
-              <Stack.Screen
-                name="PartnerDashboardStack"
-                component={PartnerDashboardStack}
-                options={{ animationTypeForReplace: "push" }}
-              />
-              <Stack.Screen
-              name="PartnersActivityStack"
-              component={PartnersActivityStack}
-              options={{
-                animationTypeForReplace:'push'
-              }}
-              />
-              <Stack.Screen name="PartnerInvestmentStack" component={PartnersInvestmentDetailStack}/>
+                <Stack.Screen
+                  name="AppTabs"
+                  component={AppTabNavigator}
+                  options={{ animationTypeForReplace: "push" }}
+                />
+                <Stack.Screen
+                  name="PartnerDashboardStack"
+                  component={PartnerDashboardStack}
+                  options={{ animationTypeForReplace: "push" }}
+                />
+                <Stack.Screen
+                  name="PartnersActivityStack"
+                  component={PartnersActivityStack}
+                  options={{
+                    animationTypeForReplace: "push",
+                  }}
+                />
+                <Stack.Screen
+                  name="PartnerInvestmentStack"
+                  component={PartnersInvestmentDetailStack}
+                />
               </>
             )}
 

@@ -62,7 +62,7 @@ export const InvestmentDetails = () => {
   )
 }
 
-export default InvestmentDetails;
+// export default InvestmentDetails;
 
 const styles = StyleSheet.create({
 container: {
@@ -111,7 +111,7 @@ paddingHorizontal:16
     backgroundColor: Colors.darkButton,
     borderRadius: 18,
     paddingHorizontal: 10,
-    paddingVertical: 7,
+    paddingVertical: 10,
     // marginRight: 12,
   },
   balanceActionTextDark: {

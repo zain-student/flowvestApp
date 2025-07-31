@@ -17,6 +17,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -286,6 +287,10 @@ export const RegisterScreen: React.FC = () => {
 
     return (
       <View style={styles.stepContent}>
+        <StatusBar
+                          barStyle="dark-content" // or "dark-content"
+                          // backgroundColor="#000" // set to match your theme
+                        />
         <Text style={styles.stepTitle}>Create Your Account</Text>
         <Text style={styles.stepDescription}>
           Fill in your details to get started

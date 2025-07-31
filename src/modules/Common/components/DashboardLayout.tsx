@@ -6,7 +6,7 @@ import type { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
 import { useAppDispatch } from "@store/index";
 import React from "react";
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -52,6 +52,11 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar
+              barStyle="light-content" // or "dark-content"
+              backgroundColor={Colors.secondary} // set to match your theme
+              translucent={true}
+            />
       <View style={styles.header}>
         <Text style={styles.logo}>FlowVest</Text>
         <View style={styles.headerRight}>

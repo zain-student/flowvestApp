@@ -5,14 +5,13 @@
 
 // import { DashboardScreen } from '@/modules/dashboard/Investor/screens/DashboardScreen';
 import { ProfileScreen } from "@/modules/Common/profile/screens";
-import InvestmentStack from "@/navigation/InvestorStacks/InvestmentStack";
+import { InvestmentStack } from "@/navigation/InvestorStacks/InvestmentStack";
 import { InvestorDashboardStack } from "@/navigation/InvestorStacks/InvestorDashboardStack";
-import PayoutStack from "@/navigation/InvestorStacks/PayoutStack";
+import { PayoutStack } from "@/navigation/InvestorStacks/PayoutStack";
 import { useAppSelector } from "@/shared/store";
 import { Feather } from "@expo/vector-icons";
 import { PortfolioScreen } from "@modules/Common/portfolio/screens/PortfolioScreen";
 import { MyActivity } from "@modules/Partner/Activities/screens/MyActivity";
-import { PartnersDashboard } from "@modules/Partner/Dashboard/screens/PartnersDashboard";
 import { InvestmentDetails } from "@modules/Partner/InvestmentDetails/screens/InvestmentDetails";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -25,6 +24,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { PartnerDashboardStack } from "./PartnerStacks/PartnerDashboardStack";
 
 // Tab navigation types
 export type AppTabParamList = {
@@ -33,7 +33,7 @@ export type AppTabParamList = {
   Payouts: undefined;
   Portfolio: undefined;
   Profile: undefined;
-  PartnersDashboard: undefined;
+  PartnerDashboard: undefined;
   Activity:undefined;
   InvestmentDetails :undefined;
 };
@@ -140,7 +140,7 @@ export const AppTabNavigator: React.FC = () => {
       )}
       {userRole === "user" && (
         <>
-          <Tab.Screen name="Dashboard" component={PartnersDashboard} />
+          <Tab.Screen name="Dashboard" component={PartnerDashboardStack} />
           <Tab.Screen name="InvestmentDetails" component={InvestmentDetails}/>
           <Tab.Screen name="Activity" component={MyActivity}/>
           {/* <Tab.Screen name="Portfolio" component={PortfolioScreen} /> */}

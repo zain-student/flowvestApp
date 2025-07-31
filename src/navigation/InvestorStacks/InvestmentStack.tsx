@@ -9,7 +9,7 @@ export type InvestmentStackParamList = {
   InvestmentDetails: { id: number };
 };
 
-const Stack = createNativeStackNavigator<InvestmentStackParamList>();
+export const Stack = createNativeStackNavigator<InvestmentStackParamList>();
 
 export const InvestmentStack = () => {
   return (
@@ -58,4 +58,4 @@ export const InvestmentStack = () => {
     </Stack.Navigator>
   );
 };
-export default InvestmentStack;
+// export default InvestmentStack;

@@ -83,4 +83,4 @@ const styles = StyleSheet.create({
   txAmount: { fontSize: 15, color: Colors.white, fontWeight: '500' },
   txDate: { fontSize: 13, color: Colors.gray },
 });
-export default InvestmentDetailsScreen; 
+// export default InvestmentDetailsScreen; 

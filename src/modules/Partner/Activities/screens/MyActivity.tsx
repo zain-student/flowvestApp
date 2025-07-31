@@ -62,7 +62,7 @@ export const MyActivity = () => {
   );
 };
 
-export default MyActivity;
+// export default MyActivity;
 
 const styles = StyleSheet.create({
   container: {
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.darkButton,
     borderRadius: 18,
     paddingHorizontal: 10,
-    paddingVertical: 7,
+    paddingVertical: 10,
     // marginRight: 12,
   },
   balanceActionTextDark: {

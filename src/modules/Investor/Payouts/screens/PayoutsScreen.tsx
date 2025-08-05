@@ -34,6 +34,27 @@ const mockPayouts = [
     status: "Completed",
     recipient: "You",
   },
+  {
+    id: 4,
+    date: "2024-07-15",
+    amount: 1200,
+    status: "Upcoming",
+    recipient: "You",
+  },
+  {
+    id: 5,
+    date: "2024-06-01",
+    amount: 900,
+    status: "Completed",
+    recipient: "You",
+  },
+  {
+    id: 6,
+    date: "2024-05-01",
+    amount: 800,
+    status: "Completed",
+    recipient: "You",
+  },
 ];
 
 const FILTERS = ["All", "Upcoming", "Completed"];
@@ -135,14 +156,17 @@ export const PayoutsScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  scrollContent: { flex:1,paddingBottom:80, backgroundColor: Colors.background },
+  scrollContent: { 
+    // flex:1,
+    paddingBottom:80, 
+    backgroundColor: Colors.background },
   card: {
     backgroundColor: Colors.secondary,
     borderBottomLeftRadius: 32,
     borderBottomRightRadius: 32,
     padding: 24,
     paddingTop: 36,
-    marginBottom: 18,
+    // marginBottom: 18,
     shadowColor: "#000",
     shadowOpacity: 0.08,
     shadowRadius: 12,
@@ -174,6 +198,7 @@ const styles = StyleSheet.create({
   balanceActionsRow: { flexDirection: "row", marginTop: 18 },
   filterRow: {
     flexDirection: "row",
+    marginTop:10,
     marginBottom: 16,
     gap: 10,
     marginHorizontal: 12,
@@ -203,6 +228,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 16,
     marginBottom: 14,
+    
     flexDirection: "row",
     alignItems: "center",
     shadowColor: "#000",

@@ -56,7 +56,7 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Colors.background },
+  container: { flex: 1, backgroundColor: Colors.background ,paddingBottom:100},
   closeBtn: {  position: "absolute",
     top: 32,
     right: 24,

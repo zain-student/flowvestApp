@@ -1,5 +1,5 @@
 import { InvestmentStackParamList } from "@/navigation/InvestorStacks/InvestmentStack";
-import Colors from '@/shared/colors/Colors';
+import Colors from "@/shared/colors/Colors";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -38,6 +38,30 @@ const mockInvestments = [
     returns: "+5.7%",
     date: "2024-05-15",
   },
+  {
+    id: 4,
+    name: "Tech Growth Fund",
+    amount: 12000,
+    status: "Active",
+    returns: "+8.2%",
+    date: "2024-06-01",
+  },
+  {
+    id: 5,
+    name: "Real Estate Trust",
+    amount: 5000,
+    status: "Pending",
+    returns: "+2.1%",
+    date: "2024-07-01",
+  },
+  {
+    id: 6,
+    name: "Green Energy Bonds",
+    amount: 3000,
+    status: "Completed",
+    returns: "+5.7%",
+    date: "2024-05-15",
+  },
 ];
 
 const FILTERS = ["All", "Active", "Pending", "Completed"];
@@ -56,35 +80,34 @@ export const InvestmentsScreen: React.FC = () => {
 
   return (
     <DashboardLayout>
-      
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Total Invested</Text>
-          <Text style={styles.cardValue}>$12,500.00</Text>
-          <Text style={styles.cardSubtitle}>
-            +8.2%{" "}
-            <Text
-              style={{
-                color: Colors.gray,
-                fontWeight: "400",
-                fontFamily: "Inter_400Regular",
-              }}
-            >
-              this year
-            </Text>{" "}
-          </Text>
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>Total Invested</Text>
+        <Text style={styles.cardValue}>$12,500.00</Text>
+        <Text style={styles.cardSubtitle}>
+          +8.2%{" "}
+          <Text
+            style={{
+              color: Colors.gray,
+              fontWeight: "400",
+              fontFamily: "Inter_400Regular",
+            }}
+          >
+            this year
+          </Text>{" "}
+        </Text>
 
-          <View style={styles.balanceActionsRow}>
-            <TouchableOpacity style={styles.balanceActionBtnDark}>
-              <Feather name="plus" size={18} color= '#fff' />
-              <Text style={styles.balanceActionTextDark}>Top Up</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.balanceActionBtnDark}>
-              <Feather name="arrow-up-right" size={18} color='#fff' />
-              <Text style={styles.balanceActionTextDark}>Send Money</Text>
-            </TouchableOpacity>
-          </View>
+        <View style={styles.balanceActionsRow}>
+          <TouchableOpacity style={styles.balanceActionBtnDark}>
+            <Feather name="plus" size={18} color="#fff" />
+            <Text style={styles.balanceActionTextDark}>Top Up</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.balanceActionBtnDark}>
+            <Feather name="arrow-up-right" size={18} color="#fff" />
+            <Text style={styles.balanceActionTextDark}>Send Money</Text>
+          </TouchableOpacity>
         </View>
-        <ScrollView
+      </View>
+      <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
@@ -120,7 +143,7 @@ export const InvestmentsScreen: React.FC = () => {
                 navigation.navigate("InvestmentDetails", { id: i.id })
               }
             >
-              <View style={{ flex: 1  }}>
+              <View style={{ flex: 1 }}>
                 <Text style={styles.investmentName}>{i.name}</Text>
                 <Text style={styles.investmentAmount}>
                   ${i.amount.toLocaleString()}
@@ -142,8 +165,7 @@ export const InvestmentsScreen: React.FC = () => {
         )}
       </ScrollView>
       <TouchableOpacity style={styles.fab}>
-     
-        <Ionicons name="add" size={24} color={"white"}/>
+        <Ionicons name="add" size={24} color={"white"} />
         <Text style={styles.fabLabel}>Add Investment</Text>
       </TouchableOpacity>
     </DashboardLayout>
@@ -152,17 +174,21 @@ export const InvestmentsScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   scrollContent: {
-    flex:1,
-    paddingBottom:80,
-    //  padding: 0,
-      backgroundColor: Colors.background },
+    // flex:1,
+    // paddingBottom:100,
+    // //  padding: 0,
+    //   backgroundColor: Colors.background
+    padding: 0,
+    paddingBottom: 100,
+    backgroundColor: Colors.background,
+  },
   card: {
     backgroundColor: Colors.secondary,
     borderBottomLeftRadius: 32,
     borderBottomRightRadius: 32,
     padding: 24,
     paddingTop: 36,
-    marginBottom: 1,
+    // marginBottom: 1,
     shadowColor: "#000",
     shadowOpacity: 0.08,
     shadowRadius: 12,
@@ -224,6 +250,7 @@ const styles = StyleSheet.create({
   filterRow: {
     flexDirection: "row",
     marginBottom: 16,
+    marginTop: 10,
     gap: 10,
     marginHorizontal: 12,
     backgroundColor: Colors.white,

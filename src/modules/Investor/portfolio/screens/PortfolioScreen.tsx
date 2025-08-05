@@ -13,6 +13,9 @@ const mockAssets = [
   { id: 1, name: "Tech Growth Fund", value: 12000, growth: "+8.2%" },
   { id: 2, name: "Real Estate Trust", value: 5000, growth: "+2.1%" },
   { id: 3, name: "Green Energy Bonds", value: 3000, growth: "+5.7%" },
+   { id: 4, name: "Tech Growth Fund", value: 12000, growth: "+8.2%" },
+  { id: 5, name: "Real Estate Trust", value: 5000, growth: "+2.1%" },
+  { id: 6, name: "Green Energy Bonds", value: 3000, growth: "+5.7%" },
 ];
 
 export const PortfolioScreen: React.FC = () => {
@@ -65,13 +68,15 @@ export const PortfolioScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  scrollContent: { flex:1,paddingBottom:80,backgroundColor: Colors.background },
+  scrollContent: { 
+    // flex:1,
+    paddingBottom:100,backgroundColor: Colors.background },
   card: {
     backgroundColor: Colors.secondary,
     borderBottomLeftRadius: 32, borderBottomRightRadius: 32,
     padding: 24,
     paddingTop:36,
-    marginBottom: 18,
+    // marginBottom: 18,
     shadowColor: "#000",
     shadowOpacity: 0.08,
     shadowRadius: 12,
@@ -109,6 +114,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FDE68A",
     borderRadius: 16,
     marginBottom: 8,
+       marginTop:10,
   },
   chartLabel: { color: Colors.green, fontWeight: "600", fontSize: 13 },
   sectionTitle: {

@@ -1,5 +1,7 @@
 import { InvestorDashboardStackParamList } from "@/navigation/InvestorStacks/InvestorDashboardStack";
 import Colors from "@/shared/colors/Colors";
+import { useAppDispatch, useAppSelector } from "@/shared/store";
+import { fetchInvestments } from "@/shared/store/slices/investmentSlice";
 import {
   Inter_400Regular,
   Inter_600SemiBold,
@@ -16,7 +18,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { DashboardLayout } from "../../../Common/components/DashboardLayout";
 SplashScreen.preventAutoHideAsync(); // Keep splash visible
@@ -29,7 +31,7 @@ const dashboardData = {
     total_payouts_scheduled: 3,
     overdue_payouts: 1,
     total_partners: 4,
-    total_payout_amount: 8200,
+    total_invested_amount: 8200,
     this_month_payouts: 2,
     roi_average: 8.2,
   },
@@ -61,39 +63,14 @@ const dashboardData = {
   investment_performance: [],
 };
 
-const statCards = [
-  {
-    icon: "layers",
-    label: "Total Investments",
-    value: dashboardData.stats.total_investments,
-    bg: "#E0F2FE", // pastel blue
-  },
-  {
-    icon: "activity",
-    label: "Active Investments",
-    value: dashboardData.stats.active_investments,
-    bg: "#DCFCE7", // pastel green
-  },
-  {
-    icon: "users",
-    label: "Partners",
-    value: dashboardData.stats.total_partners,
-    bg: "#FDE68A", // pastel yellow
-  },
-  {
-    icon: "percent",
-    label: "Avg ROI",
-    value: `${dashboardData.stats.roi_average}%`,
-    bg: "#FCE7F3", // pastel pink
-  },
-];
 type Props = NativeStackNavigationProp<
   InvestorDashboardStackParamList,
   "InvestorDashboard"
 >;
 export const DashboardScreen: React.FC = () => {
+  
   const navigation =
-      useNavigation<NativeStackNavigationProp<InvestorDashboardStackParamList>>();
+    useNavigation<NativeStackNavigationProp<InvestorDashboardStackParamList>>();
   // const navigation =
   //   useNavigation<BottomTabNavigationProp<AppTabParamList, "Dashboard">>();
   const [fontsLoaded] = useFonts({
@@ -101,7 +78,6 @@ export const DashboardScreen: React.FC = () => {
     Inter_600SemiBold,
     Inter_700Bold,
   });
-
   useEffect(() => {
     const hide = async () => {
       // Wait 10 seconds (10000 ms)
@@ -110,42 +86,81 @@ export const DashboardScreen: React.FC = () => {
     };
     hide();
   }, []);
-
+  const dispatch = useAppDispatch();
+  const { investments,stats, isLoading } = useAppSelector(
+    (state) => state.investments
+  );
+  const statCards = [
+  {
+    icon: "layers",
+    label: "Total Investments",
+    // value: dashboardData.stats.total_investments,
+    value: stats?.total_investments ?? "--",
+    bg: "#E0F2FE", // pastel blue
+  },
+  {
+    icon: "activity",
+    label: "Active Investments",
+    // value: dashboardData.stats.active_investments,
+    value:stats?.active_investments ?? "--",
+    bg: "#DCFCE7", // pastel green
+  },
+  {
+    icon: "users",
+    label: "Partners",
+    // value: dashboardData.stats.total_partners,
+    value:stats?.total_partners ?? "--",
+    bg: "#FDE68A", // pastel yellow
+  },
+  {
+    icon: "percent",
+    label: "Avg ROI",
+    // value: `${dashboardData.stats.roi_average}%`,
+    value: stats?.roi_average ? `${stats.roi_average.toFixed(2)}` : "--",
+    bg: "#FCE7F3", // pastel pink
+  },
+];
+  useEffect(() => {
+    // if (!investments.length)
+       dispatch(fetchInvestments());
+    //  console.log("📦 Investments from Redux:", investments);
+    // investments
+  }, []);
+  // const activeInvestments = investments.filter((i) => i.status === "active");
   if (!fontsLoaded) return null;
 
   return (
     <DashboardLayout headerStyle="dark">
-      
-        {/* Main Balance Card (dark, rounded) */}
-        <View style={styles.balanceCardDark}>
-          <Text style={styles.balanceLabelDark}>Total Payout Amount</Text>
-          <Text style={styles.balanceValueDark}>
-            ${dashboardData.stats.total_payout_amount.toLocaleString()}
+      {/* Main Balance Card (dark, rounded) */}
+      <View style={styles.balanceCardDark}>
+        <Text style={styles.balanceLabelDark}>Total Invested Amount</Text>
+        <Text style={styles.balanceValueDark}>
+          ${stats?.total_invested_amount ?? "--"}
+        </Text>
+        <Text style={styles.balanceChangeDark}>
+          +${(11915.28).toLocaleString()}{" "}
+          <Text
+            style={{
+              color: Colors.gray,
+              fontWeight: "400",
+              fontFamily: "Inter_400Regular",
+            }}
+          >
+            than last month
           </Text>
-          <Text style={styles.balanceChangeDark}>
-            +${(11915.28).toLocaleString()}{" "}
-            <Text
-              style={{
-                color: Colors.gray,
-                fontWeight: "400",
-                fontFamily: "Inter_400Regular",
-              }}
-            >
-              than last month
-            </Text>
-          </Text>
-          <View style={styles.balanceActionsRow}>
-            <TouchableOpacity style={styles.balanceActionBtnDark}>
-              <Feather name="plus" size={18} color="#fff" />
-              <Text style={styles.balanceActionTextDark}>Top Up</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.balanceActionBtnDark}>
-              <Feather name="arrow-up-right" size={18} color="#fff" />
-              <Text style={styles.balanceActionTextDark}>Send Money</Text>
-            </TouchableOpacity>
-          </View>
+        </Text>
+        <View style={styles.balanceActionsRow}>
+          <TouchableOpacity style={styles.balanceActionBtnDark}>
+            <Feather name="plus" size={18} color="#fff" />
+            <Text style={styles.balanceActionTextDark}>Top Up</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.balanceActionBtnDark}>
+            <Feather name="arrow-up-right" size={18} color="#fff" />
+            <Text style={styles.balanceActionTextDark}>Send Money</Text>
+          </TouchableOpacity>
         </View>
-<ScrollView
+      </View>
+      <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
@@ -229,11 +244,14 @@ export const DashboardScreen: React.FC = () => {
           )}
         </View>
       </ScrollView>
-      <TouchableOpacity style={styles.fab} onPress={
-        () =>navigation.navigate("AddPartner") // Adjust navigation to your stack
-      }>
+      <TouchableOpacity
+        style={styles.fab}
+        onPress={
+          () => navigation.navigate("AddPartner") // Adjust navigation to your stack
+        }
+      >
         {/* <Text style={styles.fabIcon}>＋</Text> */}
-        <Ionicons name="add" size={24} color={"white"}/>
+        <Ionicons name="add" size={24} color={"white"} />
         <Text style={styles.fabLabel}>Add Partner</Text>
       </TouchableOpacity>
     </DashboardLayout>
@@ -241,9 +259,7 @@ export const DashboardScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1,
-    paddingBottom:80
-    , backgroundColor: Colors.background },
+  container: { flex: 1, paddingBottom: 80, backgroundColor: Colors.background },
   header: {
     flexDirection: "row",
     alignItems: "center",

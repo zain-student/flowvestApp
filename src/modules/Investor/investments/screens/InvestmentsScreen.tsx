@@ -1,9 +1,11 @@
 import { InvestmentStackParamList } from "@/navigation/InvestorStacks/InvestmentStack";
 import Colors from "@/shared/colors/Colors";
+import { useAppDispatch, useAppSelector } from "@/shared/store";
+import { fetchInvestments } from "@/shared/store/slices/investmentSlice";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -13,70 +15,89 @@ import {
 } from "react-native";
 import { DashboardLayout } from "../../../Common/components/DashboardLayout";
 
-const mockInvestments = [
-  {
-    id: 1,
-    name: "Tech Growth Fund",
-    amount: 12000,
-    status: "Active",
-    returns: "+8.2%",
-    date: "2024-06-01",
-  },
-  {
-    id: 2,
-    name: "Real Estate Trust",
-    amount: 5000,
-    status: "Pending",
-    returns: "+2.1%",
-    date: "2024-07-01",
-  },
-  {
-    id: 3,
-    name: "Green Energy Bonds",
-    amount: 3000,
-    status: "Completed",
-    returns: "+5.7%",
-    date: "2024-05-15",
-  },
-  {
-    id: 4,
-    name: "Tech Growth Fund",
-    amount: 12000,
-    status: "Active",
-    returns: "+8.2%",
-    date: "2024-06-01",
-  },
-  {
-    id: 5,
-    name: "Real Estate Trust",
-    amount: 5000,
-    status: "Pending",
-    returns: "+2.1%",
-    date: "2024-07-01",
-  },
-  {
-    id: 6,
-    name: "Green Energy Bonds",
-    amount: 3000,
-    status: "Completed",
-    returns: "+5.7%",
-    date: "2024-05-15",
-  },
-];
-
 const FILTERS = ["All", "Active", "Pending", "Completed"];
 type Props = NativeStackNavigationProp<
   InvestmentStackParamList,
   "InvestmentScreen"
 >;
 export const InvestmentsScreen: React.FC = () => {
-  const [filter, setFilter] = useState("All");
+const dispatch=useAppDispatch();
+  const {  investments,stats, isLoading }=useAppSelector((state)=>state.investments);
+   const [filter, setFilter] = useState("All");
+  const formattedInvestments = investments.map((inv) => ({
+    id: inv.id,
+    name: inv.name,
+    amount: inv.initial_amount,
+    status: inv.status,
+    returns: inv.expected_return_rate,
+    date: inv.start_date,
+  }));
+//   const mockInvestments = [
+//   {
+//     id: 1,
+//     name: "Tech Growth Fund",
+//     // amount: 12000,
+//     amount:stats?.initial_amount ?? "--",
+//     status: "Active",
+//     returns: "+8.2%",
+//     date: "2024-06-01",
+//   },
+//   {
+//     id: 2,
+//     name: "Real Estate Trust",
+//     amount: 5000,
+//     status: "Pending",
+//     returns: "+2.1%",
+//     date: "2024-07-01",
+//   },
+//   {
+//     id: 3,
+//     name: "Green Energy Bonds",
+//     amount: 3000,
+//     status: "Completed",
+//     returns: "+5.7%",
+//     date: "2024-05-15",
+//   },
+//   {
+//     id: 4,
+//     name: "Tech Growth Fund",
+//     amount: 12000,
+//     status: "Active",
+//     returns: "+8.2%",
+//     date: "2024-06-01",
+//   },
+//   {
+//     id: 5,
+//     name: "Real Estate Trust",
+//     amount: 5000,
+//     status: "Pending",
+//     returns: "+2.1%",
+//     date: "2024-07-01",
+//   },
+//   {
+//     id: 6,
+//     name: "Green Energy Bonds",
+//     amount: 3000,
+//     status: "Completed",
+//     returns: "+5.7%",
+//     date: "2024-05-15",
+//   },
+// ];
+
+ 
   const navigation =
     useNavigation<NativeStackNavigationProp<InvestmentStackParamList>>();
   const filtered =
     filter === "All"
-      ? mockInvestments
-      : mockInvestments.filter((i) => i.status === filter);
+      ? formattedInvestments
+      : formattedInvestments.filter((i) => i.status === filter);
+
+   useEffect(() => {
+      // if (!investments.length)
+         dispatch(fetchInvestments());
+      //  console.log("📦 Investments from Redux:", investments);
+      // investments
+    }, []);
 
   return (
     <DashboardLayout>
@@ -146,7 +167,7 @@ export const InvestmentsScreen: React.FC = () => {
               <View style={{ flex: 1 }}>
                 <Text style={styles.investmentName}>{i.name}</Text>
                 <Text style={styles.investmentAmount}>
-                  ${i.amount.toLocaleString()}
+                  ${i.amount}
                 </Text>
                 <Text style={styles.investmentDate}>{i.date}</Text>
               </View>

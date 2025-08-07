@@ -48,6 +48,11 @@ export interface AuthSession {
   issued_at: string;
   refresh_available_until: string;
 }
+interface RejectError {
+  code: string;
+  message: string;
+  status: number;
+}
 
 export interface AuthState {
   isAuthenticated: boolean;
@@ -244,32 +249,30 @@ export const refreshToken = createAsyncThunk("/v1/auth/refresh", async () => {
         response.data.data.session.refresh_available_until,
     },
   };
-  // This will be implemented with actual API call
-  // return {
-  //   token: {} as AuthToken,
-  //   session: {} as AuthSession,
-  // };
+  
 });
 
-export const getCurrentUser = createAsyncThunk("/v1/auth/me", async () => {
-  try {
-    const response = await api.get(API_ENDPOINTS.AUTH.ME, {
-    },
-  );
-  const user= response?.data?.data;
-  console.log("Get current user response:", JSON.stringify(response.data));
-  return user;
+export const getCurrentUser = createAsyncThunk<User, void, { rejectValue: RejectError }>(
+  "/v1/auth/me",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get(API_ENDPOINTS.AUTH.ME);
+      const user = response?.data?.data;
+      console.log("✅ Get current user response:", JSON.stringify(response.data));
+      return user;
+    } catch (error: any) {
+      const errMsg = error?.response?.data?.message || error?.message || "Failed to get user profile";
+      const code = error?.response?.data?.code || "SERVER_ERROR";
+      const status = error?.response?.status || 500;
 
+      ToastAndroid.show(errMsg, ToastAndroid.SHORT);
+      console.error("❌ Get current user error:", errMsg);
+
+      return rejectWithValue({ code, message: errMsg, status });
+    }
   }
-  catch (error: any) {
-    const errMsg = error?.response?.data?.message || error?.message || "Failed to get user profile";
-    ToastAndroid.show(errMsg, ToastAndroid.SHORT);
-    console.error("❌ Get current user error:", errMsg);
-    // return rejectWithValue(errMsg);
-  }
-  // This will be implemented with actual API call
-  // return {} as User;
-});
+);
+
 
 // Auth slice
 const authSlice = createSlice({
@@ -387,13 +390,23 @@ const authSlice = createSlice({
         state.user = action.payload;
         state.isLoading = false;
       })
-    //    .addCase(getCurrentUser.pending, (state) => {
-    //   state.isLoading = true;
-    // })
-      .addCase(getCurrentUser.rejected, (state) => {
-        // If can't get user, probably invalid token
-        return { ...initialState };
-      });
+//       .addCase(getCurrentUser.pending, (state) => {
+//   state.isLoading = true;
+//   state.error = null;
+// })
+
+    .addCase(getCurrentUser.rejected, (state, action: PayloadAction<RejectError | undefined>) => {
+  state.isLoading = false;
+  state.error = action.payload?.message || "Failed to fetch current user";
+  // Optionally: don't clear all state unless absolutely needed
+  state.isAuthenticated = false;
+  state.user = null;
+});
+
+      // .addCase(getCurrentUser.rejected, (state) => {
+      //   // If can't get user, probably invalid token
+      //   return { ...initialState };
+      // });
   },
 });
 

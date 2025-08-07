@@ -28,7 +28,7 @@ const dispatch=useAppDispatch();
     id: inv.id,
     name: inv.name,
     amount: inv.initial_amount,
-    status: inv.status,
+    status: inv.status.charAt(0).toUpperCase()+ inv.status.slice(1),
     returns: inv.expected_return_rate,
     date: inv.start_date,
   }));
@@ -101,9 +101,10 @@ const dispatch=useAppDispatch();
 
   return (
     <DashboardLayout>
+      <View style={styles.container}>
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>Total Invested</Text>
-        <Text style={styles.cardValue}>$12,500.00</Text>
+        <Text style={styles.cardTitle}>Total Invested Amount</Text>
+        <Text style={styles.cardValue}>${stats?.total_invested_amount ?? '--'}</Text>
         <Text style={styles.cardSubtitle}>
           +8.2%{" "}
           <Text
@@ -189,11 +190,13 @@ const dispatch=useAppDispatch();
         <Ionicons name="add" size={24} color={"white"} />
         <Text style={styles.fabLabel}>Add Investment</Text>
       </TouchableOpacity>
+      </View>
     </DashboardLayout>
   );
 };
 
 const styles = StyleSheet.create({
+  container:{flex:1,backgroundColor:Colors.background},
   scrollContent: {
     // flex:1,
     // paddingBottom:100,
@@ -201,7 +204,7 @@ const styles = StyleSheet.create({
     //   backgroundColor: Colors.background
     padding: 0,
     paddingBottom: 100,
-    backgroundColor: Colors.background,
+    // backgroundColor: Colors.background,
   },
   card: {
     backgroundColor: Colors.secondary,
@@ -290,9 +293,10 @@ const styles = StyleSheet.create({
   filterTextActive: { color: Colors.white },
 
   emptyState: {
-    flex: 1,
+    // flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    // backgroundColor:'red'
   },
   emptyText: { fontSize: 16, color: "#6B7280" },
   fab: {

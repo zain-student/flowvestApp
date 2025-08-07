@@ -10,7 +10,7 @@ import investmentSlice from '@/shared/store/slices/investmentSlice';
 import authSlice from '../../modules/auth/store/authSlice';
 import partnerSlice from '../store/slices/partnerSlice';
 // import dashboardSlice from '../../modules/dashboard/store/dashboardSlice';
-// import payoutSlice from '../../modules/payouts/store/payoutSlice';
+import payoutSlice from '../store/slices/payoutSlice';
 // import portfolioSlice from '../../modules/portfolio/store/portfolioSlice';
 // import profileSlice from '../../modules/profile/store/profileSlice';
 // import notificationSlice from '../../modules/notifications/store/notificationSlice';
@@ -28,7 +28,7 @@ export const rootReducer = combineReducers({
   investments: investmentSlice,
   // Module reducers (will be uncommented as we create them)
   // dashboard: dashboardSlice,
-  // payouts: payoutSlice,
+  payout: payoutSlice,
   // portfolio: portfolioSlice,
   // profile: profileSlice,
   // notifications: notificationSlice,

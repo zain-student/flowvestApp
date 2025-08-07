@@ -24,7 +24,7 @@ export const InvestmentsScreen: React.FC = () => {
 const dispatch=useAppDispatch();
   const {  investments,stats, isLoading }=useAppSelector((state)=>state.investments);
    const [filter, setFilter] = useState("All");
-  const formattedInvestments = investments.map((inv) => ({
+  const formattedInvestments = investments.map((inv:any) => ({
     id: inv.id,
     name: inv.name,
     amount: inv.initial_amount,
@@ -90,7 +90,7 @@ const dispatch=useAppDispatch();
   const filtered =
     filter === "All"
       ? formattedInvestments
-      : formattedInvestments.filter((i) => i.status === filter);
+      : formattedInvestments.filter((i:any) => i.status === filter);
 
    useEffect(() => {
       // if (!investments.length)
@@ -157,7 +157,8 @@ const dispatch=useAppDispatch();
             <Text style={styles.emptyText}>No investments found.</Text>
           </View>
         ) : (
-          filtered.map((i) => (
+
+          filtered.map((i:any) => (
             <TouchableOpacity
               key={i.id}
               style={styles.investmentCard}

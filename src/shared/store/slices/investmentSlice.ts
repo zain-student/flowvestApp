@@ -4,7 +4,7 @@ import { StorageKeys, storage } from "@/shared/services/storage";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "@shared/services/api"; // Axios instance
 
-interface Investment {
+export interface Investment {
   id: number;
   name: string;
   description: string;

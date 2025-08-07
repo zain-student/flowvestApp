@@ -1,9 +1,11 @@
 import { PayoutStackParamList } from "@/navigation/InvestorStacks/PayoutStack";
 import Colors from "@/shared/colors/Colors";
+import { useAppDispatch, useAppSelector } from "@/shared/store";
+import { fetchPayouts } from "@/shared/store/slices/payoutSlice";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -60,6 +62,8 @@ const mockPayouts = [
 const FILTERS = ["All", "Upcoming", "Completed"];
 type props = NativeStackNavigationProp<PayoutStackParamList, "PayoutsScreen">;
 export const PayoutsScreen: React.FC = () => {
+  const dispatch=useAppDispatch();
+  const {  payouts, isloading }=useAppSelector((state)=>state.payout);
   const [filter, setFilter] = useState("All");
   const navigation =
     useNavigation<NativeStackNavigationProp<PayoutStackParamList>>();
@@ -67,7 +71,9 @@ export const PayoutsScreen: React.FC = () => {
     filter === "All"
       ? mockPayouts
       : mockPayouts.filter((p) => p.status === filter);
-
+useEffect(()=>{
+  dispatch(fetchPayouts())
+},[dispatch])
   return (
     <DashboardLayout>
       

@@ -104,7 +104,7 @@ const dispatch=useAppDispatch();
       <View style={styles.container}>
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Total Invested Amount</Text>
-        <Text style={styles.cardValue}>${stats?.total_invested_amount ?? '--'}</Text>
+        <Text style={styles.cardValue}>${stats?.total_invested_amount.toFixed(1) ?? '--'}</Text>
         <Text style={styles.cardSubtitle}>
           +8.2%{" "}
           <Text

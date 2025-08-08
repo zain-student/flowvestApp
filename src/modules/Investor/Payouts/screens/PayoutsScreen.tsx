@@ -62,8 +62,8 @@ const mockPayouts = [
 const FILTERS = ["All", "Upcoming", "Completed"];
 type props = NativeStackNavigationProp<PayoutStackParamList, "PayoutsScreen">;
 export const PayoutsScreen: React.FC = () => {
-  const dispatch=useAppDispatch();
-  const {  payouts, isloading }=useAppSelector((state)=>state.payout);
+  const dispatch = useAppDispatch();
+  const { payouts,totalPayoutAmount, isloading } = useAppSelector((state) => state.payout);
   const [filter, setFilter] = useState("All");
   const navigation =
     useNavigation<NativeStackNavigationProp<PayoutStackParamList>>();
@@ -71,39 +71,39 @@ export const PayoutsScreen: React.FC = () => {
     filter === "All"
       ? mockPayouts
       : mockPayouts.filter((p) => p.status === filter);
-useEffect(()=>{
-  dispatch(fetchPayouts())
-},[dispatch])
+  useEffect(() => {
+    dispatch(fetchPayouts())
+  }, [dispatch])
   return (
     <DashboardLayout>
-      
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Total Payouts</Text>
-          <Text style={styles.cardValue}>$2,900.00</Text>
-          <Text style={styles.cardSubtitle}>
-            <Text
-              style={{
-                color: Colors.gray,
-                fontWeight: "400",
-                fontFamily: "Inter_400Regular",
-              }}
-            >
-              Next payout:{" "}
-            </Text>
-            July 15, 2024
+
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>Total Payouts</Text>
+        <Text style={styles.cardValue}>${totalPayoutAmount.toFixed(1) ?? '--'}</Text>
+        <Text style={styles.cardSubtitle}>
+          <Text
+            style={{
+              color: Colors.gray,
+              fontWeight: "400",
+              fontFamily: "Inter_400Regular",
+            }}
+          >
+            Next payout:{" "}
           </Text>
-          <View style={styles.balanceActionsRow}>
-            <TouchableOpacity style={styles.balanceActionBtnDark}>
-              <Feather name="plus" size={18} color="#fff" />
-              <Text style={styles.balanceActionTextDark}>Top Up</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.balanceActionBtnDark}>
-              <Feather name="arrow-up-right" size={18} color="#fff" />
-              <Text style={styles.balanceActionTextDark}>Send Money</Text>
-            </TouchableOpacity>
-          </View>
+          July 15, 2024
+        </Text>
+        <View style={styles.balanceActionsRow}>
+          <TouchableOpacity style={styles.balanceActionBtnDark}>
+            <Feather name="plus" size={18} color="#fff" />
+            <Text style={styles.balanceActionTextDark}>Top Up</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.balanceActionBtnDark}>
+            <Feather name="arrow-up-right" size={18} color="#fff" />
+            <Text style={styles.balanceActionTextDark}>Send Money</Text>
+          </TouchableOpacity>
         </View>
-        <ScrollView
+      </View>
+      <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
@@ -162,10 +162,11 @@ useEffect(()=>{
 };
 
 const styles = StyleSheet.create({
-  scrollContent: { 
+  scrollContent: {
     // flex:1,
-    paddingBottom:80, 
-    backgroundColor: Colors.background },
+    paddingBottom: 80,
+    backgroundColor: Colors.background
+  },
   card: {
     backgroundColor: Colors.secondary,
     borderBottomLeftRadius: 32,
@@ -204,7 +205,7 @@ const styles = StyleSheet.create({
   balanceActionsRow: { flexDirection: "row", marginTop: 18 },
   filterRow: {
     flexDirection: "row",
-    marginTop:10,
+    marginTop: 10,
     marginBottom: 16,
     gap: 10,
     marginHorizontal: 12,
@@ -234,7 +235,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 16,
     marginBottom: 14,
-    
+
     flexDirection: "row",
     alignItems: "center",
     shadowColor: "#000",

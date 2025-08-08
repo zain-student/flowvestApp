@@ -1,29 +1,56 @@
 // @features/payout/payoutSlice.ts
 import { API_ENDPOINTS } from "@/config/env";
 import { storage, StorageKeys } from "@/shared/services/storage";
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "@shared/services/api"; // Adjust the path as per your structure
 // Types
+// export interface Payout {
+//   id: number;
+//   amount: number;
+//   due_date: string;
+//   status: string;
+//   created_at: string;
+//   updated_at: string;
+//   [key: string]: any; // for any additional fields
+// }
 export interface Payout {
   id: number;
-  amount: number;
+  amount: string;
   due_date: string;
+  paid_date: string | null;
   status: string;
+  payout_type: string;
+  investment: {
+    id: number;
+    name: string;
+    type: string;
+  };
+  notes: string | null;
+  calculation_base: {
+    method: string;
+    base_amount: string;
+    calculated_at: string;
+  };
+  can_mark_as_paid: boolean;
+  can_cancel: boolean;
+  can_reschedule: boolean;
   created_at: string;
   updated_at: string;
-  [key: string]: any; // for any additional fields
 }
 
 interface PayoutState {
   payouts: Payout[];
   isloading: boolean;
   error: string | null;
+  totalPayoutAmount: number;
 }
 
 const initialState: PayoutState = {
   payouts: [],
   isloading: false,
   error: null,
+    totalPayoutAmount: 0,
+
 };
 
 // Async thunk to fetch payouts
@@ -49,10 +76,10 @@ const payoutSlice = createSlice({
   name: "payout",
   initialState,
   reducers: {
-    clearPayouts: (state) => {
-      state.payouts = [];
-      state.error = null;
-    },
+    // clearPayouts: (state) => {
+    //   state.payouts = [];
+    //   state.error = null;
+    // },
   },
   extraReducers: (builder) => {
     builder
@@ -60,13 +87,20 @@ const payoutSlice = createSlice({
         state.isloading = true;
         state.error = null;
       })
-      .addCase(fetchPayouts.fulfilled, (state, action: PayloadAction<Payout[]>) => {
+      .addCase(fetchPayouts.fulfilled, (state, action) => {
         state.isloading = false;
         state.payouts = action.payload;
+        // ✅ Calculate total payout amount here
+        const totalAmount = action.payload.reduce(
+          (sum: number, payout: Payout) =>
+            sum + parseFloat(payout.amount || "0"),
+          0
+        );
+        state.totalPayoutAmount = totalAmount;
       })
       .addCase(fetchPayouts.rejected, (state, action) => {
         state.isloading = false;
-        state.error = action.payload || "Something went wrong";
+        state.error = action.payload as string || "Something went wrong";
       });
   },
 });

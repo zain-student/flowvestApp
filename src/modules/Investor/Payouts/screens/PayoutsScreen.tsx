@@ -14,69 +14,32 @@ import {
   View,
 } from "react-native";
 import { DashboardLayout } from "../../../Common/components/DashboardLayout";
-const mockPayouts = [
-  {
-    id: 1,
-    date: "2024-07-15",
-    amount: 1200,
-    status: "Upcoming",
-    recipient: "You",
-  },
-  {
-    id: 2,
-    date: "2024-06-01",
-    amount: 900,
-    status: "Completed",
-    recipient: "You",
-  },
-  {
-    id: 3,
-    date: "2024-05-01",
-    amount: 800,
-    status: "Completed",
-    recipient: "You",
-  },
-  {
-    id: 4,
-    date: "2024-07-15",
-    amount: 1200,
-    status: "Upcoming",
-    recipient: "You",
-  },
-  {
-    id: 5,
-    date: "2024-06-01",
-    amount: 900,
-    status: "Completed",
-    recipient: "You",
-  },
-  {
-    id: 6,
-    date: "2024-05-01",
-    amount: 800,
-    status: "Completed",
-    recipient: "You",
-  },
-];
-
-const FILTERS = ["All", "Upcoming", "Completed"];
+const FILTERS = ["All","Cancelled","Scheduled","Paid"];
 type props = NativeStackNavigationProp<PayoutStackParamList, "PayoutsScreen">;
 export const PayoutsScreen: React.FC = () => {
   const dispatch = useAppDispatch();
   const { payouts,totalPayoutAmount, isloading } = useAppSelector((state) => state.payout);
   const [filter, setFilter] = useState("All");
+    const formattedPayouts = payouts.map((pay:any) => ({
+    id: pay.id,
+    name: pay.name,
+    amount: pay.amount,
+    status: pay.status.charAt(0).toUpperCase()+ pay.status.slice(1),
+    // returns: pay.expected_return_rate,
+    due_date: pay.due_date,
+  }));
   const navigation =
     useNavigation<NativeStackNavigationProp<PayoutStackParamList>>();
   const filtered =
     filter === "All"
-      ? mockPayouts
-      : mockPayouts.filter((p) => p.status === filter);
+      ? formattedPayouts
+      : formattedPayouts.filter((p) => p.status === filter);
   useEffect(() => {
     dispatch(fetchPayouts())
   }, [dispatch])
   return (
     <DashboardLayout>
-
+<View style={styles.container}>
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Total Payouts</Text>
         <Text style={styles.cardValue}>${totalPayoutAmount.toFixed(1) ?? '--'}</Text>
@@ -141,14 +104,14 @@ export const PayoutsScreen: React.FC = () => {
                 <Text style={styles.payoutAmount}>
                   ${p.amount.toLocaleString()}
                 </Text>
-                <Text style={styles.payoutDate}>{p.date}</Text>
+                <Text style={styles.payoutDate}>{p.due_date}</Text>
               </View>
               <Text
                 style={[
                   styles.payoutStatus,
-                  p.status === "Upcoming"
-                    ? styles.statusUpcoming
-                    : styles.statusCompleted,
+                  p.status === "Cancelled"
+                    ? styles.statusCancelled
+                    : styles.statusScheduled,
                 ]}
               >
                 {p.status}
@@ -157,14 +120,16 @@ export const PayoutsScreen: React.FC = () => {
           ))
         )}
       </ScrollView>
+      </View>
     </DashboardLayout>
   );
 };
 
 const styles = StyleSheet.create({
+    container:{flex:1,backgroundColor:Colors.background},
   scrollContent: {
     // flex:1,
-    paddingBottom: 80,
+    paddingBottom: 100,
     backgroundColor: Colors.background
   },
   card: {
@@ -247,9 +212,9 @@ const styles = StyleSheet.create({
   payoutAmount: { fontSize: 16, fontWeight: "600", color: Colors.white },
   payoutDate: { fontSize: 15, color: Colors.gray, marginTop: 2 },
   payoutStatus: { fontSize: 13, fontWeight: "500", marginLeft: 12 },
-  statusUpcoming: { color: Colors.green },
-  statusCompleted: { color: Colors.green },
-  emptyState: { alignItems: "center", marginTop: 32 },
+  statusCancelled: { color: Colors.gray },
+  statusScheduled: { color: Colors.green },
+  emptyState: { alignItems: "center",justifyContent:'center', marginTop: 32 },
   emptyText: { color: "#6B7280", fontSize: 15 },
 });
 export default PayoutsScreen;

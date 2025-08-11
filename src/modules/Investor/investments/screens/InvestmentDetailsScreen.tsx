@@ -13,20 +13,20 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-const mockInvestment = {
-  id: 1,
-  name: "Tech Growth Fund",
-  amount: 12000,
-  status: "Active",
-  returns: "+8.2%",
-  startDate: "2023-01-01",
-  endDate: "2024-12-31",
-  transactions: [
-    { id: 1, date: "2024-06-01", type: "Deposit", amount: 5000 },
-    { id: 2, date: "2024-03-01", type: "Deposit", amount: 7000 },
-    { id: 3, date: "2024-05-01", type: "Payout", amount: 800 },
-  ],
-};
+// const mockInvestment = {
+//   id: 1,
+//   name: "Tech Growth Fund",
+//   amount: 12000,
+//   status: "Active",
+//   returns: "+8.2%",
+//   startDate: "2023-01-01",
+//   endDate: "2024-12-31",
+//   transactions: [
+//     { id: 1, date: "2024-06-01", type: "Deposit", amount: 5000 },
+//     { id: 2, date: "2024-03-01", type: "Deposit", amount: 7000 },
+//     { id: 3, date: "2024-05-01", type: "Payout", amount: 800 },
+//   ],
+// };
 
 type Props = NativeStackScreenProps<
   InvestmentStackParamList,

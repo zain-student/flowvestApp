@@ -187,7 +187,7 @@ const dispatch=useAppDispatch();
           ))
         )}
       </ScrollView>
-      <TouchableOpacity style={styles.fab}>
+      <TouchableOpacity onPress={()=> navigation.navigate("AddInvestments")} style={styles.fab}>
         <Ionicons name="add" size={24} color={"white"} />
         <Text style={styles.fabLabel}>Add Investment</Text>
       </TouchableOpacity>

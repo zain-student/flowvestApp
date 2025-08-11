@@ -43,6 +43,7 @@ interface PayoutState {
   isloading: boolean;
   error: string | null;
   totalPayoutAmount: number;
+   currentPayout: Payout | null;
 }
 
 const initialState: PayoutState = {
@@ -50,7 +51,7 @@ const initialState: PayoutState = {
   isloading: false,
   error: null,
     totalPayoutAmount: 0,
-
+currentPayout:null,
 };
 
 // Async thunk to fetch payouts
@@ -70,7 +71,15 @@ export const fetchPayouts = createAsyncThunk<Payout[], void, { rejectValue: stri
     }
   }
 );
-
+//  Payout Details
+export const fetchPayoutsById = createAsyncThunk(
+  "v1/payouts/:investmentId",
+  async (id: string) => {
+    const response = await api.get(API_ENDPOINTS.PAYOUTS.DETAIL(id));
+    console.log("Payout details is :",response.data);
+    return response.data.data;
+  }
+);
 // Slice
 const payoutSlice = createSlice({
   name: "payout",
@@ -101,14 +110,21 @@ const payoutSlice = createSlice({
       .addCase(fetchPayouts.rejected, (state, action) => {
         state.isloading = false;
         state.error = action.payload as string || "Something went wrong";
-      });
+      })
+      // reducers for payout details
+            .addCase(fetchPayoutsById.pending, (state, action) => {
+              state.isloading = true;
+              state.error = null;
+            })
+            .addCase(fetchPayoutsById.fulfilled, (state, action) => {
+              state.currentPayout = action.payload;
+              state.isloading = false;
+            })
+            .addCase(fetchPayoutsById.rejected, (state, action) => {
+              state.isloading = false;
+              state.error = action.payload as string;
+            });
   },
 });
-
-// Exports
-// export const { clearPayouts } = payoutSlice.actions;
-// export const selectPayouts = (state: RootState) => state.payout.payouts;
-// export const selectPayoutLoading = (state: RootState) => state.payout.loading;
-// export const selectPayoutError = (state: RootState) => state.payout.error;
 
 export default payoutSlice.reducer;

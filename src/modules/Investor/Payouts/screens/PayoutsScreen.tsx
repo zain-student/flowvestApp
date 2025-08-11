@@ -109,9 +109,9 @@ export const PayoutsScreen: React.FC = () => {
               <Text
                 style={[
                   styles.payoutStatus,
-                  p.status === "Cancelled"
-                    ? styles.statusCancelled
-                    : styles.statusScheduled,
+                  p.status === "Scheduled"
+                    ? styles.statusScheduled
+                    : styles.statusCancelled,
                 ]}
               >
                 {p.status}

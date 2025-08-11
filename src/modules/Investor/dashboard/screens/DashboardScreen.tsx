@@ -135,7 +135,7 @@ export const DashboardScreen: React.FC = () => {
       <View style={styles.balanceCardDark}>
         <Text style={styles.balanceLabelDark}>Total Invested Amount</Text>
         <Text style={styles.balanceValueDark}>
-          ${stats?.total_invested_amount ?? "--"}
+          ${stats?.total_invested_amount.toFixed(1) ?? "--"}
         </Text>
         <Text style={styles.balanceChangeDark}>
           +${(11915.28).toLocaleString()}{" "}

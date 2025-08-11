@@ -177,6 +177,36 @@ export const addPartnerSchema = z.object({
   // send_invitation: z.enum(['Yes', 'No']),
 });
 
+// Add Investment Schema
+
+export const soloInvestmentSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  description: z.string().min(1, "Description is required"),
+  is_shared: z.literal(false),
+  return_type: z.enum(["percentage", "fixed"]),
+  frequency: z.enum(["monthly", "quarterly", "yearly"]),
+  start_date: z.string().min(1, "Start date required"),
+  end_date: z.string().min(1, "End date required"),
+  expected_return_rate: z.number().positive(),
+  initial_amount: z.number().positive(),
+  notes: z.string().optional(),
+});
+
+export const sharedInvestmentSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  description: z.string().min(1, "Description is required"),
+  is_shared: z.literal(true),
+  return_type: z.enum(["percentage", "fixed"]),
+  frequency: z.enum(["monthly", "quarterly", "yearly"]),
+  start_date: z.string().min(1, "Start date required"),
+  end_date: z.string().min(1, "End date required"),
+  expected_return_rate: z.number().positive(),
+  total_target_amount: z.number().positive(),
+  min_investment_amount: z.number().positive(),
+  max_investment_amount: z.number().positive(),
+});
+
+
 // Type exports for form data
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type AdminRegistrationFormData = z.infer<typeof adminRegistrationSchema>;
@@ -187,6 +217,8 @@ export type ChangePasswordFormData = z.infer<typeof changePasswordSchema>;
 export type ProfileUpdateFormData = z.infer<typeof profileUpdateSchema>;
 export type PartnerFormData = z.infer<typeof partnerSchema>;
 export type AddPartnerFormData = z.infer<typeof addPartnerSchema>;
+export type soloInvestmentSchema = z.infer<typeof soloInvestmentSchema>;
+export type sharedInvestmentSchema=z.infer<typeof sharedInvestmentSchema>;
 
 // Generic registration form data type
 export type RegistrationFormData = 

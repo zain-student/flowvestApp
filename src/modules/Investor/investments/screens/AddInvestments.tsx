@@ -6,7 +6,7 @@ import {
     sharedInvestmentSchema,
     soloInvestmentSchema,
 } from "@modules/auth/utils/authValidation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -32,10 +32,14 @@ export const AddInvestments = () => {
             end_date: '',
         },
     });
+    useEffect(() => {
+        reset();
+    }, [])
 
     const onSubmit = (data: any) => {
         // console.log("Pressed")
         console.log("Final API Payload:", data);
+        reset();
         // call createInvestment API here
     };
 
@@ -76,8 +80,8 @@ export const AddInvestments = () => {
                         />
                     )}
                 />
-                
-                
+
+
                 <Controller
                     control={control}
                     name="start_date"
@@ -95,7 +99,7 @@ export const AddInvestments = () => {
                                         startField.onChange(start);
                                         endField.onChange(end);
                                     }}
-                                    
+
                                 />
                             )}
                         />
@@ -140,7 +144,7 @@ export const AddInvestments = () => {
                     render={({ field }) => (
                         <Input
                             label="Return Type"
-                            placeholder="percentage / fixed"
+                            placeholder="percentage / fixed / custom"
                             value={field.value}
                             onChangeText={field.onChange}
                             required
@@ -155,7 +159,7 @@ export const AddInvestments = () => {
                     render={({ field }) => (
                         <Input
                             label="Frequency"
-                            placeholder="monthly / quarterly / yearly"
+                            placeholder="monthly / quarterly / annual / manual"
                             value={field.value}
                             onChangeText={field.onChange}
                             required
@@ -291,6 +295,7 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         alignItems: "center",
         marginHorizontal: 4,
+        backgroundColor: Colors.white,
     },
     selected: {
         backgroundColor: "#d0f0c0",

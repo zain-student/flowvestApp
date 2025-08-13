@@ -1,19 +1,22 @@
 import Colors from "@/shared/colors/Colors";
 import { Button, Input } from "@/shared/components/ui"; // custom styled input
 import { DatePicker } from "@/shared/components/ui/DatePicker";
+import { addInvestments } from "@/shared/store/slices/investmentSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
     sharedInvestmentSchema,
     soloInvestmentSchema,
 } from "@modules/auth/utils/authValidation";
+import { useAppDispatch, useAppSelector } from "@shared/store";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
+import { SafeAreaView, ScrollView, StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 
 export const AddInvestments = () => {
+    const dispatch = useAppDispatch();
+    const {isLoading}= useAppSelector((state)=> state.investments)
     const [isShared, setIsShared] = useState(false);
-    const [modalVisible, setModalVisible] = useState(false);
+    // const [modalVisible, setModalVisible] = useState(false);
     const { control, handleSubmit, reset, setValue } = useForm({
         resolver: zodResolver(isShared ? sharedInvestmentSchema : soloInvestmentSchema),
         defaultValues: {
@@ -37,9 +40,20 @@ export const AddInvestments = () => {
     }, [])
 
     const onSubmit = (data: any) => {
-        // console.log("Pressed")
-        console.log("Final API Payload:", data);
-        reset();
+        dispatch(addInvestments(data))
+        .unwrap()
+        .then(() => {
+            ToastAndroid.show("Added Investment Successfully", ToastAndroid.SHORT);
+            console.log("Investment added successfully:", data);
+            reset();
+
+        }).catch((error) => {
+            console.error("Failed to add investment:", error);
+            ToastAndroid.show("Failed to create investment", ToastAndroid.SHORT);
+        });
+        console.log("Submitted Data:", data);
+        // console.log("Is Shared:", isShared);
+        // console.log("Form Values:", control.getValues());
         // call createInvestment API here
     };
 

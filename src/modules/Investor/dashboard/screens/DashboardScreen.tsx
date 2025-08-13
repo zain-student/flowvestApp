@@ -87,7 +87,7 @@ export const DashboardScreen: React.FC = () => {
     hide();
   }, []);
   const dispatch = useAppDispatch();
-  const { investments,stats, isLoading } = useAppSelector(
+  const { investments,stats, isLoading, meta } = useAppSelector(
     (state) => state.investments
   );
   const statCards = [

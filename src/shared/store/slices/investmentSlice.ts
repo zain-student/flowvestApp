@@ -14,13 +14,18 @@ export interface Investment {
   start_date: string;
   end_date: string;
   status: string;
+  return_type: string;
   initial_amount: string;
-  performance: {
-    total_paid_out: number;
-    pending_payouts: number;
-    next_payout_date: string | null;
-    completion_percentage: number;
-  };
+  is_creator: boolean;
+  is_participant: boolean;
+  can_edit: boolean;
+  can_delete: boolean;
+  can_pause: boolean;
+  can_resume: boolean;
+  can_complete: boolean;
+  performance: InvestmentPerformance;
+  created_at: string;
+  updated_at: string;
   recent_payouts: {
     map: any;
     id: number;
@@ -28,6 +33,22 @@ export interface Investment {
     due_date: string;
     status: string;
   };
+}
+export interface InvestmentPerformance {
+    total_paid_out: number;
+    pending_payouts: number;
+    next_payout_date: string | null;
+    completion_percentage: number;
+}
+// Pagination metadata for investments
+export interface PaginationMeta {
+  current_page: number;
+  last_page: number;
+  per_page: number;
+  total: number; // ✅ Total number of investments
+  from: number;
+  to: number;
+  has_more_pages: boolean;
 }
 export interface InvestmentStats {
   total_investments: number;
@@ -44,6 +65,10 @@ export interface InvestmentState {
   error: string | null;
   stats: InvestmentStats;
   currentInvestment?: Investment | null;
+  // Pagination metadata
+  meta:{
+    pagination: PaginationMeta;
+  };
 }
 
 const initialState: InvestmentState = {
@@ -59,8 +84,37 @@ const initialState: InvestmentState = {
     // for investments screen
     initial_amount: 0,
   },
+  meta: {
+    pagination: {
+      current_page: 1,
+      last_page: 1,
+      per_page: 10,
+      total: 0, // Total number of investments
+      from: 1,
+      to: 10,
+      has_more_pages: false,
+    },
+  },
+  // Current investment details
   currentInvestment: null,
 };
+
+
+
+// Create Investment Slice
+export const addInvestments = createAsyncThunk(
+  "v1/investments",
+  async (newInvestment: Investment, { rejectWithValue }) => {
+    try {
+      const response = await api.post(API_ENDPOINTS.INVESTMENTS.CREATE, newInvestment);
+      console.log("📦 Investment Created:", response.data);
+      return response.data.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data?.message || "Create failed");
+    }
+  }
+)
+
 
 // 1️⃣ Fetch investments from API
 export const fetchInvestments = createAsyncThunk(
@@ -70,8 +124,10 @@ export const fetchInvestments = createAsyncThunk(
       const response = await api.get(API_ENDPOINTS.INVESTMENTS.LIST);
       console.log("📦 Investments API Response:", response.data);
       const investments = response.data?.data || [];
-      await storage.setItem(StorageKeys.INVESTMENTS_CACHE, investments);
-      return investments;
+      const total = response.data?.meta?.pagination?.total || 0;
+
+      await storage.setItem(StorageKeys.INVESTMENTS_CACHE, {investments,total});
+      return {investments,total};
     } catch (error: any) {
       const cached = await storage.getItem(StorageKeys.INVESTMENTS_CACHE);
       if (cached) return cached;
@@ -94,25 +150,42 @@ const investmentSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+
+      // reducers for adding investments
+      .addCase(addInvestments.pending, (state)=>{
+        state.isLoading = true;
+      })
+      .addCase(addInvestments.fulfilled, (state, action)=>{
+        state.isLoading= false;
+        state.investments.push(action.payload);
+      })
+      .addCase(addInvestments.rejected, (state,action)=>{
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+
+      // reducers for fetching investments
       .addCase(fetchInvestments.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
       .addCase(fetchInvestments.fulfilled, (state, action) => {
-        state.investments = action.payload;
+        state.investments = action.payload.investments;
         state.isLoading = false;
-        const total = action.payload.length;
-        const active = action.payload.filter(
+        // For total investments from meta data
+        // const total= state.meta.pagination.total;
+        // const total = state.meta.pagination.total = action.payload.length;
+        const active = action.payload.investments.filter(
           (inv: Investment) => inv.status === "active"
         ).length;
-        const avgROI =
-          action.payload.reduce(
-            (sum: number, inv: { expected_return_rate: any }) =>
-              sum + parseFloat(inv.expected_return_rate || 0),
-            0
-          ) / total || 0;
+        // const avgROI =
+        //   action.payload.reduce(
+        //     (sum: number, inv: { expected_return_rate: any }) =>
+        //       sum + parseFloat(inv.expected_return_rate || 0),
+        //     0
+        //   ) / total || 0;
         //  ✅ NEW: Calculate total amount invested from initial_amounts
-        const totalAmountInvested = action.payload.reduce(
+        const totalAmountInvested = action.payload.investments.reduce(
           (sum: number, inv: { initial_amount: any }) =>
             sum + parseFloat(inv.initial_amount || "0"),
           0
@@ -121,7 +194,7 @@ const investmentSlice = createSlice({
         // Data to be shown and used in investment screen
         const initialAmount = action.payload.initial_amount;
         state.stats = {
-          total_investments: total,
+          total_investments: action.payload.total,
           active_investments: active,
           roi_average: 0,
           total_partners: 0,

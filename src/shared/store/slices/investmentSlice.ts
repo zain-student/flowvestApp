@@ -88,10 +88,10 @@ const initialState: InvestmentState = {
     pagination: {
       current_page: 1,
       last_page: 1,
-      per_page: 10,
+      per_page: 15,
       total: 0, // Total number of investments
-      from: 1,
-      to: 10,
+      from: 0,
+      to: 0,
       has_more_pages: false,
     },
   },
@@ -119,7 +119,7 @@ export const addInvestments = createAsyncThunk(
 // 1️⃣ Fetch investments from API
 export const fetchInvestments = createAsyncThunk(
   "/v1/investments",
-  async (_, { rejectWithValue }) => {
+  async (page: number=1, { rejectWithValue }) => {
     try {
       const response = await api.get(API_ENDPOINTS.INVESTMENTS.LIST);
       console.log("📦 Investments API Response:", response.data);
@@ -172,6 +172,28 @@ const investmentSlice = createSlice({
       .addCase(fetchInvestments.fulfilled, (state, action) => {
         state.investments = action.payload.investments;
         state.isLoading = false;
+        const data = action.payload.investments;
+        const meta = {
+          pagination: { 
+            current_page: 1,
+            last_page: 1,
+            per_page: 15,
+            total: action.payload.total || 0, // Total number of investments
+            from: 0,
+            to: data.length,
+            has_more_pages: action.payload.total > data.length,
+          },
+        };
+        // If current page is greater than 1, append new data to existing investments
+        // else replace the investments with new data
+        if(meta.pagination.current_page >1) {
+          state.investments = [...state.investments, ...data];
+        }
+        else {
+          state.investments = data;
+        }
+        state.meta=meta;
+        // state.isLoading = false;
         // For total investments from meta data
         // const total= state.meta.pagination.total;
         // const total = state.meta.pagination.total = action.payload.length;

@@ -122,7 +122,7 @@ export const DashboardScreen: React.FC = () => {
 ];
   useEffect(() => {
     // if (!investments.length)
-       dispatch(fetchInvestments());
+       dispatch(fetchInvestments(1));
     //  console.log("📦 Investments from Redux:", investments);
     // investments
   }, []);

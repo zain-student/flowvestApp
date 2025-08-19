@@ -8,6 +8,7 @@ import { RouteProp, useRoute } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useEffect } from "react";
 import {
+  ActivityIndicator,
   ScrollView,
   StyleSheet,
   Text,
@@ -24,13 +25,17 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
   const { id } =
     useRoute<RouteProp<InvestmentStackParamList, "InvestmentDetails">>().params;
   const dispatch = useAppDispatch();
-  const investment = useAppSelector(
-    (state) => state.investments.currentInvestment
+  const { currentInvestment, isLoading } = useAppSelector(
+    (state) => state.investments
   );
   useEffect(() => {
     dispatch(fetchInvestmentsById(String(id)));
   }, [id]);
-  if (!investment) {
+  
+  if (isLoading) {
+    return <ActivityIndicator size="large" color="#131314ff"  />;
+  }
+  if (!currentInvestment) {
     return (
       <View>
         <Text>Investment not found.</Text>
@@ -49,46 +54,46 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.title}>{investment.name}</Text>
+        <Text style={styles.title}>{currentInvestment.name}</Text>
         <View style={styles.summaryCard}>
           <Text style={styles.label}>Amount Invested</Text>
           <Text style={styles.value}>
-            ${investment.initial_amount ?? " --"}
+            ${currentInvestment.initial_amount ?? " --"}
           </Text>
           <Text style={styles.label}>Status</Text>
           <Text
             style={[
               styles.status,
-              investment.status === "active"
+              currentInvestment.status === "active"
                 ? styles.statusActive
                 : styles.statusCompleted,
             ]}
           >
-            {investment.status.charAt(0).toUpperCase() +
-              investment.status.slice(1)}
+            {currentInvestment.status.charAt(0).toUpperCase() +
+              currentInvestment.status.slice(1)}
           </Text>
           <Text style={styles.label}>Type</Text>
-          <Text style={styles.returns}>{investment.type}</Text>
+          <Text style={styles.returns}>{currentInvestment.type}</Text>
           <Text style={styles.label}>Returns</Text>
           <Text style={styles.returns}>
-            {investment.expected_return_rate != null
-              ? parseFloat(investment.expected_return_rate).toFixed(1)
+            {currentInvestment.expected_return_rate != null
+              ? parseFloat(currentInvestment.expected_return_rate).toFixed(1)
               : "--"}
             %
           </Text>
           <Text style={styles.label}>Start Date</Text>
-          <Text style={styles.value}>{investment.start_date}</Text>
+          <Text style={styles.value}>{currentInvestment.start_date}</Text>
           <Text style={styles.label}>End Date</Text>
-          <Text style={styles.value}>{investment.end_date}</Text>
+          <Text style={styles.value}>{currentInvestment.end_date}</Text>
           <View style={styles.footer}>
             <Button
               title="Update"
               icon={<Ionicons name="create-outline" size={20} color={Colors.white} />}
               onPress={() => {
-                console.log("Editing investment:", investment); // full object
-                console.log("Editing investment ID:", investment.id); // just ID
+                console.log("Editing investment:", currentInvestment); // full object
+                console.log("Editing investment ID:", currentInvestment.id); // just ID
                 navigation.navigate("EditInvestments", {
-                  id: investment.id,
+                  id: currentInvestment.id,
                   mode: "edit"
                 })
 
@@ -109,7 +114,7 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
           </View>
         </View>
         <Text style={styles.sectionTitle}>Transactions</Text>
-        {investment?.recent_payouts?.map((tx: any) => (
+        {currentInvestment?.recent_payouts?.map((tx: any) => (
           <View key={tx.id} style={styles.txCard}>
             <Text style={styles.txType}>Payout</Text>
             <Text style={styles.txAmount}>${tx.amount.toLocaleString()}</Text>

@@ -135,14 +135,6 @@ export const InvestmentsScreen: React.FC = () => {
           ListFooterComponent={
             isLoadingMore ? <ActivityIndicator size="small" color={Colors.green} /> : null
           }
-          
-          // ListEmptyComponent={
-          //   !isLoading && (
-          //     <View style={styles.emptyState}>
-          //       <Text style={styles.emptyText}>No investments found.</Text>
-          //     </View>
-          //   )
-          // }
           contentContainerStyle={{ paddingBottom: 100 }}
         />
 

@@ -196,7 +196,8 @@ const investmentSlice = createSlice({
       })
       .addCase(addInvestments.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.investments.push(action.payload);
+        // state.investments.push(action.payload);
+        state.investments=[action.payload, ...state.investments];
       })
       .addCase(addInvestments.rejected, (state, action) => {
         state.isLoading = false;

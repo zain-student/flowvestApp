@@ -11,7 +11,6 @@ export const AddInvestments = () => {
   const { isLoading } = useAppSelector((s) => s.investments);
 
   const handleAdd = (data: any) => {
-    
     dispatch(addInvestments(data))
       .unwrap()
       .then(() => {

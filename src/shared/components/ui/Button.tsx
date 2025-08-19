@@ -10,6 +10,7 @@ import {
   Text,
   TextStyle,
   TouchableOpacity,
+  View,
   ViewStyle,
 } from 'react-native';
 
@@ -23,6 +24,8 @@ interface ButtonProps {
   fullWidth?: boolean;
   style?: ViewStyle;
   textStyle?: TextStyle;
+  icon?: React.ReactNode; // <-- New
+  iconPosition?: 'left' | 'right';
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -35,6 +38,8 @@ export const Button: React.FC<ButtonProps> = ({
   fullWidth = false,
   style,
   textStyle,
+  icon,
+  iconPosition = 'left',
 }) => {
   const isDisabled = disabled || loading;
 
@@ -68,7 +73,16 @@ export const Button: React.FC<ButtonProps> = ({
           color={variant === 'primary' ? '#FFFFFF' : '#2563EB'}
         />
       ) : (
-        <Text style={textStyles}>{title}</Text>
+        <View style={styles.content}>
+          {icon && iconPosition === 'left' && (
+            <View style={styles.iconWrapper}>{icon}</View>
+          )}
+          <Text style={textStyles}>{title}</Text>
+          {icon && iconPosition === 'right' && (
+            <View style={styles.iconWrapper}>{icon}</View>
+          )}
+        </View>
+        // <Text style={textStyles}>{title}</Text>
       )}
     </TouchableOpacity>
   );
@@ -147,7 +161,13 @@ const styles = StyleSheet.create({
   largeText: {
     fontSize: 18,
   },
-  
+  content: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  iconWrapper: {
+    marginHorizontal: 6,
+  },
   // States
   disabled: {
     opacity: 0.5,

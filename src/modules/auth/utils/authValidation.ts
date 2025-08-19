@@ -177,33 +177,60 @@ export const addPartnerSchema = z.object({
   // send_invitation: z.enum(['Yes', 'No']),
 });
 
-// Add Investment Schema
+// Add and Edit Investment Schema
 
 export const soloInvestmentSchema = z.object({
   name: z.string().min(1, "Name is required"),
   description: z.string().min(1, "Description is required"),
-  is_shared: z.literal(false),
+  // is_shared: z.literal(false),
+  type: z.literal("solo"),   // ✅ use type
   return_type: z.enum(["percentage", "fixed"]),
   frequency: z.enum(["monthly", "quarterly", "yearly"]),
   start_date: z.string().min(1, "Start date required"),
   end_date: z.string().min(1, "End date required"),
-  expected_return_rate: z.number().positive(),
-  initial_amount: z.number().positive(),
+
+  expected_return_rate: z.preprocess(
+    (val) => (val !== "" && val !== undefined ? Number(val) : undefined),
+    z.number().positive()
+  ),
+
+  initial_amount: z.preprocess(
+    (val) => (val !== "" && val !== undefined ? Number(val) : undefined),
+    z.number().positive()
+  ),
+
   notes: z.string().optional(),
 });
 
 export const sharedInvestmentSchema = z.object({
   name: z.string().min(1, "Name is required"),
   description: z.string().min(1, "Description is required"),
-  is_shared: z.literal(true),
+  // is_shared: z.literal(true),
+    type: z.literal("shared"),   // ✅ use type
   return_type: z.enum(["percentage", "fixed"]),
   frequency: z.enum(["monthly", "quarterly", "yearly"]),
   start_date: z.string().min(1, "Start date required"),
   end_date: z.string().min(1, "End date required"),
-  expected_return_rate: z.number().positive(),
-  total_target_amount: z.number().positive(),
-  min_investment_amount: z.number().positive(),
-  max_investment_amount: z.number().positive(),
+
+  expected_return_rate: z.preprocess(
+    (val) => (val !== "" && val !== undefined ? Number(val) : undefined),
+    z.number().positive()
+  ),
+
+  total_target_amount: z.preprocess(
+    (val) => (val !== "" && val !== undefined ? Number(val) : undefined),
+    z.number().positive()
+  ),
+
+  min_investment_amount: z.preprocess(
+    (val) => (val !== "" && val !== undefined ? Number(val) : undefined),
+    z.number().positive()
+  ),
+
+  max_investment_amount: z.preprocess(
+    (val) => (val !== "" && val !== undefined ? Number(val) : undefined),
+    z.number().positive()
+  ),
 });
 
 

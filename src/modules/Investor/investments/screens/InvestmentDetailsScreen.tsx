@@ -1,5 +1,6 @@
 import { InvestmentStackParamList } from "@/navigation/InvestorStacks/InvestmentStack";
 import Colors from "@/shared/colors/Colors";
+import { Button } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { fetchInvestmentsById } from "@/shared/store/slices/investmentSlice";
 import { Ionicons } from "@expo/vector-icons";
@@ -13,21 +14,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-// const mockInvestment = {
-//   id: 1,
-//   name: "Tech Growth Fund",
-//   amount: 12000,
-//   status: "Active",
-//   returns: "+8.2%",
-//   startDate: "2023-01-01",
-//   endDate: "2024-12-31",
-//   transactions: [
-//     { id: 1, date: "2024-06-01", type: "Deposit", amount: 5000 },
-//     { id: 2, date: "2024-03-01", type: "Deposit", amount: 7000 },
-//     { id: 3, date: "2024-05-01", type: "Payout", amount: 800 },
-//   ],
-// };
-
 type Props = NativeStackScreenProps<
   InvestmentStackParamList,
   "InvestmentDetails"
@@ -94,6 +80,33 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
           <Text style={styles.value}>{investment.start_date}</Text>
           <Text style={styles.label}>End Date</Text>
           <Text style={styles.value}>{investment.end_date}</Text>
+          <View style={styles.footer}>
+            <Button
+              title="Update"
+              icon={<Ionicons name="create-outline" size={20} color={Colors.white} />}
+              onPress={() => {
+                console.log("Editing investment:", investment); // full object
+                console.log("Editing investment ID:", investment.id); // just ID
+                navigation.navigate("EditInvestments", {
+                  id: investment.id,
+                  mode: "edit"
+                })
+
+              }
+              }
+              style={styles.updateButton}
+              textStyle={styles.footerButtonText}
+              variant="primary"
+            />
+            <Button
+              title="Delete"
+              icon={<Ionicons name="trash-outline" size={20} color={Colors.white} />}
+              onPress={() => console.log("Delete pressed")}
+              style={styles.deleteButton}
+              textStyle={styles.footerButtonText}
+              variant="primary"
+            />
+          </View>
         </View>
         <Text style={styles.sectionTitle}>Transactions</Text>
         {investment?.recent_payouts?.map((tx: any) => (
@@ -173,5 +186,35 @@ const styles = StyleSheet.create({
   txType: { fontSize: 15, color: Colors.white, fontWeight: "600" },
   txAmount: { fontSize: 15, color: Colors.white, fontWeight: "500" },
   txDate: { fontSize: 13, color: Colors.gray },
+  footer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 16,
+    borderTopWidth: 0.2,
+    borderTopColor: Colors.gray,
+    paddingTop: 12,
+  },
+
+  updateButton: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: 6,
+    alignItems: "center",
+    marginHorizontal: 5,
+    backgroundColor: "#3B82F6", // Blue
+  },
+  deleteButton: {
+    flex: 1,
+    flexDirection: "row",
+    paddingVertical: 10,
+    borderRadius: 6,
+    alignItems: "center",
+    marginHorizontal: 5,
+    backgroundColor: "#EF4444", // Red
+  },
+  footerButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
 });
 // export default InvestmentDetailsScreen;

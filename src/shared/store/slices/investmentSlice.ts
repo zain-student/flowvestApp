@@ -161,7 +161,6 @@ export const updateInvestment = createAsyncThunk(
     { id, updatedData }: { id: string; updatedData: Partial<Investment> },
     { rejectWithValue }
   ) => {
-    console.log("hello");
     try {
       console.log("Update called");
       const response = await api.put(
@@ -172,6 +171,24 @@ export const updateInvestment = createAsyncThunk(
       return response.data.data;
     } catch (error: any) {
       return rejectWithValue(error?.response?.data?.message || "Update failed");
+    }
+  }
+);
+// Delete Investment
+export const deleteInvestment = createAsyncThunk(
+  "v1/investments/delete",
+  async (
+    { id }: { id: string},
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await api.delete(API_ENDPOINTS.INVESTMENTS.DELETE(id), {
+        // data: deleteData,
+      });
+      console.log("Investment deleted successfully:", response.data);
+      return response.data.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data?.message || "Delete failed");
     }
   }
 );
@@ -197,7 +214,7 @@ const investmentSlice = createSlice({
       .addCase(addInvestments.fulfilled, (state, action) => {
         state.isLoading = false;
         // state.investments.push(action.payload);
-        state.investments=[action.payload, ...state.investments];
+        state.investments = [action.payload, ...state.investments];
       })
       .addCase(addInvestments.rejected, (state, action) => {
         state.isLoading = false;
@@ -295,6 +312,24 @@ const investmentSlice = createSlice({
 
       .addCase(updateInvestment.rejected, (state, action) => {
         state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      // reducers for deleting investments
+      .addCase(deleteInvestment.pending,(state)=>{
+        state.isLoading =true;
+      })
+      .addCase(deleteInvestment.fulfilled,(state,action)=>{
+        state.isLoading= false;
+        state.investments = state.investments.filter(
+          (inv)=> inv.id  !== action.payload
+        );
+        // Clear current investment if deleted one was open
+        if(state.currentInvestment?.id === action.payload){
+          state.currentInvestment = null;
+        }
+      })
+      .addCase(deleteInvestment.rejected,(state,action)=>{
+        state.isLoading=false;
         state.error = action.payload as string;
       });
   },

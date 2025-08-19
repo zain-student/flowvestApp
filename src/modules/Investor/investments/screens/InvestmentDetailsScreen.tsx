@@ -2,13 +2,14 @@ import { InvestmentStackParamList } from "@/navigation/InvestorStacks/Investment
 import Colors from "@/shared/colors/Colors";
 import { Button } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { fetchInvestmentsById } from "@/shared/store/slices/investmentSlice";
+import { deleteInvestment, fetchInvestmentsById } from "@/shared/store/slices/investmentSlice";
 import { Ionicons } from "@expo/vector-icons";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useEffect } from "react";
 import {
   ActivityIndicator,
+  Alert,
   ScrollView,
   StyleSheet,
   Text,
@@ -42,6 +43,34 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
       </View>
     );
   }
+const handleDelete=()=>{
+  Alert.alert(
+    "Delete Investment",
+    "Are you sure you want to delete this investment?",
+    [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text:"Delete",
+        style: "destructive",
+        onPress: ()=>{
+          dispatch(deleteInvestment({ id: String(currentInvestment.id) }))
+          .unwrap()
+          .then(() => {
+            navigation.goBack();
+          })
+          .catch((error) => {
+            console.error("Failed to delete investment:", error);
+            Alert.alert("Error", "Failed to delete investment. Please try again.");
+          });
+        }
+      }
+    ]
+  )
+}
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -106,7 +135,7 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
             <Button
               title="Delete"
               icon={<Ionicons name="trash-outline" size={20} color={Colors.white} />}
-              onPress={() => console.log("Delete pressed")}
+              onPress={() => handleDelete()}
               style={styles.deleteButton}
               textStyle={styles.footerButtonText}
               variant="primary"

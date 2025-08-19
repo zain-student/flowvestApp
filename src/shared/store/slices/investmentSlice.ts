@@ -182,11 +182,9 @@ export const deleteInvestment = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response = await api.delete(API_ENDPOINTS.INVESTMENTS.DELETE(id), {
-        // data: deleteData,
-      });
+      const response = await api.delete(API_ENDPOINTS.INVESTMENTS.DELETE(id));
       console.log("Investment deleted successfully:", response.data);
-      return response.data.data;
+      return id;
     } catch (error: any) {
       return rejectWithValue(error?.response?.data?.message || "Delete failed");
     }
@@ -320,13 +318,19 @@ const investmentSlice = createSlice({
       })
       .addCase(deleteInvestment.fulfilled,(state,action)=>{
         state.isLoading= false;
+        // Remove the deleted investment from the list
+        const deletedId= action.payload;
         state.investments = state.investments.filter(
-          (inv)=> inv.id  !== action.payload
+          (inv) => inv.id !== Number(deletedId)
         );
         // Clear current investment if deleted one was open
-        if(state.currentInvestment?.id === action.payload){
+        if(state.currentInvestment?.id ===Number(deletedId)){
           state.currentInvestment = null;
         }
+        if (state.stats && typeof state.stats.total_investments === "number") {
+    state.stats.total_investments -= 1;
+  }
+
       })
       .addCase(deleteInvestment.rejected,(state,action)=>{
         state.isLoading=false;

@@ -13,6 +13,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -59,11 +60,18 @@ const handleDelete=()=>{
           dispatch(deleteInvestment({ id: String(currentInvestment.id) }))
           .unwrap()
           .then(() => {
+            ToastAndroid.show(
+              "Investment deleted successfully",
+              ToastAndroid.SHORT
+            );
             navigation.goBack();
           })
           .catch((error) => {
             console.error("Failed to delete investment:", error);
-            Alert.alert("Error", "Failed to delete investment. Please try again.");
+            ToastAndroid.show(
+              "Failed to delete investment. Please try again.",
+              ToastAndroid.SHORT
+            );
           });
         }
       }

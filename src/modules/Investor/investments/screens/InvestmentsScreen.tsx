@@ -80,7 +80,7 @@ export const InvestmentsScreen: React.FC = () => {
       </Text>
     </TouchableOpacity>
   );
-
+console.log("Filtered investments IDs:", filtered.map((i) => i.id));
   return (
     <DashboardLayout>
       <View style={styles.container}>

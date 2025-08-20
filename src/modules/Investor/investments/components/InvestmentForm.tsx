@@ -6,7 +6,7 @@ import { sharedInvestmentSchema, soloInvestmentSchema } from "@modules/auth/util
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
+import DropDownPicker from "react-native-dropdown-picker";
 type InvestmentFormProps = {
     defaultValues?: any;
     mode: "add" | "edit";
@@ -21,7 +21,7 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
     onSubmit,
 }) => {
 
-    const [isShared, setIsShared] = useState(defaultValues?.type=== "shared" ?true : false);
+    const [isShared, setIsShared] = useState(defaultValues?.type === "shared" ? true : false);
     const [investmentType, setInvestmentType] = useState<"solo" | "shared">(
         defaultValues?.type ?? "solo"
     );
@@ -126,6 +126,7 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
                         onPress={() => {
                             setIsShared(false);
                             setValue("type", "solo");
+                            setValue("is_shared", false);
                         }}
                     >
                         <Text>Solo</Text>
@@ -134,7 +135,8 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
                         style={[styles.typeBtn, isShared && styles.selected]}
                         onPress={() => {
                             setIsShared(true);
-                            setValue("type","shared" );
+                            setValue("type", "shared");
+                            setValue("is_shared", true);
                         }}
                     >
                         <Text>Shared</Text>
@@ -142,7 +144,7 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
                 </View>
 
                 {/* Return Type */}
-                <Controller
+                {/* <Controller
                     control={control}
                     name="return_type"
                     render={({ field, fieldState }) => (
@@ -157,10 +159,50 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
                             required
                         />
                     )}
-                />
-
-                {/* Frequency */}
+                /> */}
                 <Controller
+                    control={control}
+                    name="return_type"
+                    render={({ field, fieldState }) => {
+                        const [open, setOpen] = React.useState(false);
+                        const [items, setItems] = React.useState([
+                            { label: "Fixed", value: "fixed" },
+                            { label: "Percentage", value: "percentage" },
+                            { label: "Custom", value: "custom" },
+                        ]);
+
+                        return (
+                            <View style={{ marginBottom: 16, zIndex: 2000 }}>
+                                <Text style={{ marginBottom: 4, fontWeight: "500" }}>Return Type *</Text>
+                                <DropDownPicker
+                                    open={open}
+                                    value={field.value}
+                                    items={items}
+                                    setOpen={setOpen}
+                                    setValue={(callback) => field.onChange(callback(field.value))}
+                                    setItems={setItems}
+                                    placeholder="Select Return Type"
+                                    listMode="SCROLLVIEW"
+                                    dropDownDirection="BOTTOM"
+                                    style={{
+                                        borderColor: fieldState.error ? "red" : "#ccc",
+                                        borderRadius: 8,
+                                    }}
+                                    dropDownContainerStyle={{
+                                        borderColor: "#ccc",
+                                    }}
+                                />
+                                {fieldState.error?.message && (
+                                    <Text style={{ color: "red", marginTop: 4 }}>
+                                        {fieldState.error.message}
+                                    </Text>
+                                )}
+                            </View>
+                        );
+                    }}
+                />
+                {/* Frequency */}
+                {/* <Controller
                     control={control}
                     name="frequency"
                     render={({ field, fieldState }) => (
@@ -173,7 +215,85 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
                             required
                         />
                     )}
+                /> */}
+                <Controller
+                    control={control}
+                    name="frequency"
+                    render={({ field, fieldState }) => {
+                        const [open, setOpen] = React.useState(false);
+                        const [items, setItems] = React.useState([
+                            { label: "Monthly", value: "monthly" },
+                            { label: "Quarterly", value: "quarterly" },
+                            { label: "Annual", value: "annual" },
+                            { label: "Manual", value: "manual" },
+                        ]);
+
+                        return (
+                            <View style={{ marginBottom: 16, zIndex: 1500 }}>
+                                <Text style={{ marginBottom: 4, fontWeight: "500" }}>Frequency *</Text>
+                                <DropDownPicker
+                                    open={open}
+                                    value={field.value}
+                                    items={items}
+                                    setOpen={setOpen}
+                                    setValue={(callback) => field.onChange(callback(field.value))}
+                                    setItems={setItems}
+                                    placeholder="Select Frequency"
+                                    listMode="SCROLLVIEW"
+                                    dropDownDirection="BOTTOM"
+                                    style={{
+                                        borderColor: fieldState.error ? "red" : "#ccc",
+                                        borderRadius: 8,
+                                        // zIndex: 1000, // Ensure it appears above other elements
+                                    }}
+                                    dropDownContainerStyle={{
+                                        borderColor: "#ccc",
+                                        // zIndex: 1000, // Ensure it appears above other elements
+                                    }}
+                                />
+                                {fieldState.error?.message && (
+                                    <Text style={{ color: "red", marginTop: 4 }}>
+                                        {fieldState.error.message}
+                                    </Text>
+                                )}
+                            </View>
+                        );
+                    }}
                 />
+
+                {/* <Controller
+                    control={control}
+                    name="frequency"
+                    render={({ field, fieldState }) => (
+                        <View style={{ marginBottom: 16 }}>
+                            <Text style={{ marginBottom: 4, fontWeight: "500" }}>Frequency *</Text>
+                            <View
+                                style={{
+                                    borderWidth: 1,
+                                    borderColor: fieldState.error ? "red" : "#ccc",
+                                    borderRadius: 8,
+                                    backgroundColor: "#fff",
+                                }}
+                            >
+                                <Picker
+                                    selectedValue={field.value}
+                                    onValueChange={(value) => field.onChange(value)}
+                                >
+                                    <Picker.Item label="Select Frequency" value="" />
+                                    <Picker.Item label="Monthly" value="monthly" />
+                                    <Picker.Item label="Quarterly" value="quarterly" />
+                                    <Picker.Item label="Annual" value="annual" />
+                                    <Picker.Item label="Manual" value="manual" />
+                                </Picker>
+                            </View>
+                            {fieldState.error?.message && (
+                                <Text style={{ color: "red", marginTop: 4 }}>
+                                    {fieldState.error.message}
+                                </Text>
+                            )}
+                        </View>
+                    )}
+                /> */}
 
                 {/* Expected Return Rate */}
                 <Controller

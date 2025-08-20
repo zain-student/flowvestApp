@@ -11,14 +11,21 @@ export const AddInvestments = () => {
   const { isLoading } = useAppSelector((s) => s.investments);
 
   const handleAdd = (data: any) => {
-    dispatch(addInvestments(data))
+     const payload = {
+    ...data,
+    is_shared: data.type === "shared", // true for shared, false for solo
+  };
+    console.log("Adding investment with data:", payload);
+    dispatch(addInvestments(payload))
       .unwrap()
       .then(() => {
         ToastAndroid.show("Added Investment Successfully", ToastAndroid.SHORT);
         navigation.goBack();
       })
-      .catch(() => {
-        ToastAndroid.show("Failed to create investment", ToastAndroid.SHORT);
+      .catch((err) => {
+        // ToastAndroid.show("Failed to create investment", ToastAndroid.SHORT);
+         console.log("Create investment error:", err);
+  ToastAndroid.show("Failed: " + (err?.message || "Unknown error"), ToastAndroid.LONG);
       });
   };
 

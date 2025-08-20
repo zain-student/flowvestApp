@@ -177,10 +177,7 @@ export const updateInvestment = createAsyncThunk(
 // Delete Investment
 export const deleteInvestment = createAsyncThunk(
   "v1/investments/delete",
-  async (
-    { id }: { id: string},
-    { rejectWithValue }
-  ) => {
+  async ({ id }: { id: string }, { rejectWithValue }) => {
     try {
       const response = await api.delete(API_ENDPOINTS.INVESTMENTS.DELETE(id));
       console.log("Investment deleted successfully:", response.data);
@@ -213,6 +210,15 @@ const investmentSlice = createSlice({
         state.isLoading = false;
         // state.investments.push(action.payload);
         state.investments = [action.payload, ...state.investments];
+        if (state.stats && typeof state.stats.total_investments === "number") {
+          state.stats.total_investments += 1;
+        }
+        if (
+          action.payload.status === "active" &&
+          state.stats?.active_investments !== undefined
+        ) {
+          state.stats.active_investments += 1;
+        }
       })
       .addCase(addInvestments.rejected, (state, action) => {
         state.isLoading = false;
@@ -313,27 +319,26 @@ const investmentSlice = createSlice({
         state.error = action.payload as string;
       })
       // reducers for deleting investments
-      .addCase(deleteInvestment.pending,(state)=>{
-        state.isLoading =true;
+      .addCase(deleteInvestment.pending, (state) => {
+        state.isLoading = true;
       })
-      .addCase(deleteInvestment.fulfilled,(state,action)=>{
-        state.isLoading= false;
+      .addCase(deleteInvestment.fulfilled, (state, action) => {
+        state.isLoading = false;
         // Remove the deleted investment from the list
-        const deletedId= action.payload;
+        const deletedId = action.payload;
         state.investments = state.investments.filter(
           (inv) => inv.id !== Number(deletedId)
         );
         // Clear current investment if deleted one was open
-        if(state.currentInvestment?.id ===Number(deletedId)){
+        if (state.currentInvestment?.id === Number(deletedId)) {
           state.currentInvestment = null;
         }
         if (state.stats && typeof state.stats.total_investments === "number") {
-    state.stats.total_investments -= 1;
-  }
-
+          state.stats.total_investments -= 1;
+        }
       })
-      .addCase(deleteInvestment.rejected,(state,action)=>{
-        state.isLoading=false;
+      .addCase(deleteInvestment.rejected, (state, action) => {
+        state.isLoading = false;
         state.error = action.payload as string;
       });
   },

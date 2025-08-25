@@ -67,8 +67,8 @@ export const InvestmentsScreen: React.FC = () => {
     >
       <View style={{ flex: 1 }}>
         <Text style={styles.investmentName}>{item.name}</Text>
-        <Text style={styles.investmentAmount}>${item.amount}</Text>
-        <Text style={styles.investmentDate}>{item.date}</Text>
+        <Text style={styles.investmentAmount}>Amount: ${item.amount}</Text>
+        <Text style={styles.investmentDate}>Started: {item.date}</Text>
       </View>
       <Text
         style={[

@@ -31,11 +31,11 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
     (state) => state.investments
   );
   useEffect(() => {
-    dispatch(fetchInvestmentsById(String(id)));
+    dispatch(fetchInvestmentsById(id));
   }, [id]);
-  
+
   if (isLoading) {
-    return <ActivityIndicator size="large" color="#131314ff"  />;
+    return <ActivityIndicator size="large" color="#131314ff" />;
   }
   if (!currentInvestment) {
     return (
@@ -44,40 +44,36 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
       </View>
     );
   }
-const handleDelete=()=>{
-  Alert.alert(
-    "Delete Investment",
-    "Are you sure you want to delete this investment?",
-    [
-      {
-        text: "Cancel",
-        style: "cancel",
-      },
-      {
-        text:"Delete",
-        style: "destructive",
-        onPress: ()=>{
-          dispatch(deleteInvestment({ id: String(currentInvestment.id) }))
-          .unwrap()
-          .then(() => {
-            ToastAndroid.show(
-              "Investment deleted successfully",
-              ToastAndroid.SHORT
-            );
-            navigation.goBack();
-          })
-          .catch((error) => {
-            console.error("Failed to delete investment:", error);
-            ToastAndroid.show(
-              "Failed to delete investment. Please try again.",
-              ToastAndroid.SHORT
-            );
-          });
+  const handleDelete = () => {
+    Alert.alert(
+      "Delete Investment",
+      "Are you sure you want to delete this investment?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => {
+            dispatch(deleteInvestment({ investmentId: Number(currentInvestment.id) }))
+              .unwrap()
+              .then(() => {
+                navigation.goBack();
+              })
+              .catch((error) => {
+                console.log("Failed to delete investment:", error.message);
+                ToastAndroid.show(
+                  error.message,
+                  ToastAndroid.SHORT
+                );
+              });
+          }
         }
-      }
-    ]
-  )
-}
+      ]
+    )
+  }
 
   return (
     <View style={styles.container}>
@@ -92,6 +88,7 @@ const handleDelete=()=>{
         showsVerticalScrollIndicator={false}
       >
         <Text style={styles.title}>{currentInvestment.name}</Text>
+        {/* <Text style={styles.descriptionText}>{currentInvestment.description}</Text> */}
         <View style={styles.summaryCard}>
           <Text style={styles.label}>Amount Invested</Text>
           <Text style={styles.value}>
@@ -187,6 +184,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     color: Colors.secondary,
+    marginBottom: 1,
+  },
+  descriptionText: {
+    fontSize: 16,
+    color: Colors.gray,
     marginBottom: 18,
   },
   summaryCard: {

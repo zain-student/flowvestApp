@@ -11,10 +11,10 @@ export const AddInvestments = () => {
   const { isLoading } = useAppSelector((s) => s.investments);
 
   const handleAdd = (data: any) => {
-     const payload = {
-    ...data,
-    is_shared: data.type === "shared", // true for shared, false for solo
-  };
+    const payload = {
+      ...data,
+      is_shared: data.type === "shared", // true for shared, false for solo
+    };
     console.log("Adding investment with data:", payload);
     dispatch(addInvestments(payload))
       .unwrap()
@@ -24,8 +24,8 @@ export const AddInvestments = () => {
       })
       .catch((err) => {
         // ToastAndroid.show("Failed to create investment", ToastAndroid.SHORT);
-         console.log("Create investment error:", err);
-  ToastAndroid.show("Failed: " + (err?.message || "Unknown error"), ToastAndroid.LONG);
+        console.log("Create investment error:", err);
+        ToastAndroid.show("Failed: " + (err?.message || "Unknown error"), ToastAndroid.LONG);
       });
   };
 

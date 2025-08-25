@@ -7,69 +7,205 @@ import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
 import {
-  ScrollView,
+  ActivityIndicator,
+  FlatList,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { DashboardLayout } from "../../../Common/components/DashboardLayout";
-const FILTERS = ["All","Cancelled","Scheduled","Paid"];
+const FILTERS = ["All", "Cancelled", "Scheduled", "Paid"];
 type props = NativeStackNavigationProp<PayoutStackParamList, "PayoutsScreen">;
+// export const PayoutsScreen: React.FC = () => {
+//   const dispatch = useAppDispatch();
+//   const { payouts, totalPayoutAmount, isloading } = useAppSelector((state) => state.payout);
+//   const [filter, setFilter] = useState("All");
+//   const formattedPayouts = payouts.map((pay: any) => ({
+//     id: pay.id,
+//     name: pay.name,
+//     amount: pay.amount,
+//     status: pay.status.charAt(0).toUpperCase() + pay.status.slice(1),
+//     // returns: pay.expected_return_rate,
+//     due_date: pay.due_date,
+//   }));
+//   const navigation =
+//     useNavigation<NativeStackNavigationProp<PayoutStackParamList>>();
+//   const filtered =
+//     filter === "All"
+//       ? formattedPayouts
+//       : formattedPayouts.filter((p) => p.status === filter);
+//   useEffect(() => {
+//     dispatch(fetchPayouts())
+//   }, [dispatch])
+
 export const PayoutsScreen: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { payouts,totalPayoutAmount, isloading } = useAppSelector((state) => state.payout);
+  const { payouts, totalPayoutAmount, isloading, isLoadingMore, meta } = useAppSelector((state) => state.payout);
   const [filter, setFilter] = useState("All");
-    const formattedPayouts = payouts.map((pay:any) => ({
+  const navigation = useNavigation<NativeStackNavigationProp<PayoutStackParamList>>();
+
+  const formattedPayouts = payouts.map((pay: any) => ({
     id: pay.id,
     name: pay.name,
     amount: pay.amount,
-    status: pay.status.charAt(0).toUpperCase()+ pay.status.slice(1),
-    // returns: pay.expected_return_rate,
+    status: pay.status.charAt(0).toUpperCase() + pay.status.slice(1),
     due_date: pay.due_date,
   }));
-  const navigation =
-    useNavigation<NativeStackNavigationProp<PayoutStackParamList>>();
+
   const filtered =
     filter === "All"
       ? formattedPayouts
       : formattedPayouts.filter((p) => p.status === filter);
+
   useEffect(() => {
-    dispatch(fetchPayouts())
-  }, [dispatch])
-  return (
-    <DashboardLayout>
-<View style={styles.container}>
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Total Payouts</Text>
-        <Text style={styles.cardValue}>${totalPayoutAmount.toFixed(1) ?? '--'}</Text>
-        <Text style={styles.cardSubtitle}>
-          <Text
-            style={{
-              color: Colors.gray,
-              fontWeight: "400",
-              fontFamily: "Inter_400Regular",
-            }}
-          >
-            Next payout:{" "}
-          </Text>
-          July 15, 2024
-        </Text>
-        <View style={styles.balanceActionsRow}>
-          <TouchableOpacity style={styles.balanceActionBtnDark}>
-            <Feather name="plus" size={18} color="#fff" />
-            <Text style={styles.balanceActionTextDark}>Top Up</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.balanceActionBtnDark}>
-            <Feather name="arrow-up-right" size={18} color="#fff" />
-            <Text style={styles.balanceActionTextDark}>Send Money</Text>
-          </TouchableOpacity>
-        </View>
+    dispatch(fetchPayouts(1));
+  }, []);
+ // Load more when reaching end
+  const handleLoadMore = () => {
+    if (!isLoadingMore && meta.pagination.has_more_pages) {
+      dispatch(fetchPayouts(meta.pagination.current_page + 1));
+    }
+  };
+
+  // Pull-to-refresh
+  const handleRefresh = () => {
+    dispatch(fetchPayouts(1));
+  };
+ const renderPayout = ({ item }: any) => (
+    <TouchableOpacity
+      key={item.id}
+      style={styles.payoutCard}
+      onPress={() => navigation.navigate("PayoutDetails", { id: item.id })}
+    >
+      <View style={{ flex: 1 }}>
+        <Text style={styles.payoutAmount}>${item.amount.toLocaleString()}</Text>
+        <Text style={styles.payoutDate}>{item.due_date}</Text>
       </View>
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
+      <Text
+        style={[
+          styles.payoutStatus,
+          item.status === "Scheduled"
+            ? styles.statusScheduled
+            : styles.statusCancelled,
+        ]}
       >
+        {item.status}
+      </Text>
+    </TouchableOpacity>
+  );
+
+//   return (
+//     <DashboardLayout>
+//       <View style={styles.container}>
+//         <View style={styles.card}>
+//           <Text style={styles.cardTitle}>Total Payouts</Text>
+//           <Text style={styles.cardValue}>${totalPayoutAmount.toFixed(1) ?? '--'}</Text>
+//           <Text style={styles.cardSubtitle}>
+//             <Text
+//               style={{
+//                 color: Colors.gray,
+//                 fontWeight: "400",
+//                 fontFamily: "Inter_400Regular",
+//               }}
+//             >
+//               Next payout:{" "}
+//             </Text>
+//             July 15, 2024
+//           </Text>
+//           <View style={styles.balanceActionsRow}>
+//             <TouchableOpacity style={styles.balanceActionBtnDark}>
+//               <Feather name="plus" size={18} color="#fff" />
+//               <Text style={styles.balanceActionTextDark}>Top Up</Text>
+//             </TouchableOpacity>
+//             <TouchableOpacity style={styles.balanceActionBtnDark}>
+//               <Feather name="arrow-up-right" size={18} color="#fff" />
+//               <Text style={styles.balanceActionTextDark}>Send Money</Text>
+//             </TouchableOpacity>
+//           </View>
+//         </View>
+//         <ScrollView
+//           contentContainerStyle={styles.scrollContent}
+//           showsVerticalScrollIndicator={false}
+//         >
+//           <View style={styles.filterRow}>
+//             {FILTERS.map((f) => (
+//               <TouchableOpacity
+//                 key={f}
+//                 style={[styles.filterBtn, filter === f && styles.filterBtnActive]}
+//                 onPress={() => setFilter(f)}
+//               >
+//                 <Text
+//                   style={[
+//                     styles.filterText,
+//                     filter === f && styles.filterTextActive,
+//                   ]}
+//                 >
+//                   {f}
+//                 </Text>
+//               </TouchableOpacity>
+//             ))}
+//           </View>
+//           <Text style={styles.sectionTitle}>Payouts</Text>
+//           {filtered.length === 0 ? (
+//             <View style={styles.emptyState}>
+//               <Text style={styles.emptyText}>No payouts found.</Text>
+//             </View>
+//           ) : (
+//             filtered.map((p) => (
+//               <TouchableOpacity
+//                 key={p.id}
+//                 style={styles.payoutCard}
+//                 onPress={() => navigation.navigate("PayoutDetails", { id: p.id })}
+//               >
+//                 <View style={{ flex: 1 }}>
+//                   <Text style={styles.payoutAmount}>
+//                     ${p.amount.toLocaleString()}
+//                   </Text>
+//                   <Text style={styles.payoutDate}>{p.due_date}</Text>
+//                 </View>
+//                 <Text
+//                   style={[
+//                     styles.payoutStatus,
+//                     p.status === "Scheduled"
+//                       ? styles.statusScheduled
+//                       : styles.statusCancelled,
+//                   ]}
+//                 >
+//                   {p.status}
+//                 </Text>
+//               </TouchableOpacity>
+//             ))
+//           )}
+//         </ScrollView>
+//       </View>
+//     </DashboardLayout>
+//   );
+// };
+console.log("Payout IDs:", filtered.map(p => p.id));
+return (
+    <DashboardLayout>
+      <View style={styles.container}>
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Total Payouts</Text>
+          <Text style={styles.cardValue}>${totalPayoutAmount.toFixed(1) ?? "--"}</Text>
+          <Text style={styles.cardSubtitle}>
+            <Text style={{ color: Colors.gray, fontWeight: "400", fontFamily: "Inter_400Regular" }}>
+              Next payout:{" "}
+            </Text>
+            July 15, 2024
+          </Text>
+          <View style={styles.balanceActionsRow}>
+            <TouchableOpacity style={styles.balanceActionBtnDark}>
+              <Feather name="plus" size={18} color="#fff" />
+              <Text style={styles.balanceActionTextDark}>Top Up</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.balanceActionBtnDark}>
+              <Feather name="arrow-up-right" size={18} color="#fff" />
+              <Text style={styles.balanceActionTextDark}>Send Money</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
         <View style={styles.filterRow}>
           {FILTERS.map((f) => (
             <TouchableOpacity
@@ -77,56 +213,39 @@ export const PayoutsScreen: React.FC = () => {
               style={[styles.filterBtn, filter === f && styles.filterBtnActive]}
               onPress={() => setFilter(f)}
             >
-              <Text
-                style={[
-                  styles.filterText,
-                  filter === f && styles.filterTextActive,
-                ]}
-              >
+              <Text style={[styles.filterText, filter === f && styles.filterTextActive]}>
                 {f}
               </Text>
             </TouchableOpacity>
           ))}
         </View>
         <Text style={styles.sectionTitle}>Payouts</Text>
-        {filtered.length === 0 ? (
-          <View style={styles.emptyState}>
-            <Text style={styles.emptyText}>No payouts found.</Text>
-          </View>
-        ) : (
-          filtered.map((p) => (
-            <TouchableOpacity
-              key={p.id}
-              style={styles.payoutCard}
-              onPress={() => navigation.navigate("PayoutDetails", { id: p.id })}
-            >
-              <View style={{ flex: 1 }}>
-                <Text style={styles.payoutAmount}>
-                  ${p.amount.toLocaleString()}
-                </Text>
-                <Text style={styles.payoutDate}>{p.due_date}</Text>
-              </View>
-              <Text
-                style={[
-                  styles.payoutStatus,
-                  p.status === "Scheduled"
-                    ? styles.statusScheduled
-                    : styles.statusCancelled,
-                ]}
-              >
-                {p.status}
-              </Text>
-            </TouchableOpacity>
-          ))
-        )}
-      </ScrollView>
+        <FlatList
+          data={filtered}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderPayout}
+          onEndReached={handleLoadMore}
+          onEndReachedThreshold={0.5}
+          refreshing={isloading}
+          onRefresh={handleRefresh}
+          // ListEmptyComponent={
+          //   !isloading && (
+          //     <View style={styles.emptyState}>
+          //       <Text style={styles.emptyText}>No payouts found.</Text>
+          //     </View>
+          //   )
+          // }
+          ListFooterComponent={
+            isLoadingMore ? <ActivityIndicator size="small" color={Colors.green} /> : null
+          }
+          contentContainerStyle={styles.scrollContent}
+        />
       </View>
     </DashboardLayout>
   );
-};
-
+}
 const styles = StyleSheet.create({
-    container:{flex:1,backgroundColor:Colors.background},
+  container: { flex: 1, backgroundColor: Colors.background },
   scrollContent: {
     // flex:1,
     paddingBottom: 100,
@@ -214,7 +333,7 @@ const styles = StyleSheet.create({
   payoutStatus: { fontSize: 13, fontWeight: "500", marginLeft: 12 },
   statusCancelled: { color: Colors.gray },
   statusScheduled: { color: Colors.green },
-  emptyState: { alignItems: "center",justifyContent:'center', marginTop: 32 },
+  emptyState: { alignItems: "center", justifyContent: 'center', marginTop: 32 },
   emptyText: { color: "#6B7280", fontSize: 15 },
 });
 export default PayoutsScreen;

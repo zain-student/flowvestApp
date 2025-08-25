@@ -3,6 +3,7 @@ import { API_ENDPOINTS } from "@/config/env";
 import { StorageKeys, storage } from "@/shared/services/storage";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "@shared/services/api"; // Axios instance
+import { ToastAndroid } from "react-native";
 
 export interface Investment {
   id: number;
@@ -148,7 +149,7 @@ export const fetchInvestments = createAsyncThunk(
 //  Investment Details
 export const fetchInvestmentsById = createAsyncThunk(
   "v1/investments/:id",
-  async (id: string) => {
+  async (id: number) => {
     const response = await api.get(API_ENDPOINTS.INVESTMENTS.DETAIL(id));
     console.log("Investment detail is :", response.data);
     return response.data.data;
@@ -158,7 +159,7 @@ export const fetchInvestmentsById = createAsyncThunk(
 export const updateInvestment = createAsyncThunk(
   "v1/investments/update",
   async (
-    { id, updatedData }: { id: string; updatedData: Partial<Investment> },
+    { id, updatedData }: { id: number; updatedData: Partial<Investment> },
     { rejectWithValue }
   ) => {
     try {
@@ -177,13 +178,17 @@ export const updateInvestment = createAsyncThunk(
 // Delete Investment
 export const deleteInvestment = createAsyncThunk(
   "v1/investments/delete",
-  async ({ id }: { id: string }, { rejectWithValue }) => {
+  async ({ investmentId }: { investmentId: number }, { rejectWithValue }) => {
     try {
-      const response = await api.delete(API_ENDPOINTS.INVESTMENTS.DELETE(id));
+      const response = await api.delete(API_ENDPOINTS.INVESTMENTS.DELETE(investmentId));
       console.log("Investment deleted successfully:", response.data);
-      return id;
+      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+      return investmentId;
     } catch (error: any) {
-      return rejectWithValue(error?.response?.data?.message || "Delete failed");
+      //  console.error("Full error object:", error);
+      // console.error("Error response:", error.message);
+     
+      return rejectWithValue(error|| "Delete failed");
     }
   }
 );
@@ -201,7 +206,6 @@ const investmentSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-
       // reducers for adding investments
       .addCase(addInvestments.pending, (state) => {
         state.isLoading = true;
@@ -244,8 +248,13 @@ const investmentSlice = createSlice({
         state.meta = meta; // full pagination meta from backend
 
         if (page > 1) {
+          // Remove duplicates by id
+          const existingIds = new Set(state.investments.map((p) => p.id));
+          const newInvestments = investments.filter(
+            (p: { id: number; }) => !existingIds.has(p.id)
+          );
           // Append to existing data
-          state.investments = [...state.investments, ...investments];
+          state.investments = [...state.investments, ...newInvestments];
         } else {
           // Replace for first page
           state.investments = investments;

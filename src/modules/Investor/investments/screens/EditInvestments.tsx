@@ -15,7 +15,7 @@ export const EditInvestments = () => {
 
   useEffect(() => {
     if (id) {
-      dispatch(fetchInvestmentsById(String(id)))
+      dispatch(fetchInvestmentsById(id))
         .unwrap()
         .then((data) => setInvestment(data))
         .catch(() => {
@@ -26,7 +26,7 @@ export const EditInvestments = () => {
 
   const handleUpdate = (data: any) => {
     // console.log("Updating Investment with ID:", id, "Data:", data);
-    dispatch(updateInvestment({ id: String(id), updatedData: data }))
+    dispatch(updateInvestment({ id: (id), updatedData: data }))
       .unwrap()
       .then(() => {
         ToastAndroid.show("Investment updated successfully", ToastAndroid.SHORT);

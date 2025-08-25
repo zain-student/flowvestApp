@@ -124,9 +124,10 @@ class ErrorHandler {
 
       case 500:
         return {
-          message: 'Server error. Please try again later.',
+          message: data?.message ||'Server error. Please try again later.',
           status,
-          code: 'SERVER_ERROR',
+          code: data?.error_code || 'SERVER_ERROR',
+          data,
         };
 
       case 502:

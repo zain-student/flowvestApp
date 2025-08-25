@@ -67,9 +67,9 @@ export const API_ENDPOINTS = {
   INVESTMENTS: {
     LIST: '/v1/investments',
     CREATE: '/v1/investments',
-    DETAIL: (id: string) => `/v1/investments/${id}`,
-    UPDATE: (id: string) => `/v1/investments/${id}`,
-    DELETE: (id: string) => `/v1/investments/${id}`,
+    DETAIL: (id: number) => `/v1/investments/${id}`,
+    UPDATE: (id: number) => `/v1/investments/${id}`,
+    DELETE: (id: number) => `/v1/investments/${id}`,
     JOIN: (id: string) => `/v1/investments/${id}/join`,
     LEAVE: (id: string) => `/v1/investments/${id}/leave`,
     PAUSE: (id: string) => `/v1/investments/${id}/pause`,

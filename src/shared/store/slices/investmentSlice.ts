@@ -114,7 +114,7 @@ export const addInvestments = createAsyncThunk(
       console.log("📦 Investment Created:", response.data);
       return response.data.data;
     } catch (error: any) {
-      return rejectWithValue(error?.response?.data?.message || "Create failed");
+      return rejectWithValue(error || "Create failed");
     }
   }
 );

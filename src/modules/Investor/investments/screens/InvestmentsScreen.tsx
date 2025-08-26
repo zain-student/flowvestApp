@@ -16,7 +16,7 @@ import {
 } from "react-native";
 import { DashboardLayout } from "../../../Common/components/DashboardLayout";
 
-const FILTERS = ["All", "Active", "Pending", "Completed"];
+const FILTERS = ["All", "Active", "Paused", "Completed"];
 type Props = NativeStackNavigationProp<InvestmentStackParamList, "InvestmentScreen">;
 
 export const InvestmentsScreen: React.FC = () => {

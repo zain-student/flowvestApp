@@ -33,8 +33,9 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
             description: "",
             type: "solo",
             is_shared: false,
-            return_type: "percentage",
-            frequency: "monthly",
+            return_type: "",
+            frequency: "",
+            status: "",
             expected_return_rate: "",
             initial_amount: "",
             notes: "",
@@ -144,22 +145,6 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
                 </View>
 
                 {/* Return Type */}
-                {/* <Controller
-                    control={control}
-                    name="return_type"
-                    render={({ field, fieldState }) => (
-                        <Input
-                            label="Return Type"
-                            placeholder="percentage / fixed / custom"
-                            value={field.value}
-                            onChangeText={field.onChange}
-                            error={
-                                fieldState.error?.message
-                            }
-                            required
-                        />
-                    )}
-                /> */}
                 <Controller
                     control={control}
                     name="return_type"
@@ -172,7 +157,7 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
                         ]);
 
                         return (
-                            <View style={{ marginBottom: 16, zIndex: 2000 }}>
+                            <View style={{ marginBottom: 16, zIndex: 3000 }}>
                                 <Text style={{ marginBottom: 4, fontWeight: "500" }}>Return Type *</Text>
                                 <DropDownPicker
                                     open={open}
@@ -202,20 +187,6 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
                     }}
                 />
                 {/* Frequency */}
-                {/* <Controller
-                    control={control}
-                    name="frequency"
-                    render={({ field, fieldState }) => (
-                        <Input
-                            label="Frequency"
-                            placeholder="monthly / quarterly / annual / manual"
-                            value={field.value}
-                            onChangeText={field.onChange}
-                            error={fieldState.error?.message}
-                            required
-                        />
-                    )}
-                /> */}
                 <Controller
                     control={control}
                     name="frequency"
@@ -229,7 +200,7 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
                         ]);
 
                         return (
-                            <View style={{ marginBottom: 16, zIndex: 1500 }}>
+                            <View style={{ marginBottom: 16, zIndex: 2000 }}>
                                 <Text style={{ marginBottom: 4, fontWeight: "500" }}>Frequency *</Text>
                                 <DropDownPicker
                                     open={open}
@@ -260,40 +231,51 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
                         );
                     }}
                 />
-
-                {/* <Controller
+                {/* Status */}
+                <Controller
                     control={control}
-                    name="frequency"
-                    render={({ field, fieldState }) => (
-                        <View style={{ marginBottom: 16 }}>
-                            <Text style={{ marginBottom: 4, fontWeight: "500" }}>Frequency *</Text>
-                            <View
-                                style={{
-                                    borderWidth: 1,
-                                    borderColor: fieldState.error ? "red" : "#ccc",
-                                    borderRadius: 8,
-                                    backgroundColor: "#fff",
-                                }}
-                            >
-                                <Picker
-                                    selectedValue={field.value}
-                                    onValueChange={(value) => field.onChange(value)}
-                                >
-                                    <Picker.Item label="Select Frequency" value="" />
-                                    <Picker.Item label="Monthly" value="monthly" />
-                                    <Picker.Item label="Quarterly" value="quarterly" />
-                                    <Picker.Item label="Annual" value="annual" />
-                                    <Picker.Item label="Manual" value="manual" />
-                                </Picker>
+                    name="status"
+                    render={({ field, fieldState }) => {
+                        const [open, setOpen] = React.useState(false);
+                        const [items, setItems] = React.useState([
+                            { label: "Draft", value: "draft" },
+                            { label: "Active", value: "active" },
+                            { label: "Pause", value: "paused" },
+                        ]);
+
+                        return (
+                            <View style={{ marginBottom: 16, zIndex: 1500 }}>
+                                <Text style={{ marginBottom: 4, fontWeight: "500" }}>Status *</Text>
+                                <DropDownPicker
+                                    open={open}
+                                    value={field.value}
+                                    items={items}
+                                    setOpen={setOpen}
+                                    setValue={(callback) => field.onChange(callback(field.value))}
+                                    setItems={setItems}
+                                    placeholder="Select Status"
+                                    listMode="SCROLLVIEW"
+                                    dropDownDirection="BOTTOM"
+                                    style={{
+                                        borderColor: fieldState.error ? "red" : "#ccc",
+                                        borderRadius: 8,
+                                        // zIndex: 1000, // Ensure it appears above other elements
+                                    }}
+                                    dropDownContainerStyle={{
+                                        borderColor: "#ccc",
+                                        // zIndex: 1000, // Ensure it appears above other elements
+                                    }}
+                                />
+                                {fieldState.error?.message && (
+                                    <Text style={{ color: "red", marginTop: 4 }}>
+                                        {fieldState.error.message}
+                                    </Text>
+                                )}
                             </View>
-                            {fieldState.error?.message && (
-                                <Text style={{ color: "red", marginTop: 4 }}>
-                                    {fieldState.error.message}
-                                </Text>
-                            )}
-                        </View>
-                    )}
-                /> */}
+                        );
+                    }}
+                />
+
 
                 {/* Expected Return Rate */}
                 <Controller

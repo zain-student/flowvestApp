@@ -32,8 +32,8 @@ export const EditInvestments = () => {
         ToastAndroid.show("Investment updated successfully", ToastAndroid.SHORT);
         navigation.goBack();
       })
-      .catch(() => {
-        ToastAndroid.show("Failed to update investment", ToastAndroid.SHORT);
+      .catch((error:any) => {
+        ToastAndroid.show( error.message , ToastAndroid.SHORT);
       });
   };
   if (!investment) return null;

@@ -171,7 +171,7 @@ export const updateInvestment = createAsyncThunk(
       console.log("📦 Investment Updated:", response.data);
       return response.data.data;
     } catch (error: any) {
-      return rejectWithValue(error?.response?.data?.message || "Update failed");
+      return rejectWithValue(error || "Update failed");
     }
   }
 );

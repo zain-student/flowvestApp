@@ -155,6 +155,27 @@ export const fetchInvestmentsById = createAsyncThunk(
     return response.data.data;
   }
 );
+// Duplicate Investment
+export const duplicateInvestment = createAsyncThunk(
+  "v1/investments/:id/duplicate",
+  async ({ investmentId }: { investmentId: number }, { rejectWithValue }) => {
+    try {
+      console.log("Duplicate called for ID:", investmentId);
+      const response = await api.post(
+        API_ENDPOINTS.INVESTMENTS.DUPLICATE(investmentId)
+      );
+      console.log("Investment Duplicated:", response.data);
+      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+      return response.data.data;
+    } catch (error: any) {
+      ToastAndroid.show(
+        error.message || "Duplication failed",
+        ToastAndroid.SHORT
+      );
+      return rejectWithValue(error || "Duplication failed");
+    }
+  }
+);
 // Update Investment
 export const updateInvestment = createAsyncThunk(
   "v1/investments/update",
@@ -169,6 +190,7 @@ export const updateInvestment = createAsyncThunk(
         updatedData
       );
       console.log("📦 Investment Updated:", response.data);
+      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       return response.data.data;
     } catch (error: any) {
       return rejectWithValue(error || "Update failed");
@@ -180,15 +202,17 @@ export const deleteInvestment = createAsyncThunk(
   "v1/investments/delete",
   async ({ investmentId }: { investmentId: number }, { rejectWithValue }) => {
     try {
-      const response = await api.delete(API_ENDPOINTS.INVESTMENTS.DELETE(investmentId));
+      const response = await api.delete(
+        API_ENDPOINTS.INVESTMENTS.DELETE(investmentId)
+      );
       console.log("Investment deleted successfully:", response.data);
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       return investmentId;
     } catch (error: any) {
       //  console.error("Full error object:", error);
       // console.error("Error response:", error.message);
-     
-      return rejectWithValue(error|| "Delete failed");
+
+      return rejectWithValue(error || "Delete failed");
     }
   }
 );
@@ -251,7 +275,7 @@ const investmentSlice = createSlice({
           // Remove duplicates by id
           const existingIds = new Set(state.investments.map((p) => p.id));
           const newInvestments = investments.filter(
-            (p: { id: number; }) => !existingIds.has(p.id)
+            (p: { id: number }) => !existingIds.has(p.id)
           );
           // Append to existing data
           state.investments = [...state.investments, ...newInvestments];
@@ -304,13 +328,36 @@ const investmentSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload as string;
       })
+      // reducers for duplicating investments
+      .addCase(duplicateInvestment.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(duplicateInvestment.fulfilled, (state, action) => {
+        state.isLoading = false;
+        // Add new duplicated investment at top of list
+        state.investments = [action.payload, ...state.investments];
+
+        // Update stats
+        if (state.stats && typeof state.stats.total_investments === "number") {
+          state.stats.total_investments += 1;
+        }
+        if (
+          action.payload.status === "active" &&
+          state.stats?.active_investments !== undefined
+        ) {
+          state.stats.active_investments += 1;
+        }
+      })
+      .addCase(duplicateInvestment.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
       // reducers for updating investments
       .addCase(updateInvestment.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(updateInvestment.fulfilled, (state, action) => {
         state.isLoading = false;
-
         state.investments = state.investments.map((inv) =>
           inv.id === action.payload.id ? { ...inv, ...action.payload } : inv
         );

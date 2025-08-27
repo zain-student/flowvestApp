@@ -2,11 +2,11 @@ import { InvestmentStackParamList } from "@/navigation/InvestorStacks/Investment
 import Colors from "@/shared/colors/Colors";
 import { Button } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { deleteInvestment, fetchInvestmentsById } from "@/shared/store/slices/investmentSlice";
+import { deleteInvestment, duplicateInvestment, fetchInvestmentsById } from "@/shared/store/slices/investmentSlice";
 import { Ionicons } from "@expo/vector-icons";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -15,7 +15,7 @@ import {
   Text,
   ToastAndroid,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 type Props = NativeStackScreenProps<
   InvestmentStackParamList,
@@ -30,6 +30,7 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
   const { currentInvestment, isLoading } = useAppSelector(
     (state) => state.investments
   );
+  const [showMenu, setShowMenu] = useState(false);
   useEffect(() => {
     dispatch(fetchInvestmentsById(id));
   }, [id]);
@@ -65,6 +66,7 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
               .catch((error) => {
                 console.log("Failed to delete investment:", error.message);
                 ToastAndroid.show(
+                  "Delete failed! " +
                   error.message,
                   ToastAndroid.SHORT
                 );
@@ -73,6 +75,20 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
         }
       ]
     )
+  }
+  const handleDuplicate = () => {
+    // console.log("Duplicate investment:", currentInvestment);
+    setShowMenu(false);
+    dispatch(duplicateInvestment({ investmentId: currentInvestment.id
+    }))
+    .catch((error) => {
+      console.log("Failed to duplicate investment:", error.message);
+      ToastAndroid.show(
+        "Duplication failed! " +
+        error.message,
+        ToastAndroid.SHORT
+      );
+    });
   }
 
   return (
@@ -83,13 +99,40 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
       >
         <Ionicons name="close" size={27} />
       </TouchableOpacity>
+
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
+
         <Text style={styles.title}>{currentInvestment.name}</Text>
         {/* <Text style={styles.descriptionText}>{currentInvestment.description}</Text> */}
+
         <View style={styles.summaryCard}>
+          {/* 3 Dots Button */}
+          <TouchableOpacity
+            style={styles.menuBtn}
+            onPress={() => setShowMenu((prev) => !prev)}
+          >
+            <Ionicons name="ellipsis-vertical" size={24} color="white" />
+          </TouchableOpacity>
+
+          {/* Simple Dropdown */}
+          {showMenu && (
+             <TouchableOpacity
+          activeOpacity={1}
+          style={styles.overlay}
+          onPress={() => setShowMenu(false)} // close menu when tapping outside
+        >
+            <View style={styles.dropdown}>
+              <TouchableOpacity onPress={handleDuplicate} style={styles.dropdownItem}>
+                <Ionicons name="copy-outline" size={18} color="black" />
+                <Text style={styles.dropdownText}>Duplicate Investment</Text>
+              </TouchableOpacity>
+            </View>
+            </TouchableOpacity>
+          )}
+
           <Text style={styles.label}>Amount Invested</Text>
           <Text style={styles.value}>
             ${currentInvestment.initial_amount ?? " --"}
@@ -150,9 +193,9 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
         <Text style={styles.sectionTitle}>Transactions</Text>
         {currentInvestment?.recent_payouts?.map((tx: any) => (
           <View key={tx.id} style={styles.txCard}>
-            <Text style={styles.txType}>Payout</Text>
+            <Text style={styles.txType}>{tx.payout_type.charAt(0).toUpperCase() + tx.payout_type.slice(1)}</Text>
             <Text style={styles.txAmount}>${tx.amount.toLocaleString()}</Text>
-            <Text style={styles.txDate}>{tx.due_date}</Text>
+            <Text style={styles.txDate}>Due: {tx.due_date}</Text>
           </View>
         ))}
       </ScrollView>
@@ -178,7 +221,42 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+
   closeText: { fontSize: 22, fontWeight: "bold", color: Colors.secondary },
+  menuBtn: {
+    position: "absolute",
+    top: 20,
+    right: 20,
+    padding: 8,
+    zIndex: 20,
+  },
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 10,
+  },
+  dropdown: {
+    position: "absolute",
+    top: 50,
+    right: 20,
+    backgroundColor: "white",
+    borderRadius: 8,
+    elevation: 5,
+    paddingVertical: 5,
+    width: 200,
+  },
+  dropdownItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+  },
+  dropdownText: {
+    marginLeft: 8,
+    fontSize: 16,
+  },
   scrollContent: { padding: 24, paddingTop: 60, paddingBottom: 40 },
   title: {
     fontSize: 24,

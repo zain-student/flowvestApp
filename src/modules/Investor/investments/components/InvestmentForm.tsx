@@ -241,6 +241,8 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
                             { label: "Draft", value: "draft" },
                             { label: "Active", value: "active" },
                             { label: "Pause", value: "paused" },
+                            { label: "Complete", value: "completed" },
+                            // { label: "Cancel", value: "cancelled" },
                         ]);
 
                         return (

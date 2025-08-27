@@ -186,7 +186,7 @@ export const soloInvestmentSchema = z.object({
   // is_shared: z.literal(false),
   return_type: z.enum(["percentage", "fixed", "custom"]),
   frequency: z.enum(["monthly", "quarterly", "annual", "manual"]),
-  status: z.enum(["draft", "active", "paused"]),
+  status: z.enum(["draft", "active", "paused","completed"]),
   start_date: z.string().min(1, "Start date required"),
   end_date: z.string().min(1, "End date required"),
 
@@ -210,7 +210,7 @@ export const sharedInvestmentSchema = z.object({
   // is_shared: z.literal(true),
   return_type: z.enum(["percentage", "fixed", "custom"]),
   frequency: z.enum(["monthly", "quarterly", "annual","manual"]),
-  status: z.enum(["draft", "active", "paused"]),
+  status: z.enum(["draft", "active", "paused","completed"]),
   start_date: z.string().min(1, "Start date required"),
   end_date: z.string().min(1, "End date required"),
 

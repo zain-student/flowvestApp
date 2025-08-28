@@ -59,7 +59,7 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.title}>{payouts.investment.name}</Text>
+        <Text style={styles.title}>{payouts.investment_title}</Text>
         <View style={styles.summaryCard}>
           <Text style={styles.label}>Amount</Text>
           <Text style={styles.value}>
@@ -81,7 +81,7 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
           <Text style={styles.label}>Method</Text>
           <Text style={styles.value}>{payouts.notes ?? "Not Paid Yet"}</Text>
           <Text style={styles.label}>Date</Text>
-          <Text style={styles.value}>{payouts.due_date}</Text>
+          <Text style={styles.value}>{payouts.scheduled_date}</Text>
         </View>
         <Text style={styles.sectionTitle}>Timeline</Text>
         {mockPayout.timeline.map((item) => (

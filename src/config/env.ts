@@ -59,7 +59,7 @@ export const API_ENDPOINTS = {
   
   // Dashboard
   DASHBOARD: {
-    ADMIN: '/v1/admin/dashboard',
+    ADMIN: '/v1/admin/reports/dashboard-summary',
     USER: '/v1/user/dashboard',
   },
   

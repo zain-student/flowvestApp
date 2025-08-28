@@ -1,7 +1,7 @@
 import { InvestorDashboardStackParamList } from "@/navigation/InvestorStacks/InvestorDashboardStack";
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { fetchInvestments } from "@/shared/store/slices/investmentSlice";
+import { fetchAdminDashboard } from "@/shared/store/slices/adminDashboardSlice";
 import {
   Inter_400Regular,
   Inter_600SemiBold,
@@ -23,18 +23,63 @@ import {
 import { DashboardLayout } from "../../../Common/components/DashboardLayout";
 SplashScreen.preventAutoHideAsync(); // Keep splash visible
 
-// Mock dashboard data (structure matches backend)
+
+type Props = NativeStackNavigationProp<
+  InvestorDashboardStackParamList,
+  "InvestorDashboard"
+>;
+export const DashboardScreen: React.FC = () => {
+
+  const navigation =
+    useNavigation<NativeStackNavigationProp<InvestorDashboardStackParamList>>();
+
+  const [fontsLoaded] = useFonts({
+    Inter_400Regular,
+    Inter_600SemiBold,
+    Inter_700Bold,
+  });
+  useEffect(() => {
+    const hide = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 10000));
+      await SplashScreen.hideAsync();
+    };
+    hide();
+  }, []);
+  const dispatch = useAppDispatch();
+  const { overview, recent_activities, upcoming_payouts } = useAppSelector(
+    (state) => state.dashboard
+  );
+  const statCards = [
+    {
+      icon: "layers",
+      label: "Total Investments",
+
+      value: overview?.total_investments ?? "--",
+      bg: "#E0F2FE", // pastel blue
+    },
+    {
+      icon: "activity",
+      label: "Active Investments",
+    
+      value: overview?.active_investments ?? "--",
+      bg: "#DCFCE7", // pastel green
+    },
+    {
+      icon: "users",
+      label: "Partners",
+    
+      value: overview?.total_partners ?? "--",
+      bg: "#FDE68A", // pastel yellow
+    },
+    {
+      icon: "percent",
+      label: "Avg ROI",
+      value: overview?.roi_average ? `${overview.roi_average.toFixed(2)}` : "--",
+      bg: "#FCE7F3", // pastel pink
+    },
+  ];
+  // Mock dashboard data (structure matches backend)
 const dashboardData = {
-  stats: {
-    total_investments: 12,
-    active_investments: 5,
-    total_payouts_scheduled: 3,
-    overdue_payouts: 1,
-    total_partners: 4,
-    total_invested_amount: 8200,
-    this_month_payouts: 2,
-    roi_average: 8.2,
-  },
   recent_activities: [
     {
       id: 1,
@@ -63,68 +108,8 @@ const dashboardData = {
   investment_performance: [],
 };
 
-type Props = NativeStackNavigationProp<
-  InvestorDashboardStackParamList,
-  "InvestorDashboard"
->;
-export const DashboardScreen: React.FC = () => {
-  
-  const navigation =
-    useNavigation<NativeStackNavigationProp<InvestorDashboardStackParamList>>();
-  // const navigation =
-  //   useNavigation<BottomTabNavigationProp<AppTabParamList, "Dashboard">>();
-  const [fontsLoaded] = useFonts({
-    Inter_400Regular,
-    Inter_600SemiBold,
-    Inter_700Bold,
-  });
   useEffect(() => {
-    const hide = async () => {
-      // Wait 10 seconds (10000 ms)
-      await new Promise((resolve) => setTimeout(resolve, 10000));
-      await SplashScreen.hideAsync();
-    };
-    hide();
-  }, []);
-  const dispatch = useAppDispatch();
-  const { investments,stats, isLoading, meta } = useAppSelector(
-    (state) => state.investments
-  );
-  const statCards = [
-  {
-    icon: "layers",
-    label: "Total Investments",
-    // value: dashboardData.stats.total_investments,
-    value: stats?.total_investments ?? "--",
-    bg: "#E0F2FE", // pastel blue
-  },
-  {
-    icon: "activity",
-    label: "Active Investments",
-    // value: dashboardData.stats.active_investments,
-    value:stats?.active_investments ?? "--",
-    bg: "#DCFCE7", // pastel green
-  },
-  {
-    icon: "users",
-    label: "Partners",
-    // value: dashboardData.stats.total_partners,
-    value:stats?.total_partners ?? "--",
-    bg: "#FDE68A", // pastel yellow
-  },
-  {
-    icon: "percent",
-    label: "Avg ROI",
-    // value: `${dashboardData.stats.roi_average}%`,
-    value: stats?.roi_average ? `${stats.roi_average.toFixed(2)}` : "--",
-    bg: "#FCE7F3", // pastel pink
-  },
-];
-  useEffect(() => {
-    // if (!investments.length)
-       dispatch(fetchInvestments(1));
-    //  console.log("📦 Investments from Redux:", investments);
-    // investments
+    dispatch(fetchAdminDashboard());
   }, []);
   // const activeInvestments = investments.filter((i) => i.status === "active");
   if (!fontsLoaded) return null;
@@ -133,12 +118,12 @@ export const DashboardScreen: React.FC = () => {
     <DashboardLayout headerStyle="dark">
       {/* Main Balance Card (dark, rounded) */}
       <View style={styles.balanceCardDark}>
-        <Text style={styles.balanceLabelDark}>Total Invested Amount</Text>
+        <Text style={styles.balanceLabelDark}>Total Payout Amount</Text>
         <Text style={styles.balanceValueDark}>
-          ${stats?.total_invested_amount.toFixed(1) ?? "--"}
+          ${overview?.total_payout_amount ?? "--"}
         </Text>
         <Text style={styles.balanceChangeDark}>
-          +${(11915.28).toLocaleString()}{" "}
+          ${overview?.this_month_payouts ?? "--"}{" "}
           <Text
             style={{
               color: Colors.gray,
@@ -146,7 +131,8 @@ export const DashboardScreen: React.FC = () => {
               fontFamily: "Inter_400Regular",
             }}
           >
-            than last month
+            {/* than last month */}
+            this month payouts
           </Text>
         </Text>
         <View style={styles.balanceActionsRow}>
@@ -197,22 +183,26 @@ export const DashboardScreen: React.FC = () => {
           <Text style={styles.sectionTitle}>Recent Activities</Text>
         </View>
         <View style={styles.activityList}>
-          {dashboardData.recent_activities.length === 0 ? (
+          {recent_activities?.length === 0 ? (
             <Text style={styles.emptyText}>No recent activities.</Text>
           ) : (
-            dashboardData.recent_activities.map((act) => (
+            recent_activities.map((act) => (
               <View key={act.id} style={styles.activityItem}>
                 <Feather
-                  name={act.icon as any}
+                  name={ act.type.includes("payout")
+              ? "arrow-down-right"
+              : "arrow-up-right"}
                   size={20}
                   color="colors.secondary"
                   style={styles.activityIcon}
                 />
                 <View style={{ flex: 1 }}>
-                  <Text style={styles.activityText}>{act.text}</Text>
-                  <Text style={styles.activityDate}>{act.date}</Text>
+                  <Text style={styles.activityText}>{act.type}</Text>
+                  <Text style={styles.activityDate}>{
+                    new Date(act.timestamp).toLocaleDateString()
+                    }</Text>
                 </View>
-                <Text style={styles.activityAmount}>{act.amount}</Text>
+                <Text style={styles.activityAmount}>{act.user}</Text>
               </View>
             ))
           )}
@@ -223,22 +213,24 @@ export const DashboardScreen: React.FC = () => {
           <Text style={styles.sectionTitle}>Upcoming Payouts</Text>
         </View>
         <View style={styles.activityList}>
-          {dashboardData.upcoming_payouts.length === 0 ? (
+          {upcoming_payouts.length === 0 ? (
             <Text style={styles.emptyText}>No upcoming payouts.</Text>
           ) : (
-            dashboardData.upcoming_payouts.map((up) => (
+            upcoming_payouts.map((up) => (
               <View key={up.id} style={styles.activityItem}>
                 <Feather
-                  name={up.icon as any}
+                  name="calendar"
                   size={20}
                   color="colors.secondary"
                   style={styles.activityIcon}
                 />
                 <View style={{ flex: 1 }}>
-                  <Text style={styles.activityText}>{up.text}</Text>
-                  <Text style={styles.activityDate}>{up.date}</Text>
+                  <Text style={styles.activityText}>{up.investment}</Text>
+                  <Text style={styles.activityDate}>{
+                  
+                  new Date(up.due_date).toLocaleDateString()}</Text>
                 </View>
-                <Text style={styles.activityAmount}>{up.amount}</Text>
+                <Text style={styles.activityAmount}>${up.amount}</Text>
               </View>
             ))
           )}
@@ -384,15 +376,19 @@ const styles = StyleSheet.create({
   },
   activityList: { paddingHorizontal: 8 },
   activityItem: {
+    backgroundColor: Colors.white,
+    marginVertical: 6,
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: "#F3F4F6",
+    borderWidth: 1,
+    borderColor: Colors.lightGray,
+    borderRadius: 12,
+    paddingHorizontal: 12,
   },
   activityIcon: { marginRight: 12 },
   activityText: {
-    color: "colors.secondary",
+    color: Colors.secondary,
     fontSize: 15,
     fontFamily: "Inter_700Bold",
     fontWeight: "700",

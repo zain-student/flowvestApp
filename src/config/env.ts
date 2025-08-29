@@ -85,10 +85,10 @@ export const API_ENDPOINTS = {
   // Payouts
   PAYOUTS: {
     LIST: '/v1/payouts/managed',
-    DETAIL: (id: string) => `/v1/payouts/managed/${id}`,
-    MARK_PAID: (id: string) => `/v1/payouts/${id}/mark-paid`,
-    CANCEL: (id: string) => `/v1/payouts/${id}/cancel`,
-    RESCHEDULE: (id: string) => `/v1/payouts/${id}/reschedule`,
+    DETAIL: (id: number) => `/v1/payouts/managed/${id}`,
+    MARK_PAID: (id: number) => `/v1/payouts/${id}/mark-paid`,
+    CANCEL: (id: number) => `/v1/payouts/managed/${id}`,
+    RESCHEDULE: (id: number) => `/v1/payouts/${id}/reschedule`,
     UPCOMING: '/v1/payouts/upcoming/all',
     OVERDUE: '/v1/payouts/overdue/all',
     STATISTICS: '/v1/payouts/statistics/summary',

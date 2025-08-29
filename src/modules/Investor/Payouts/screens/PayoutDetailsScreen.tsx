@@ -1,7 +1,8 @@
 import { PayoutStackParamList } from "@/navigation/InvestorStacks/PayoutStack";
 import Colors from "@/shared/colors/Colors";
+import { Button } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { fetchPayoutsById } from "@/shared/store/slices/payoutSlice";
+import { cancelPayout, fetchPayoutsById } from "@/shared/store/slices/payoutSlice";
 import { Ionicons } from "@expo/vector-icons";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -10,8 +11,9 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  ToastAndroid,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 const mockPayout = {
   id: 1,
@@ -30,22 +32,32 @@ type Props = NativeStackScreenProps<PayoutStackParamList, "PayoutDetails">;
 type RouteProps = RouteProp<PayoutStackParamList, "PayoutDetails">;
 export const PayoutDetailsScreen = ({ navigation }: Props) => {
   const route = useRoute<RouteProps>();
-    const { id } =
-      useRoute<RouteProp<PayoutStackParamList, "PayoutDetails">>().params;
-    const dispatch = useAppDispatch();
-    const payouts = useAppSelector(
-      (state) => state.payout.currentPayout
+  const { id } =
+    useRoute<RouteProp<PayoutStackParamList, "PayoutDetails">>().params;
+  const dispatch = useAppDispatch();
+  const payouts = useAppSelector(
+    (state) => state.payout.currentPayout
+  );
+  useEffect(() => {
+    dispatch(fetchPayoutsById(id));
+
+  }, [id]);
+  if (!payouts) {
+    return (
+      <View>
+        <Text>Investment not found.</Text>
+      </View>
     );
-    useEffect(() => {
-        dispatch(fetchPayoutsById(String(id)));
-      }, [id]);
-      if (!payouts) {
-        return (
-          <View>
-            <Text>Investment not found.</Text>
-          </View>
-        );
-      }
+  }
+const delPayout = async () => {
+  try {
+    await dispatch(cancelPayout(payouts.id)).unwrap();
+  } catch (err) {
+    console.error("❌ Cancel payout failed:", err);
+    ToastAndroid.show("Failed to cancel payout", ToastAndroid.SHORT);
+  }
+};
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -53,7 +65,7 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
         onPress={() => navigation.goBack()}
       >
         {/* <Text style={styles.closeText}>✕</Text> */}
-        <Ionicons name="close" size={27}/>
+        <Ionicons name="close" size={27} />
       </TouchableOpacity>
       <ScrollView
         contentContainerStyle={styles.scrollContent}
@@ -74,7 +86,7 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
                 : styles.statusCompleted,
             ]}
           >
-            {payouts.status.charAt(0).toUpperCase()+ payouts.status.slice(1)}
+            {payouts.status.charAt(0).toUpperCase() + payouts.status.slice(1)}
           </Text>
           <Text style={styles.label}>Recipient</Text>
           <Text style={styles.value}>{mockPayout.recipient}</Text>
@@ -82,6 +94,22 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
           <Text style={styles.value}>{payouts.notes ?? "Not Paid Yet"}</Text>
           <Text style={styles.label}>Date</Text>
           <Text style={styles.value}>{payouts.scheduled_date}</Text>
+
+          {payouts.status.toLowerCase() !== "cancelled" && (<View style={styles.footer}>
+            <Button
+              title="Cancel Payout"
+              icon={<Ionicons name="trash" size={20} color={Colors.white} />}
+              onPress={() => {
+                console.log("Editing investment:"); // full object
+                console.log("Editing investment ID:")
+                delPayout()
+              }
+              }
+              style={styles.cancelButton}
+              textStyle={styles.footerButtonText}
+              variant="primary"
+            />
+          </View>)}
         </View>
         <Text style={styles.sectionTitle}>Timeline</Text>
         {mockPayout.timeline.map((item) => (
@@ -123,7 +151,7 @@ const styles = StyleSheet.create({
     padding: 18,
     marginBottom: 24,
   },
-  label: { fontSize: 13, color: Colors.gray , marginTop: 8 },
+  label: { fontSize: 13, color: Colors.gray, marginTop: 8 },
   value: { fontSize: 16, color: Colors.white, fontWeight: "600" },
   status: { fontSize: 15, fontWeight: "600", marginTop: 2 },
   statusScheduled: { color: Colors.green },
@@ -133,6 +161,27 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: Colors.secondary,
     marginBottom: 10,
+  },
+  footer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 16,
+    borderTopWidth: 0.2,
+    borderTopColor: Colors.gray,
+    paddingTop: 12,
+  },
+
+  cancelButton: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: 6,
+    alignItems: "center",
+    marginHorizontal: 5,
+    backgroundColor: "#EF4444", // Blue
+  },
+  footerButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
   timelineItem: {
     backgroundColor: Colors.secondary,
@@ -148,6 +197,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   timelineLabel: { fontSize: 15, color: Colors.white, fontWeight: "600" },
-  timelineDate: { fontSize: 13, color: Colors.gray  },
+  timelineDate: { fontSize: 13, color: Colors.gray },
 });
 export default PayoutDetailsScreen;

@@ -3,6 +3,7 @@ import { API_ENDPOINTS } from "@/config/env";
 import { storage, StorageKeys } from "@/shared/services/storage";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "@shared/services/api"; // Adjust the path as per your structure
+import { ToastAndroid } from "react-native";
 
 export interface CalculationBase {
   method: string; // "fixed" | "percentage"
@@ -17,7 +18,7 @@ export interface Payout {
   participant_name: string;
   participant_email: string;
   amount: number;
-  status: "scheduled" | "paid" | "overdue"; // adjust if backend has more
+  status: "scheduled" | "paid" | "overdue" | "cancelled"; // adjust if backend has more
   payout_type: "regular" | "bonus"; // add other types if exist
   scheduled_date: string;
   paid_date: string | null;
@@ -62,11 +63,11 @@ const initialState: PayoutState = {
   totalPayoutAmount: 0,
   currentPayout: null,
   pagination: {
-      current_page: 1,
-      last_page: 1,
-      per_page: 15,
-      total: 0,
-    },
+    current_page: 1,
+    last_page: 1,
+    per_page: 15,
+    total: 0,
+  },
 };
 
 // Async thunk to fetch payouts
@@ -81,12 +82,16 @@ export const fetchPayouts = createAsyncThunk<
     );
     const payouts = response.data?.data?.payouts || [];
     const pagination = response.data?.data?.pagination || {
-      current_page:1,
-      last_page:1,
-      per_page:15,
-      total:0,
+      current_page: 1,
+      last_page: 1,
+      per_page: 15,
+      total: 0,
     };
-    await storage.setItem(StorageKeys.PAYOUTS_CACHE, { payouts, pagination, page });
+    await storage.setItem(StorageKeys.PAYOUTS_CACHE, {
+      payouts,
+      pagination,
+      page,
+    });
     return { payouts, pagination, page };
   } catch (error: any) {
     const cached = await storage.getItem(StorageKeys.PAYOUTS_CACHE);
@@ -97,16 +102,40 @@ export const fetchPayouts = createAsyncThunk<
   }
 });
 
-
 //  Payout Details
 export const fetchPayoutsById = createAsyncThunk(
   "v1/payouts/managed/:id",
-  async (id: string) => {
+  async (id: number) => {
     const response = await api.get(API_ENDPOINTS.PAYOUTS.DETAIL(id));
     console.log("Payout details is :", response.data);
     return response.data.data;
   }
 );
+// Cancel Payout
+// slice.ts
+export const cancelPayout = createAsyncThunk<
+  { id: number }, // what we resolve back to reducers
+  number, // payload we accept (payoutId)
+  { rejectValue: string }
+>("v1/payouts/cancel", async (payoutId, { rejectWithValue }) => {
+  try {
+    const response = await api.delete(API_ENDPOINTS.PAYOUTS.CANCEL(payoutId));
+
+    if (!response.data?.success) {
+      return rejectWithValue(
+        response.data?.message || "Failed to cancel payout"
+      );
+    }
+
+    ToastAndroid.show("Payout Cancelled successfully",ToastAndroid.SHORT)
+    return { id: payoutId };
+  } catch (error: any) {
+    return rejectWithValue(
+      error.response?.data?.message || "Failed to cancel payout"
+    );
+  }
+});
+
 // Slice
 const payoutSlice = createSlice({
   name: "payout",
@@ -114,25 +143,7 @@ const payoutSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // .addCase(fetchPayouts.pending, (state) => {
-      //   state.isloading = true;
-      //   state.error = null;
-      // })
-      // .addCase(fetchPayouts.fulfilled, (state, action) => {
-      //   state.isloading = false;
-      //   state.payouts = action.payload;
-      //   // ✅ Calculate total payout amount here
-      //   const totalAmount = action.payload.reduce(
-      //     (sum: number, payout: Payout) =>
-      //       sum + parseFloat(payout.amount || "0"),
-      //     0
-      //   );
-      //   state.totalPayoutAmount = totalAmount;
-      // })
-      // .addCase(fetchPayouts.rejected, (state, action) => {
-      //   state.isloading = false;
-      //   state.error = action.payload as string || "Something went wrong";
-      // })
+      //reducers for Fetchpayouts
       .addCase(fetchPayouts.pending, (state, action) => {
         const page = typeof action.meta.arg === "number" ? action.meta.arg : 1;
         if (page > 1) {
@@ -142,35 +153,19 @@ const payoutSlice = createSlice({
         }
         state.error = null;
       })
-      // .addCase(fetchPayouts.fulfilled, (state, action) => {
-      //   const { payouts, meta, page } = action.payload;
-      //   state.meta = meta;
-      //   if (page > 1) {
-      //     state.payouts = [...state.payouts, ...payouts];
-      //   } else {
-      //     state.payouts = payouts;
-      //   }
-      //   state.totalPayoutAmount = state.payouts.reduce(
-      //     (sum: number, payout: Payout) => sum + parseFloat(payout.amount || "0"),
-      //     0
-      //   );
-      //   state.isloading = false;
-      //   state.isLoadingMore = false;
-      // })
       .addCase(fetchPayouts.fulfilled, (state, action) => {
-        const { payouts, pagination , page } = action.payload;
+        const { payouts, pagination, page } = action.payload;
         state.pagination = pagination;
         if (page > 1) {
           // Remove duplicates by id
-          const existingIds = new Set(state.payouts.map((p) => p.id)); 
+          const existingIds = new Set(state.payouts.map((p) => p.id));
           const newPayouts = payouts.filter((p) => !existingIds.has(p.id));
           state.payouts = [...state.payouts, ...newPayouts];
         } else {
           state.payouts = payouts;
         }
         state.totalPayoutAmount = state.payouts.reduce(
-          (sum: number, payout: Payout) =>
-            sum + payout.amount,
+          (sum: number, payout: Payout) => sum + payout.amount,
           0
         );
         state.isLoading = false;
@@ -182,7 +177,7 @@ const payoutSlice = createSlice({
         state.error = (action.payload as string) || "Something went wrong";
       })
       // reducers for payout details
-      .addCase(fetchPayoutsById.pending, (state, action) => {
+      .addCase(fetchPayoutsById.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
@@ -191,6 +186,31 @@ const payoutSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(fetchPayoutsById.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      // reducers for cancel payout
+      .addCase(cancelPayout.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      });
+    builder
+      .addCase(cancelPayout.fulfilled, (state, action) => {
+        const { id } = action.payload;
+        const payout = state.payouts.find((p) => p.id === id);
+        if (payout) {
+          payout.status = "cancelled";
+        }
+        if(state.currentPayout?.id === id){
+          state.currentPayout={
+            ...state.currentPayout,
+            status: "cancelled"
+          }
+        }
+        state.isLoading= false;
+      })
+
+      .addCase(cancelPayout.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       });

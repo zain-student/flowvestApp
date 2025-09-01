@@ -37,6 +37,13 @@ interface Pagination {
   per_page: number;
   total: number;
 }
+interface summary{
+  total_payouts: number,
+  total_amount: number,
+  paid_amount: number,
+  pending_amount: number,
+  overdue_amount: number
+}
 export interface PayoutsResponse {
   success: boolean;
   message: string;
@@ -80,6 +87,7 @@ export const fetchPayouts = createAsyncThunk<
     const response = await api.get(
       `${API_ENDPOINTS.PAYOUTS.LIST}?page=${page}`
     );
+    console.log("Payouts API response:",response.data)
     const payouts = response.data?.data?.payouts || [];
     const pagination = response.data?.data?.pagination || {
       current_page: 1,
@@ -203,7 +211,7 @@ const payoutSlice = createSlice({
         }
         if(state.currentPayout?.id === id){
           state.currentPayout={
-            ...state.currentPayout,
+            ...state.currentPayout, 
             status: "cancelled"
           }
         }

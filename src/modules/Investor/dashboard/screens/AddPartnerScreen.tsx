@@ -1,11 +1,7 @@
 // src/screens/PartnerDropdownScreen.tsx
-
-import {
-  addPartnerSchema,
-  validateFormData,
-} from "@/modules/auth/utils/authValidation";
 import { Button, Input } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
+import { fetchPartners, Partner } from "@/shared/store/slices/addPartnerSlice";
 import { Picker } from "@react-native-picker/picker";
 import React, { useEffect, useState } from "react";
 import {
@@ -18,143 +14,41 @@ import {
   View,
 } from "react-native";
 import Colors from "../../../../shared/colors/Colors";
-import { PartnerDropdown } from "../../../../shared/components/ui/PartnerDropdown";
-import { addPartner } from "../../../../shared/store/slices/partnerSlice";
-
-type Partner = {
-  id: string;
-  name: string;
-  email: string;
-  phone?: string;
-  role: string;
-  permissions: string;
-  invitation: "Yes" | "No";
-};
+import { PartnerDropdown } from "../components/PartnerDropdown";
 
 export const AddPartnerScreen = () => {
-  const [selectedPartner, setSelectedPartner] = useState<Partner>();
-  const [error, setError] = useState("");
-  const [modalVisible, setModalVisible] = useState(false);
-  // const [selectedRole, setSelectedRole] = useState("Partner");
-  // const [send_invitation, setSendInvitation] = useState<'Yes' | 'No'>('Yes');
-  const [formData, setFormData] = useState({
-    first_name: "",
-    last_name: "",
-    email: "",
-    phone: "",
-    role: "Partner",
-    send_invitation: false,
-    permissions: "View_Own_Investments" as 'view_own_investments' | 'view_payouts',
-  });
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const partners = [
-    { id: "1", name: "Zain" },
-    { id: "2", name: "Ali" },
-    { id: "3", name: "Hassan" },
-    { id: "4", name: "Ahmed" },
-  ];
   const dispatch = useAppDispatch();
-  const partnersList = useAppSelector((state) => state.partner.partners);
+  const { partners, isLoading, error } = useAppSelector((state) => state.partner);
+  const [selectedPartner, setSelectedPartner] = useState<Partner | undefined>();
+  const [modalVisible, setModalVisible] = useState(false);
+  // const navigation = useNavigation<Props>();
+  // Dummy partners for UI preview
+  const partnersList = [
+    { id: 1, name: "Zain", email: "zain@example.com" },
+    { id: 2, name: "Ali", email: "ali@example.com" },
+    { id: 3, name: "Hassan", email: "hassan@example.com" },
+    { id: 4, name: "Ahmed", email: "ahmed@example.com" },
+  ];
   useEffect(() => {
-    // Clear Partners from the redux store when the screen is mounted
-    // dispatch(clearPartner());   // If you want to clear partners on mount or want to create a button to clear partners. You can use it 
-    // Reset form data when the modal is closed
-    if (!modalVisible) {
-      setFormData({
-        first_name: "",
-        last_name: "",
-        email: "",
-        phone: "",
-        role: "Partner",
-        send_invitation: false,
-        permissions:"view_own_investments",
-      });
-      setErrors({});
-    }
-    // Clear selected partner when the screen is mounted
-    setSelectedPartner(undefined);
-  }, [modalVisible]);
-
-  const handleInputChange = (field: string, value: string | boolean) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-
-    // Clear specific field error when user starts typing
-    if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: "" }));
-    }
-  };
-  const handleSelect = (partner: any) => {
-    setSelectedPartner(partner);
-    setError(""); // Clear error on selection
-  };
-  // const formValidation=() => {
-  //    // Validate form data
-  //     const validation = validateFormData(addPartnerSchema, formData);
-  //     if (!validation.success) {
-  //       setErrors(validation.errors || {});
-  //       return;
-  //     }
-  //     console.log("Validation Success:", validation.data);
-  // }
-  const addPartnerData = () => {
-    // Validate form data
-    const validation = validateFormData(addPartnerSchema, formData);
-    if (!validation.success) {
-      setErrors(validation.errors || {});
-      console.log("Validation Errors:", validation.errors);
-      return;
-    }
-    console.log("Validation Success:", validation.data);
-    const newPartner = {
-      id: Date.now().toString(), // Use timestamp as a simple unique ID
-      name: `${formData.first_name} ${formData.last_name}`,
-      email: formData.email,
-      phone: formData.phone,
-      role: formData.role,
-      permissions: formData.permissions,
-      invitation: formData.send_invitation ? "Yes" : ("No" as "Yes" | "No"),
-    };
-    console.log("Form Data to be send:", formData);
-    // Log the new partner data
-    console.log("New Partner Data:", newPartner);
-    // Dispatch action to add partner in redux store
-    dispatch(addPartner(newPartner));
-    // Reset form and close modal
-    setFormData({
-      first_name: "",
-      last_name: "",
-      email: "",
-      phone: "",
-      permissions: "view_own_investments",
-      role: "Partner",
-      send_invitation: false,
-    });
-    setErrors({});
-    // Handle form submission logic here
-    setModalVisible(false);
-  };
-
+    dispatch(fetchPartners())
+  }, [])
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.title}>Choose a Partner</Text>
 
+        {/* Partner Dropdown */}
+        {isLoading && <Text>Loading partners...</Text>}
+        {error && <Text style={{ color: "red" }}>{error}</Text>}
+
         <PartnerDropdown
-          key={partnersList.length} // 🔁 re-renders when partner is added
           label="Select Partner"
-          required
-          partners={partnersList}
+          partners={partners}
           selectedPartner={selectedPartner}
-          // onSelect={handleSelect}
-          onSelect={setSelectedPartner}
-          error={error}
+          onSelect={(p) => { setSelectedPartner(p) }}
+          placeholder="Choose a partner"
         />
 
-        {selectedPartner && (
-          <Text style={styles.selectedText}>
-            Selected: {selectedPartner.name}
-          </Text>
-        )}
         <View style={styles.modal}>
           <Modal
             visible={modalVisible}
@@ -163,10 +57,7 @@ export const AddPartnerScreen = () => {
             onRequestClose={() => setModalVisible(false)}
             statusBarTranslucent={true}
           >
-            <ScrollView
-              contentContainerStyle={styles.modalOverlay}
-              //  style={styles.modalOverlay}
-            >
+            <ScrollView contentContainerStyle={styles.modalOverlay}>
               <View style={styles.modalContainer}>
                 <ScrollView>
                   <Text
@@ -185,112 +76,47 @@ export const AddPartnerScreen = () => {
                   >
                     <Text style={styles.closeText}>✕</Text>
                   </TouchableOpacity>
-                  <Input
-                    label="First Name"
-                    placeholder="Enter your first name"
-                    value={formData.first_name}
-                    onChangeText={(value) =>
-                      handleInputChange("first_name", value)
-                    }
-                    error={errors.first_name}
-                    required
-                  />
-                  <Input
-                    label="Last Name"
-                    placeholder="Enter your Last name"
-                    value={formData.last_name}
-                    onChangeText={(value) =>
-                      handleInputChange("last_name", value)
-                    }
-                    error={errors.last_name}
-                    required
-                  />
-                  <Input
-                    label="Email"
-                    placeholder="Enter your email"
-                    value={formData.email}
-                    onChangeText={(value) => handleInputChange("email", value)}
-                    error={errors.email}
-                    required
-                  />
-                  <Input
-                    label="Phone Number"
-                    placeholder="Enter your phone number"
-                    value={formData.phone}
-                    onChangeText={(value) => handleInputChange("phone", value)}
-                    error={errors.phone}
-                    required
-                  />
+
+                  {/* Input fields (UI only, no state) */}
+                  <Input label="First Name" placeholder="Enter first name" />
+                  <Input label="Last Name" placeholder="Enter last name" />
+                  <Input label="Email" placeholder="Enter email" />
+                  <Input label="Phone Number" placeholder="Enter phone number" />
+
+                  {/* Dropdowns */}
                   <Text style={{ fontWeight: "500", color: Colors.secondary }}>
                     Role
                   </Text>
                   <View style={styles.pickerView}>
-                    <Picker
-                      selectedValue={formData.role}
-                      placeholder="Select Role"
-                      onValueChange={(itemValue) =>
-                        handleInputChange("role", itemValue)
-                      }
-                      style={styles.picker}
-                    >
+                    <Picker selectedValue={"Partner"} style={styles.picker}>
                       <Picker.Item label="Partner" value="Partner" />
                     </Picker>
                   </View>
+
                   <Text style={{ fontWeight: "500", color: Colors.secondary }}>
                     Permissions
                   </Text>
                   <View style={styles.pickerView}>
-                    <Picker
-                      selectedValue={formData.permissions}
-                      placeholder="Select Permissions"
-                      onValueChange={(itemValue) =>
-                        handleInputChange(
-                          "permissions",
-                          itemValue 
-                        )
-                      }
-                      style={styles.picker}
-                    >
+                    <Picker selectedValue={"view_own_investments"} style={styles.picker}>
                       <Picker.Item label="View_Own_Investments" value="view_own_investments" />
                       <Picker.Item label="View_Payouts" value="view_payouts" />
                     </Picker>
                   </View>
-                  {/* <Input
-                    label="Permissions"
-                    placeholder="Enter permissions"
-                    value={formData.permissions}
-                    onChangeText={(value) =>
-                      handleInputChange("permissions", value)
-                    }
-                    error={errors.permissions}
-                    required
-                  /> */}
+
                   <Text style={{ fontWeight: "500", color: Colors.secondary }}>
                     Invitation
                   </Text>
                   <View style={styles.pickerView}>
-                    <Picker
-                      selectedValue={formData.send_invitation ? "Yes" : "No"}
-                      placeholder="Send Invitation"
-                      onValueChange={(itemValue) =>
-                        handleInputChange(
-                          "send_invitation",
-                          itemValue === "Yes"
-                        )
-                      }
-                      style={styles.picker}
-                    >
+                    <Picker selectedValue={"Yes"} style={styles.picker}>
                       <Picker.Item label="Yes" value="Yes" />
                       <Picker.Item label="No" value="No" />
                     </Picker>
                   </View>
+
                   <Button
                     title="Add"
-                    onPress={addPartnerData}
-                    style={{
-                      marginTop: 0,
-                      backgroundColor: Colors.secondary,
-                    }}
+                    onPress={() => setModalVisible(false)}
+                    style={{ marginTop: 0, backgroundColor: Colors.secondary }}
                   />
                 </ScrollView>
               </View>
@@ -298,6 +124,8 @@ export const AddPartnerScreen = () => {
           </Modal>
         </View>
       </ScrollView>
+
+      {/* Floating Button to open modal */}
       <Button
         title="+ Add New Partner"
         onPress={() => setModalVisible(true)}
@@ -307,12 +135,13 @@ export const AddPartnerScreen = () => {
           alignItems: "center",
           alignSelf: "center",
         }}
-        // disabled={!selectedPartner}
       />
     </SafeAreaView>
   );
 };
+
 export default AddPartnerScreen;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -340,20 +169,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   closeText: { fontSize: 17, fontWeight: "bold", color: Colors.secondary },
-  selectedText: {
-    marginTop: 20,
-    fontSize: 16,
-    color: Colors.text,
-    fontWeight: "500",
-  },
-  errorButton: {
-    marginTop: 20,
-    fontSize: 16,
-    color: Colors.error,
-    fontWeight: "500",
-  },
   modal: {
-    // maxHeight: "40%",
     backgroundColor: Colors.lightGray,
     borderRadius: 20,
   },
@@ -375,29 +191,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderColor: Colors.lightGray,
     borderRadius: 8,
-    // paddingHorizontal: 12,
-    // paddingVertical: 10,
     marginBottom: 10,
   },
   picker: {
     height: 51,
     width: "100%",
-  },
-  // closeBtn: {
-  //   marginTop: 12,
-  //   alignItems: "center",
-  // },
-  // closeText: {
-  //   color: Colors.secondary,
-  //   fontWeight: "500",
-  // },
-  searchInput: {
-    borderWidth: 1,
-    backgroundColor: Colors.white,
-    borderColor: Colors.lightGray,
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    marginBottom: 12,
   },
 });

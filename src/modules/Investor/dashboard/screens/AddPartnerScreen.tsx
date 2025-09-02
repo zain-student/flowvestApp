@@ -1,37 +1,64 @@
 // src/screens/PartnerDropdownScreen.tsx
+import { addPartnerSchema } from "@/modules/auth/utils/authValidation";
 import { Button, Input } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { fetchPartners, Partner } from "@/shared/store/slices/addPartnerSlice";
-import { Picker } from "@react-native-picker/picker";
+import { addPartners, fetchPartners, Partner } from "@/shared/store/slices/addPartnerSlice";
+import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import {
   Modal,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
+  ToastAndroid,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
+import DropDownPicker from "react-native-dropdown-picker";
 import Colors from "../../../../shared/colors/Colors";
 import { PartnerDropdown } from "../components/PartnerDropdown";
-
 export const AddPartnerScreen = () => {
   const dispatch = useAppDispatch();
   const { partners, isLoading, error } = useAppSelector((state) => state.partner);
   const [selectedPartner, setSelectedPartner] = useState<Partner | undefined>();
   const [modalVisible, setModalVisible] = useState(false);
-  // const navigation = useNavigation<Props>();
-  // Dummy partners for UI preview
-  const partnersList = [
-    { id: 1, name: "Zain", email: "zain@example.com" },
-    { id: 2, name: "Ali", email: "ali@example.com" },
-    { id: 3, name: "Hassan", email: "hassan@example.com" },
-    { id: 4, name: "Ahmed", email: "ahmed@example.com" },
-  ];
   useEffect(() => {
     dispatch(fetchPartners())
   }, [])
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(addPartnerSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      status: "active",
+      company_name: "",
+      company_type: "private",
+      address: "",
+      description: "",
+      initial_investment: "",
+      notes: "",
+    },
+  });
+  const onSubmit = (data: any) => {
+    console.log("Data entered :", data);
+    dispatch(addPartners(data)) // from addPartnerSlice
+    .unwrap()
+    .then(() => {
+      // ToastAndroid.show("Partner created successfully", ToastAndroid.SHORT);
+      setModalVisible(false);
+    })
+    .catch((error:any) => {
+      // ToastAndroid.show(`Error: ${error}`, ToastAndroid.LONG);
+      ToastAndroid.show("Failed: " + (error?.message || "Unknown error"), ToastAndroid.LONG);
+    });
+  };
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
@@ -39,7 +66,7 @@ export const AddPartnerScreen = () => {
 
         {/* Partner Dropdown */}
         {isLoading && <Text>Loading partners...</Text>}
-        {error && <Text style={{ color: "red" }}>{error}</Text>}
+        {/* {error && <Text style={{ color: "red" }}>{error}</Text>} */}
 
         <PartnerDropdown
           label="Select Partner"
@@ -57,9 +84,13 @@ export const AddPartnerScreen = () => {
             onRequestClose={() => setModalVisible(false)}
             statusBarTranslucent={true}
           >
-            <ScrollView contentContainerStyle={styles.modalOverlay}>
+            <ScrollView contentContainerStyle={styles.modalOverlay}
+              showsVerticalScrollIndicator={false}
+            >
               <View style={styles.modalContainer}>
-                <ScrollView>
+                <ScrollView
+                  showsVerticalScrollIndicator={false}
+                >
                   <Text
                     style={{
                       fontSize: 20,
@@ -78,44 +109,211 @@ export const AddPartnerScreen = () => {
                   </TouchableOpacity>
 
                   {/* Input fields (UI only, no state) */}
-                  <Input label="First Name" placeholder="Enter first name" />
-                  <Input label="Last Name" placeholder="Enter last name" />
-                  <Input label="Email" placeholder="Enter email" />
-                  <Input label="Phone Number" placeholder="Enter phone number" />
+                  <Controller
+                    control={control}
+                    name="name"
+                    render={({ field }) => (
+                      <Input
+                        label="Name"
+                        placeholder="Enter your full name"
+                        value={field.value}
+                        onChangeText={field.onChange}
+                        error={errors.name?.message}
+                        required
+                      />
+                    )}
+                  />
+                  <Controller
+                    control={control}
+                    name="email"
+                    render={({ field }) => (
+                      <Input
+                        label="Email"
+                        placeholder="Enter email"
+                        value={field.value}
+                        onChangeText={field.onChange}
+                        error={errors.email?.message}
+                        required
+                      />
+                    )}
+                  />
+                  <Controller
+                    control={control}
+                    name="phone"
+                    render={({ field }) => (
+                      <Input
+                        label="Phone"
+                        placeholder="Enter your Phone number"
+                        value={field.value}
+                        onChangeText={field.onChange}
+                        error={errors.phone?.message}
+                        required
+                      />
+                    )}
+                  />
+                 
+                  <Controller
+                    control={control}
+                    name="status"
+                    render={({ field, fieldState }) => {
+                      const [open, setOpen] = React.useState(false);
+                      const [items, setItems] = React.useState([
+                        { label: "Active", value: "active" },
+                        { label: "Inactive", value: "inactive" },
+                      ]);
 
-                  {/* Dropdowns */}
-                  <Text style={{ fontWeight: "500", color: Colors.secondary }}>
-                    Role
-                  </Text>
-                  <View style={styles.pickerView}>
-                    <Picker selectedValue={"Partner"} style={styles.picker}>
-                      <Picker.Item label="Partner" value="Partner" />
-                    </Picker>
-                  </View>
+                      return (
+                        <View style={{ marginBottom: 16, zIndex: 1000 }}>
+                          <Text style={{ marginBottom: 4, fontWeight: "500", color: Colors.secondary }}>
+                            Status *
+                          </Text>
+                          <DropDownPicker
+                            open={open}
+                            value={field.value}
+                            items={items}
+                            setOpen={setOpen}
+                            setValue={(callback) => field.onChange(callback(field.value))}
+                            setItems={setItems}
+                            placeholder="Select Status"
+                            listMode="SCROLLVIEW"
+                            dropDownDirection="BOTTOM"
+                            style={{
+                              borderColor: fieldState.error ? "red" : "#ccc",
+                              borderRadius: 8,
+                            }}
+                            dropDownContainerStyle={{
+                              borderColor: "#ccc",
+                            }}
+                          />
+                          {fieldState.error?.message && (
+                            <Text style={{ color: "red", marginTop: 4 }}>
+                              {fieldState.error.message}
+                            </Text>
+                          )}
+                        </View>
+                      );
+                    }}
+                  />
 
-                  <Text style={{ fontWeight: "500", color: Colors.secondary }}>
-                    Permissions
-                  </Text>
-                  <View style={styles.pickerView}>
-                    <Picker selectedValue={"view_own_investments"} style={styles.picker}>
-                      <Picker.Item label="View_Own_Investments" value="view_own_investments" />
-                      <Picker.Item label="View_Payouts" value="view_payouts" />
-                    </Picker>
-                  </View>
+                  <Controller
+                    control={control}
+                    name="company_name"
+                    render={({ field }) => (
+                      <Input
+                        label="Company Name"
+                        placeholder="Enter company name"
+                        value={field.value}
+                        onChangeText={field.onChange}
+                        error={errors.company_name?.message}
+                        required
+                      />
+                    )}
+                  />
+                  {/* Company Type */}
+                  <Controller
+                    control={control}
+                    name="company_type"
+                    render={({ field, fieldState }) => {
+                      const [open, setOpen] = React.useState(false);
+                      const [items, setItems] = React.useState([
+                        { label: "Private", value: "private" },
+                        { label: "Individual", value: "individual" },
+                        { label: "Silent", value: "silent" },
+                        { label: "Holding", value: "holding" },
+                      ]);
 
-                  <Text style={{ fontWeight: "500", color: Colors.secondary }}>
-                    Invitation
-                  </Text>
-                  <View style={styles.pickerView}>
-                    <Picker selectedValue={"Yes"} style={styles.picker}>
-                      <Picker.Item label="Yes" value="Yes" />
-                      <Picker.Item label="No" value="No" />
-                    </Picker>
-                  </View>
+                      return (
+                        <View style={{ marginBottom: 16, zIndex: 2000 }}>
+                          <Text style={{ marginBottom: 4, fontWeight: "500", color: Colors.secondary }}>
+                            Company Type *
+                          </Text>
+                          <DropDownPicker
+                            open={open}
+                            value={field.value}
+                            items={items}
+                            setOpen={setOpen}
+                            setValue={(callback) => field.onChange(callback(field.value))}
+                            setItems={setItems}
+                            placeholder="Select Company Type"
+                            listMode="SCROLLVIEW"
+                            dropDownDirection="BOTTOM"
+                            style={{
+                              borderColor: fieldState.error ? "red" : "#ccc",
+                              borderRadius: 8,
+                            }}
+                            dropDownContainerStyle={{
+                              borderColor: "#ccc",
+                            }}
+                          />
+                          {fieldState.error?.message && (
+                            <Text style={{ color: "red", marginTop: 4 }}>
+                              {fieldState.error.message}
+                            </Text>
+                          )}
+                        </View>
+                      );
+                    }}
+                  />
 
+                  <Controller
+                    control={control}
+                    name="address"
+                    render={({ field }) => (
+                      <Input
+                        label="Company Address"
+                        placeholder="Enter Company Address"
+                        value={field.value}
+                        onChangeText={field.onChange}
+                        error={errors.address?.message}
+                        required
+                      />
+                    )}
+                  />
+                  <Controller
+                    control={control}
+                    name="description"
+                    render={({ field }) => (
+                      <Input
+                        label="Description"
+                        placeholder="Enter description"
+                        value={field.value}
+                        onChangeText={field.onChange}
+                        error={errors.description?.message}
+                        multiline
+                      />
+                    )}
+                  />
+                  <Controller
+                    control={control}
+                    name="initial_investment"
+                    render={({ field }) => (
+                      <Input
+                        label="Initial Investment"
+                        placeholder="Enter initial investment"
+                        value={field.value}
+                        onChangeText={field.onChange}
+                        error={errors.initial_investment?.message}
+                        required
+                      />
+                    )}
+                  />
+                  <Controller
+                    control={control}
+                    name="notes"
+                    render={({ field }) => (
+                      <Input
+                        label="Notes"
+                        placeholder="Enter Notes"
+                        value={field.value}
+                        onChangeText={field.onChange}
+                        error={errors.notes?.message}
+                        multiline
+                      />
+                    )}
+                  />
                   <Button
                     title="Add"
-                    onPress={() => setModalVisible(false)}
+                    onPress={handleSubmit(onSubmit)}
                     style={{ marginTop: 0, backgroundColor: Colors.secondary }}
                   />
                 </ScrollView>
@@ -184,7 +382,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     borderRadius: 20,
     padding: 16,
-    maxHeight: "75%",
+    maxHeight: "80%",
   },
   pickerView: {
     borderWidth: 1,

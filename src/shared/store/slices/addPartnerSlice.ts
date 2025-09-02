@@ -3,6 +3,22 @@ import { API_ENDPOINTS } from "@/config/env";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "@shared/services/api"; // Axios instance
 import { ToastAndroid } from "react-native";
+
+// For creating a partner (request body)
+export interface CreatePartnerPayload {
+  id: number;
+  name: string;
+  email: string;
+  phone?: string;
+  status: "active" | "inactive";
+  company_name: string;
+  company_type: "private" | "individual" | "silent" | "holding";
+  address?: string;
+  description?: string;
+  initial_investment?: string;
+  notes?: string;
+}
+
 export interface Company {
   id: number;
   name: string;
@@ -38,7 +54,23 @@ const initialState: partnerState = {
   isLoading: false,
   error: null,
 };
-
+export const addPartners = createAsyncThunk(
+  "v1/admin/addPartners",
+  async (newPartner: CreatePartnerPayload, { rejectWithValue }) => {
+    try {
+      const response = await api.post(
+        API_ENDPOINTS.ADMIN.PARTNERS.CREATE,
+        newPartner
+      );
+      console.log("Add Partner response:", response.data);
+      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+      return response.data.data;
+    } catch (error: any) {
+      console.log("error",error.message)
+      return rejectWithValue(error || "Failed to Add partner");
+    }
+  }
+);
 export const fetchPartners = createAsyncThunk(
   "v1/admin/partners",
   async (_, { rejectWithValue }) => {
@@ -59,6 +91,21 @@ const partnerSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      // Add partners thunk
+      .addCase(addPartners.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(addPartners.fulfilled, (state, action) => {
+        state.isLoading = false;
+        // state.partners=action.payload;
+        state.partners.push(action.payload);
+      })
+      .addCase(addPartners.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      // Fetch partners thunk
       .addCase(fetchPartners.pending, (state) => {
         state.isLoading = true;
         state.error = null;

@@ -3,47 +3,50 @@
  * Zod schemas for login and registration forms
  */
 
-import { z } from 'zod';
+import { z } from "zod";
 
 // Password validation schema
 const passwordSchema = z
   .string()
-  .min(8, 'Password must be at least 8 characters')
-  .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
-  .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
-  .regex(/[0-9]/, 'Password must contain at least one number')
-  .regex(/[^a-zA-Z0-9]/, 'Password must contain at least one special character');
+  .min(8, "Password must be at least 8 characters")
+  .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+  .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+  .regex(/[0-9]/, "Password must contain at least one number")
+  .regex(
+    /[^a-zA-Z0-9]/,
+    "Password must contain at least one special character"
+  );
 
 // Email validation schema
 const emailSchema = z
   .string()
-  .email('Please enter a valid email address')
-  .min(1, 'Email is required');
+  .email("Please enter a valid email address")
+  .min(1, "Email is required");
 
 // Name validation schema
 const nameSchema = z
   .string()
-  .min(2, 'Name must be at least 2 characters')
-  .max(50, 'Name must be less than 50 characters')
-  .regex(/^[a-zA-Z\s]+$/, 'Name can only contain letters and spaces');
+  .min(2, "Name must be at least 2 characters")
+  .max(50, "Name must be less than 50 characters")
+  .regex(/^[a-zA-Z\s]+$/, "Name can only contain letters and spaces");
 
 // Company name validation schema
 const companyNameSchema = z
   .string()
-  .min(2, 'Company name must be at least 2 characters')
-  .max(100, 'Company name must be less than 100 characters');
+  .min(2, "Company name must be at least 2 characters")
+  .max(100, "Company name must be less than 100 characters");
 
 // Invitation token validation schema
 const invitationTokenSchema = z
   .string()
-  .min(32, 'Invitation token must be exactly 32 characters')
-  .max(32, 'Invitation token must be exactly 32 characters')
-  .regex(/^[a-zA-Z0-9_-]+$/, 'Invalid invitation token format');
+  .min(32, "Invitation token must be exactly 32 characters")
+  .max(32, "Invitation token must be exactly 32 characters")
+  .regex(/^[a-zA-Z0-9_-]+$/, "Invalid invitation token format");
 
 // Login form validation schema
 export const loginSchema = z.object({
   email: emailSchema,
-  password: z.string().min(1, 'Password is required'),
+  password: z.string().min(1, "Password is required"),
   remember: z.boolean().optional(),
 });
 
@@ -54,61 +57,70 @@ const baseRegistrationSchema = z.object({
   email: emailSchema,
   password: passwordSchema,
   password_confirmation: z.string(),
-  role: z.enum(['admin', 'user'], {
-    required_error: 'Please select a role',
+  role: z.enum(["admin", "user"], {
+    required_error: "Please select a role",
   }),
   terms_accepted: z.boolean().refine((val: boolean) => val === true, {
-    message: 'You must accept the terms and conditions',
+    message: "You must accept the terms and conditions",
   }),
 });
 
 // Admin registration schema
-export const adminRegistrationSchema = baseRegistrationSchema.extend({
-  role: z.literal('admin'),
-  company_name: companyNameSchema,
-}).refine((data: any) => data.password === data.password_confirmation, {
-  message: 'Passwords do not match',
-  path: ['password_confirmation'],
-});
+export const adminRegistrationSchema = baseRegistrationSchema
+  .extend({
+    role: z.literal("admin"),
+    company_name: companyNameSchema,
+  })
+  .refine((data: any) => data.password === data.password_confirmation, {
+    message: "Passwords do not match",
+    path: ["password_confirmation"],
+  });
 
 // User registration schema (invited)
-export const invitedUserRegistrationSchema = baseRegistrationSchema.extend({
-  role: z.literal('user'),
-  registration_type: z.literal('invited'),
-  invitation_token: invitationTokenSchema,
-}).refine((data: any) => data.password === data.password_confirmation, {
-  message: 'Passwords do not match',
-  path: ['password_confirmation'],
-});
+export const invitedUserRegistrationSchema = baseRegistrationSchema
+  .extend({
+    role: z.literal("user"),
+    registration_type: z.literal("invited"),
+    invitation_token: invitationTokenSchema,
+  })
+  .refine((data: any) => data.password === data.password_confirmation, {
+    message: "Passwords do not match",
+    path: ["password_confirmation"],
+  });
 
 // User registration schema (independent)
-export const independentUserRegistrationSchema = baseRegistrationSchema.extend({
-  role: z.literal('user'),
-  registration_type: z.literal('independent'),
-  company_name: companyNameSchema,
-  company_type: z.enum(['individual', 'private', 'silent', 'holding'], {
-    required_error: 'Please select a company type',
-  }),
-}).refine((data: any) => data.password === data.password_confirmation, {
-  message: 'Passwords do not match',
-  path: ['password_confirmation'],
-});
+export const independentUserRegistrationSchema = baseRegistrationSchema
+  .extend({
+    role: z.literal("user"),
+    registration_type: z.literal("independent"),
+    company_name: companyNameSchema,
+    company_type: z.enum(["individual", "private", "silent", "holding"], {
+      required_error: "Please select a company type",
+    }),
+  })
+  .refine((data: any) => data.password === data.password_confirmation, {
+    message: "Passwords do not match",
+    path: ["password_confirmation"],
+  });
 
 // Dynamic registration schema based on role and registration type
-export const createRegistrationSchema = (role: string, registrationType?: string) => {
-  if (role === 'admin') {
+export const createRegistrationSchema = (
+  role: string,
+  registrationType?: string
+) => {
+  if (role === "admin") {
     return adminRegistrationSchema;
   }
-  
-  if (role === 'user') {
-    if (registrationType === 'invited') {
+
+  if (role === "user") {
+    if (registrationType === "invited") {
       return invitedUserRegistrationSchema;
     }
-    if (registrationType === 'independent') {
+    if (registrationType === "independent") {
       return independentUserRegistrationSchema;
     }
   }
-  
+
   // Fallback to base schema
   return baseRegistrationSchema;
 };
@@ -119,14 +131,16 @@ export const forgotPasswordSchema = z.object({
 });
 
 // Change password schema
-export const changePasswordSchema = z.object({
-  current_password: z.string().min(1, 'Current password is required'),
-  password: passwordSchema,
-  password_confirmation: z.string(),
-}).refine((data: any) => data.password === data.password_confirmation, {
-  message: 'Passwords do not match',
-  path: ['password_confirmation'],
-});
+export const changePasswordSchema = z
+  .object({
+    current_password: z.string().min(1, "Current password is required"),
+    password: passwordSchema,
+    password_confirmation: z.string(),
+  })
+  .refine((data: any) => data.password === data.password_confirmation, {
+    message: "Passwords do not match",
+    path: ["password_confirmation"],
+  });
 
 // Profile update schema
 export const profileUpdateSchema = z.object({
@@ -138,55 +152,55 @@ export const profileUpdateSchema = z.object({
 export const partnerSchema = z.object({
   name: z
     .string()
-    .min(2, 'Partner name must be at least 2 characters')
-    .max(50, 'Partner name must be less than 50 characters')
-    .regex(/^[a-zA-Z\s]+$/, 'Partner name can only contain letters and spaces'),
+    .min(2, "Partner name must be at least 2 characters")
+    .max(50, "Partner name must be less than 50 characters")
+    .regex(/^[a-zA-Z\s]+$/, "Partner name can only contain letters and spaces"),
 });
-export const addPartnerSchema = z.object({
-  first_name: z
-    .string()
-    .min(2, 'First name must be at least 2 characters')
-    .max(50, 'First name must be less than 50 characters'),
+// export const addPartnerSchema = z.object({
+//   first_name: z
+//     .string()
+//     .min(2, 'First name must be at least 2 characters')
+//     .max(50, 'First name must be less than 50 characters'),
 
-  last_name: z
-    .string()
-    .min(2, 'Last name must be at least 2 characters')
-    .max(50, 'Last name must be less than 50 characters'),
+//   last_name: z
+//     .string()
+//     .min(2, 'Last name must be at least 2 characters')
+//     .max(50, 'Last name must be less than 50 characters'),
 
-  email: z
-    .string()
-    .email('Enter a valid email'),
+//   email: z
+//     .string()
+//     .email('Enter a valid email'),
 
-  phone: z
-    .string()
-    .min(7, 'Phone number must be at least 7 characters')
-    .max(15, 'Phone number must be less than 15 characters')
-    .optional(),
+//   phone: z
+//     .string()
+//     .min(7, 'Phone number must be at least 7 characters')
+//     .max(15, 'Phone number must be less than 15 characters')
+//     .optional(),
 
-  role: z.string().min(1, 'Role is required'),
+//   role: z.string().min(1, 'Role is required'),
 
-  permissions: z
-  // .boolean({
-  //   required_error: 'Permissions are required',
-  // }),
-    .string()
-    .min(1, 'Permissions are required'),
-  send_invitation: z.boolean({
-    required_error: 'Please select if you want to send an invitation',
-  }),
-  // send_invitation: z.enum(['Yes', 'No']),
-});
+//   permissions: z
+//   // .boolean({
+//   //   required_error: 'Permissions are required',
+//   // }),
+//     .string()
+//     .min(1, 'Permissions are required'),
+//   send_invitation: z.boolean({
+//     required_error: 'Please select if you want to send an invitation',
+//   }),
+//   // send_invitation: z.enum(['Yes', 'No']),
+// });
 
 // Add and Edit Investment Schema
 
 export const soloInvestmentSchema = z.object({
   name: z.string().min(1, "Name is required"),
   description: z.string().min(1, "Description is required"),
-  type: z.literal("solo"),   // ✅ use type
+  type: z.literal("solo"), // ✅ use type
   // is_shared: z.literal(false),
   return_type: z.enum(["percentage", "fixed", "custom"]),
   frequency: z.enum(["monthly", "quarterly", "annual", "manual"]),
-  status: z.enum(["draft", "active", "paused","completed"]),
+  status: z.enum(["draft", "active", "paused", "completed"]),
   start_date: z.string().min(1, "Start date required"),
   end_date: z.string().min(1, "End date required"),
 
@@ -206,11 +220,11 @@ export const soloInvestmentSchema = z.object({
 export const sharedInvestmentSchema = z.object({
   name: z.string().min(1, "Name is required"),
   description: z.string().min(1, "Description is required"),
-  type: z.literal("shared"),   // ✅ use type
+  type: z.literal("shared"), // ✅ use type
   // is_shared: z.literal(true),
   return_type: z.enum(["percentage", "fixed", "custom"]),
-  frequency: z.enum(["monthly", "quarterly", "annual","manual"]),
-  status: z.enum(["draft", "active", "paused","completed"]),
+  frequency: z.enum(["monthly", "quarterly", "annual", "manual"]),
+  status: z.enum(["draft", "active", "paused", "completed"]),
   start_date: z.string().min(1, "Start date required"),
   end_date: z.string().min(1, "End date required"),
 
@@ -234,29 +248,50 @@ export const sharedInvestmentSchema = z.object({
     z.number().positive()
   ),
 });
+// Add partner schema
+export const addPartnerSchema = z.object({
+  name: z.string().min(2, "Name is required"),
+  email: z.string().email("Invalid email"),
+  phone: z.string().regex(/^\d{10,15}$/, "Phone number must be 10–15 digits"),
 
+  status: z.enum(["active", "inactive"]),
+  company_name: z.string().min(2, "Company name is required"),
+  company_type: z.enum(["individual", "private", "silent", "holding"]),
+  address: z.string().min(5, "Address is required"),
+  initial_investment: z.string().min(1, "Investment is required"),
+  description: z.string().optional().or(z.literal("")),
+  notes: z.string().optional().or(z.literal("")),
+});
 
 // Type exports for form data
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type AdminRegistrationFormData = z.infer<typeof adminRegistrationSchema>;
-export type InvitedUserRegistrationFormData = z.infer<typeof invitedUserRegistrationSchema>;
-export type IndependentUserRegistrationFormData = z.infer<typeof independentUserRegistrationSchema>;
+export type InvitedUserRegistrationFormData = z.infer<
+  typeof invitedUserRegistrationSchema
+>;
+export type IndependentUserRegistrationFormData = z.infer<
+  typeof independentUserRegistrationSchema
+>;
 export type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
 export type ChangePasswordFormData = z.infer<typeof changePasswordSchema>;
 export type ProfileUpdateFormData = z.infer<typeof profileUpdateSchema>;
 export type PartnerFormData = z.infer<typeof partnerSchema>;
 export type AddPartnerFormData = z.infer<typeof addPartnerSchema>;
 export type soloInvestmentSchema = z.infer<typeof soloInvestmentSchema>;
-export type sharedInvestmentSchema=z.infer<typeof sharedInvestmentSchema>;
+export type sharedInvestmentSchema = z.infer<typeof sharedInvestmentSchema>;
+// export type addPartnerSchema = z.infer<typeof addPartnerSchema>;
 
 // Generic registration form data type
-export type RegistrationFormData = 
-  | AdminRegistrationFormData 
-  | InvitedUserRegistrationFormData 
+export type RegistrationFormData =
+  | AdminRegistrationFormData
+  | InvitedUserRegistrationFormData
   | IndependentUserRegistrationFormData;
 
 // Helper function to validate form data
-export const validateFormData = <T>(schema: z.ZodSchema<T>, data: unknown): {
+export const validateFormData = <T>(
+  schema: z.ZodSchema<T>,
+  data: unknown
+): {
   success: boolean;
   data?: T;
   errors?: Record<string, string>;
@@ -268,11 +303,11 @@ export const validateFormData = <T>(schema: z.ZodSchema<T>, data: unknown): {
     if (error instanceof z.ZodError) {
       const formattedErrors: Record<string, string> = {};
       error.errors.forEach((err: any) => {
-        const path = err.path.join('.');
+        const path = err.path.join(".");
         formattedErrors[path] = err.message;
       });
       return { success: false, errors: formattedErrors };
     }
-    return { success: false, errors: { general: 'Validation failed' } };
+    return { success: false, errors: { general: "Validation failed" } };
   }
-}; 
+};

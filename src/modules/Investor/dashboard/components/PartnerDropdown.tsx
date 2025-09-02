@@ -10,13 +10,6 @@ import {
   TextInput,
   View,
 } from "react-native";
-
-// interface PartnerDropdownProps {
-//   label?: string;
-//   partners: Partner[];
-//   selectedPartner?: Partner;
-//   onSelect: (partner: Partner) => void;
-// }
 interface PartnerDropdownProps {
   label?: string;
   partners: Partner[]; // comes from slice
@@ -26,12 +19,6 @@ interface PartnerDropdownProps {
   required?: boolean;
   error?: string;
 }
-// export const PartnerDropdown: React.FC<PartnerDropdownProps> = ({
-//   label,
-//   partners: initialPartners,
-//   selectedPartner,
-//   onSelect,
-// }) => {
 export const PartnerDropdown: React.FC<PartnerDropdownProps> = ({
   label,
   placeholder = "Select a Partner",
@@ -94,6 +81,7 @@ export const PartnerDropdown: React.FC<PartnerDropdownProps> = ({
             <FlatList
               data={filteredPartners}
               keyExtractor={(item) => item.id.toString()}
+              showsVerticalScrollIndicator={false}
               renderItem={({ item }) => (
                 <Pressable
                   onPress={() => {
@@ -111,11 +99,11 @@ export const PartnerDropdown: React.FC<PartnerDropdownProps> = ({
                   </View>
                   <View style={{ flexDirection: 'row', justifyContent: "space-between" }}>
                     <Text style={styles.subText}>{item.email}</Text>
-                    {/* <Text style={styles.subText}>Phone: {item.phone ?? "N/A"}</Text> */}
                     {/* <Text style={styles.subText}>Company: {item.company?.name ?? "N/A"}</Text> */}
                     <Text
                       style={[styles.statusText, item.status === "active" ? styles.statusActive : styles.statusClosed,]}> {item.status?.charAt(0).toUpperCase()}{item.status?.slice(1)}</Text>
                   </View>
+                    <Text style={styles.subText}>Phone: {item.phone ?? "N/A"}</Text>
                   
                 </Pressable>
               )}

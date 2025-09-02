@@ -1,9 +1,12 @@
 // src/screens/PartnerDropdownScreen.tsx
 import { addPartnerSchema } from "@/modules/auth/utils/authValidation";
+import { InvestorDashboardStackParamList } from "@/navigation/InvestorStacks/InvestorDashboardStack";
 import { Button, Input } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { addPartners, fetchPartners, Partner } from "@/shared/store/slices/addPartnerSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
@@ -19,14 +22,16 @@ import {
 import DropDownPicker from "react-native-dropdown-picker";
 import Colors from "../../../../shared/colors/Colors";
 import { PartnerDropdown } from "../components/PartnerDropdown";
+type Props = NativeStackNavigationProp<InvestorDashboardStackParamList, "AddPartner">;
 export const AddPartnerScreen = () => {
   const dispatch = useAppDispatch();
   const { partners, isLoading, error } = useAppSelector((state) => state.partner);
   const [selectedPartner, setSelectedPartner] = useState<Partner | undefined>();
   const [modalVisible, setModalVisible] = useState(false);
+  const navigation = useNavigation<Props>();
   useEffect(() => {
     dispatch(fetchPartners())
-  }, [])
+  }, [dispatch])
   const {
     control,
     handleSubmit,
@@ -49,15 +54,15 @@ export const AddPartnerScreen = () => {
   const onSubmit = (data: any) => {
     console.log("Data entered :", data);
     dispatch(addPartners(data)) // from addPartnerSlice
-    .unwrap()
-    .then(() => {
-      // ToastAndroid.show("Partner created successfully", ToastAndroid.SHORT);
-      setModalVisible(false);
-    })
-    .catch((error:any) => {
-      // ToastAndroid.show(`Error: ${error}`, ToastAndroid.LONG);
-      ToastAndroid.show("Failed: " + (error?.message || "Unknown error"), ToastAndroid.LONG);
-    });
+      .unwrap()
+      .then(() => {
+        // ToastAndroid.show("Partner created successfully", ToastAndroid.SHORT);
+        setModalVisible(false);
+      })
+      .catch((error: any) => {
+        // ToastAndroid.show(`Error: ${error}`, ToastAndroid.LONG);
+        ToastAndroid.show("Failed: " + (error?.message || "Unknown error"), ToastAndroid.LONG);
+      });
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -72,7 +77,13 @@ export const AddPartnerScreen = () => {
           label="Select Partner"
           partners={partners}
           selectedPartner={selectedPartner}
-          onSelect={(p) => { setSelectedPartner(p) }}
+          onSelect={(partner) => {
+            navigation.navigate("PartnerDetail", {
+              id: partner.id,
+            });
+
+            setSelectedPartner(partner)
+          }}
           placeholder="Choose a partner"
         />
 
@@ -151,7 +162,7 @@ export const AddPartnerScreen = () => {
                       />
                     )}
                   />
-                 
+
                   <Controller
                     control={control}
                     name="status"

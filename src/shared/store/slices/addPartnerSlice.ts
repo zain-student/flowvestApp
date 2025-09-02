@@ -48,12 +48,15 @@ interface partnerState {
   partners: Partner[];
   isLoading: boolean;
   error: string | null;
+  selectedPartner: Partner | null;
 }
 const initialState: partnerState = {
   partners: [],
   isLoading: false,
   error: null,
+  selectedPartner: null,
 };
+// add partner thunk
 export const addPartners = createAsyncThunk(
   "v1/admin/addPartners",
   async (newPartner: CreatePartnerPayload, { rejectWithValue }) => {
@@ -66,11 +69,12 @@ export const addPartners = createAsyncThunk(
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       return response.data.data;
     } catch (error: any) {
-      console.log("error",error.message)
+      console.log("error", error.message);
       return rejectWithValue(error || "Failed to Add partner");
     }
   }
 );
+// fetch partners thunk
 export const fetchPartners = createAsyncThunk(
   "v1/admin/partners",
   async (_, { rejectWithValue }) => {
@@ -81,6 +85,20 @@ export const fetchPartners = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.message || "Failed to fetch Partners");
+    }
+  }
+);
+// get detail partner thunk
+export const fetchPartnerDetail = createAsyncThunk(
+  "v1/admin/partner/detail",
+  async (id: number, { rejectWithValue }) => {
+    try {
+      const response = await api.get(API_ENDPOINTS.ADMIN.PARTNERS.DETAIL(id));
+      console.log("Partner detail response:", response.data);
+      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+      return response.data.data; // ✅ directly the partner object
+    } catch (error: any) {
+      return rejectWithValue(error.message || "Failed to fetch partner detail");
     }
   }
 );
@@ -115,6 +133,19 @@ const partnerSlice = createSlice({
         state.partners = action.payload.data.partners;
       })
       .addCase(fetchPartners.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      // Partner details reducers
+      .addCase(fetchPartnerDetail.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchPartnerDetail.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.selectedPartner = action.payload; // ✅ store partner detail
+      })
+      .addCase(fetchPartnerDetail.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       });

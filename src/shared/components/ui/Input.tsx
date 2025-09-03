@@ -17,7 +17,7 @@ import {
 
 interface InputProps extends Omit<TextInputProps, 'style'> {
   label?: string;
-  error?: string;
+  error?: string ;
   hint?: string;
   type?: 'text' | 'email' | 'password' | 'phone' | 'number';
   required?: boolean;

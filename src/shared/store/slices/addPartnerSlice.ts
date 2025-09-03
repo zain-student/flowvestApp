@@ -81,7 +81,7 @@ export const fetchPartners = createAsyncThunk(
     try {
       const response = await api.get(API_ENDPOINTS.ADMIN.PARTNERS.LIST);
       console.log("Partners api response: ", response.data);
-      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+      // ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.message || "Failed to fetch Partners");
@@ -99,6 +99,33 @@ export const fetchPartnerDetail = createAsyncThunk(
       return response.data.data; // ✅ directly the partner object
     } catch (error: any) {
       return rejectWithValue(error.message || "Failed to fetch partner detail");
+    }
+  }
+);
+
+// Update Partner
+export const updatePartner = createAsyncThunk(
+  "v1/partners/update",
+  async (
+    { id, updatedData }: { id: number; updatedData: Partial<Partner> },
+    { rejectWithValue }
+  ) => {
+    try {
+      console.log("Update Partner called");
+
+      // 🔹 API call
+      const response = await api.put(
+        API_ENDPOINTS.ADMIN.PARTNERS.UPDATE(id),
+        updatedData
+      );
+
+      console.log("📦 Partner Updated:", response.data);
+      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+
+      // return updated partner object
+      return response.data.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.message || "Update failed");
     }
   }
 );
@@ -146,6 +173,29 @@ const partnerSlice = createSlice({
         state.selectedPartner = action.payload; // ✅ store partner detail
       })
       .addCase(fetchPartnerDetail.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      // Update partner reducers
+      .addCase(updatePartner.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updatePartner.fulfilled, (state, action) => {
+        state.isLoading = false;
+        // update the partner in the list
+        state.partners = state.partners.map((p) =>
+          p.id === action.payload.id ? { ...p, ...action.payload } : p
+        );
+
+        // also update if it's the currently selected partner
+        if (state.selectedPartner?.id === action.payload.id) {
+          state.selectedPartner = {
+            ...state.selectedPartner,
+            ...action.payload,
+          };
+        }
+      })
+      .addCase(updatePartner.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       });

@@ -7,7 +7,7 @@ import { AddPartnerScreen } from '../../modules/Investor/dashboard/screens/AddPa
 import { DashboardScreen } from '../../modules/Investor/dashboard/screens/DashboardScreen';
 export type InvestorDashboardStackParamList = {
   InvestorDashboard: undefined;
-  AddPartner: undefined;
+  AddPartner: {partner?: any};
   PartnerDetail: { id: number };
 };
 export const Stack = createNativeStackNavigator<InvestorDashboardStackParamList>();

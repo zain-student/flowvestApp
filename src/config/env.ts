@@ -157,7 +157,7 @@ export const API_ENDPOINTS = {
       LIST: '/v1/admin/partners',
       CREATE: '/v1/admin/partners',
       DETAIL: (id: number) => `/v1/admin/partners/${id}`,
-      UPDATE: (id: string) => `/v1/admin/partners/${id}`,
+      UPDATE: (id: number) => `/v1/admin/partners/${id}`,
       DEACTIVATE: (id: string) => `/v1/admin/partners/${id}`,
       INVESTMENTS: (id: string) => `/v1/admin/partners/${id}/investments`,
       PAYOUTS: (id: string) => `/v1/admin/partners/${id}/payouts`,

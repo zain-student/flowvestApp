@@ -48,12 +48,12 @@ export const LoginScreen: React.FC = () => {
   // Handle input changes
   const handleInputChange = (field: keyof LoginFormData, value: string | boolean) => {
     setFormData((prev: LoginFormData) => ({ ...prev, [field]: value }));
-    
+
     // Clear specific field error when user starts typing
     if (errors[field as string]) {
       setErrors((prev: Record<string, string>) => ({ ...prev, [field as string]: '' }));
     }
-    
+
     // Clear auth error when user makes changes
     if (authError) {
       dispatch(clearError());
@@ -64,7 +64,7 @@ export const LoginScreen: React.FC = () => {
   const handleSubmit = async () => {
     // Validate form data
     const validation = validateFormData(loginSchema, formData);
-    
+
     if (!validation.success && validation.errors) {
       setErrors(validation.errors);
       return;
@@ -75,7 +75,7 @@ export const LoginScreen: React.FC = () => {
     try {
       // Dispatch login action
       const result = await dispatch(loginUser(validation.data));
-      
+
       if (loginUser.fulfilled.match(result)) {
         // Login successful - navigation will be handled by RootNavigator
         console.log('Login successful');
@@ -105,7 +105,7 @@ export const LoginScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      
+
       <KeyboardAvoidingView
         style={styles.keyboardAvoid}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -116,9 +116,9 @@ export const LoginScreen: React.FC = () => {
           showsVerticalScrollIndicator={false}
         >
           <StatusBar
-                  barStyle="dark-content" // or "dark-content"
-                  // backgroundColor="#000" // set to match your theme
-                />
+            barStyle="dark-content" // or "dark-content"
+          // backgroundColor="#000" // set to match your theme
+          />
           {/* Header */}
           <View style={styles.header}>
             <Text style={styles.title}>Welcome Back</Text>
@@ -155,9 +155,9 @@ export const LoginScreen: React.FC = () => {
             >
               <View style={[styles.checkbox, formData.remember && styles.checkboxChecked]}>
                 {formData.remember &&
-                //  <Text style={styles.checkmark}>✓</Text>
-                <Ionicons name='checkmark' size={16}  color={"white"}/>
-                 }
+                  //  <Text style={styles.checkmark}>✓</Text>
+                  <Ionicons name='checkmark' size={16} color={"white"} />
+                }
               </View>
               <Text style={styles.rememberText}>Remember me</Text>
             </TouchableOpacity>
@@ -205,50 +205,50 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
   },
-  
+
   keyboardAvoid: {
     flex: 1,
   },
-  
+
   scrollView: {
     flex: 1,
   },
-  
+
   scrollContent: {
     flexGrow: 1,
     paddingHorizontal: 24,
     paddingVertical: 20,
   },
-  
+
   header: {
     alignItems: 'center',
     marginTop: 40,
     marginBottom: 40,
   },
-  
+
   title: {
     fontSize: 28,
     fontWeight: 'bold',
     color: '#111827',
     marginBottom: 8,
   },
-  
+
   subtitle: {
     fontSize: 16,
     color: Colors.gray,
     textAlign: 'center',
   },
-  
+
   form: {
     flex: 1,
   },
-  
+
   rememberContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 24,
   },
-  
+
   checkbox: {
     width: 20,
     height: 20,
@@ -259,23 +259,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  
+
   checkboxChecked: {
     borderColor: Colors.secondary,
     backgroundColor: Colors.secondary,
   },
-  
+
   checkmark: {
     color: Colors.white,
     fontSize: 12,
     fontWeight: 'bold',
   },
-  
+
   rememberText: {
     fontSize: 14,
     color: Colors.secondary,
   },
-  
+
   errorContainer: {
     backgroundColor: '#FEF2F2',
     borderWidth: 1,
@@ -284,29 +284,29 @@ const styles = StyleSheet.create({
     padding: 12,
     marginBottom: 16,
   },
-  
+
   errorText: {
     color: '#DC2626',
     fontSize: 14,
     textAlign: 'center',
   },
-  
+
   submitButton: {
     marginBottom: 16,
   },
-  
+
   forgotPasswordContainer: {
     alignItems: 'center',
     marginBottom: 32,
   },
-  
+
   forgotPasswordText: {
     fontSize: 14,
     // color: '#2563EB',
     color: Colors.secondary,
     fontWeight: '500',
   },
-  
+
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -314,14 +314,14 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     borderTopWidth: 1,
     borderTopColor: Colors.lightGray,
-    
+
   },
-  
+
   footerText: {
     fontSize: 14,
     color: Colors.gray,
   },
-  
+
   footerLink: {
     fontSize: 14,
     color: Colors.secondary,

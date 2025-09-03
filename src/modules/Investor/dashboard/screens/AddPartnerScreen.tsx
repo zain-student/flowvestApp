@@ -3,9 +3,9 @@ import { addPartnerSchema } from "@/modules/auth/utils/authValidation";
 import { InvestorDashboardStackParamList } from "@/navigation/InvestorStacks/InvestorDashboardStack";
 import { Button, Input } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { addPartners, fetchPartners, Partner } from "@/shared/store/slices/addPartnerSlice";
+import { addPartners, fetchPartners, Partner, updatePartner } from "@/shared/store/slices/addPartnerSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -22,47 +22,84 @@ import {
 import DropDownPicker from "react-native-dropdown-picker";
 import Colors from "../../../../shared/colors/Colors";
 import { PartnerDropdown } from "../components/PartnerDropdown";
+type AddPartnerRouteProp = RouteProp<InvestorDashboardStackParamList, "AddPartner">;
 type Props = NativeStackNavigationProp<InvestorDashboardStackParamList, "AddPartner">;
 export const AddPartnerScreen = () => {
   const dispatch = useAppDispatch();
+  const route = useRoute<AddPartnerRouteProp>();
+  const editingPartner = route.params?.partner;
   const { partners, isLoading, error } = useAppSelector((state) => state.partner);
   const [selectedPartner, setSelectedPartner] = useState<Partner | undefined>();
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(!!editingPartner);
   const navigation = useNavigation<Props>();
-  useEffect(() => {
-    dispatch(fetchPartners())
-  }, [dispatch])
+
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(addPartnerSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
-      status: "active",
-      company_name: "",
-      company_type: "private",
-      address: "",
-      description: "",
-      initial_investment: "",
-      notes: "",
+      name: editingPartner?.name || "",
+      email: editingPartner?.email || "",
+      phone: editingPartner?.phone || "",
+      status: editingPartner?.status || "active",
+      company_name: editingPartner?.company_name || "",
+      company_type: editingPartner?.company_type || "private",
+      address: editingPartner?.company?.address || "",
+      description: editingPartner?.description || "",
+      initial_investment: editingPartner?.total_invested || "",
+      notes: editingPartner?.notes || "",
     },
   });
-  const onSubmit = (data: any) => {
-    console.log("Data entered :", data);
-    dispatch(addPartners(data)) // from addPartnerSlice
-      .unwrap()
-      .then(() => {
-        // ToastAndroid.show("Partner created successfully", ToastAndroid.SHORT);
-        setModalVisible(false);
-      })
-      .catch((error: any) => {
-        // ToastAndroid.show(`Error: ${error}`, ToastAndroid.LONG);
-        ToastAndroid.show("Failed: " + (error?.message || "Unknown error"), ToastAndroid.LONG);
+  useEffect(() => {
+    if (editingPartner) {
+      reset({
+        name: editingPartner.name,
+        email: editingPartner.email,
+        phone: editingPartner.phone,
+        status: editingPartner.status,
+        company_name: editingPartner.company?.name,
+        company_type: editingPartner.company_type,
+        address: editingPartner.company?.address,
+        description: editingPartner.description,
+        initial_investment: editingPartner.total_invested,
+        notes: editingPartner.notes,
       });
+      setModalVisible(true); // ✅ open modal automatically
+    }
+  }, [editingPartner, reset]);
+  useEffect(() => {
+    dispatch(fetchPartners())
+  }, [dispatch])
+
+  const onSubmit = (data: any) => {
+    if (editingPartner) {
+      dispatch(updatePartner({ id: editingPartner.id, updatedData: data }))
+        .unwrap()
+        .then(() => {
+          ToastAndroid.show("Partner Updated Successfully", ToastAndroid.SHORT);
+          setModalVisible(false);
+          navigation.goBack();
+        })
+        .catch((error: any) => {
+          ToastAndroid.show("Update failed: " + error, ToastAndroid.LONG);
+        });
+    } else {
+
+      dispatch(addPartners(data)) // from addPartnerSlice
+        .unwrap()
+        .then(() => {
+          // ToastAndroid.show("Partner created successfully", ToastAndroid.SHORT);
+          console.log("Adding partner Data:", data);
+          setModalVisible(false);
+        })
+        .catch((error: any) => {
+          // ToastAndroid.show(`Error: ${error}`, ToastAndroid.LONG);
+          ToastAndroid.show("Failed: " + (error?.message || "Unknown error"), ToastAndroid.LONG);
+        });
+    }
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -71,8 +108,6 @@ export const AddPartnerScreen = () => {
 
         {/* Partner Dropdown */}
         {isLoading && <Text>Loading partners...</Text>}
-        {/* {error && <Text style={{ color: "red" }}>{error}</Text>} */}
-
         <PartnerDropdown
           label="Select Partner"
           partners={partners}
@@ -110,11 +145,16 @@ export const AddPartnerScreen = () => {
                       alignSelf: "center",
                     }}
                   >
-                    Add New Partner
+                    {editingPartner ? "Update Partner" : " Add New Partner"}
                   </Text>
                   <TouchableOpacity
                     style={styles.closeBtn}
-                    onPress={() => setModalVisible(false)}
+                    onPress={() => {
+                      if (editingPartner) {
+                        setModalVisible(false)
+                        navigation.goBack()
+                      } else { setModalVisible(false) }
+                    }}
                   >
                     <Text style={styles.closeText}>✕</Text>
                   </TouchableOpacity>
@@ -129,7 +169,7 @@ export const AddPartnerScreen = () => {
                         placeholder="Enter your full name"
                         value={field.value}
                         onChangeText={field.onChange}
-                        error={errors.name?.message}
+                        error={errors.name?.message as string | undefined}
                         required
                       />
                     )}
@@ -143,7 +183,7 @@ export const AddPartnerScreen = () => {
                         placeholder="Enter email"
                         value={field.value}
                         onChangeText={field.onChange}
-                        error={errors.email?.message}
+                        error={errors.email?.message as string | undefined}
                         required
                       />
                     )}
@@ -157,7 +197,7 @@ export const AddPartnerScreen = () => {
                         placeholder="Enter your Phone number"
                         value={field.value}
                         onChangeText={field.onChange}
-                        error={errors.phone?.message}
+                        error={errors.phone?.message as string | undefined}
                         required
                       />
                     )}
@@ -215,7 +255,7 @@ export const AddPartnerScreen = () => {
                         placeholder="Enter company name"
                         value={field.value}
                         onChangeText={field.onChange}
-                        error={errors.company_name?.message}
+                        error={errors.company_name?.message as string | undefined}
                         required
                       />
                     )}
@@ -275,7 +315,7 @@ export const AddPartnerScreen = () => {
                         placeholder="Enter Company Address"
                         value={field.value}
                         onChangeText={field.onChange}
-                        error={errors.address?.message}
+                        error={errors.address?.message as string | undefined}
                         required
                       />
                     )}
@@ -289,7 +329,7 @@ export const AddPartnerScreen = () => {
                         placeholder="Enter description"
                         value={field.value}
                         onChangeText={field.onChange}
-                        error={errors.description?.message}
+                        error={errors.description?.message as string | undefined}
                         multiline
                       />
                     )}
@@ -303,7 +343,7 @@ export const AddPartnerScreen = () => {
                         placeholder="Enter initial investment"
                         value={field.value}
                         onChangeText={field.onChange}
-                        error={errors.initial_investment?.message}
+                        error={errors.initial_investment?.message as string | undefined}
                         required
                       />
                     )}
@@ -317,13 +357,13 @@ export const AddPartnerScreen = () => {
                         placeholder="Enter Notes"
                         value={field.value}
                         onChangeText={field.onChange}
-                        error={errors.notes?.message}
+                        error={errors.notes?.message as string | undefined}
                         multiline
                       />
                     )}
                   />
                   <Button
-                    title="Add"
+                    title={editingPartner ? "Update" : "Add"}
                     onPress={handleSubmit(onSubmit)}
                     style={{ marginTop: 0, backgroundColor: Colors.secondary }}
                   />

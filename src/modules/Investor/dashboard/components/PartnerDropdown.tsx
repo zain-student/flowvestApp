@@ -82,6 +82,7 @@ export const PartnerDropdown: React.FC<PartnerDropdownProps> = ({
               data={filteredPartners}
               keyExtractor={(item) => item.id.toString()}
               showsVerticalScrollIndicator={false}
+              keyboardDismissMode="on-drag"
               renderItem={({ item }) => (
                 <Pressable
                   onPress={() => {

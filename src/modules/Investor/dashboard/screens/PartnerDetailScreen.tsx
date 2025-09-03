@@ -1,25 +1,29 @@
+import { InvestorDashboardStackParamList } from "@/navigation/InvestorStacks/InvestorDashboardStack";
 import Colors from "@/shared/colors/Colors";
+import { Button } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { fetchPartnerDetail } from "@/shared/store/slices/addPartnerSlice";
-import { RouteProp, useRoute } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useEffect } from "react";
-import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from "react-native";
 type PartnerDetailParams = {
   PartnerDetailScreen: { id: number };
 };
-
-export const PartnerDetailScreen=()=> {
+type Props = NativeStackNavigationProp<InvestorDashboardStackParamList, "AddPartner">;
+export const PartnerDetailScreen = () => {
   const route = useRoute<RouteProp<PartnerDetailParams, "PartnerDetailScreen">>();
+  const navigation = useNavigation<Props>();
   const { id } = route.params;
-const dispatch= useAppDispatch();
-const {selectedPartner,isLoading,error}=useAppSelector((state)=>state.partner);
-useEffect(()=>{
+  const dispatch = useAppDispatch();
+  const { selectedPartner, isLoading, error } = useAppSelector((state) => state.partner);
+  useEffect(() => {
     dispatch(fetchPartnerDetail(id));
-},[dispatch,id])
-if (isLoading) {
+  }, [dispatch, id])
+  if (isLoading) {
     return <ActivityIndicator size="large" color="#131314ff" />;
   }
-   
+
   if (error) {
     return <Text style={{ padding: 20, color: "red" }}>{error}</Text>;
   }
@@ -28,19 +32,19 @@ if (isLoading) {
     return <Text style={{ padding: 20 }}>No partner data available.</Text>;
   }
 
-const partner=selectedPartner;
+  const partner = selectedPartner;
   return (
     <ScrollView style={styles.container}>
       {/* Header Card */}
       <View style={styles.card}>
-        <Text style={styles.name}>{partner.name }</Text>
-        <View style={{flexDirection:'row', justifyContent:'space-between'}}> 
-        <Text style={styles.email}>Email: {partner.email}</Text>
-        <Text style={[styles.status, partner.status === "active" ? styles.active : styles.inactive]}>
-          {partner.status}
-        </Text>
+        <Text style={styles.name}>{partner.name}</Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={styles.email}>Email: {partner.email}</Text>
+          <Text style={[styles.status, partner.status === "active" ? styles.active : styles.inactive]}>
+            {partner.status}
+          </Text>
         </View>
-        <Text style={styles.email}>Phone: {partner.phone||"N/A"}</Text>
+        <Text style={styles.email}>Phone: {partner.phone || "N/A"}</Text>
       </View>
 
       {/* Company Info */}
@@ -48,7 +52,7 @@ const partner=selectedPartner;
         <Text style={styles.sectionTitle}>Company Information</Text>
         <Text style={styles.detail}>Name: {partner.company?.name}</Text>
         {/* <Text style={styles.detail}>📂 {partner.company.type}</Text> */}
-        <Text style={styles.detail}>Address: {partner.company?.address||"N/A"}</Text>
+        <Text style={styles.detail}>Address: {partner.company?.address || "N/A"}</Text>
       </View>
 
       {/* Financials */}
@@ -61,9 +65,17 @@ const partner=selectedPartner;
       </View>
 
       {/* Action Button */}
-      <TouchableOpacity style={styles.button}>
+      <Button
+        title="Edit Partner"
+        loading={isLoading}
+        onPress={() =>
+          navigation.navigate("AddPartner", {partner})
+          // console.log("Editing partner.....")
+        }
+      />
+      {/* <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Edit Partner</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </ScrollView>
   );
 }
@@ -83,14 +95,14 @@ const styles = StyleSheet.create({
   },
   name: { fontSize: 20, fontWeight: "700", color: Colors.secondary },
   email: { fontSize: 14, color: Colors.gray, marginVertical: 4 },
-  status: {  fontWeight: "600", paddingVertical: 4, paddingHorizontal: 8, borderRadius: 8, alignSelf: "flex-start" },
+  status: { fontWeight: "600", paddingVertical: 4, paddingHorizontal: 8, borderRadius: 8, alignSelf: "flex-start" },
   active: { backgroundColor: "#d1f7c4", color: "#1a7f37" },
   inactive: { backgroundColor: "#ffe0e0", color: "#a00" },
   sectionTitle: { fontSize: 16, fontWeight: "600", marginBottom: 8, color: Colors.secondary },
   detail: { fontSize: 14, color: Colors.secondary, marginBottom: 4 },
   activityRow: { flexDirection: "row", justifyContent: "space-between", marginBottom: 6 },
   activityText: { fontSize: 14, color: Colors.secondary },
- 
+
   button: {
     backgroundColor: "#007bff",
     paddingVertical: 14,

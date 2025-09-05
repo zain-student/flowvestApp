@@ -10,7 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAppDispatch, useAppSelector } from '@store/index';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -37,8 +37,8 @@ export const LoginScreen: React.FC = () => {
 
   // Form state
   const [formData, setFormData] = useState<LoginFormData>({
-    email: '',
-    password: '',
+    email: 'zainma4989@gmail.com',
+    password: 'Zain,4321',
     remember: false,
   });
 
@@ -59,7 +59,9 @@ export const LoginScreen: React.FC = () => {
       dispatch(clearError());
     }
   };
-
+useEffect(()=>{
+  
+})
   // Handle form submission
   const handleSubmit = async () => {
     // Validate form data

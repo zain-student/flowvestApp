@@ -1,4 +1,6 @@
 import { PartnerDetailScreen } from '@/modules/Investor/dashboard/screens/PartnerDetailScreen';
+import { PartnerInvestments } from "@/modules/Investor/dashboard/screens/PartnerInvestments";
+import { PartnerPayouts } from "@/modules/Investor/dashboard/screens/PartnerPayouts";
 import { Ionicons } from '@expo/vector-icons';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
@@ -7,8 +9,10 @@ import { AddPartnerScreen } from '../../modules/Investor/dashboard/screens/AddPa
 import { DashboardScreen } from '../../modules/Investor/dashboard/screens/DashboardScreen';
 export type InvestorDashboardStackParamList = {
   InvestorDashboard: undefined;
-  AddPartner: {partner?: any};
+  AddPartner: { partner?: any };
   PartnerDetail: { id: number };
+  PartnerInvestment: { id: number };
+  PartnerPayout: { id: number };
 };
 export const Stack = createNativeStackNavigator<InvestorDashboardStackParamList>();
 export const InvestorDashboardStack = () => {
@@ -61,6 +65,62 @@ export const InvestorDashboardStack = () => {
         options={({ navigation }) => ({
           // gestureEnabled: false,
           title: 'Partner Details',
+          headerTitleAlign: 'center',
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={{
+                marginRight: 16,
+                marginLeft: 10,
+                marginTop: 5,
+                marginBottom: 5,
+                backgroundColor: "#F3F4F6",
+                width: 50,
+                height: 50,
+                borderRadius: 25,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Ionicons name="chevron-back" color={"black"} size={30} />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="PartnerInvestment"
+        component={PartnerInvestments}
+        options={({ navigation }) => ({
+          // gestureEnabled: false,
+          title: 'Partner Investments',
+          headerTitleAlign: 'center',
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={{
+                marginRight: 16,
+                marginLeft: 10,
+                marginTop: 5,
+                marginBottom: 5,
+                backgroundColor: "#F3F4F6",
+                width: 50,
+                height: 50,
+                borderRadius: 25,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Ionicons name="chevron-back" color={"black"} size={30} />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="PartnerPayout"
+        component={PartnerPayouts}
+        options={({ navigation }) => ({
+          // gestureEnabled: false,
+          title: 'Partner Payouts',
           headerTitleAlign: 'center',
           headerLeft: () => (
             <TouchableOpacity

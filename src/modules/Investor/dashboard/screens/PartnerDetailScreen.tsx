@@ -3,10 +3,11 @@ import Colors from "@/shared/colors/Colors";
 import { Button } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { fetchPartnerDetail } from "@/shared/store/slices/addPartnerSlice";
+import { Ionicons } from "@expo/vector-icons";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useEffect } from "react";
-import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 type PartnerDetailParams = {
   PartnerDetailScreen: { id: number };
 };
@@ -41,7 +42,7 @@ export const PartnerDetailScreen = () => {
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={styles.email}>Email: {partner.email}</Text>
           <Text style={[styles.status, partner.status === "active" ? styles.active : styles.inactive]}>
-            {partner.status}
+            {partner.status?.charAt(0).toUpperCase()}{partner.status?.slice(1)}
           </Text>
         </View>
         <Text style={styles.email}>Phone: {partner.phone || "N/A"}</Text>
@@ -62,6 +63,22 @@ export const PartnerDetailScreen = () => {
         <Text style={styles.detail}>Active Investments: {partner.active_investments}</Text>
         <Text style={styles.detail}>Total Earned: {partner.total_earned}</Text>
         <Text style={styles.detail}>ROI %: {partner.roi_percentage}</Text>
+        <View style={{flexDirection:'row',
+          justifyContent:"space-between"
+        }}>
+        <TouchableOpacity style={styles.investmentButton} onPress={()=>navigation.navigate("PartnerInvestment",{ id :partner.id})}>
+          <Ionicons name="eye-outline" size={23} />
+          <Text style={{ marginLeft:5,fontSize: 16,fontWeight:"500" }}>
+            View Investments
+          </Text>
+        </TouchableOpacity>
+         <TouchableOpacity style={styles.payoutButton} onPress={()=>navigation.navigate("PartnerPayout",{id:partner.id})}>
+          <Ionicons name="eye-outline" size={23} />
+          <Text style={{ marginLeft:5,fontSize: 16, fontWeight:"500" }}>
+            View Payouts
+          </Text>
+        </TouchableOpacity>
+        </View>
       </View>
 
       {/* Action Button */}
@@ -69,7 +86,7 @@ export const PartnerDetailScreen = () => {
         title="Edit Partner"
         loading={isLoading}
         onPress={() =>
-          navigation.navigate("AddPartner", {partner})
+          navigation.navigate("AddPartner", { partner })
           // console.log("Editing partner.....")
         }
       />
@@ -102,7 +119,34 @@ const styles = StyleSheet.create({
   detail: { fontSize: 14, color: Colors.secondary, marginBottom: 4 },
   activityRow: { flexDirection: "row", justifyContent: "space-between", marginBottom: 6 },
   activityText: { fontSize: 14, color: Colors.secondary },
-
+  investmentButton: {
+    flexDirection: 'row',
+    backgroundColor: Colors.background,
+    width: "46%",
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  payoutButton: {
+    flexDirection: 'row',
+    backgroundColor: Colors.background,
+    width: "46%",
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 2,
+  },
   button: {
     backgroundColor: "#007bff",
     paddingVertical: 14,

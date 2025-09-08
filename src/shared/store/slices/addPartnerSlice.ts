@@ -44,17 +44,38 @@ export interface Partner {
   created_at?: string;
   updated_at?: string;
 }
+export interface Investment {
+  id: number;
+  title: string;
+  amount_invested: string;
+  current_value: string;
+  roi_percentage: number;
+  status: "active" | "completed";
+  start_date: string;
+}
+
+export interface InvestmentSummary {
+  total_invested: number;
+  total_current_value: number;
+  total_roi: number;
+}
+
 interface partnerState {
   partners: Partner[];
   isLoading: boolean;
   error: string | null;
   selectedPartner: Partner | null;
+// For partner investments
+  investments: Investment[];
+  investmentSummary:InvestmentSummary | null;
 }
 const initialState: partnerState = {
   partners: [],
   isLoading: false,
   error: null,
   selectedPartner: null,
+  investments:[],
+  investmentSummary:null,
 };
 // add partner thunk
 export const addPartners = createAsyncThunk(
@@ -103,7 +124,7 @@ export const fetchPartnerDetail = createAsyncThunk(
   }
 );
 
-// Update Partner
+// Update Partner thunk
 export const updatePartner = createAsyncThunk(
   "v1/partners/update",
   async (
@@ -126,6 +147,20 @@ export const updatePartner = createAsyncThunk(
       return response.data.data;
     } catch (error: any) {
       return rejectWithValue(error?.message || "Update failed");
+    }
+  }
+);
+// Partners investments thunk
+export const fetchPartnerInvestments = createAsyncThunk(
+  "v1/admin/partner/investments",
+  async (id: number, { rejectWithValue }) => {
+    try {
+      const response = await api.get(API_ENDPOINTS.ADMIN.PARTNERS.INVESTMENTS(id));
+      console.log("Partner investments response:", response.data.data);
+      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+      return response.data.data; // ✅ directly the partner object
+    } catch (error: any) {
+      return rejectWithValue(error.message || "Failed to fetch partner investments");
     }
   }
 );
@@ -198,7 +233,21 @@ const partnerSlice = createSlice({
       .addCase(updatePartner.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
-      });
+      })
+      // Partner investments reducers
+      .addCase(fetchPartnerInvestments.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchPartnerInvestments.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.investments = action.payload.investments; // ✅ store partner investments
+        state.investmentSummary=action.payload.summary; 
+      })
+      .addCase(fetchPartnerInvestments.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
   },
 });
 export default partnerSlice.reducer;

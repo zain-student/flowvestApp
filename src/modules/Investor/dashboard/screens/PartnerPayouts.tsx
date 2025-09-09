@@ -4,13 +4,14 @@ import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 
 export const PartnerPayouts = () => {
-  // Dummy Data (replace with API later)
+  // Dummy Summary Data
   const dummySummary = {
     total_paid: 15000,
     pending_amount: 5000,
     total_payouts: 4,
   };
 
+  // Dummy Payout List
   const dummyPayouts = [
     {
       id: 1,
@@ -44,14 +45,9 @@ export const PartnerPayouts = () => {
 
   const renderPayout = ({ item }: any) => (
     <View style={styles.card}>
+      {/* Amount + Status */}
       <View style={styles.cardHeader}>
-        <Text style={styles.payoutTitle}>Amount: ${item.amount}</Text>
-        <Text style={styles.date}>
-          {new Date(item.date).toDateString()}
-        </Text>
-      </View>
-      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <Text style={styles.method}>Method: {item.method}</Text>
+        <Text style={styles.amount}>${item.amount}</Text>
         <Text
           style={[
             styles.status,
@@ -61,6 +57,12 @@ export const PartnerPayouts = () => {
           {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
         </Text>
       </View>
+
+      {/* Method + Date */}
+      <View style={styles.cardFooter}>
+        <Text style={styles.method}>{item.method}</Text>
+        <Text style={styles.date}>{new Date(item.date).toDateString()}</Text>
+      </View>
     </View>
   );
 
@@ -69,9 +71,20 @@ export const PartnerPayouts = () => {
       {/* Summary Card */}
       <View style={styles.summaryCard}>
         <Text style={styles.summaryTitle}>Summary</Text>
-        <Text style={styles.cardValue}>Total Paid: ${dummySummary.total_paid}</Text>
-        <Text style={styles.cardValue}>Pending Amount: ${dummySummary.pending_amount}</Text>
-        <Text style={styles.cardValue}>Total Payouts: {dummySummary.total_payouts}</Text>
+        <View style={styles.summaryRow}>
+          <View style={styles.summaryItem}>
+            <Text style={styles.summaryLabel}>Total Paid</Text>
+            <Text style={styles.summaryValue}>${dummySummary.total_paid}</Text>
+          </View>
+          <View style={styles.summaryItem}>
+            <Text style={styles.summaryLabel}>Pending</Text>
+            <Text style={styles.summaryValue}>${dummySummary.pending_amount}</Text>
+          </View>
+          <View style={styles.summaryItem}>
+            <Text style={styles.summaryLabel}>Payouts</Text>
+            <Text style={styles.summaryValue}>{dummySummary.total_payouts}</Text>
+          </View>
+        </View>
       </View>
 
       {/* Payouts List */}
@@ -81,7 +94,7 @@ export const PartnerPayouts = () => {
         renderItem={renderPayout}
         contentContainerStyle={{ paddingBottom: 20 }}
         ListHeaderComponent={
-          <Text style={styles.sectionTitle}>Payouts</Text>
+          <Text style={styles.sectionTitle}>Recent Payouts</Text>
         }
       />
     </View>
@@ -94,66 +107,77 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
-    padding: 12,
+    padding: 16,
   },
   summaryCard: {
     backgroundColor: Colors.secondary,
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 16,
+    padding: 18,
+    borderRadius: 14,
+    marginBottom: 20,
     shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowRadius: 5,
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
     elevation: 3,
   },
   summaryTitle: {
     fontSize: 16,
     color: Colors.white,
-    marginBottom: 8,
+    marginBottom: 12,
     fontFamily: "Inter_600SemiBold",
   },
-  cardValue: {
+  summaryRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  summaryItem: {
+    flex: 1,
+    alignItems: "center",
+  },
+  summaryLabel: {
     color: Colors.white,
-    fontSize: 15,
+    fontSize: 13,
+    marginBottom: 4,
+    fontFamily: "Inter_500Medium",
+  },
+  summaryValue: {
+    color: Colors.white,
+    fontSize: 16,
+    fontFamily: "Inter_700Bold",
   },
   sectionTitle: {
     fontSize: 16,
     fontFamily: "Inter_600SemiBold",
-    marginBottom: 8,
+    marginBottom: 12,
   },
   card: {
     backgroundColor: Colors.white,
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 12,
+    padding: 18,
+    borderRadius: 14,
+    marginBottom: 14,
     shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
+    shadowOpacity: 0.06,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 5,
     elevation: 2,
   },
   cardHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 8,
+    marginBottom: 5,
   },
-  payoutTitle: {
-    fontSize: 16,
+  amount: {
+    fontSize: 18,
     color: Colors.secondary,
-    fontFamily: "Inter_600SemiBold",
-  },
-  method: {
-    fontSize: 14,
-    color: Colors.secondary,
+    fontFamily: "Inter_700Bold",
   },
   status: {
     fontSize: 13,
-    fontWeight: "600",
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    borderRadius: 20,
     overflow: "hidden",
     color: "white",
+    fontFamily: "Inter_600SemiBold",
   },
   paid: {
     backgroundColor: Colors.activeStatusBg,
@@ -162,6 +186,15 @@ const styles = StyleSheet.create({
   pending: {
     backgroundColor: Colors.inActiveStatusBg,
     color: Colors.inActiveStatus,
+  },
+  cardFooter: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  method: {
+    fontSize: 14,
+    color: Colors.secondary,
+    fontFamily: "Inter_500Medium",
   },
   date: {
     fontSize: 12,

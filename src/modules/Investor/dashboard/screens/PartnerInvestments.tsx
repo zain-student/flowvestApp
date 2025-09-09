@@ -4,39 +4,53 @@ import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { fetchPartnerInvestments } from "@/shared/store/slices/addPartnerSlice";
 import React, { useEffect } from "react";
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from "react-native";
+
 export const PartnerInvestments = ({ route }: any) => {
   const { id } = route.params;
   const dispatch = useAppDispatch();
-  const { isLoading, investments, investmentSummary, error } = useAppSelector((state) => state.partner)
+  const { isLoading, investments, investmentSummary, error } = useAppSelector(
+    (state) => state.partner
+  );
+
   useEffect(() => {
-    dispatch(fetchPartnerInvestments(id))
-  }, [id])
-  // const { summary } = dummyData;
+    dispatch(fetchPartnerInvestments(id));
+  }, [id]);
 
   const renderInvestment = ({ item }: any) => (
     <View style={styles.card}>
+      {/* Title + Status */}
       <View style={styles.cardHeader}>
         <Text style={styles.investmentTitle}>{item.title}</Text>
-        <Text style={styles.date}>
-          Start Date: {new Date(item.start_date).toDateString()}
-        </Text>
-      </View>
-      <Text style={styles.amount}>Invested: ${item.amount_invested}</Text>
-      <View style={{ flexDirection: 'row', justifyContent: "space-between" }}>
-        <Text style={styles.amount}>Current Value: ${item.current_value}</Text>
         <Text
           style={[
             styles.status,
             item.status === "active" ? styles.active : styles.completed,
           ]}
         >
-          {item.status.charAt(0).toUpperCase()}{item.status.slice(1)}
+          {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
         </Text>
       </View>
-      <Text style={styles.roi}>ROI: {item.roi_percentage}%</Text>
 
+      {/* Amounts */}
+      <View style={styles.amountRow}>
+        <Text style={styles.amountLabel}>Invested</Text>
+        <Text style={styles.amountValue}>${item.amount_invested}</Text>
+      </View>
+      <View style={styles.amountRow}>
+        <Text style={styles.amountLabel}>Current Value</Text>
+        <Text style={styles.amountValue}>${item.current_value}</Text>
+      </View>
+
+      {/* ROI + Date */}
+      <View style={styles.footerRow}>
+        <Text style={styles.roi}>ROI: {item.roi_percentage}%</Text>
+        <Text style={styles.date}>
+          {new Date(item.start_date).toDateString()}
+        </Text>
+      </View>
     </View>
   );
+
   if (isLoading) {
     return (
       <View style={styles.center}>
@@ -52,14 +66,32 @@ export const PartnerInvestments = ({ route }: any) => {
       </View>
     );
   }
+
   return (
     <View style={styles.container}>
       {/* Summary Card */}
       <View style={styles.summaryCard}>
         <Text style={styles.summaryTitle}>Summary</Text>
-        <Text style={styles.cardValue}>Total Invested: ${investmentSummary?.total_invested}</Text>
-        <Text style={styles.cardValue}>Current Value: ${investmentSummary?.total_current_value}</Text>
-        <Text style={styles.cardValue}>Total ROI: {investmentSummary?.total_roi}%</Text>
+        <View style={styles.summaryRow}>
+          <View style={styles.summaryItem}>
+            <Text style={styles.summaryLabel}>Total Invested</Text>
+            <Text style={styles.summaryValue}>
+              ${investmentSummary?.total_invested}
+            </Text>
+          </View>
+          <View style={styles.summaryItem}>
+            <Text style={styles.summaryLabel}>Current Value</Text>
+            <Text style={styles.summaryValue}>
+              ${investmentSummary?.total_current_value}
+            </Text>
+          </View>
+          <View style={styles.summaryItem}>
+            <Text style={styles.summaryLabel}>Total ROI</Text>
+            <Text style={styles.summaryValue}>
+              {investmentSummary?.total_roi}%
+            </Text>
+          </View>
+        </View>
       </View>
 
       {/* Investments List */}
@@ -82,97 +114,118 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
-    padding: 12,
-  },
-  summaryCard: {
-    backgroundColor: Colors.secondary,
     padding: 16,
-    borderRadius: 12,
-    marginBottom: 16,
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowRadius: 5,
-    elevation: 3,
   },
   center: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
+  summaryCard: {
+    backgroundColor: Colors.secondary,
+    padding: 18,
+    borderRadius: 14,
+    marginBottom: 20,
+    shadowColor: "#000",
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 3,
+  },
   summaryTitle: {
     fontSize: 16,
-    // fontWeight: "bold",
     color: Colors.white,
-    marginBottom: 8,
-    fontFamily: "Inter_600SemiBold"
+    marginBottom: 12,
+    fontFamily: "Inter_600SemiBold",
   },
-  cardValue: {
+  summaryRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  summaryItem: {
+    flex: 1,
+    alignItems: "center",
+  },
+  summaryLabel: {
     color: Colors.white,
-    fontSize: 15,
+    fontSize: 13,
+    marginBottom: 4,
+    fontFamily: "Inter_500Medium",
+  },
+  summaryValue: {
+    color: Colors.white,
+    fontSize: 16,
+    fontFamily: "Inter_700Bold",
   },
   sectionTitle: {
     fontSize: 16,
-    // fontWeight: "600",
     fontFamily: "Inter_600SemiBold",
-    marginBottom: 8,
+    marginBottom: 12,
   },
   card: {
     backgroundColor: Colors.white,
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 12,
-    // shadowColor: "#000",
-    // shadowOpacity: 0.05,
-    // shadowRadius: 5,
-    // elevation: 2,
-
+    padding: 18,
+    borderRadius: 14,
+    marginBottom: 14,
     shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
+    shadowOpacity: 0.06,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 5,
     elevation: 2,
   },
   cardHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 8,
+    marginBottom: 10,
   },
   investmentTitle: {
     fontSize: 16,
     color: Colors.secondary,
-    // fontWeight: "600",
-    fontFamily: "Inter_600SemiBold"
+    fontFamily: "Inter_600SemiBold",
   },
   status: {
     fontSize: 13,
-    fontWeight: "600",
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    borderRadius: 20,
     overflow: "hidden",
     color: "white",
+    fontFamily: "Inter_600SemiBold",
   },
   active: {
     backgroundColor: Colors.activeStatusBg,
-    color: Colors.activeStatus
+    color: Colors.activeStatus,
   },
   completed: {
     backgroundColor: Colors.inActiveStatusBg,
-    color: Colors.inActiveStatus
+    color: Colors.inActiveStatus,
   },
-  amount: {
+  amountRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 3,
+  },
+  amountLabel: {
     fontSize: 14,
+    color: "gray",
+    fontFamily: "Inter_500Medium",
+  },
+  amountValue: {
+    fontSize: 15,
     color: Colors.secondary,
-    // marginBottom: 4,
+    fontFamily: "Inter_600SemiBold",
   },
   roi: {
     fontSize: 14,
-    // fontWeight: "500",
     color: Colors.secondary,
-    // marginBottom: 4,
+    fontFamily: "Inter_500Medium",
   },
   date: {
     fontSize: 12,
     color: "gray",
+  },
+  footerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    // marginTop: 10,
   },
 });

@@ -45,7 +45,7 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
   if (!payouts) {
     return (
       <View>
-        <Text>Investment not found.</Text>
+        <Text>Payouts not found.</Text>
       </View>
     );
   }

@@ -44,6 +44,7 @@ export interface Partner {
   created_at?: string;
   updated_at?: string;
 }
+// Partner Investments type interface
 export interface Investment {
   id: number;
   title: string;
@@ -59,7 +60,19 @@ export interface InvestmentSummary {
   total_current_value: number;
   total_roi: number;
 }
-
+// Partner Payouts type interface
+export interface Payouts{
+  id: number;
+  amount:string;
+  method :string;
+  status: "paid" | "pending";
+  date: string;
+}
+export interface PayoutSummary{
+  total_paid: number;
+  pending_amount:number;
+  total_payouts:number;
+}
 interface partnerState {
   partners: Partner[];
   isLoading: boolean;
@@ -68,6 +81,9 @@ interface partnerState {
 // For partner investments
   investments: Investment[];
   investmentSummary:InvestmentSummary | null;
+  // For partner payouts
+  payouts:Payouts[];
+  payoutSummary: PayoutSummary | null;
 }
 const initialState: partnerState = {
   partners: [],
@@ -76,6 +92,8 @@ const initialState: partnerState = {
   selectedPartner: null,
   investments:[],
   investmentSummary:null,
+  payouts:[],
+  payoutSummary:null,
 };
 // add partner thunk
 export const addPartners = createAsyncThunk(
@@ -164,7 +182,20 @@ export const fetchPartnerInvestments = createAsyncThunk(
     }
   }
 );
-
+// Partners Payouts thunk
+export const fetchPartnerPayouts = createAsyncThunk(
+  "v1/admin/partner/payouts",
+  async (id: number, { rejectWithValue }) => {
+    try {
+      const response = await api.get(API_ENDPOINTS.ADMIN.PARTNERS.PAYOUTS(id));
+      console.log("Partner payouts response:", response.data.data);
+      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+      return response.data.data; // ✅ directly the partner object
+    } catch (error: any) {
+      return rejectWithValue(error.message || "Failed to fetch partner payouts");
+    }
+  }
+);
 const partnerSlice = createSlice({
   name: "partners",
   initialState,
@@ -245,6 +276,20 @@ const partnerSlice = createSlice({
         state.investmentSummary=action.payload.summary; 
       })
       .addCase(fetchPartnerInvestments.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      // Partner payout reducers
+      .addCase(fetchPartnerPayouts.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchPartnerPayouts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.payouts = action.payload.payouts; // ✅ store partner investments
+        state.payoutSummary=action.payload.summary; 
+      })
+      .addCase(fetchPartnerPayouts.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })

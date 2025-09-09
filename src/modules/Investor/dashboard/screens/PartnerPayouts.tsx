@@ -1,9 +1,17 @@
 // src/screens/PartnerPayoutsScreen.tsx
 import Colors from "@/shared/colors/Colors";
-import React from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { useAppDispatch, useAppSelector } from "@/shared/store";
+import { fetchPartnerPayouts } from "@/shared/store/slices/addPartnerSlice";
+import React, { useEffect } from "react";
+import { ActivityIndicator, FlatList, StyleSheet, Text, View } from "react-native";
+export const PartnerPayouts = ({ route }: any) => {
+  const { id } = route.params;
+  const dispatch = useAppDispatch();
+  const { isLoading, error, payouts, payoutSummary } = useAppSelector((state) => state.partner);
 
-export const PartnerPayouts = () => {
+  useEffect(() => {
+    dispatch(fetchPartnerPayouts(id));
+  }, [id])
   // Dummy Summary Data
   const dummySummary = {
     total_paid: 15000,
@@ -44,6 +52,7 @@ export const PartnerPayouts = () => {
   ];
 
   const renderPayout = ({ item }: any) => (
+
     <View style={styles.card}>
       {/* Amount + Status */}
       <View style={styles.cardHeader}>
@@ -65,6 +74,21 @@ export const PartnerPayouts = () => {
       </View>
     </View>
   );
+  if (isLoading) {
+    return (
+      <View style={styles.center}>
+        <ActivityIndicator size="large" color={Colors.secondary} />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.center}>
+        <Text style={{ color: "red" }}>{error}</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -74,22 +98,23 @@ export const PartnerPayouts = () => {
         <View style={styles.summaryRow}>
           <View style={styles.summaryItem}>
             <Text style={styles.summaryLabel}>Total Paid</Text>
-            <Text style={styles.summaryValue}>${dummySummary.total_paid}</Text>
+            <Text style={styles.summaryValue}>${payoutSummary?.total_paid}</Text>
           </View>
           <View style={styles.summaryItem}>
             <Text style={styles.summaryLabel}>Pending</Text>
-            <Text style={styles.summaryValue}>${dummySummary.pending_amount}</Text>
+            <Text style={styles.summaryValue}>${payoutSummary?.pending_amount}</Text>
           </View>
           <View style={styles.summaryItem}>
             <Text style={styles.summaryLabel}>Payouts</Text>
-            <Text style={styles.summaryValue}>{dummySummary.total_payouts}</Text>
+            <Text style={styles.summaryValue}>{payoutSummary?.total_payouts}</Text>
           </View>
         </View>
       </View>
 
       {/* Payouts List */}
+      {/* {payouts && payouts.length > 0 ? (
       <FlatList
-        data={dummyPayouts}
+        data={payouts}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderPayout}
         contentContainerStyle={{ paddingBottom: 20 }}
@@ -97,6 +122,27 @@ export const PartnerPayouts = () => {
           <Text style={styles.sectionTitle}>Recent Payouts</Text>
         }
       />
+      ):(
+        <View style={styles.center}>
+          <Text style={styles.noDataText}> Payouts not availible</Text>
+          </View>
+      )
+    } */}
+      {payouts && payouts.length > 0 ? (
+        <FlatList
+          data={payouts}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderPayout}
+          contentContainerStyle={{ paddingBottom: 20 }}
+          ListHeaderComponent={
+            <Text style={styles.sectionTitle}>Recent Payouts</Text>
+          }
+        />
+      ) : (
+        <View style={styles.card}>
+          <Text style={styles.noDataText}>Payouts not available</Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -109,6 +155,18 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     padding: 16,
   },
+  center: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noDataText: {
+    fontSize: 14,
+    color: "gray",
+    textAlign: "center",
+    fontFamily: "Inter_500Medium",
+  },
+
   summaryCard: {
     backgroundColor: Colors.secondary,
     padding: 18,

@@ -95,15 +95,21 @@ export const PartnerInvestments = ({ route }: any) => {
       </View>
 
       {/* Investments List */}
-      <FlatList
-        data={investments}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderInvestment}
-        contentContainerStyle={{ paddingBottom: 20 }}
-        ListHeaderComponent={
-          <Text style={styles.sectionTitle}>Investments</Text>
-        }
-      />
+      {investments && investments.length > 0 ? (
+        <FlatList
+          data={investments}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderInvestment}
+          contentContainerStyle={{ paddingBottom: 20 }}
+          ListHeaderComponent={
+            <Text style={styles.sectionTitle}>Investments</Text>
+          }
+        />
+      ) : (
+        <View style={styles.card}>
+          <Text style={styles.noDataText}>Investments not available</Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -121,6 +127,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  noDataText: {
+    fontSize: 15,
+    color: "gray",
+    textAlign: "center",
+    fontFamily: "Inter_500Medium",
+  },
+
   summaryCard: {
     backgroundColor: Colors.secondary,
     padding: 18,

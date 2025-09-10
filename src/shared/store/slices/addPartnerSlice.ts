@@ -61,39 +61,72 @@ export interface InvestmentSummary {
   total_roi: number;
 }
 // Partner Payouts type interface
-export interface Payouts{
+export interface Payouts {
   id: number;
-  amount:string;
-  method :string;
+  amount: string;
+  method: string;
   status: "paid" | "pending";
   date: string;
 }
-export interface PayoutSummary{
+export interface PayoutSummary {
   total_paid: number;
-  pending_amount:number;
-  total_payouts:number;
+  pending_amount: number;
+  total_payouts: number;
 }
+// Partner Performance type interface
+export interface PartnerPerformanceOverview {
+  total_invested: string; // comes as string "10000.00"
+  current_portfolio_value: number;
+  total_earned: number;
+  overall_roi: number;
+  active_investments: number;
+}
+
+export interface PartnerMonthlyPerformance {
+  month: string; // e.g. "2025-08"
+  investment_amount: number | string; // can be "10000.00" or 0
+  earnings: number;
+  roi: number;
+}
+
+export interface PartnerInvestmentBreakdown {
+  investment_type: string;
+  amount: number;
+  percentage: number;
+  roi: number;
+}
+
+export interface PartnerPerformanceData {
+  overview: PartnerPerformanceOverview;
+  monthly_performance: PartnerMonthlyPerformance[];
+  investment_breakdown: PartnerInvestmentBreakdown[];
+}
+
 interface partnerState {
   partners: Partner[];
   isLoading: boolean;
   error: string | null;
   selectedPartner: Partner | null;
-// For partner investments
+  // For partner investments
   investments: Investment[];
-  investmentSummary:InvestmentSummary | null;
+  investmentSummary: InvestmentSummary | null;
   // For partner payouts
-  payouts:Payouts[];
+  payouts: Payouts[];
   payoutSummary: PayoutSummary | null;
+  // For partner performance
+  performance: PartnerPerformanceData | null;
+  
 }
 const initialState: partnerState = {
   partners: [],
   isLoading: false,
   error: null,
   selectedPartner: null,
-  investments:[],
-  investmentSummary:null,
-  payouts:[],
-  payoutSummary:null,
+  investments: [],
+  investmentSummary: null,
+  payouts: [],
+  payoutSummary: null,
+  performance: null,
 };
 // add partner thunk
 export const addPartners = createAsyncThunk(
@@ -173,12 +206,16 @@ export const fetchPartnerInvestments = createAsyncThunk(
   "v1/admin/partner/investments",
   async (id: number, { rejectWithValue }) => {
     try {
-      const response = await api.get(API_ENDPOINTS.ADMIN.PARTNERS.INVESTMENTS(id));
+      const response = await api.get(
+        API_ENDPOINTS.ADMIN.PARTNERS.INVESTMENTS(id)
+      );
       console.log("Partner investments response:", response.data.data);
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       return response.data.data; // ✅ directly the partner object
     } catch (error: any) {
-      return rejectWithValue(error.message || "Failed to fetch partner investments");
+      return rejectWithValue(
+        error.message || "Failed to fetch partner investments"
+      );
     }
   }
 );
@@ -192,10 +229,32 @@ export const fetchPartnerPayouts = createAsyncThunk(
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       return response.data.data; // ✅ directly the partner object
     } catch (error: any) {
-      return rejectWithValue(error.message || "Failed to fetch partner payouts");
+      return rejectWithValue(
+        error.message || "Failed to fetch partner payouts"
+      );
     }
   }
 );
+// Partner Performance thunk
+// Partner Performance thunk
+export const fetchPartnerPerformance = createAsyncThunk(
+  "v1/admin/partner/performance",
+  async (id: number, { rejectWithValue }) => {
+    try {
+      const response = await api.get(
+        API_ENDPOINTS.ADMIN.PARTNERS.PERFORMANCE(id)
+      );
+      console.log("Partner performance response:", response.data.data);
+      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+      return response.data.data; // ✅ directly performance data
+    } catch (error: any) {
+      return rejectWithValue(
+        error.message || "Failed to fetch partner performance"
+      );
+    }
+  }
+);
+
 const partnerSlice = createSlice({
   name: "partners",
   initialState,
@@ -273,7 +332,7 @@ const partnerSlice = createSlice({
       .addCase(fetchPartnerInvestments.fulfilled, (state, action) => {
         state.isLoading = false;
         state.investments = action.payload.investments; // ✅ store partner investments
-        state.investmentSummary=action.payload.summary; 
+        state.investmentSummary = action.payload.summary;
       })
       .addCase(fetchPartnerInvestments.rejected, (state, action) => {
         state.isLoading = false;
@@ -287,12 +346,25 @@ const partnerSlice = createSlice({
       .addCase(fetchPartnerPayouts.fulfilled, (state, action) => {
         state.isLoading = false;
         state.payouts = action.payload.payouts; // ✅ store partner investments
-        state.payoutSummary=action.payload.summary; 
+        state.payoutSummary = action.payload.summary;
       })
       .addCase(fetchPartnerPayouts.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })
+      // Partner Performance reducers
+      .addCase(fetchPartnerPerformance.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchPartnerPerformance.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.performance = action.payload; // ✅ store partner performance
+      })
+      .addCase(fetchPartnerPerformance.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      });
   },
 });
 export default partnerSlice.reducer;

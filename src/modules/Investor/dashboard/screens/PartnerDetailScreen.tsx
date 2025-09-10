@@ -64,7 +64,7 @@ export const PartnerDetailScreen = () => {
         <Text style={styles.detail}>Total Earned: {partner.total_earned}</Text>
         <Text style={styles.detail}>ROI %: {partner.roi_percentage}</Text>
         <View style={{flexDirection:'row',
-          justifyContent:"space-between"
+          justifyContent:"space-between", marginBottom:4
         }}>
         <TouchableOpacity style={styles.investmentButton} onPress={()=>navigation.navigate("PartnerInvestment",{ id :partner.id})}>
           <Ionicons name="eye-outline" size={23} />
@@ -79,6 +79,12 @@ export const PartnerDetailScreen = () => {
           </Text>
         </TouchableOpacity>
         </View>
+         <TouchableOpacity style={styles.performanceButton} onPress={()=>navigation.navigate("PartnerPerformance",{id:partner.id})}>
+          <Ionicons name="eye-outline" size={23} />
+          <Text style={{ marginLeft:5,fontSize: 16, fontWeight:"500" }}>
+            Performance
+          </Text>
+        </TouchableOpacity>
       </View>
 
       {/* Action Button */}
@@ -146,6 +152,23 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
     elevation: 2,
+  },
+   performanceButton: {
+    flexDirection: 'row',
+    alignSelf:"center",
+    backgroundColor: Colors.background,
+    width: "46%",
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop:3,
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 2,
+
   },
   button: {
     backgroundColor: "#007bff",

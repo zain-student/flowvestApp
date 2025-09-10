@@ -32,34 +32,6 @@ export const PartnerPerformanceScreen = ({ route }: any) => {
     useEffect(() => {
         dispatch(fetchPartnerPerformance(id));
     }, [id]);
-
-    // Dummy Data (replace with API data later)
-    // const dummyOverview = {
-    //     total_invested: 10000,
-    //     current_portfolio_value: 10000,
-    //     total_earned: 0,
-    //     overall_roi: 0,
-    //     active_investments: 1,
-    // };
-
-    // const dummyMonthly = [
-    //     { month: "2025-05", earnings: 500, roi: 2 },
-    //     { month: "2025-06", earnings: 800, roi: 3 },
-    //     { month: "2025-07", earnings: 200, roi: 1 },
-    //     { month: "2025-08", earnings: 1200, roi: 5 },
-    //     { month: "2025-09", earnings: 0, roi: 0 },
-    // ];
-
-    // const dummyBreakdown = [
-    //     {
-    //         name: "Real Estate",
-    //         amount: 10000,
-    //         color: "#4CAF50",
-    //         legendFontColor: "#333",
-    //         legendFontSize: 13,
-    //     },
-    // ];
-
     if (isLoading) {
         return (
             <View style={styles.center}>
@@ -75,7 +47,6 @@ export const PartnerPerformanceScreen = ({ route }: any) => {
             </View>
         );
     }
-
     return (
         <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 80 }}
             showsVerticalScrollIndicator={false}
@@ -143,26 +114,6 @@ export const PartnerPerformanceScreen = ({ route }: any) => {
             ) : (
                 <Text style={styles.noData}>No monthly performance available</Text>
             )}
-
-            {/* Investment Breakdown */}
-            {/* <Text style={styles.sectionTitle}>Investment Breakdown</Text>
-            {breakdown.length > 0 ? (
-                <PieChart
-                    data={breakdown}
-                    width={screenWidth - 30}
-                    height={220}
-                    chartConfig={{
-                        backgroundColor: "transparent",
-                        color: () => `#fff`,
-                    }}
-                    accessor={"amount"}
-                    backgroundColor={"transparent"}
-                    paddingLeft={"16"}
-                    absolute 
-                />
-            ) : (
-                <Text style={styles.noData}>No breakdown available</Text>
-            )} */}
             {/* Investment Breakdown */}
             <Text style={styles.sectionTitle}>Investment Breakdown</Text>
             {(performance?.investment_breakdown ?? []).length > 0 ? (

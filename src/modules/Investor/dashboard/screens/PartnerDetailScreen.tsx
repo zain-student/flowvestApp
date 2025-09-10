@@ -63,25 +63,26 @@ export const PartnerDetailScreen = () => {
         <Text style={styles.detail}>Active Investments: {partner.active_investments}</Text>
         <Text style={styles.detail}>Total Earned: {partner.total_earned}</Text>
         <Text style={styles.detail}>ROI %: {partner.roi_percentage}</Text>
-        <View style={{flexDirection:'row',
-          justifyContent:"space-between", marginBottom:4
+        <View style={{
+          flexDirection: 'row',
+          justifyContent: "space-between", marginBottom: 4
         }}>
-        <TouchableOpacity style={styles.investmentButton} onPress={()=>navigation.navigate("PartnerInvestment",{ id :partner.id})}>
-          <Ionicons name="eye-outline" size={23} />
-          <Text style={{ marginLeft:5,fontSize: 16,fontWeight:"500" }}>
-            View Investments
-          </Text>
-        </TouchableOpacity>
-         <TouchableOpacity style={styles.payoutButton} onPress={()=>navigation.navigate("PartnerPayout",{id:partner.id})}>
-          <Ionicons name="eye-outline" size={23} />
-          <Text style={{ marginLeft:5,fontSize: 16, fontWeight:"500" }}>
-            View Payouts
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.investmentButton} onPress={() => navigation.navigate("PartnerInvestment", { id: partner.id })}>
+            <Ionicons name="eye-outline" size={23} />
+            <Text style={{ marginLeft: 5, fontSize: 16, fontWeight: "500" }}>
+              View Investments
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.payoutButton} onPress={() => navigation.navigate("PartnerPayout", { id: partner.id })}>
+            <Ionicons name="eye-outline" size={23} />
+            <Text style={{ marginLeft: 5, fontSize: 16, fontWeight: "500" }}>
+              View Payouts
+            </Text>
+          </TouchableOpacity>
         </View>
-         <TouchableOpacity style={styles.performanceButton} onPress={()=>navigation.navigate("PartnerPerformance",{id:partner.id})}>
-          <Ionicons name="eye-outline" size={23} />
-          <Text style={{ marginLeft:5,fontSize: 16, fontWeight:"500" }}>
+        <TouchableOpacity style={styles.performanceButton} onPress={() => navigation.navigate("PartnerPerformance", { id: partner.id })}>
+          <Ionicons name="stats-chart-outline" size={20} />
+          <Text style={{ marginLeft: 5, fontSize: 16, fontWeight: "500" }}>
             Performance
           </Text>
         </TouchableOpacity>
@@ -96,9 +97,7 @@ export const PartnerDetailScreen = () => {
           // console.log("Editing partner.....")
         }
       />
-      {/* <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Edit Partner</Text>
-      </TouchableOpacity> */}
+
     </ScrollView>
   );
 }
@@ -153,15 +152,15 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
   },
-   performanceButton: {
+  performanceButton: {
     flexDirection: 'row',
-    alignSelf:"center",
+    alignSelf: "center",
     backgroundColor: Colors.background,
     width: "46%",
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop:3,
+    marginTop: 3,
     borderRadius: 12,
     shadowColor: "#000",
     shadowOpacity: 0.05,

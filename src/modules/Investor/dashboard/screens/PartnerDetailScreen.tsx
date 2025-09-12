@@ -70,13 +70,13 @@ export const PartnerDetailScreen = () => {
           <TouchableOpacity style={styles.investmentButton} onPress={() => navigation.navigate("PartnerInvestment", { id: partner.id })}>
             <Ionicons name="eye-outline" size={23} />
             <Text style={{ marginLeft: 5, fontSize: 16, fontWeight: "500" }}>
-              View Investments
+              Investments
             </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.payoutButton} onPress={() => navigation.navigate("PartnerPayout", { id: partner.id })}>
             <Ionicons name="eye-outline" size={23} />
             <Text style={{ marginLeft: 5, fontSize: 16, fontWeight: "500" }}>
-              View Payouts
+              Payouts
             </Text>
           </TouchableOpacity>
         </View>

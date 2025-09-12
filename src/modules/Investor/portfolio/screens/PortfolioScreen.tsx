@@ -30,8 +30,11 @@ const renderAssets = ({ item }: any) => (
       <Text style={styles.assetValue}>
         ${item.value.toLocaleString()}
       </Text>
+      <Text style={styles.assetValue}>
+        Start: {item.start}
+      </Text>
     </View>
-    <Text style={styles.assetGrowth}>{item.growth}</Text>
+    <Text style={styles.assetGrowth}>{item.expected_return_rate}</Text>
   </View>
 )
 // const handleLoadMore = () => {
@@ -55,14 +58,16 @@ export const PortfolioScreen: React.FC = () => {
       id: inv.id,
       name: inv.name,
       value: parseFloat(inv.initial_amount || "0"),
-      growth: `${inv.performance?.completion_percentage ?? 0}%`,
+      // growth: `${inv.performance?.completion_percentage ?? 0}%`,
+      expected_return_rate: `${Number(inv.expected_return_rate ?? 0).toFixed(2)}%`,
+      start: inv.start_date,
     })) ?? [];
   return (
     <DashboardLayout>
 
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Net Worth</Text>
-        <Text style={styles.cardValue}>$25,000.00</Text>
+        <Text style={styles.cardValue}>${data?.summary.total_earned}</Text>
         <Text style={styles.cardSubtitle}>Asset Allocation</Text>
         <View style={styles.balanceActionsRow}>
           <TouchableOpacity style={styles.balanceActionBtnDark}>
@@ -75,10 +80,7 @@ export const PortfolioScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
       </View>
-      {/* <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      > */}
+     
       <View style={styles.chartContainer}>
         <View style={styles.chartBar} />
         <Text style={styles.chartLabel}>Performance (Mock Chart)</Text>
@@ -97,19 +99,6 @@ export const PortfolioScreen: React.FC = () => {
           }
         contentContainerStyle={styles.scrollContent}
       />
-
-      {/* {mockAssets.map((asset) => (
-          <View key={asset.id} style={styles.assetCard}>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.assetName}>{asset.name}</Text>
-              <Text style={styles.assetValue}>
-                ${asset.value.toLocaleString()}
-              </Text>
-            </View>
-            <Text style={styles.assetGrowth}>{asset.growth}</Text>
-          </View>
-        ))} */}
-      {/* </ScrollView> */}
       <TouchableOpacity style={styles.fab}>
 
         <Ionicons name="document-outline" size={24} color={"white"} />

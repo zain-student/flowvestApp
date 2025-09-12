@@ -6,12 +6,17 @@ import { Feather, Ionicons } from "@expo/vector-icons";
 import React, { useEffect } from "react";
 import {
   ActivityIndicator,
+  Dimensions,
   FlatList,
   StyleSheet,
   Text,
   TouchableOpacity,
   View
 } from "react-native";
+import { BarChart } from "react-native-chart-kit";
+
+const screenWidth = Dimensions.get("window").width;
+
 
 
 const mockAssets = [
@@ -80,11 +85,47 @@ export const PortfolioScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
       </View>
-     
+
       <View style={styles.chartContainer}>
-        <View style={styles.chartBar} />
-        <Text style={styles.chartLabel}>Performance (Mock Chart)</Text>
+        <BarChart
+          data={{
+            labels: ["All Time", "Year", "Quarter", "Month"],
+            datasets: [
+              {
+                // take ROI percentage values from API
+                data: [
+                  data?.performance?.all_time?.roi_percentage ?? 0,
+                  data?.performance?.year?.roi_percentage ?? 0,
+                  data?.performance?.quarter?.roi_percentage ?? 0,
+                  data?.performance?.month?.roi_percentage ?? 0,
+                ],
+              },
+            ],
+          }}
+          width={screenWidth - 32}
+          height={200}
+          fromZero
+          yAxisLabel=""
+          yAxisSuffix="%"
+          chartConfig={{
+            backgroundGradientFrom: "#fff",
+            backgroundGradientTo: "#fff",
+            color: (opacity = 1) => `rgba(34, 197, 94, ${opacity})`,
+            labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+            propsForBackgroundLines: {
+              strokeWidth: 1,
+              stroke: "#e3e3e3",
+              strokeDasharray: "0",
+            },
+          }}
+          style={{
+            borderRadius: 12,
+            // marginVertical: 8,
+          }}
+        />
+        <Text style={styles.chartLabel}>Performance ROI %</Text>
       </View>
+
       <Text style={styles.sectionTitle}>Investments Assets</Text>
       <FlatList
         data={assets}
@@ -94,9 +135,10 @@ export const PortfolioScreen: React.FC = () => {
         //   onEndReachedThreshold={0.5}
         //   refreshing={isLoading}
         //   onRefresh={handleRefresh}
-          ListFooterComponent={
-            isLoading ? <ActivityIndicator size="small" color={Colors.green} /> : null
-          }
+        showsVerticalScrollIndicator={false}
+        ListFooterComponent={
+          isLoading ? <ActivityIndicator size="small" color={Colors.green} /> : null
+        }
         contentContainerStyle={styles.scrollContent}
       />
       <TouchableOpacity style={styles.fab}>
@@ -201,3 +243,4 @@ const styles = StyleSheet.create({
   fabLabel: { color: Colors.white, fontWeight: "bold", fontSize: 15 },
 });
 export default PortfolioScreen;
+ 

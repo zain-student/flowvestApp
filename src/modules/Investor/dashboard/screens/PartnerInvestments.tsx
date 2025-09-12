@@ -1,7 +1,7 @@
 // src/screens/PartnerInvestmentsScreen.tsx
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { fetchPartnerInvestments } from "@/shared/store/slices/addPartnerSlice";
+import { fetchPartnerInvestments } from "@/shared/store/slices/investor/dashboard/addPartnerSlice";
 import React, { useEffect } from "react";
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from "react-native";
 

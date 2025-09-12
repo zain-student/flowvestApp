@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { addInvestments } from "@/shared/store/slices/investmentSlice";
+import { addInvestments } from "@/shared/store/slices/investor/investments/investmentSlice";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { ToastAndroid } from "react-native";

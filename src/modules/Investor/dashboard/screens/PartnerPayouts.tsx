@@ -1,7 +1,7 @@
 // src/screens/PartnerPayoutsScreen.tsx
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { fetchPartnerPayouts } from "@/shared/store/slices/addPartnerSlice";
+import { fetchPartnerPayouts } from "@/shared/store/slices/investor/dashboard/addPartnerSlice";
 import React, { useEffect } from "react";
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from "react-native";
 export const PartnerPayouts = ({ route }: any) => {

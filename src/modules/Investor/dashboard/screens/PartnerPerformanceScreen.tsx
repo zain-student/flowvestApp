@@ -1,7 +1,7 @@
 // src/screens/PartnerPerformanceScreen.tsx
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { fetchPartnerPerformance } from "@/shared/store/slices/addPartnerSlice";
+import { fetchPartnerPerformance } from "@/shared/store/slices/investor/dashboard/addPartnerSlice";
 import React, { useEffect } from "react";
 import {
     ActivityIndicator,

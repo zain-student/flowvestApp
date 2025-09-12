@@ -3,21 +3,21 @@ import { addPartnerSchema } from "@/modules/auth/utils/authValidation";
 import { InvestorDashboardStackParamList } from "@/navigation/InvestorStacks/InvestorDashboardStack";
 import { Button, Input } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { addPartners, fetchPartners, Partner, updatePartner } from "@/shared/store/slices/addPartnerSlice";
+import { addPartners, fetchPartners, Partner, updatePartner } from "@/shared/store/slices/investor/dashboard/addPartnerSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
-  Modal,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  ToastAndroid,
-  TouchableOpacity,
-  View
+    Modal,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    ToastAndroid,
+    TouchableOpacity,
+    View
 } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import Colors from "../../../../shared/colors/Colors";

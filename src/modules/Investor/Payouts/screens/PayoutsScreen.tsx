@@ -1,7 +1,7 @@
 import { PayoutStackParamList } from "@/navigation/InvestorStacks/PayoutStack";
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { fetchPayouts } from "@/shared/store/slices/payoutSlice";
+import { fetchPayouts } from "@/shared/store/slices/investor/payouts/payoutSlice";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";

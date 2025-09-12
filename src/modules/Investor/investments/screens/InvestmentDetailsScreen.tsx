@@ -2,20 +2,20 @@ import { InvestmentStackParamList } from "@/navigation/InvestorStacks/Investment
 import Colors from "@/shared/colors/Colors";
 import { Button } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { deleteInvestment, duplicateInvestment, fetchInvestmentsById } from "@/shared/store/slices/investmentSlice";
+import { deleteInvestment, duplicateInvestment, fetchInvestmentsById } from "@/shared/store/slices/investor/investments/investmentSlice";
 import { Ionicons } from "@expo/vector-icons";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
-  Alert,
-  ScrollView,
-  StyleSheet,
-  Text,
-  ToastAndroid,
-  TouchableOpacity,
-  View
+    ActivityIndicator,
+    Alert,
+    ScrollView,
+    StyleSheet,
+    Text,
+    ToastAndroid,
+    TouchableOpacity,
+    View
 } from "react-native";
 type Props = NativeStackScreenProps<
   InvestmentStackParamList,

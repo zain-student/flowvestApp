@@ -1,5 +1,5 @@
 import Colors from "@/shared/colors/Colors";
-import { Partner } from "@/shared/store/slices/addPartnerSlice"; // ✅ Single source of truth
+import { Partner } from "@/shared/store/slices/investor/dashboard/addPartnerSlice"; // ✅ Single source of truth
 import React, { useState } from "react";
 import {
   FlatList,

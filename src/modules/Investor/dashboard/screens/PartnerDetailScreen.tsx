@@ -2,7 +2,7 @@ import { InvestorDashboardStackParamList } from "@/navigation/InvestorStacks/Inv
 import Colors from "@/shared/colors/Colors";
 import { Button } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { fetchPartnerDetail } from "@/shared/store/slices/addPartnerSlice";
+import { fetchPartnerDetail } from "@/shared/store/slices/investor/dashboard/addPartnerSlice";
 import { Ionicons } from "@expo/vector-icons";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";

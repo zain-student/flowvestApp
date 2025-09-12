@@ -1,18 +1,18 @@
 import { InvestmentStackParamList } from "@/navigation/InvestorStacks/InvestmentStack";
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { fetchInvestments } from "@/shared/store/slices/investmentSlice";
+import { fetchInvestments } from "@/shared/store/slices/investor/investments/investmentSlice";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useCallback, useEffect, useState } from "react";
 import {
-  ActivityIndicator,
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    ActivityIndicator,
+    FlatList,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
 import { DashboardLayout } from "../../../Common/components/DashboardLayout";
 

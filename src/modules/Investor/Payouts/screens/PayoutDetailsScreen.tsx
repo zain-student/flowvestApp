@@ -2,7 +2,7 @@ import { PayoutStackParamList } from "@/navigation/InvestorStacks/PayoutStack";
 import Colors from "@/shared/colors/Colors";
 import { Button } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { cancelPayout, fetchPayoutsById } from "@/shared/store/slices/payoutSlice";
+import { cancelPayout, fetchPayoutsById } from "@/shared/store/slices/investor/payouts/payoutSlice";
 import { Ionicons } from "@expo/vector-icons";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";

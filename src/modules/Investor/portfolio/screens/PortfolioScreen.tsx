@@ -1,52 +1,104 @@
 import { DashboardLayout } from "@/modules/Common/components/DashboardLayout";
 import Colors from "@/shared/colors/Colors";
+import { useAppDispatch, useAppSelector } from "@/shared/store";
+import { fetchPortfolio } from "@/shared/store/slices/investor/portfolio/portfolioSlice";
 import { Feather, Ionicons } from "@expo/vector-icons";
-import React from "react";
+import React, { useEffect } from "react";
 import {
-  ScrollView,
+  ActivityIndicator,
+  FlatList,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
+
+
 const mockAssets = [
   { id: 1, name: "Tech Growth Fund", value: 12000, growth: "+8.2%" },
   { id: 2, name: "Real Estate Trust", value: 5000, growth: "+2.1%" },
   { id: 3, name: "Green Energy Bonds", value: 3000, growth: "+5.7%" },
-   { id: 4, name: "Tech Growth Fund", value: 12000, growth: "+8.2%" },
+  { id: 4, name: "Tech Growth Fund", value: 12000, growth: "+8.2%" },
   { id: 5, name: "Real Estate Trust", value: 5000, growth: "+2.1%" },
   { id: 6, name: "Green Energy Bonds", value: 3000, growth: "+5.7%" },
 ];
 
+const renderAssets = ({ item }: any) => (
+  <View style={styles.assetCard}>
+    <View style={{ flex: 1 }}>
+      <Text style={styles.assetName}>{item.name}</Text>
+      <Text style={styles.assetValue}>
+        ${item.value.toLocaleString()}
+      </Text>
+    </View>
+    <Text style={styles.assetGrowth}>{item.growth}</Text>
+  </View>
+)
+// const handleLoadMore = () => {
+//   if (!isLoadingMore && pagination.current_page!== pagination.last_page) {
+//     dispatch(fetchPayouts(pagination.current_page + 1));
+//   }
+// }; 
+
+// // Pull-to-refresh
+// const handleRefresh = () => {
+//   dispatch(fetchPayouts(1));
+// };
 export const PortfolioScreen: React.FC = () => {
+  const dispatch = useAppDispatch()
+  const { isLoading, error, data } = useAppSelector((state) => state.portfolio)
+  useEffect(() => {
+    dispatch(fetchPortfolio())
+  }, [dispatch])
+  const assets =
+    data?.own_investments?.map((inv) => ({
+      id: inv.id,
+      name: inv.name,
+      value: parseFloat(inv.initial_amount || "0"),
+      growth: `${inv.performance?.completion_percentage ?? 0}%`,
+    })) ?? [];
   return (
     <DashboardLayout>
-      
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Net Worth</Text>
-          <Text style={styles.cardValue}>$25,000.00</Text>
-          <Text style={styles.cardSubtitle}>Asset Allocation</Text>
-          <View style={styles.balanceActionsRow}>
-            <TouchableOpacity style={styles.balanceActionBtnDark}>
-              <Feather name="plus" size={18} color="#fff" />
-              <Text style={styles.balanceActionTextDark}>Top Up</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.balanceActionBtnDark}>
-              <Feather name="arrow-up-right" size={18} color="#fff" />
-              <Text style={styles.balanceActionTextDark}>Send Money</Text>
-            </TouchableOpacity>
-          </View>
+
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>Net Worth</Text>
+        <Text style={styles.cardValue}>$25,000.00</Text>
+        <Text style={styles.cardSubtitle}>Asset Allocation</Text>
+        <View style={styles.balanceActionsRow}>
+          <TouchableOpacity style={styles.balanceActionBtnDark}>
+            <Feather name="plus" size={18} color="#fff" />
+            <Text style={styles.balanceActionTextDark}>Top Up</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.balanceActionBtnDark}>
+            <Feather name="arrow-up-right" size={18} color="#fff" />
+            <Text style={styles.balanceActionTextDark}>Send Money</Text>
+          </TouchableOpacity>
         </View>
-        <ScrollView
+      </View>
+      {/* <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.chartContainer}>
-          <View style={styles.chartBar} />
-          <Text style={styles.chartLabel}>Performance (Mock Chart)</Text>
-        </View>
-        <Text style={styles.sectionTitle}>Your Assets</Text>
-        {mockAssets.map((asset) => (
+      > */}
+      <View style={styles.chartContainer}>
+        <View style={styles.chartBar} />
+        <Text style={styles.chartLabel}>Performance (Mock Chart)</Text>
+      </View>
+      <Text style={styles.sectionTitle}>Investments Assets</Text>
+      <FlatList
+        data={assets}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={renderAssets}
+        // onEndReached={handleLoadMore}
+        //   onEndReachedThreshold={0.5}
+        //   refreshing={isLoading}
+        //   onRefresh={handleRefresh}
+          ListFooterComponent={
+            isLoading ? <ActivityIndicator size="small" color={Colors.green} /> : null
+          }
+        contentContainerStyle={styles.scrollContent}
+      />
+
+      {/* {mockAssets.map((asset) => (
           <View key={asset.id} style={styles.assetCard}>
             <View style={{ flex: 1 }}>
               <Text style={styles.assetName}>{asset.name}</Text>
@@ -56,11 +108,11 @@ export const PortfolioScreen: React.FC = () => {
             </View>
             <Text style={styles.assetGrowth}>{asset.growth}</Text>
           </View>
-        ))}
-      </ScrollView>
+        ))} */}
+      {/* </ScrollView> */}
       <TouchableOpacity style={styles.fab}>
-       
-        <Ionicons name="document-outline" size={24} color={"white"}/>
+
+        <Ionicons name="document-outline" size={24} color={"white"} />
         <Text style={styles.fabLabel}>Export Report</Text>
       </TouchableOpacity>
     </DashboardLayout>
@@ -68,14 +120,15 @@ export const PortfolioScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  scrollContent: { 
+  scrollContent: {
     // flex:1,
-    paddingBottom:100,backgroundColor: Colors.background },
+    paddingBottom: 100, backgroundColor: Colors.background
+  },
   card: {
     backgroundColor: Colors.secondary,
     borderBottomLeftRadius: 32, borderBottomRightRadius: 32,
     padding: 24,
-    paddingTop:36,
+    paddingTop: 36,
     // marginBottom: 18,
     shadowColor: "#000",
     shadowOpacity: 0.08,
@@ -89,7 +142,7 @@ const styles = StyleSheet.create({
     color: Colors.white,
     marginBottom: 4,
   },
-  
+
   cardSubtitle: { fontSize: 14, color: Colors.gray },
   balanceActionBtnDark: {
     flexDirection: "row",
@@ -114,7 +167,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FDE68A",
     borderRadius: 16,
     marginBottom: 8,
-       marginTop:10,
+    marginTop: 10,
   },
   chartLabel: { color: Colors.green, fontWeight: "600", fontSize: 13 },
   sectionTitle: {
@@ -122,7 +175,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: Colors.secondary,
     marginBottom: 10,
-    marginHorizontal:12
+    marginHorizontal: 12
   },
   assetCard: {
     backgroundColor: Colors.secondary,
@@ -135,7 +188,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.02,
     shadowRadius: 4,
     elevation: 1,
-    marginHorizontal:12
+    marginHorizontal: 12
   },
   assetName: { fontSize: 16, fontWeight: "600", color: Colors.white },
   assetValue: { fontSize: 15, color: Colors.gray, marginTop: 2 },
@@ -158,4 +211,4 @@ const styles = StyleSheet.create({
   fabIcon: { fontSize: 22, color: Colors.white, marginRight: 6 },
   fabLabel: { color: Colors.white, fontWeight: "bold", fontSize: 15 },
 });
-// export default PortfolioScreen;
+export default PortfolioScreen;

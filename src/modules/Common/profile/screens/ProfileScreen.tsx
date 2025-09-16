@@ -1,24 +1,27 @@
 import { getCurrentUser, selectIsLoading } from '@/modules/auth/store/authSlice';
+import { ProfileStackParamList } from "@/navigation/ProfileStacks/ProfileStack";
 import Colors from '@/shared/colors/Colors';
 import { useAppDispatch, useAppSelector } from '@/shared/store';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { DashboardLayout } from '../../components/DashboardLayout';
-
 const mockUser = {
   name: 'Naomi Carter',
   role: 'Investment Manager',
   email: 'naomi@flowvest.com',
   company: 'FlowVest Inc.',
 };
-
+type ProfileNavProp = NativeStackNavigationProp<ProfileStackParamList>;
 // const dispatch = useAppDispatch();
 // const user = useAppSelector(getCurrentUser);
 export const ProfileScreen: React.FC = () => {
   const dispatch = useAppDispatch();
    const { user, error } = useAppSelector((state) => state.auth); // adjust if it's profileSlice
  const isLoading = useAppSelector(selectIsLoading);
+ const navigation = useNavigation<ProfileNavProp>();
    useEffect(() => {
      dispatch(getCurrentUser());
    }, []);
@@ -63,7 +66,7 @@ export const ProfileScreen: React.FC = () => {
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>Settings</Text>
           <View style={styles.buttonGroup}>
-            <TouchableOpacity style={styles.buttonItem}>
+            <TouchableOpacity style={styles.buttonItem} onPress={() => navigation.navigate("ChangePassword")}>
                <Ionicons name='lock-closed-outline' color={"gray"} size={20} />
               <Text style={styles.buttonText}>Change Password</Text>
             </TouchableOpacity>

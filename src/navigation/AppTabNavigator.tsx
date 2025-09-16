@@ -4,7 +4,7 @@
  */
 
 // import { DashboardScreen } from '@/modules/dashboard/Investor/screens/DashboardScreen';
-import { ProfileScreen } from "@/modules/Common/profile/screens";
+// import { ProfileScreen } from "@/modules/Common/profile/screens";
 import { PortfolioScreen } from "@/modules/Investor/portfolio/screens/PortfolioScreen";
 import { InvestmentStack } from "@/navigation/InvestorStacks/InvestmentStack";
 import { InvestorDashboardStack } from "@/navigation/InvestorStacks/InvestorDashboardStack";
@@ -25,6 +25,7 @@ import {
   View,
 } from "react-native";
 import { PartnerDashboardStack } from "./PartnerStacks/PartnerDashboardStack";
+import { ProfileStack } from "./ProfileStacks/ProfileStack";
 
 // Tab navigation types
 export type AppTabParamList = {
@@ -135,7 +136,7 @@ export const AppTabNavigator: React.FC = () => {
           <Tab.Screen name="Investments" component={InvestmentStack} />
           <Tab.Screen name="Payouts" component={PayoutStack} />
           <Tab.Screen name="Portfolio" component={PortfolioScreen} />
-          <Tab.Screen name="Profile" component={ProfileScreen} />
+          <Tab.Screen name="Profile" component={ProfileStack} />
         </>
       )}
       {userRole === "user" && (
@@ -144,7 +145,7 @@ export const AppTabNavigator: React.FC = () => {
           <Tab.Screen name="InvestmentDetails" component={InvestmentDetails}/>
           <Tab.Screen name="Activity" component={MyActivity}/>
           {/* <Tab.Screen name="Portfolio" component={PortfolioScreen} /> */}
-          <Tab.Screen name="Profile" component={ProfileScreen} />
+          <Tab.Screen name="Profile" component={ProfileStack} />
         </>
       )}
     </Tab.Navigator>

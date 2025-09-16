@@ -156,40 +156,6 @@ export const partnerSchema = z.object({
     .max(50, "Partner name must be less than 50 characters")
     .regex(/^[a-zA-Z\s]+$/, "Partner name can only contain letters and spaces"),
 });
-// export const addPartnerSchema = z.object({
-//   first_name: z
-//     .string()
-//     .min(2, 'First name must be at least 2 characters')
-//     .max(50, 'First name must be less than 50 characters'),
-
-//   last_name: z
-//     .string()
-//     .min(2, 'Last name must be at least 2 characters')
-//     .max(50, 'Last name must be less than 50 characters'),
-
-//   email: z
-//     .string()
-//     .email('Enter a valid email'),
-
-//   phone: z
-//     .string()
-//     .min(7, 'Phone number must be at least 7 characters')
-//     .max(15, 'Phone number must be less than 15 characters')
-//     .optional(),
-
-//   role: z.string().min(1, 'Role is required'),
-
-//   permissions: z
-//   // .boolean({
-//   //   required_error: 'Permissions are required',
-//   // }),
-//     .string()
-//     .min(1, 'Permissions are required'),
-//   send_invitation: z.boolean({
-//     required_error: 'Please select if you want to send an invitation',
-//   }),
-//   // send_invitation: z.enum(['Yes', 'No']),
-// });
 
 // Add and Edit Investment Schema
 
@@ -262,7 +228,6 @@ export const addPartnerSchema = z.object({
   description: z.string().optional().or(z.literal("")),
   notes: z.string().optional().or(z.literal("")),
 });
-
 // Type exports for form data
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type AdminRegistrationFormData = z.infer<typeof adminRegistrationSchema>;
@@ -279,6 +244,7 @@ export type PartnerFormData = z.infer<typeof partnerSchema>;
 export type AddPartnerFormData = z.infer<typeof addPartnerSchema>;
 export type soloInvestmentSchema = z.infer<typeof soloInvestmentSchema>;
 export type sharedInvestmentSchema = z.infer<typeof sharedInvestmentSchema>;
+
 // export type addPartnerSchema = z.infer<typeof addPartnerSchema>;
 
 // Generic registration form data type

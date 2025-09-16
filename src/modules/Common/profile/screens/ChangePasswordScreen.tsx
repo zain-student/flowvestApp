@@ -4,15 +4,12 @@ import { Input } from '@components/ui/Input';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import {
-    KeyboardAvoidingView,
-    Platform,
     ScrollView,
     StatusBar,
     StyleSheet,
     Text,
-    View,
+    View
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 export const ChangePasswordScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -51,13 +48,7 @@ export const ChangePasswordScreen: React.FC = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView
-        style={styles.keyboardAvoid}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      >
         <ScrollView
-          style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
@@ -111,26 +102,16 @@ export const ChangePasswordScreen: React.FC = () => {
             />
           </View>
         </ScrollView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.background,
-  },
-  keyboardAvoid: {
-    flex: 1,
-  },
-  scrollView: {
-    flex: 1,
-  },
   scrollContent: {
     flexGrow: 1,
     paddingHorizontal: 24,
     paddingVertical: 20,
+    paddingBottom: 80,
+    backgroundColor: Colors.background,
   },
   header: {
     alignItems: 'center',

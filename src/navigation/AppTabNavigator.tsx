@@ -144,7 +144,7 @@ export const AppTabNavigator: React.FC = () => {
           <Tab.Screen name="Dashboard" component={PartnerDashboardStack} />
           <Tab.Screen name="InvestmentDetails" component={InvestmentDetails}/>
           <Tab.Screen name="Activity" component={MyActivity}/>
-          {/* <Tab.Screen name="Portfolio" component={PortfolioScreen} /> */}
+          <Tab.Screen name="Portfolio" component={PortfolioScreen} />
           <Tab.Screen name="Profile" component={ProfileStack} />
         </>
       )}

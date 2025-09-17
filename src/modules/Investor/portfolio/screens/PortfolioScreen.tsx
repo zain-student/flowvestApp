@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import { BarChart } from "react-native-chart-kit";
+import { LineChart } from "react-native-chart-kit";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -86,13 +86,13 @@ export const PortfolioScreen: React.FC = () => {
         </View>
       </View>
 
+
       <View style={styles.chartContainer}>
-        <BarChart
+        {/* <LineChart
           data={{
             labels: ["All Time", "Year", "Quarter", "Month"],
             datasets: [
               {
-                // take ROI percentage values from API
                 data: [
                   data?.performance?.all_time?.roi_percentage ?? 0,
                   data?.performance?.year?.roi_percentage ?? 0,
@@ -104,9 +104,8 @@ export const PortfolioScreen: React.FC = () => {
           }}
           width={screenWidth - 32}
           height={200}
-          fromZero
-          yAxisLabel=""
           yAxisSuffix="%"
+          fromZero
           chartConfig={{
             backgroundGradientFrom: "#fff",
             backgroundGradientTo: "#fff",
@@ -117,13 +116,66 @@ export const PortfolioScreen: React.FC = () => {
               stroke: "#e3e3e3",
               strokeDasharray: "0",
             },
+            propsForDots: {
+              r: "5",
+              strokeWidth: "2",
+              stroke: "#22c55e",
+            },
+          }}
+          bezier
+          style={{
+            borderRadius: 12,
+          }}
+        />
+        <Text style={styles.chartLabel}>Performance ROI %</Text> */}
+        <LineChart
+          data={{
+            labels: ["All Time", "Year", "Quarter", "Month"],
+            datasets: [
+              {
+                data: [
+                  data?.performance?.all_time?.roi_percentage ?? 0,
+                  data?.performance?.year?.roi_percentage ?? 0,
+                  data?.performance?.quarter?.roi_percentage ?? 0,
+                  data?.performance?.month?.roi_percentage ?? 0,
+                ],
+              },
+            ],
+          }}
+          width={screenWidth - 32}
+          height={220}
+          yAxisSuffix="%"
+          fromZero
+          withDots
+          withShadow
+          bezier
+          chartConfig={{
+            backgroundGradientFrom: "#fff",
+            backgroundGradientTo: "#fff",
+            decimalPlaces: 2,
+            color: (opacity = 1) => `rgba(34, 197, 94, ${opacity})`,
+            labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+            propsForDots: {
+              r: "5",
+              strokeWidth: "2",
+              stroke: "#22c55e",
+              fill: "#22c55e",
+            },
+            propsForBackgroundLines: {
+              strokeWidth: 1,
+              stroke: "#e3e3e3",
+              strokeDasharray: "0",
+            },
           }}
           style={{
             borderRadius: 12,
-            // marginVertical: 8,
+            marginVertical: 8,
           }}
         />
-        <Text style={styles.chartLabel}>Performance ROI %</Text>
+        <Text style={styles.chartLabel}>
+          Performance ROI % — Earned ${data?.performance?.all_time?.total_earned}
+        </Text>
+
       </View>
 
       <Text style={styles.sectionTitle}>Investments Assets</Text>
@@ -131,10 +183,6 @@ export const PortfolioScreen: React.FC = () => {
         data={assets}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderAssets}
-        // onEndReached={handleLoadMore}
-        //   onEndReachedThreshold={0.5}
-        //   refreshing={isLoading}
-        //   onRefresh={handleRefresh}
         showsVerticalScrollIndicator={false}
         ListFooterComponent={
           isLoading ? <ActivityIndicator size="small" color={Colors.green} /> : null
@@ -243,4 +291,3 @@ const styles = StyleSheet.create({
   fabLabel: { color: Colors.white, fontWeight: "bold", fontSize: 15 },
 });
 export default PortfolioScreen;
- 

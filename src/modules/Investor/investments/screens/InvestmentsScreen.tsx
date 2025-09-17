@@ -7,12 +7,12 @@ import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useCallback, useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    FlatList,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { DashboardLayout } from "../../../Common/components/DashboardLayout";
 
@@ -88,7 +88,7 @@ console.log("Filtered investments IDs:", filtered.map((i) => i.id));
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Total Invested Amount</Text>
           <Text style={styles.cardValue}>
-            ${stats?.total_invested_amount.toFixed(1) ?? "--"}
+            {stats.total_invested}
           </Text>
           <Text style={styles.cardSubtitle}>
             +8.2%{" "}

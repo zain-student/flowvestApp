@@ -55,8 +55,8 @@ export interface InvestmentStats {
   total_investments: number;
   active_investments: number;
   total_partners: number;
-  roi_average: number;
-  total_invested_amount: number;
+  average_roi: number;
+  total_invested: number;
   // for investments screen
   initial_amount: number;
 }
@@ -82,8 +82,8 @@ const initialState: InvestmentState = {
     total_investments: 0,
     active_investments: 0,
     total_partners: 0,
-    roi_average: 0,
-    total_invested_amount: 0,
+    average_roi: 0,
+    total_invested: 0,
     // for investments screen
     initial_amount: 0,
   },
@@ -131,13 +131,14 @@ export const fetchInvestments = createAsyncThunk(
       console.log("📦 Investments API Response:", response.data);
       const investments = response.data?.data || [];
       const meta = response.data?.meta || {};
-
+   const summary = response.data?.summary || {};
       await storage.setItem(StorageKeys.INVESTMENTS_CACHE, {
         investments,
         meta,
+          summary,
         page,
       });
-      return { investments, meta, page };
+      return { investments, meta,summary, page };
     } catch (error: any) {
       const cached = await storage.getItem(StorageKeys.INVESTMENTS_CACHE);
       if (cached) return cached;
@@ -266,7 +267,7 @@ const investmentSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchInvestments.fulfilled, (state, action) => {
-        const { investments, meta, page } = action.payload;
+        const { investments, meta, page, summary } = action.payload;
 
         // state.isLoading = false;
         state.meta = meta; // full pagination meta from backend
@@ -284,29 +285,36 @@ const investmentSlice = createSlice({
           state.investments = investments;
         }
 
-        // ✅ Always use backend total for total investments
-        const totalFromBackend =
-          meta?.pagination?.total || state.investments.length;
+        // // ✅ Always use backend total for total investments
+        // const totalFromBackend =
+        //   meta?.pagination?.total || state.investments.length;
 
-        // ✅ Active count from all accumulated investments
-        const activeCount = state.investments.filter(
-          (inv) => inv.status === "active"
-        ).length;
+        // // ✅ Active count from all accumulated investments
+        // const activeCount = state.investments.filter(
+        //   (inv) => inv.status === "active"
+        // ).length;
 
-        // ✅ Calculate total amount invested
-        const totalAmountInvested = state.investments.reduce(
-          (sum, inv) => sum + parseFloat(inv.initial_amount || "0"),
-          0
-        );
-
+        // // ✅ Calculate total amount invested
+        // const totalAmountInvested = state.investments.reduce(
+        //   (sum, inv) => sum + parseFloat(inv.initial_amount || "0"),
+        //   0
+        // );
         state.stats = {
-          total_investments: totalFromBackend,
-          active_investments: activeCount,
-          roi_average: 0, // you can calculate this later
-          total_partners: 0,
-          total_invested_amount: totalAmountInvested,
-          initial_amount: 0, // not clear from your API what this should be
+          total_investments: summary?.total_investments ?? 0,
+          active_investments: summary?.active_investments ?? 0,
+          average_roi: summary?.average_roi ?? 0,
+          total_invested: summary?.total_invested ?? 0,
+          total_partners: 0, // if API adds later
+          initial_amount: 0, // optional, keep for UI
         };
+        // state.stats = {
+        //   total_investments: totalFromBackend,
+        //   active_investments: activeCount,
+        //   average_roi: 0, // you can calculate this later
+        //   total_partners: 0,
+        //   total_invested: totalAmountInvested,
+        //   initial_amount: 0, // not clear from your API what this should be
+        // };
         state.isLoading = false;
         state.isLoadingMore = false;
       })

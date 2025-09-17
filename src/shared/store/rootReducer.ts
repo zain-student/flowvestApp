@@ -12,7 +12,7 @@ import authSlice from '../../modules/auth/store/authSlice';
 import addPartnerSlice from './slices/investor/dashboard/addPartnerSlice';
 import payoutSlice from './slices/investor/payouts/payoutSlice';
 import portfolioSlice from './slices/investor/portfolio/portfolioSlice';
-// import profileSlice from '../../modules/profile/store/profileSlice';
+import profileSlice from './slices/profile/profileSlice';
 // import notificationSlice from '../../modules/notifications/store/notificationSlice';
 
 // Import shared reducers
@@ -30,7 +30,7 @@ export const rootReducer = combineReducers({
   dashboard: adminDashboardSlice,
   payout: payoutSlice,
   portfolio: portfolioSlice,
-  // profile: profileSlice,
+  profile: profileSlice,
   // notifications: notificationSlice,
   
   // Shared/Global state (will be created later)

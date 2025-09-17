@@ -1,21 +1,28 @@
 import { ChangePasswordFormData, changePasswordSchema, validateFormData } from "@/modules/auth/utils/authValidation"; // adjust path if needed
 import Colors from '@/shared/colors/Colors';
+import { useAppDispatch, useAppSelector } from '@/shared/store';
+import { changePassword } from "@/shared/store/slices/profile/profileSlice"; // or wherever you put it
 import { Button } from '@components/ui/Button';
 import { Input } from '@components/ui/Input';
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
     ScrollView,
     StatusBar,
     StyleSheet,
     Text,
+    ToastAndroid,
     View
 } from 'react-native';
 
 export const ChangePasswordScreen: React.FC = () => {
+    const dispatch = useAppDispatch();
+    const { isLoading, error } = useAppSelector((state) => state.profile);
     const navigation = useNavigation();
-
+    useEffect(() => {
+        console.log("Profile error state changed:");
+    }, [error]);
     const [formData, setFormData] = useState({
         current_password: '',
         password: '',
@@ -31,22 +38,31 @@ export const ChangePasswordScreen: React.FC = () => {
         }
     };
 
-    const handleSubmit = () => {
-        // // For now just validation UI
-        // const newErrors: Record<string, string> = {};
-        // if (!formData.current_password) newErrors.currentPassword = 'Current password is required';
-        // if (!formData.password) newErrors.newPassword = 'New password is required';
-        // if (formData.password !== formData.password_confirmation) {
-        //     newErrors.confirmPassword = 'Passwords do not match';
-        // }
+    // const handleSubmit = () => {
+    //     const result = validateFormData(changePasswordSchema, formData);
 
-        // if (Object.keys(newErrors).length > 0) {
-        //     setErrors(newErrors);
-        //     return;
-        // }
+    //     if (!result.success) {
+    //         setErrors(result.errors || {});
+    //         return;
+    //     }
 
-        // // later: dispatch API call here
-        // console.log('Password form submitted', formData);
+    //     setErrors({});
+    //     console.log("Password form submitted ✅", result.data);
+    //     try {
+    //         dispatch(changePassword({
+    //             current_password: formData.current_password,
+    //             new_password: formData.password,
+    //             new_password_confirmation: formData.password_confirmation,
+    //         })
+    //         ).unwrap();
+
+    //         // ✅ Navigate back or reset form on success
+    //         navigation.goBack();
+    //     } catch (err) {
+    //         console.error("❌ Change password error:", err);
+    //     }
+    // };
+    const handleSubmit = async () => {
         const result = validateFormData(changePasswordSchema, formData);
 
         if (!result.success) {
@@ -56,8 +72,28 @@ export const ChangePasswordScreen: React.FC = () => {
 
         setErrors({});
         console.log("Password form submitted ✅", result.data);
-        // TODO: call API here
+
+        try {
+            const res = await dispatch(
+                changePassword({
+                    current_password: formData.current_password,
+                    new_password: formData.password,
+                    new_password_confirmation: formData.password_confirmation,
+                })
+            ).unwrap();
+
+            console.log("✅ Change password API response:", res);
+
+            // Show toast here if you want
+            ToastAndroid.show(res.message, ToastAndroid.SHORT);
+
+            // Navigate back after success
+            navigation.goBack();
+        } catch (err: any) {
+            ToastAndroid.show(err, ToastAndroid.SHORT);
+        }
     };
+
 
     return (
         <ScrollView
@@ -107,8 +143,9 @@ export const ChangePasswordScreen: React.FC = () => {
                 />
 
                 <Button
-                    title="Update Password"
+                    title={isLoading ? "Updating..." : "Update Password"}
                     onPress={handleSubmit}
+                    disabled={isLoading}
                     fullWidth
                     style={styles.submitButton}
                 />

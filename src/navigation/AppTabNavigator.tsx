@@ -5,7 +5,7 @@
 
 // import { DashboardScreen } from '@/modules/dashboard/Investor/screens/DashboardScreen';
 // import { ProfileScreen } from "@/modules/Common/profile/screens";
-import { PortfolioScreen } from "@/modules/Investor/portfolio/screens/PortfolioScreen";
+import { PortfolioScreen } from "@/modules/Common/portfolio/screens/PortfolioScreen";
 import { InvestmentStack } from "@/navigation/InvestorStacks/InvestmentStack";
 import { InvestorDashboardStack } from "@/navigation/InvestorStacks/InvestorDashboardStack";
 import { PayoutStack } from "@/navigation/InvestorStacks/PayoutStack";
@@ -18,11 +18,11 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useAppDispatch } from "@store/index";
 import React from "react";
 import {
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    Platform,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
 import { PartnerDashboardStack } from "./PartnerStacks/PartnerDashboardStack";
 import { ProfileStack } from "./ProfileStacks/ProfileStack";

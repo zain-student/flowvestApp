@@ -15,7 +15,7 @@ export const InvestmentOverview = () => {
 };
 
 const styles = StyleSheet.create({
-  card: { backgroundColor: Colors.white, padding: 16, borderRadius: 8, marginBottom: 12 },
+  card: { backgroundColor: Colors.white, padding: 16, borderRadius: 8 },
   title: { fontSize: 16, fontWeight: 'bold', color: Colors.secondary, marginBottom: 8 },
   label: { fontSize: 14, color: Colors.gray, marginBottom: 4 },
   value: { color: Colors.secondary, fontWeight: '600' },

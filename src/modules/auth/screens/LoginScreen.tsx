@@ -37,8 +37,10 @@ export const LoginScreen: React.FC = () => {
 
   // Form state
   const [formData, setFormData] = useState<LoginFormData>({
-    email: 'zainma4989@gmail.com',
-    password: 'Zain,4321',
+    email:'abc123@gmail.com', 
+    // 'zainma4989@gmail.com',
+    password: 'Zainmalik,4989',
+    // 'Zain,4321',
     remember: false,
   });
 

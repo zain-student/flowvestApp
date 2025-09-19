@@ -6,7 +6,7 @@ import Colors from "@shared/colors/Colors";
 import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-export const InvestmentDetails = () => {
+export const InvestmentDetails = ({ navigation }: any) => {
   const dispatch = useAppDispatch();
   const { investments, summary, isLoading, error, meta, isLoadingMore } = useAppSelector((state) => state.userInvestments);
 
@@ -100,7 +100,7 @@ export const InvestmentDetails = () => {
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={styles.label}>Current Value: <Text style={styles.value}>${summary.current_value}</Text></Text>
             {/* <Text style={styles.label}>Duration: <Text style={styles.value}>12 Months</Text></Text> */}
-            <TouchableOpacity style={styles.balanceActionBtnDark}>
+            <TouchableOpacity style={styles.balanceActionBtnDark} onPress={() => { navigation.navigate('PartnerInvestmentStack', { screen: 'SharedInvestments' }) }}>
               <Text style={styles.balanceActionTextDark}>
                 Shared Investments
               </Text>

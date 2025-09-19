@@ -91,17 +91,23 @@ export const InvestmentDetails = () => {
             </TouchableOpacity>
           </View>
         </View>
-      
-        {/* <ScrollView style={styles.innerContainer} showsVerticalScrollIndicator={false}> */}
-          {/* <InvestmentOverview /> */}
-          <View style={styles.card}>
-            <Text style={styles.title}>Investment Overview</Text>
-            <Text style={styles.label}>Total Investments: <Text style={styles.value}>{summary.total_investments}</Text></Text>
-            <Text style={styles.label}>Active Investments: <Text style={styles.value}>{summary.active_investments}</Text></Text>
+
+
+        <View style={styles.card}>
+          <Text style={styles.title}>Investment Overview</Text>
+          <Text style={styles.label}>Total Investments: <Text style={styles.value}>{summary.total_investments}</Text></Text>
+          <Text style={styles.label}>Active Investments: <Text style={styles.value}>{summary.active_investments}</Text></Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={styles.label}>Current Value: <Text style={styles.value}>${summary.current_value}</Text></Text>
             {/* <Text style={styles.label}>Duration: <Text style={styles.value}>12 Months</Text></Text> */}
+            <TouchableOpacity style={styles.balanceActionBtnDark}>
+              <Text style={styles.balanceActionTextDark}>
+                Shared Investments
+              </Text>
+            </TouchableOpacity>
           </View>
-            <View style={styles.filterContainer}>
+        </View>
+        <View style={styles.filterContainer}>
           <View style={styles.filterRow}>
             {FILTERS.map((f) => (
               <TouchableOpacity
@@ -117,27 +123,7 @@ export const InvestmentDetails = () => {
             ))}
           </View>
         </View>
-          {/* <ReturnFrequency />
-          <PayoutSchedule /> */}
-        {/* </ScrollView> */}
-        {/* Filters
-        <View style={styles.filterRow}>
-          {FILTERS.map((f) => (
-            <TouchableOpacity
-              key={f}
-              style={[styles.filterBtn, filter === f && styles.filterBtnActive]}
-              onPress={() => setFilter(f)}
-            >
-              <Text
-                style={[styles.filterText, filter === f && styles.filterTextActive]}
-              >
-                {f}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View> */}
-        {/* Filters */}
-        
+
 
         {/* Investment List */}
         <FlatList
@@ -227,16 +213,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   filterRow: {
-    // flexDirection: "row",
-    // marginBottom: 10,
-    // // marginTop: 10,
-    // // gap: 10,
-    // marginHorizontal: 12,
-    // backgroundColor: Colors.white,
-    // borderRadius: 20,
-    // padding: 4,
-    // justifyContent: "space-around",
-    // alignItems: "center",
     flexDirection: "row",
     backgroundColor: Colors.white,
     borderRadius: 20,

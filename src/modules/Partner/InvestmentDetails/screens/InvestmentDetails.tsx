@@ -31,6 +31,7 @@ export const InvestmentDetails = ({ navigation }: any) => {
     status: inv.status.charAt(0).toUpperCase() + inv.status.slice(1),
     returns: inv.expected_return_rate,
     date: inv.start_date,
+    participants: inv.total_participants,
   }));
 
   const filtered =
@@ -42,17 +43,23 @@ export const InvestmentDetails = ({ navigation }: any) => {
     <TouchableOpacity style={styles.investmentCard}>
       <View style={{ flex: 1 }}>
         <Text style={styles.investmentName}>{item.name}</Text>
-        <Text style={styles.investmentAmount}>Amount: ${item.amount}</Text>
-        <Text style={styles.investmentDate}>Started: {item.date}</Text>
+        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+          <Text style={styles.investmentAmount}>Amount: ${item.amount}</Text>
+          <Text
+            style={[
+              styles.investmentStatus,
+              item.status === "Active" ? styles.statusActive : styles.statusClosed,
+            ]}
+          >
+            {item.status}
+          </Text>
+        </View>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <Text style={styles.investmentDate}>Started: {item.date}</Text>
+          <Text style={styles.investmentParticipants}>Participants: {item.participants}</Text>
+        </View>
       </View>
-      <Text
-        style={[
-          styles.investmentStatus,
-          item.status === "Active" ? styles.statusActive : styles.statusClosed,
-        ]}
-      >
-        {item.status}
-      </Text>
+
     </TouchableOpacity>
   );
   if (isLoading) {
@@ -249,7 +256,7 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 14,
     marginHorizontal: 12,
-    flexDirection: "row",
+    // flexDirection: "row",
     alignItems: "center",
     shadowColor: "#000",
     shadowOpacity: 0.02,
@@ -262,6 +269,7 @@ const styles = StyleSheet.create({
   statusActive: { color: Colors.green },
   statusClosed: { color: "#6B7280" },
   investmentDate: { fontSize: 13, color: Colors.gray },
+  investmentParticipants: { fontSize: 13, color: Colors.gray },
   emptyState: { justifyContent: "center", alignItems: "center", padding: 20 },
   emptyText: { fontSize: 16, color: "#6B7280" },
 });

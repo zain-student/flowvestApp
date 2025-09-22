@@ -140,6 +140,11 @@ export const InvestmentDetails = ({ navigation }: any) => {
             ) : null
           }
           contentContainerStyle={{ paddingBottom: 100 }}
+          ListEmptyComponent={
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyText}>No shared investments available.</Text>
+            </View>
+          }
         />
       </View>
     </DashboardLayout>
@@ -257,4 +262,6 @@ const styles = StyleSheet.create({
   statusActive: { color: Colors.green },
   statusClosed: { color: "#6B7280" },
   investmentDate: { fontSize: 13, color: Colors.gray },
+  emptyState: { justifyContent: "center", alignItems: "center", padding: 20 },
+  emptyText: { fontSize: 16, color: "#6B7280" },
 });

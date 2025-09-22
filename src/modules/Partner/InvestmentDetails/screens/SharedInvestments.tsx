@@ -76,15 +76,22 @@ export const SharedInvestments: React.FC = () => {
       >
 
         <View style={{ flex: 1 }}>
-          <Text style={styles.title}>{item.name}</Text>
-          {/* <Text style={styles.subText}>{item.description}</Text> */}
-
+          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+            <Text style={styles.title}>{item.name}</Text>
+            <Text
+              style={[
+                styles.status,
+                item.status.toLowerCase() === "active"
+                  ? styles.statusActive
+                  : styles.statusClosed,
+              ]}
+            >
+              {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+            </Text>
+          </View>
           <View style={styles.row}>
             <Text style={styles.amount}>
-              Target: ${item.total_target_amount ?? "—"}
-            </Text>
-            <Text style={styles.amount}>
-              Current: ${item.current_total_invested ?? "—"}
+              Amount: ${item.current_total_invested ?? "—"}/${item.total_target_amount ?? "—"}
             </Text>
           </View>
 
@@ -99,17 +106,6 @@ export const SharedInvestments: React.FC = () => {
             </Text>
           </View>
         </View>
-
-        <Text
-          style={[
-            styles.status,
-            item.status.toLowerCase() === "active"
-              ? styles.statusActive
-              : styles.statusClosed,
-          ]}
-        >
-          {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-        </Text>
       </TouchableOpacity>
     </View>
   );

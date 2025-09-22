@@ -82,6 +82,11 @@ export interface PartnerInvestmentState {
       has_more_pages: boolean;
     };
   };
+  sharedPrograms: {
+    list: PartnerInvestment[]; // reuse PartnerInvestment type
+    isLoading: boolean;
+    error: string | null;
+  };
 }
 
 const initialState: PartnerInvestmentState = {
@@ -108,6 +113,11 @@ const initialState: PartnerInvestmentState = {
     },
   },
   currentInvestment: null,
+  sharedPrograms: {
+    list: [],
+    isLoading: false,
+    error: null,
+  },
 };
 
 // 🔹 Fetch Partner Investments
@@ -131,7 +141,7 @@ export const fetchPartnerParticipatingInvestments = createAsyncThunk(
         page,
       });
       ToastAndroid.show("Investments data cached", ToastAndroid.SHORT);
-console.log("Fetched investments:", investments);
+      console.log("Fetched investments:", investments);
       return { investments, meta, summary, page };
     } catch (error: any) {
       const cached = await storage.getItem(StorageKeys.INVESTMENTS_CACHE);
@@ -153,6 +163,23 @@ console.log("Fetched investments:", investments);
 //     }
 //   }
 // );
+export const fetchAvailableSharedPrograms = createAsyncThunk(
+  "/v1/shared-programs",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get(
+        API_ENDPOINTS.INVESTMENTS.SHARED_AVAILABLE
+      );
+      // assuming API returns { success, message, data: [...] }
+      console.log("Fetched shared programs:", response.data?.data);
+      return response.data?.data || [];
+    } catch (error: any) {
+      return rejectWithValue(
+        error?.response?.data?.message || "Failed to fetch shared programs"
+      );
+    }
+  }
+);
 
 const partnerInvestmentSlice = createSlice({
   name: "partnerInvestments",
@@ -167,60 +194,82 @@ const partnerInvestmentSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // Fetch partner investments
-      .addCase(fetchPartnerParticipatingInvestments.pending, (state, action) => {
-        const page = action.meta.arg;
-        if (page > 1) {
-          state.isLoadingMore = true;
-        } else {
-          state.isLoading = true;
+      .addCase(
+        fetchPartnerParticipatingInvestments.pending,
+        (state, action) => {
+          const page = action.meta.arg;
+          if (page > 1) {
+            state.isLoadingMore = true;
+          } else {
+            state.isLoading = true;
+          }
+          state.error = null;
         }
-        state.error = null;
-      })
-      .addCase(fetchPartnerParticipatingInvestments.fulfilled, (state, action) => {
-        const { investments, meta, page, summary } = action.payload;
+      )
+      .addCase(
+        fetchPartnerParticipatingInvestments.fulfilled,
+        (state, action) => {
+          const { investments, meta, page, summary } = action.payload;
 
-        state.meta = meta;
+          state.meta = meta;
 
-        if (page > 1) {
-          const existingIds = new Set(state.investments.map((inv) => inv.id));
-          const newInvestments = investments.filter(
-            (inv: { id: number }) => !existingIds.has(inv.id)
-          );
-          state.investments = [...state.investments, ...newInvestments];
-        } else {
-          state.investments = investments;
+          if (page > 1) {
+            const existingIds = new Set(state.investments.map((inv) => inv.id));
+            const newInvestments = investments.filter(
+              (inv: { id: number }) => !existingIds.has(inv.id)
+            );
+            state.investments = [...state.investments, ...newInvestments];
+          } else {
+            state.investments = investments;
+          }
+
+          state.summary = {
+            total_investments: summary?.total_investments ?? 0,
+            active_investments: summary?.active_investments ?? 0,
+            total_invested: summary?.total_invested ?? 0,
+            current_value: summary?.current_value ?? 0,
+            average_roi: summary?.average_roi ?? 0,
+          };
+
+          state.isLoading = false;
+          state.isLoadingMore = false;
         }
-
-        state.summary = {
-          total_investments: summary?.total_investments ?? 0,
-          active_investments: summary?.active_investments ?? 0,
-          total_invested: summary?.total_invested ?? 0,
-          current_value: summary?.current_value ?? 0,
-          average_roi: summary?.average_roi ?? 0,
-        };
-
-        state.isLoading = false;
-        state.isLoadingMore = false;
-      })
-      .addCase(fetchPartnerParticipatingInvestments.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isLoadingMore = false;
-        state.error = action.payload as string;
-      })
+      )
+      .addCase(
+        fetchPartnerParticipatingInvestments.rejected,
+        (state, action) => {
+          state.isLoading = false;
+          state.isLoadingMore = false;
+          state.error = action.payload as string;
+        }
+      )
 
       // Fetch partner investment by ID
-    //   .addCase(fetchPartnerInvestmentById.pending, (state) => {
-    //     state.isLoading = true;
-    //     state.error = null;
-    //   })
-    //   .addCase(fetchPartnerInvestmentById.fulfilled, (state, action) => {
-    //     state.isLoading = false;
-    //     state.currentInvestment = action.payload;
-    //   })
-    //   .addCase(fetchPartnerInvestmentById.rejected, (state, action) => {
-    //     state.isLoading = false;
-    //     state.error = action.payload as string;
-    //   });
+      //   .addCase(fetchPartnerInvestmentById.pending, (state) => {
+      //     state.isLoading = true;
+      //     state.error = null;
+      //   })
+      //   .addCase(fetchPartnerInvestmentById.fulfilled, (state, action) => {
+      //     state.isLoading = false;
+      //     state.currentInvestment = action.payload;
+      //   })
+      //   .addCase(fetchPartnerInvestmentById.rejected, (state, action) => {
+      //     state.isLoading = false;
+      //     state.error = action.payload as string;
+      //   });
+      // Fetch available shared programs
+      .addCase(fetchAvailableSharedPrograms.pending, (state) => {
+        state.sharedPrograms.isLoading = true;
+        state.sharedPrograms.error = null;
+      })
+      .addCase(fetchAvailableSharedPrograms.fulfilled, (state, action) => {
+        state.sharedPrograms.isLoading = false;
+        state.sharedPrograms.list = action.payload;
+      })
+      .addCase(fetchAvailableSharedPrograms.rejected, (state, action) => {
+        state.sharedPrograms.isLoading = false;
+        state.sharedPrograms.error = action.payload as string;
+      });
   },
 });
 

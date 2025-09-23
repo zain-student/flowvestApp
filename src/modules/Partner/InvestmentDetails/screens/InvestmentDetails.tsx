@@ -41,7 +41,10 @@ export const InvestmentDetails = ({ navigation }: any) => {
       : formattedInvestments.filter((i: any) => i.status === filter);
 
   const renderInvestment = ({ item }: any) => (
-    <TouchableOpacity style={styles.investmentCard} onPress={() => { console.log("Opening investment:", item.id); }}>
+    <TouchableOpacity style={styles.investmentCard} onPress={() => {
+      navigation.navigate('PartnerInvestmentStack', { screen: 'JoinedInvestmentDetail', params: { id: item.id } })
+      console.log('navigating to JoinedInvestmentDetail with id:', item.id);
+    }}>
       <View style={{ flex: 1 }}>
         <Text style={styles.investmentName}>{item.name}</Text>
         <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
@@ -115,8 +118,8 @@ export const InvestmentDetails = ({ navigation }: any) => {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.filterContainer}>
-          {/* <View style={styles.filterRow}>
+        {/* <View style={styles.filterContainer}> */}
+        {/* <View style={styles.filterRow}>
             {FILTERS.map((f) => (
               <TouchableOpacity
                 key={f}
@@ -130,7 +133,7 @@ export const InvestmentDetails = ({ navigation }: any) => {
               </TouchableOpacity>
             ))}
           </View> */}
-        </View>
+        {/* </View> */}
 
 
         {/* Investment List */}
@@ -218,7 +221,7 @@ const styles = StyleSheet.create({
     elevation: 2,
 
   },
-  title: { fontSize: 16, fontWeight: 'bold', color: Colors.secondary, marginBottom: 8},
+  title: { fontSize: 16, fontWeight: 'bold', color: Colors.secondary, marginBottom: 8 },
   label: { fontSize: 14, color: Colors.gray, marginBottom: 4 },
   value: { color: Colors.secondary, fontWeight: '600' },
   filterContainer: {

@@ -12,7 +12,7 @@ import {
   View,
 } from "react-native";
 
-export const SharedInvestments: React.FC = () => {
+export const SharedInvestments: React.FC = ({navigation}: any) => {
   const dispatch = useAppDispatch();
   const { list, isLoading, error } = useAppSelector(
     (state) => state.userInvestments.sharedPrograms
@@ -76,7 +76,7 @@ export const SharedInvestments: React.FC = () => {
         activeOpacity={0.8}
         onPress={() => {
           // ✅ Navigate to details if needed
-          // navigation.navigate("SharedInvestmentDetail", { id: item.id });
+          navigation.navigate("SharedInvestmentDetail", { id: item.id });
         }}
       >
 

@@ -150,19 +150,6 @@ export const fetchPartnerParticipatingInvestments = createAsyncThunk(
     }
   }
 );
-
-// 🔹 Fetch Partner Investment By ID
-// export const fetchPartnerInvestmentById = createAsyncThunk(
-//   "/v1/partner/investments/:id",
-//   async (id: number, { rejectWithValue }) => {
-//     try {
-//       const response = await api.get(API_ENDPOINTS.INVESTMENTS.DETAIL(id));
-//       return response.data.data;
-//     } catch (error: any) {
-//       return rejectWithValue(error?.response?.data?.message || "Fetch failed");
-//     }
-//   }
-// );
 export const fetchAvailableSharedPrograms = createAsyncThunk(
   "/v1/shared-programs",
   async (_, { rejectWithValue }) => {

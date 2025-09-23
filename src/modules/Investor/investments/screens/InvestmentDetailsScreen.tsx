@@ -8,14 +8,14 @@ import { RouteProp, useRoute } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    Alert,
-    ScrollView,
-    StyleSheet,
-    Text,
-    ToastAndroid,
-    TouchableOpacity,
-    View
+  ActivityIndicator,
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  TouchableOpacity,
+  View
 } from "react-native";
 type Props = NativeStackScreenProps<
   InvestmentStackParamList,
@@ -79,16 +79,17 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
   const handleDuplicate = () => {
     // console.log("Duplicate investment:", currentInvestment);
     setShowMenu(false);
-    dispatch(duplicateInvestment({ investmentId: currentInvestment.id
+    dispatch(duplicateInvestment({
+      investmentId: currentInvestment.id
     }))
-    .catch((error) => {
-      console.log("Failed to duplicate investment:", error.message);
-      ToastAndroid.show(
-        "Duplication failed! " +
-        error.message,
-        ToastAndroid.SHORT
-      );
-    });
+      .catch((error) => {
+        console.log("Failed to duplicate investment:", error.message);
+        ToastAndroid.show(
+          "Duplication failed! " +
+          error.message,
+          ToastAndroid.SHORT
+        );
+      });
   }
 
   return (
@@ -119,17 +120,17 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
 
           {/* Simple Dropdown */}
           {showMenu && (
-             <TouchableOpacity
-          activeOpacity={1}
-          style={styles.overlay}
-          onPress={() => setShowMenu(false)} // close menu when tapping outside
-        >
-            <View style={styles.dropdown}>
-              <TouchableOpacity onPress={handleDuplicate} style={styles.dropdownItem}>
-                <Ionicons name="copy-outline" size={18} color="black" />
-                <Text style={styles.dropdownText}>Duplicate Investment</Text>
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+              activeOpacity={1}
+              style={styles.overlay}
+              onPress={() => setShowMenu(false)} // close menu when tapping outside
+            >
+              <View style={styles.dropdown}>
+                <TouchableOpacity onPress={handleDuplicate} style={styles.dropdownItem}>
+                  <Ionicons name="copy-outline" size={18} color="black" />
+                  <Text style={styles.dropdownText}>Duplicate Investment</Text>
+                </TouchableOpacity>
+              </View>
             </TouchableOpacity>
           )}
 

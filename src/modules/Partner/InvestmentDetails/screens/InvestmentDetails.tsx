@@ -41,11 +41,11 @@ export const InvestmentDetails = ({ navigation }: any) => {
       : formattedInvestments.filter((i: any) => i.status === filter);
 
   const renderInvestment = ({ item }: any) => (
-    <TouchableOpacity style={styles.investmentCard}>
+    <TouchableOpacity style={styles.investmentCard} onPress={() => { console.log("Opening investment:", item.id); }}>
       <View style={{ flex: 1 }}>
         <Text style={styles.investmentName}>{item.name}</Text>
         <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-          <Text style={styles.investmentAmount}>Amount: ${item.amount}/Target Amount: ${item.targetAmouunt}</Text>
+          <Text style={styles.investmentAmount}>Amount: ${item.amount} / ${item.targetAmouunt}</Text>
           <Text
             style={[
               styles.investmentStatus,
@@ -102,7 +102,7 @@ export const InvestmentDetails = ({ navigation }: any) => {
 
 
         <View style={styles.card}>
-          <Text style={styles.title}>Investment Overview</Text>
+          <Text style={styles.title}>Joined Investments Overview</Text>
           <Text style={styles.label}>Total Investments: <Text style={styles.value}>{summary.total_investments}</Text></Text>
           <Text style={styles.label}>Active Investments: <Text style={styles.value}>{summary.active_investments}</Text></Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -116,7 +116,7 @@ export const InvestmentDetails = ({ navigation }: any) => {
           </View>
         </View>
         <View style={styles.filterContainer}>
-          <View style={styles.filterRow}>
+          {/* <View style={styles.filterRow}>
             {FILTERS.map((f) => (
               <TouchableOpacity
                 key={f}
@@ -129,7 +129,7 @@ export const InvestmentDetails = ({ navigation }: any) => {
                 </Text>
               </TouchableOpacity>
             ))}
-          </View>
+          </View> */}
         </View>
 
 
@@ -142,12 +142,13 @@ export const InvestmentDetails = ({ navigation }: any) => {
           onEndReachedThreshold={0.5}
           refreshing={isLoading}
           onRefresh={handleRefresh}
+          showsVerticalScrollIndicator={false}
           ListFooterComponent={
             isLoadingMore ? (
               <ActivityIndicator size="small" color={Colors.green} />
             ) : null
           }
-          contentContainerStyle={{ paddingBottom: 100 }}
+          contentContainerStyle={{ paddingBottom: 10 }}
           ListEmptyComponent={
             <View style={styles.emptyState}>
               <Text style={styles.emptyText}>No shared investments available.</Text>
@@ -258,7 +259,7 @@ const styles = StyleSheet.create({
     marginBottom: 14,
     marginHorizontal: 12,
     // flexDirection: "row",
-    alignItems: "center",
+    // alignItems: "center",
     shadowColor: "#000",
     shadowOpacity: 0.02,
     shadowRadius: 4,

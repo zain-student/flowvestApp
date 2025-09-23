@@ -61,11 +61,9 @@ export const SharedInvestments: React.FC = () => {
   );
 
   const renderItem = ({ item }: { item: PartnerInvestment }) => (
+
     <View style={{ marginHorizontal: 0 }}>
       {/* // Title: Shared Investments */}
-      <Text style={{ fontSize: 24, fontWeight: "bold", margin: 1, color: Colors.secondary }}>
-        Shared Investments
-      </Text>
       <TouchableOpacity
         style={styles.card}
         activeOpacity={0.8}
@@ -91,7 +89,7 @@ export const SharedInvestments: React.FC = () => {
           </View>
           <View style={styles.row}>
             <Text style={styles.amount}>
-              Amount: ${item.current_total_invested ?? "—"}/${item.total_target_amount ?? "—"}
+              Amount: ${item.current_total_invested ?? "N/A"}/${item.total_target_amount ?? "N/A"}
             </Text>
           </View>
 
@@ -99,10 +97,10 @@ export const SharedInvestments: React.FC = () => {
             <Text style={styles.meta}>
               ROI: {item.expected_return_rate !== undefined && item.expected_return_rate !== null
                 ? Number(item.expected_return_rate).toFixed(1)
-                : "—"}%
+                : "N/A"}%
             </Text>
             <Text style={styles.meta}>
-              Participants: {item.total_participants || "—"}
+              Participants: {item.total_participants || "N/A"}
             </Text>
           </View>
         </View>
@@ -115,7 +113,7 @@ export const SharedInvestments: React.FC = () => {
     <View style={{ flex: 1, backgroundColor: Colors.background }} >
 
       <FlatList
-        contentContainerStyle={{ padding: 12 }}
+        contentContainerStyle={{ padding: 12 }} 
         data={list}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}

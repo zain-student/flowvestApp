@@ -53,10 +53,17 @@ export const SharedInvestments: React.FC = () => {
       <SummaryCard
         label="Total Invested"
         value={`$${summary.totalInvested.toLocaleString()}`}
+        style={{ backgroundColor: "#E0F2FE" }}
       />
-      <SummaryCard label="Programs" value={summary.totalPrograms} />
-      <SummaryCard label="Avg ROI" value={`${summary.avgRoi.toFixed(1)}%`} />
-      <SummaryCard label="Participants" value={summary.participants} />
+      <SummaryCard label="Programs" value={summary.totalPrograms}
+        style={{ backgroundColor: "#FEF3C7" }}
+      />
+      <SummaryCard label="Avg ROI" value={`${summary.avgRoi.toFixed(1)}%`}
+        style={{ backgroundColor: "#ECFDF5" }}
+      />
+      <SummaryCard label="Participants" value={summary.participants}
+        style={{ backgroundColor: "#FEE2E2" }}
+      />
     </View>
   );
 
@@ -113,7 +120,7 @@ export const SharedInvestments: React.FC = () => {
     <View style={{ flex: 1, backgroundColor: Colors.background }} >
 
       <FlatList
-        contentContainerStyle={{ padding: 12 }} 
+        contentContainerStyle={{ padding: 12 }}
         data={list}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
@@ -129,8 +136,16 @@ export const SharedInvestments: React.FC = () => {
     </View>
   );
 };
-const SummaryCard = ({ label, value }: { label: string; value: string | number }) => (
-  <View style={styles.summaryCard}>
+const SummaryCard = ({
+  label,
+  value,
+  style,
+}: {
+  label: string;
+  value: string | number;
+  style?: object;
+}) => (
+  <View style={[styles.summaryCard, style]}>
     <Text style={styles.summaryValue}>{value}</Text>
     <Text style={styles.summaryLabel}>{label}</Text>
   </View>
@@ -151,9 +166,11 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "space-between",
     marginBottom: 6,
+
   },
   summaryCard: {
-    backgroundColor: Colors.white,
+    // backgroundColor: Colors.white,
+    // backgroundColor: "#6e204cff",
     borderRadius: 12,
     padding: 16,
     width: "48%",

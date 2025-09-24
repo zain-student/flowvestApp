@@ -2,6 +2,7 @@ import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import type { PartnerInvestment } from "@/shared/store/slices/partner/investments/partnerInvestmentSlice";
 import { fetchAvailableSharedPrograms } from "@/shared/store/slices/partner/investments/partnerInvestmentSlice";
+import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -110,6 +111,17 @@ export const SharedInvestments: React.FC = ({navigation}: any) => {
               Participants: {item.total_participants || "N/A"}
             </Text>
           </View>
+            {/* Join Button */}
+        <TouchableOpacity
+          style={styles.joinBtn}
+          activeOpacity={0.7}
+          onPress={() => {
+            console.log("Join investment tapped:", item.id);
+          }}
+        >
+          <Ionicons name="add-circle-outline" size={18} color={Colors.white} />
+          <Text style={styles.joinBtnText}>Join Investment</Text>
+        </TouchableOpacity>
         </View>
       </TouchableOpacity>
     </View>
@@ -217,4 +229,21 @@ const styles = StyleSheet.create({
   },
   statusActive: { color: Colors.green },
   statusClosed: { backgroundColor: Colors.inActiveStatusBg, color: Colors.gray },
+  joinBtn: {
+  marginTop: 10,
+  flexDirection: "row",
+  alignItems: "center",
+  alignSelf: "flex-end",
+  backgroundColor: Colors.primary,
+  paddingHorizontal: 12,
+  paddingVertical: 6,
+  borderRadius: 8,
+},
+joinBtnText: {
+  color: Colors.white,
+  fontSize: 14,
+  fontWeight: "600",
+  marginLeft: 6,
+},
+
 });

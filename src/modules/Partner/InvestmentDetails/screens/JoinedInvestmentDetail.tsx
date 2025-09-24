@@ -1,48 +1,36 @@
-// import React from 'react'
-// import { StyleSheet, Text, View } from 'react-native'
-
-// export const JoinedInvestmentDetail = () => {
-//   return (
-//     <View>
-//       <Text>JoinedInvestmentDetail</Text>
-//     </View>
-//   )
-// }
-
-// export default JoinedInvestmentDetail
-
-// const styles = StyleSheet.create({})
+import type { PartnersInvestmentDetailStackParamList } from "@/navigation/PartnerStacks/PartnersInvestmentDetailStack";
 import Colors from "@/shared/colors/Colors";
+import { useAppSelector } from "@/shared/store";
 import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import React, { useMemo } from "react";
 import {
     ActivityIndicator,
     ScrollView,
     StyleSheet,
     Text,
     TouchableOpacity,
-    View
+    View,
 } from "react-native";
 
-export const JoinedInvestmentDetail: React.FC = ({ navigation }: any) => {
-    // ⚡ Demo loading & data (replace with real props/store later)
-    const [isLoading] = useState(false);
-    const [showMenu, setShowMenu] = useState(false);
+type Props = NativeStackScreenProps<
+    PartnersInvestmentDetailStackParamList,
+    "JoinedInvestmentDetail"
+>;
 
-    const currentInvestment = {
-        id: 1,
-        name: "Tech Growth Fund",
-        initial_amount: 25000,
-        status: "active",
-        type: "Equity",
-        expected_return_rate: "12.5",
-        start_date: "2025-02-01",
-        end_date: "2026-02-01",
-        recent_payouts: [
-            { id: 1, payout_type: "monthly", amount: 500, due_date: "2025-10-01" },
-            { id: 2, payout_type: "monthly", amount: 500, due_date: "2025-11-01" },
-        ],
-    };
+export const JoinedInvestmentDetail: React.FC<Props> = ({ route, navigation }) => {
+    const { id } = route.params;
+
+    // Select investments & loading state from Redux
+    const { investments, isLoading } = useAppSelector(
+        (state) => state.userInvestments
+    );
+
+    //  Find current investment
+    const currentInvestment = useMemo(
+        () => investments.find((inv) => inv.id === id),
+        [investments, id]
+    );
 
     if (isLoading) {
         return (
@@ -59,11 +47,11 @@ export const JoinedInvestmentDetail: React.FC = ({ navigation }: any) => {
             </View>
         );
     }
+
     return (
         <View style={styles.container}>
             {/* Close Button */}
-            <TouchableOpacity style={styles.closeBtn}
-                onPress={() => navigation.goBack()}>
+            <TouchableOpacity style={styles.closeBtn} onPress={() => navigation.goBack()}>
                 <Ionicons name="close" size={27} />
             </TouchableOpacity>
 
@@ -73,87 +61,48 @@ export const JoinedInvestmentDetail: React.FC = ({ navigation }: any) => {
             >
                 <Text style={styles.title}>{currentInvestment.name}</Text>
 
+                {/* Summary Card  */}
                 <View style={styles.summaryCard}>
-                    {/* 3-Dots Menu
-          <TouchableOpacity
-            style={styles.menuBtn}
-            onPress={() => setShowMenu((prev) => !prev)}
-          >
-            <Ionicons name="ellipsis-vertical" size={24} color="white" />
-          </TouchableOpacity> */}
-
-                    {/* {showMenu && (
-            <TouchableOpacity
-              activeOpacity={1}
-              style={styles.overlay}
-              onPress={() => setShowMenu(false)}
-            >
-              <View style={styles.dropdown}>
-                <TouchableOpacity
-                  onPress={() => ToastAndroid.show("Duplicate tapped", ToastAndroid.SHORT)}
-                  style={styles.dropdownItem}
-                >
-                  <Ionicons name="copy-outline" size={18} color="black" />
-                  <Text style={styles.dropdownText}>Duplicate Investment</Text>
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>
-          )} */}
-
-                    <LabelValue label="Amount Invested" value={`$${currentInvestment.initial_amount}`} />
-                    <LabelValue
-                        label="Status"
-                        value={capitalize(currentInvestment.status)}
+                    <LabelValue label="Amount Invested" value={`$${formatNum(currentInvestment.current_total_invested)}`} />
+                    <LabelValue label="Status" value={capitalize(currentInvestment.status)}
                         valueStyle={
                             currentInvestment.status === "active"
                                 ? styles.statusActive
                                 : styles.statusCompleted
                         }
                     />
+                    <LabelValue label="Total Participants" value={`${currentInvestment.total_participants ?? 0}`} />
                     <LabelValue label="Type" value={currentInvestment.type} />
                     <LabelValue
                         label="Returns"
                         value={`${parseFloat(currentInvestment.expected_return_rate).toFixed(1)}%`}
                     />
-                    <LabelValue label="Start Date" value={currentInvestment.start_date} />
-                    <LabelValue label="End Date" value={currentInvestment.end_date} />
-
-                    {/* <View style={styles.footer}>
-            <Button
-              title="Update"
-              icon={<Ionicons name="create-outline" size={20} color={Colors.white} />}
-              onPress={() => ToastAndroid.show("Update tapped", ToastAndroid.SHORT)}
-              style={styles.updateButton}
-              textStyle={styles.footerButtonText}
-              variant="primary"
-            />
-            <Button
-              title="Delete"
-              icon={<Ionicons name="trash-outline" size={20} color={Colors.white} />}
-              onPress={() => ToastAndroid.show("Delete tapped", ToastAndroid.SHORT)}
-              style={styles.deleteButton}
-              textStyle={styles.footerButtonText}
-              variant="primary"
-            />
-          </View> */}
+                    <LabelValue label="Start Date" value={formatDate(currentInvestment.start_date)} />
+                    <LabelValue label="End Date" value={formatDate(currentInvestment.end_date)} />
                 </View>
 
-                <Text style={styles.sectionTitle}>Transactions</Text>
-                {currentInvestment.recent_payouts.map((tx) => (
-                    <View key={tx.id} style={styles.txCard}>
-                        <Text style={styles.txType}>
-                            {capitalize(tx.payout_type)}
-                        </Text>
-                        <Text style={styles.txAmount}>${tx.amount.toLocaleString()}</Text>
-                        <Text style={styles.txDate}>Due: {tx.due_date}</Text>
+                {/*  Performance  */}
+                <Text style={styles.sectionTitle}>Performance</Text>
+                <View style={styles.txCard}>
+                    <Text style={styles.txType}>Total Paid Out</Text>
+                    <Text style={styles.txAmount}>${currentInvestment.performance.total_paid_out}</Text>
+                </View>
+                <View style={styles.txCard}>
+                    <Text style={styles.txType}>Pending Payouts</Text>
+                    <Text style={styles.txAmount}>${currentInvestment.performance.pending_payouts}</Text>
+                </View>
+                {currentInvestment.performance.next_payout_date && (
+                    <View style={styles.txCard}>
+                        <Text style={styles.txType}>Next Payout</Text>
+                        <Text style={styles.txDate}>{currentInvestment.performance.next_payout_date}</Text>
                     </View>
-                ))}
+                )}
             </ScrollView>
         </View>
     );
 };
 
-/* ------------ Helpers ------------ */
+/*  Helpers  */
 const LabelValue = ({
     label,
     value,
@@ -163,17 +112,20 @@ const LabelValue = ({
     value: string;
     valueStyle?: any;
 }) => (
-    <>
+    <View style={{ marginBottom: 8 }}>
         <Text style={styles.label}>{label}</Text>
         <Text style={[styles.value, valueStyle]}>{value}</Text>
-    </>
+    </View>
 );
 
-const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+const capitalize = (s: string) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : "");
+const formatDate = (d?: string | null) => (d ? new Date(d).toISOString().split("T")[0] : "N/A");
+const formatNum = (n?: string | number | null) =>
+    n !== undefined && n !== null ? Number(n).toLocaleString() : "0";
 
-/* ------------ Styles ------------ */
+/* -- Styles -- */
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: Colors.background, paddingBottom: 100 },
+    container: { flex: 1, backgroundColor: Colors.background },
     centered: { flex: 1, justifyContent: "center", alignItems: "center" },
     notFound: { fontSize: 16, color: Colors.secondary },
     closeBtn: {
@@ -193,7 +145,12 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: "bold",
         color: Colors.secondary,
-        marginBottom: 1,
+        marginBottom: 6,
+    },
+    description: {
+        fontSize: 14,
+        color: Colors.gray,
+        marginBottom: 18,
     },
     summaryCard: {
         backgroundColor: Colors.secondary,
@@ -201,28 +158,13 @@ const styles = StyleSheet.create({
         padding: 18,
         marginBottom: 24,
     },
-    menuBtn: { position: "absolute", top: 20, right: 20, padding: 8, zIndex: 20 },
-    overlay: {
-        position: "absolute",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        zIndex: 10,
+    performanceCard: {
+        backgroundColor: Colors.secondary,
+        borderRadius: 14,
+        padding: 18,
+        marginBottom: 24,
     },
-    dropdown: {
-        position: "absolute",
-        top: 50,
-        right: 20,
-        backgroundColor: "white",
-        borderRadius: 8,
-        elevation: 5,
-        paddingVertical: 5,
-        width: 200,
-    },
-    dropdownItem: { flexDirection: "row", alignItems: "center", padding: 10 },
-    dropdownText: { marginLeft: 8, fontSize: 16 },
-    label: { fontSize: 13, color: Colors.gray, marginTop: 8 },
+    label: { fontSize: 13, color: Colors.gray },
     value: { fontSize: 16, color: Colors.white, fontWeight: "600" },
     statusActive: { color: Colors.green },
     statusCompleted: { color: Colors.gray },
@@ -244,30 +186,4 @@ const styles = StyleSheet.create({
     txType: { fontSize: 15, color: Colors.white, fontWeight: "600" },
     txAmount: { fontSize: 15, color: Colors.white, fontWeight: "500" },
     txDate: { fontSize: 13, color: Colors.gray },
-    footer: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        marginTop: 16,
-        borderTopWidth: 0.2,
-        borderTopColor: Colors.gray,
-        paddingTop: 12,
-    },
-    updateButton: {
-        flex: 1,
-        paddingVertical: 10,
-        borderRadius: 6,
-        alignItems: "center",
-        marginHorizontal: 5,
-        backgroundColor: "#3B82F6",
-    },
-    deleteButton: {
-        flex: 1,
-        flexDirection: "row",
-        paddingVertical: 10,
-        borderRadius: 6,
-        alignItems: "center",
-        marginHorizontal: 5,
-        backgroundColor: "#EF4444",
-    },
-    footerButtonText: { color: "#fff", fontWeight: "bold" },
 });

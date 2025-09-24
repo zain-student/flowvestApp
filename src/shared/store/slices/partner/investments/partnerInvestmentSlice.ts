@@ -230,20 +230,6 @@ const partnerInvestmentSlice = createSlice({
           state.error = action.payload as string;
         }
       )
-
-      // Fetch partner investment by ID
-      //   .addCase(fetchPartnerInvestmentById.pending, (state) => {
-      //     state.isLoading = true;
-      //     state.error = null;
-      //   })
-      //   .addCase(fetchPartnerInvestmentById.fulfilled, (state, action) => {
-      //     state.isLoading = false;
-      //     state.currentInvestment = action.payload;
-      //   })
-      //   .addCase(fetchPartnerInvestmentById.rejected, (state, action) => {
-      //     state.isLoading = false;
-      //     state.error = action.payload as string;
-      //   });
       // Fetch available shared programs
       .addCase(fetchAvailableSharedPrograms.pending, (state) => {
         state.sharedPrograms.isLoading = true;

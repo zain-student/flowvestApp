@@ -51,7 +51,6 @@ export interface PartnerInvestment {
     active_count: number;
     average_investment: number | null;
   };
-
   created_at: string;
   updated_at: string;
 }
@@ -63,7 +62,11 @@ export interface summary {
   current_value: number;
   average_roi: number;
 }
-
+export interface JoinInvestmentPayload {
+  investmentId: number;
+  amount: number;
+  notes: string;
+}
 export interface PartnerInvestmentState {
   investments: PartnerInvestment[];
   isLoading: boolean;
@@ -179,23 +182,35 @@ export const fetchAvailableSharedPrograms = createAsyncThunk(
 export const joinInvestment = createAsyncThunk(
   "/v1/investments/join",
   async (
-    {
-      investmentId,
-      amount,
-      notes,
-    }: { investmentId: number; amount: number; notes: string },
+    { investmentId, amount, notes }: JoinInvestmentPayload,
     { rejectWithValue }
   ) => {
     try {
+      console.log("Joining investment:", investmentId, amount, notes);
       const response = await api.post(
         API_ENDPOINTS.INVESTMENTS.JOIN(investmentId), // ✅ clean call
         { amount, notes }
       );
-      return response.data?.data;
-    } catch (error: any) {
-      return rejectWithValue(
-        error?.response?.data?.message || "Failed to join investment"
+      const joined = response.data?.data;
+      if (!joined) {
+        return rejectWithValue("Join investment failed: No data returned");
+      }
+
+      ToastAndroid.show(
+        response.data?.message || "Investment joined successfully",
+        ToastAndroid.SHORT
       );
+      console.log("✅ Joined investment:", JSON.stringify(joined));
+
+      return joined;
+    } catch (error: any) {
+      const errMsg =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Failed to join investment";
+      ToastAndroid.show(errMsg, ToastAndroid.SHORT);
+      console.log("❌ Join investment error:", errMsg);
+      return rejectWithValue(errMsg);
     }
   }
 );
@@ -280,14 +295,21 @@ const partnerInvestmentSlice = createSlice({
         state.join.isJoining = true;
         state.join.error = null;
       })
+      // .addCase(joinInvestment.fulfilled, (state) => {
+      //   state.join.isJoining = false;
+      // })
+      .addCase(joinInvestment.rejected, (state, action) => {
+        state.join.isJoining = false;
+        state.join.error = action.payload as string;
+      })
       .addCase(joinInvestment.fulfilled, (state, action) => {
         state.join.isJoining = false;
 
-        const participant = action.payload?.participant;
+        const participant = action.payload?.participant; 
         const updatedInvestment = participant?.investment;
 
         if (updatedInvestment) {
-          // ✅ Update sharedPrograms.list or investments if the user joined a shared program
+          // Update in both investments and sharedPrograms lists
           const updateList = (list: PartnerInvestment[]) =>
             list.map((inv) =>
               inv.id === updatedInvestment.id
@@ -304,10 +326,6 @@ const partnerInvestmentSlice = createSlice({
           state.sharedPrograms.list = updateList(state.sharedPrograms.list);
           state.investments = updateList(state.investments);
         }
-      })
-      .addCase(joinInvestment.rejected, (state, action) => {
-        state.join.isJoining = false;
-        state.join.error = action.payload as string;
       });
   },
 });

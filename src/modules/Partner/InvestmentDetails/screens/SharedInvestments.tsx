@@ -116,6 +116,10 @@ export const SharedInvestments: React.FC = ({navigation}: any) => {
           style={styles.joinBtn}
           activeOpacity={0.7}
           onPress={() => {
+            navigation.navigate("SharedInvestmentDetail", {
+              id: item.id,
+              showJoinForm: 'true'
+             });
             console.log("Join investment tapped:", item.id);
           }}
         >

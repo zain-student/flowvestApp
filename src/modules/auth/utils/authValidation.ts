@@ -228,6 +228,14 @@ export const addPartnerSchema = z.object({
   description: z.string().optional().or(z.literal("")),
   notes: z.string().optional().or(z.literal("")),
 });
+// Join Investment Schema
+export const joinInvestmentSchema = z.object({
+  amount: z.preprocess(
+    (val) => (val !== "" && val !== undefined ? Number(val) : undefined),
+    z.number().positive("Amount must be a positive number")
+  ),
+  notes: z.string().optional(),
+});
 // Type exports for form data
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type AdminRegistrationFormData = z.infer<typeof adminRegistrationSchema>;
@@ -244,7 +252,7 @@ export type PartnerFormData = z.infer<typeof partnerSchema>;
 export type AddPartnerFormData = z.infer<typeof addPartnerSchema>;
 export type soloInvestmentSchema = z.infer<typeof soloInvestmentSchema>;
 export type sharedInvestmentSchema = z.infer<typeof sharedInvestmentSchema>;
-
+export type JoinInvestmentFormData = z.infer<typeof joinInvestmentSchema>;
 // export type addPartnerSchema = z.infer<typeof addPartnerSchema>;
 
 // Generic registration form data type

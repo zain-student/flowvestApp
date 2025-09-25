@@ -11,7 +11,9 @@ export type PartnersInvestmentDetailStackParamList = {
   InvestmentDetails: undefined;
   SharedInvestments: undefined;
   JoinedInvestmentDetail: { id: number };
-  SharedInvestmentDetail: { id: number };
+  SharedInvestmentDetail: { id: number,
+     showJoinForm?: boolean,
+   };
 };
 export const Stack = createNativeStackNavigator<PartnersInvestmentDetailStackParamList>();
 export const PartnersInvestmentDetailStack = () => {

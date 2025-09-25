@@ -87,6 +87,10 @@ export interface PartnerInvestmentState {
     isLoading: boolean;
     error: string | null;
   };
+  join: {
+    isJoining: boolean;
+    error: string | null;
+  };
 }
 
 const initialState: PartnerInvestmentState = {
@@ -118,9 +122,13 @@ const initialState: PartnerInvestmentState = {
     isLoading: false,
     error: null,
   },
+  join: {
+    isJoining: false,
+    error: null,
+  },
 };
 
-// 🔹 Fetch Partner Investments
+//  Fetch Partner Investments
 export const fetchPartnerParticipatingInvestments = createAsyncThunk(
   "/v1/partner/investments/participating",
   async (page: number = 1, { rejectWithValue }) => {
@@ -163,6 +171,30 @@ export const fetchAvailableSharedPrograms = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(
         error?.response?.data?.message || "Failed to fetch shared programs"
+      );
+    }
+  }
+);
+//  Join Investment Thunk
+export const joinInvestment = createAsyncThunk(
+  "/v1/investments/join",
+  async (
+    {
+      investmentId,
+      amount,
+      notes,
+    }: { investmentId: number; amount: number; notes: string },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await api.post(
+        API_ENDPOINTS.INVESTMENTS.JOIN(investmentId), // ✅ clean call
+        { amount, notes }
+      );
+      return response.data?.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error?.response?.data?.message || "Failed to join investment"
       );
     }
   }
@@ -242,6 +274,40 @@ const partnerInvestmentSlice = createSlice({
       .addCase(fetchAvailableSharedPrograms.rejected, (state, action) => {
         state.sharedPrograms.isLoading = false;
         state.sharedPrograms.error = action.payload as string;
+      })
+      // Join Investment
+      .addCase(joinInvestment.pending, (state) => {
+        state.join.isJoining = true;
+        state.join.error = null;
+      })
+      .addCase(joinInvestment.fulfilled, (state, action) => {
+        state.join.isJoining = false;
+
+        const participant = action.payload?.participant;
+        const updatedInvestment = participant?.investment;
+
+        if (updatedInvestment) {
+          // ✅ Update sharedPrograms.list or investments if the user joined a shared program
+          const updateList = (list: PartnerInvestment[]) =>
+            list.map((inv) =>
+              inv.id === updatedInvestment.id
+                ? {
+                    ...inv,
+                    ...updatedInvestment,
+                    is_participant: true,
+                    my_investment: participant.invested_amount,
+                    joined_at: participant.joined_at,
+                  }
+                : inv
+            );
+
+          state.sharedPrograms.list = updateList(state.sharedPrograms.list);
+          state.investments = updateList(state.investments);
+        }
+      })
+      .addCase(joinInvestment.rejected, (state, action) => {
+        state.join.isJoining = false;
+        state.join.error = action.payload as string;
       });
   },
 });

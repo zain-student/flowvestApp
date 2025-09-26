@@ -4,7 +4,7 @@ import { fetchPartnerParticipatingInvestments } from "@/shared/store/slices/part
 import { Feather } from "@expo/vector-icons";
 import Colors from "@shared/colors/Colors";
 import React, { useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export const InvestmentDetails = ({ navigation }: any) => {
   const dispatch = useAppDispatch();
@@ -63,7 +63,26 @@ export const InvestmentDetails = ({ navigation }: any) => {
           <Text style={styles.investmentParticipants}>Participants: {item.participants}</Text>
         </View>
       </View>
-
+ {/* ➕ Leave Button */}
+    <TouchableOpacity
+      style={styles.leaveBtn}
+      onPress={() =>
+        Alert.alert(
+          "Leave Investment",
+          `Are you sure you want to leave "${item.name}"?`,
+          [
+            { text: "Cancel", style: "cancel" },
+            {
+              text: "Leave",
+              style: "destructive",
+              // onPress: () => dispatch(leaveInvestment(item.id)),
+            },
+          ]
+        )
+      }
+    >
+      <Text style={styles.leaveBtnText}>Leave Investment</Text>
+    </TouchableOpacity>
     </TouchableOpacity>
   );
   if (isLoading) {
@@ -118,24 +137,6 @@ export const InvestmentDetails = ({ navigation }: any) => {
             </TouchableOpacity>
           </View>
         </View>
-        {/* <View style={styles.filterContainer}> */}
-        {/* <View style={styles.filterRow}>
-            {FILTERS.map((f) => (
-              <TouchableOpacity
-                key={f}
-                style={[styles.filterBtn, filter === f && styles.filterBtnActive]}
-                onPress={() => setFilter(f)}
-                activeOpacity={0.7}
-              >
-                <Text style={[styles.filterText, filter === f && styles.filterTextActive]}>
-                  {f}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View> */}
-        {/* </View> */}
-
-
         {/* Investment List */}
         <FlatList
           data={filtered}
@@ -178,6 +179,19 @@ const styles = StyleSheet.create({
     elevation: 6,
     marginBottom: 18,
   },
+  leaveBtn: {
+  marginTop: 12,
+  backgroundColor: Colors.error,   // or your danger color
+  paddingVertical: 8,
+  borderRadius: 6,
+  alignItems: "center",
+},
+leaveBtnText: {
+  color: Colors.white,
+  fontWeight: "600",
+  fontSize: 14,
+},
+
   balanceLabelDark: {
     color: Colors.gray,
     fontSize: 15,

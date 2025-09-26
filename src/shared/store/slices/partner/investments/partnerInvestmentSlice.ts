@@ -229,8 +229,8 @@ export const leaveInvestment = createAsyncThunk(
       console.log("Response:", res.data);
       return { id, message: res.data.message };
     } catch (err: any) {
-       const errMsg =
-       err?.response?.data?.message ||
+      const errMsg =
+        err?.response?.data?.message ||
         err?.message ||
         "Failed to leave investment";
       ToastAndroid.show(errMsg, ToastAndroid.SHORT);
@@ -320,13 +320,35 @@ const partnerInvestmentSlice = createSlice({
         state.join.isJoining = true;
         state.join.error = null;
       })
-      // .addCase(joinInvestment.fulfilled, (state) => {
+      // .addCase(joinInvestment.rejected, (state, action) => {
       //   state.join.isJoining = false;
+      //   state.join.error = action.payload as string;
       // })
-      .addCase(joinInvestment.rejected, (state, action) => {
-        state.join.isJoining = false;
-        state.join.error = action.payload as string;
-      })
+      // .addCase(joinInvestment.fulfilled, (state, action) => {
+      //   state.join.isJoining = false;
+
+      //   const participant = action.payload?.participant;
+      //   const updatedInvestment = participant?.investment;
+
+      //   if (updatedInvestment) {
+      //     // Update in both investments and sharedPrograms lists
+      //     const updateList = (list: PartnerInvestment[]) =>
+      //       list.map((inv) =>
+      //         inv.id === updatedInvestment.id
+      //           ? {
+      //               ...inv,
+      //               ...updatedInvestment,
+      //               is_participant: true,
+      //               my_investment: participant.invested_amount,
+      //               joined_at: participant.joined_at,
+      //             }
+      //           : inv
+      //       );
+
+      //     state.sharedPrograms.list = updateList(state.sharedPrograms.list);
+      //     state.investments = updateList(state.investments);
+      //   }
+      // })
       .addCase(joinInvestment.fulfilled, (state, action) => {
         state.join.isJoining = false;
 
@@ -334,9 +356,12 @@ const partnerInvestmentSlice = createSlice({
         const updatedInvestment = participant?.investment;
 
         if (updatedInvestment) {
-          // Update in both investments and sharedPrograms lists
-          const updateList = (list: PartnerInvestment[]) =>
-            list.map((inv) =>
+          // ✅ 1️⃣ Update if it exists
+          const exists = state.investments.some(
+            (inv) => inv.id === updatedInvestment.id
+          );
+          if (exists) {
+            state.investments = state.investments.map((inv) =>
               inv.id === updatedInvestment.id
                 ? {
                     ...inv,
@@ -347,9 +372,31 @@ const partnerInvestmentSlice = createSlice({
                   }
                 : inv
             );
+          } else {
+            // ✅ 2️⃣ Add if it's a brand-new joined investment
+            state.investments = [
+              {
+                ...updatedInvestment,
+                is_participant: true,
+                my_investment: participant.invested_amount,
+                joined_at: participant.joined_at,
+              },
+              ...state.investments, // prepend so it appears at the top
+            ];
+          }
 
-          state.sharedPrograms.list = updateList(state.sharedPrograms.list);
-          state.investments = updateList(state.investments);
+          // Optional: update sharedPrograms list as well
+          state.sharedPrograms.list = state.sharedPrograms.list.map((inv) =>
+            inv.id === updatedInvestment.id
+              ? {
+                  ...inv,
+                  ...updatedInvestment,
+                  is_participant: true,
+                  my_investment: participant.invested_amount,
+                  joined_at: participant.joined_at,
+                }
+              : inv
+          );
         }
       })
       // Leave Investment

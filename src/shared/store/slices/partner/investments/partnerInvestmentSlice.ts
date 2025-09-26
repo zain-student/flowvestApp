@@ -214,6 +214,31 @@ export const joinInvestment = createAsyncThunk(
     }
   }
 );
+export const leaveInvestment = createAsyncThunk(
+  "partnerInvestments/leaveInvestment",
+  async (id: number, { rejectWithValue }) => {
+    try {
+      console.log("Leaving investment:", id);
+      // Assuming the API endpoint for leaving an investment is as follows:
+      const res = await api.delete(API_ENDPOINTS.INVESTMENTS.LEAVE(id));
+      ToastAndroid.show(
+        res.data?.message || "Successfully left the investment",
+        ToastAndroid.SHORT
+      );
+      console.log("✅ Left investment:", id);
+      console.log("Response:", res.data);
+      return { id, message: res.data.message };
+    } catch (err: any) {
+       const errMsg =
+       err?.response?.data?.message ||
+        err?.message ||
+        "Failed to leave investment";
+      ToastAndroid.show(errMsg, ToastAndroid.SHORT);
+      console.log("❌ Leave investment error:", errMsg);
+      return rejectWithValue(errMsg);
+    }
+  }
+);
 
 const partnerInvestmentSlice = createSlice({
   name: "partnerInvestments",
@@ -305,7 +330,7 @@ const partnerInvestmentSlice = createSlice({
       .addCase(joinInvestment.fulfilled, (state, action) => {
         state.join.isJoining = false;
 
-        const participant = action.payload?.participant; 
+        const participant = action.payload?.participant;
         const updatedInvestment = participant?.investment;
 
         if (updatedInvestment) {
@@ -326,6 +351,18 @@ const partnerInvestmentSlice = createSlice({
           state.sharedPrograms.list = updateList(state.sharedPrograms.list);
           state.investments = updateList(state.investments);
         }
+      })
+      // Leave Investment
+      .addCase(leaveInvestment.fulfilled, (state, action) => {
+        state.investments = state.investments.filter(
+          (inv) => inv.id !== action.payload.id
+        );
+      })
+      .addCase(leaveInvestment.rejected, (state, action) => {
+        state.error = action.payload as string;
+      })
+      .addCase(leaveInvestment.pending, (state) => {
+        state.error = null;
       });
   },
 });

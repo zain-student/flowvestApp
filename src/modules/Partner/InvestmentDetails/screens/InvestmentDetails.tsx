@@ -1,6 +1,6 @@
 import { DashboardLayout } from "@/modules/Common/components/DashboardLayout";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { fetchPartnerParticipatingInvestments } from "@/shared/store/slices/partner/investments/partnerInvestmentSlice";
+import { fetchPartnerParticipatingInvestments, leaveInvestment } from "@/shared/store/slices/partner/investments/partnerInvestmentSlice";
 import { Feather } from "@expo/vector-icons";
 import Colors from "@shared/colors/Colors";
 import React, { useCallback, useEffect, useState } from "react";
@@ -63,26 +63,26 @@ export const InvestmentDetails = ({ navigation }: any) => {
           <Text style={styles.investmentParticipants}>Participants: {item.participants}</Text>
         </View>
       </View>
- {/* ➕ Leave Button */}
-    <TouchableOpacity
-      style={styles.leaveBtn}
-      onPress={() =>
-        Alert.alert(
-          "Leave Investment",
-          `Are you sure you want to leave "${item.name}"?`,
-          [
-            { text: "Cancel", style: "cancel" },
-            {
-              text: "Leave",
-              style: "destructive",
-              // onPress: () => dispatch(leaveInvestment(item.id)),
-            },
-          ]
-        )
-      }
-    >
-      <Text style={styles.leaveBtnText}>Leave Investment</Text>
-    </TouchableOpacity>
+      {/* Leave Button */}
+      <TouchableOpacity
+        style={styles.leaveBtn}
+        onPress={() =>
+          Alert.alert(
+            "Leave Investment",
+            `Are you sure you want to leave "${item.name}"?`,
+            [
+              { text: "Cancel", style: "cancel" },
+              {
+                text: "Leave",
+                style: "destructive",
+                onPress: () => dispatch(leaveInvestment(item.id)),
+              },
+            ]
+          )
+        }
+      >
+        <Text style={styles.leaveBtnText}>Leave Investment</Text>
+      </TouchableOpacity>
     </TouchableOpacity>
   );
   if (isLoading) {
@@ -180,17 +180,17 @@ const styles = StyleSheet.create({
     marginBottom: 18,
   },
   leaveBtn: {
-  marginTop: 12,
-  backgroundColor: Colors.error,   // or your danger color
-  paddingVertical: 8,
-  borderRadius: 6,
-  alignItems: "center",
-},
-leaveBtnText: {
-  color: Colors.white,
-  fontWeight: "600",
-  fontSize: 14,
-},
+    marginTop: 12,
+    backgroundColor: Colors.error,   // or your danger color
+    paddingVertical: 8,
+    borderRadius: 6,
+    alignItems: "center",
+  },
+  leaveBtnText: {
+    color: Colors.white,
+    fontWeight: "600",
+    fontSize: 14,
+  },
 
   balanceLabelDark: {
     color: Colors.gray,

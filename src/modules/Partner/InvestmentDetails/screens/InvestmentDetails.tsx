@@ -180,11 +180,13 @@ const styles = StyleSheet.create({
     marginBottom: 18,
   },
   leaveBtn: {
-    marginTop: 12,
-    backgroundColor: Colors.error,   // or your danger color
+    marginTop: 8,
+    backgroundColor: Colors.error,  
     paddingVertical: 8,
+    paddingHorizontal: 12,
     borderRadius: 6,
     alignItems: "center",
+    alignSelf: "flex-end",
   },
   leaveBtnText: {
     color: Colors.white,

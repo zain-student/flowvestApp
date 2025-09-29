@@ -6,23 +6,23 @@
 // import { DashboardScreen } from '@/modules/dashboard/Investor/screens/DashboardScreen';
 // import { ProfileScreen } from "@/modules/Common/profile/screens";
 import { PortfolioScreen } from "@/modules/Common/portfolio/screens/PortfolioScreen";
+import { PartnerPayoutScreen } from "@/modules/Partner/Activities/screens/PartnerPayoutScreen";
 import { InvestmentStack } from "@/navigation/InvestorStacks/InvestmentStack";
 import { InvestorDashboardStack } from "@/navigation/InvestorStacks/InvestorDashboardStack";
 import { PayoutStack } from "@/navigation/InvestorStacks/PayoutStack";
 import { useAppSelector } from "@/shared/store";
 import { Feather } from "@expo/vector-icons";
-import { MyActivity } from "@modules/Partner/Activities/screens/MyActivity";
 import { InvestmentDetails } from "@modules/Partner/InvestmentDetails/screens/InvestmentDetails";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useAppDispatch } from "@store/index";
 import React from "react";
 import {
-    Platform,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { PartnerDashboardStack } from "./PartnerStacks/PartnerDashboardStack";
 import { ProfileStack } from "./ProfileStacks/ProfileStack";
@@ -35,7 +35,7 @@ export type AppTabParamList = {
   Portfolio: undefined;
   Profile: undefined;
   PartnerDashboard: undefined;
-  Activity:undefined;
+  PartnerPayouts:undefined;
   InvestmentDetails :undefined;
 };
 
@@ -47,7 +47,7 @@ const TAB_ICONS: Record<string, keyof typeof Feather.glyphMap> = {
   Payouts: "dollar-sign",
   Portfolio: "folder",
   Profile: "user",
-  Activity:"activity",
+  PartnerPayouts:"dollar-sign",
   InvestmentDetails:'trending-up'
 };
 
@@ -57,7 +57,7 @@ const TAB_LABELS: Record<string, string> = {
   Payouts: "Payouts",
   Portfolio: "Portfolio",
   Profile: "Profile",
-  Activity:"MyActivities",
+  PartnerPayouts:"Payouts",
   InvestmentDetails:"InvestmentDetails"
 };
 
@@ -143,7 +143,7 @@ export const AppTabNavigator: React.FC = () => {
         <>
           <Tab.Screen name="Dashboard" component={PartnerDashboardStack} />
           <Tab.Screen name="InvestmentDetails" component={InvestmentDetails}/>
-          <Tab.Screen name="Activity" component={MyActivity}/>
+          <Tab.Screen name="PartnerPayouts" component={PartnerPayoutScreen}/>
           <Tab.Screen name="Portfolio" component={PortfolioScreen} />
           <Tab.Screen name="Profile" component={ProfileStack} />
         </>

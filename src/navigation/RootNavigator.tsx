@@ -19,8 +19,8 @@ import { AppTabNavigator } from "./AppTabNavigator";
 import { AuthStack } from "./AuthStack";
 import { InvestorDashboardStack } from "./InvestorStacks/InvestorDashboardStack";
 import { PartnerDashboardStack } from "./PartnerStacks/PartnerDashboardStack";
-import { PartnersActivityStack } from "./PartnerStacks/PartnersActivityStack";
 import { PartnersInvestmentDetailStack } from "./PartnerStacks/PartnersInvestmentDetailStack";
+import { PartnersPayoutStack } from "./PartnerStacks/PartnersPayoutStack";
 
 // Navigation types
 export type RootStackParamList = {
@@ -28,7 +28,7 @@ export type RootStackParamList = {
   InvestmentStack: undefined;
   InvestorDashboardStack: undefined;
   PartnerDashboardStack: undefined;
-  PartnersActivityStack: undefined;
+  PartnersPayoutStack: undefined;
   PartnerInvestmentStack: undefined;
   PayoutStack: undefined;
   AppTabs: undefined;
@@ -124,8 +124,8 @@ export const RootNavigator: React.FC = () => {
                   options={{ animationTypeForReplace: "push" }}
                 />
                 <Stack.Screen
-                  name="PartnersActivityStack"
-                  component={PartnersActivityStack}
+                  name="PartnersPayoutStack"
+                  component={PartnersPayoutStack}
                   options={{
                     animationTypeForReplace: "push",
                   }}

@@ -1,24 +1,24 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 // import { AddPartnerScreen } from '../../modules/dashboard/Investor/screens/AddPartnerScreen';
-import { MyActivity } from '@/modules/Partner/Activities/screens/MyActivity';
+import { PartnerPayoutScreen } from '@/modules/Partner/Activities/screens/PartnerPayoutScreen';
 
 export type PartnerActivityStackParamList = {
-  PartnersActivity: undefined;
+  PartnerPayouts: undefined;
  
 };
 const Stack = createNativeStackNavigator<PartnerActivityStackParamList>();
-export const PartnersActivityStack = () => {
+export const PartnersPayoutStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName="PartnersActivity"
+      initialRouteName="PartnerPayouts"
       screenOptions={{
         animation: 'slide_from_right',
       }}
       >
       <Stack.Screen
-        name="PartnersActivity"
-        component={MyActivity}
+        name="PartnerPayouts"
+        component={PartnerPayoutScreen}
         options={{
           headerShown: false,
           gestureEnabled: false,
@@ -28,5 +28,5 @@ export const PartnersActivityStack = () => {
   )
 }
 
-export default PartnersActivityStack;
+export default PartnersPayoutStack;
 

@@ -1,4 +1,4 @@
-import { PartnerActivityStackParamList } from "@/navigation/PartnerStacks/PartnersPayoutStack";
+import { PartnerPayoutStackParamList } from "@/navigation/PartnerStacks/PartnersPayoutStack";
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { fetchPayouts } from "@/shared/store/slices/partner/payout/PartnerPayoutSlice";
@@ -16,12 +16,12 @@ import {
 } from "react-native";
 import { DashboardLayout } from "../../../Common/components/DashboardLayout";
 const FILTERS = ["All", "Cancelled", "Scheduled", "Paid"];
-type props = NativeStackNavigationProp<PartnerActivityStackParamList, "PartnerPayouts">;
+type props = NativeStackNavigationProp<PartnerPayoutStackParamList, "PartnerPayouts">;
 export const PartnerPayoutScreen: React.FC = () => {
   const dispatch = useAppDispatch();
   const { payouts, totalPayoutAmount, isLoading, isLoadingMore, pagination } = useAppSelector((state) => state.payout);
   const [filter, setFilter] = useState("All");
-  const navigation = useNavigation<NativeStackNavigationProp<PartnerActivityStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<PartnerPayoutStackParamList>>();
 
   const formattedPayouts = payouts.map((pay: any) => ({
     id: pay.id,
@@ -55,8 +55,12 @@ export const PartnerPayoutScreen: React.FC = () => {
     <TouchableOpacity
       key={item.id}
       style={styles.payoutCard}
-    // onPress={() => navigation.navigate("PayoutDetails", { id: item.id })}
+      onPress={() => {
+        console.log("Navigating to details for payout ID:", item.id);
+        navigation.navigate("PartnerPayoutDetails", { id: item.id });
+      }}
     >
+
       <View style={{ flex: 1 }}>
         <Text style={styles.payoutAmount}>${item.amount.toLocaleString()}</Text>
         <Text style={styles.payoutAmount}>{item.title}</Text>
@@ -74,7 +78,6 @@ export const PartnerPayoutScreen: React.FC = () => {
       </Text>
     </TouchableOpacity>
   );
-  console.log("Payout IDs:", filtered.map(p => p.id));
   return (
     <DashboardLayout>
       <View style={styles.container}>

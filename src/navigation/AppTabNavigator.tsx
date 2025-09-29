@@ -6,7 +6,6 @@
 // import { DashboardScreen } from '@/modules/dashboard/Investor/screens/DashboardScreen';
 // import { ProfileScreen } from "@/modules/Common/profile/screens";
 import { PortfolioScreen } from "@/modules/Common/portfolio/screens/PortfolioScreen";
-import { PartnerPayoutScreen } from "@/modules/Partner/Activities/screens/PartnerPayoutScreen";
 import { InvestmentStack } from "@/navigation/InvestorStacks/InvestmentStack";
 import { InvestorDashboardStack } from "@/navigation/InvestorStacks/InvestorDashboardStack";
 import { PayoutStack } from "@/navigation/InvestorStacks/PayoutStack";
@@ -25,6 +24,7 @@ import {
   View,
 } from "react-native";
 import { PartnerDashboardStack } from "./PartnerStacks/PartnerDashboardStack";
+import PartnersPayoutStack from "./PartnerStacks/PartnersPayoutStack";
 import { ProfileStack } from "./ProfileStacks/ProfileStack";
 
 // Tab navigation types
@@ -143,7 +143,7 @@ export const AppTabNavigator: React.FC = () => {
         <>
           <Tab.Screen name="Dashboard" component={PartnerDashboardStack} />
           <Tab.Screen name="InvestmentDetails" component={InvestmentDetails}/>
-          <Tab.Screen name="PartnerPayouts" component={PartnerPayoutScreen}/>
+          <Tab.Screen name="PartnerPayouts" component={PartnersPayoutStack}/>
           <Tab.Screen name="Portfolio" component={PortfolioScreen} />
           <Tab.Screen name="Profile" component={ProfileStack} />
         </>

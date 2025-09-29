@@ -56,25 +56,6 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
     );
   }
   const handleJoinInvestment = async () => {
-    // if (!amount) {
-    //   ToastAndroid.show("Please enter an amount", ToastAndroid.SHORT);
-    //   return;
-    // }
-
-    // try {
-    //   await dispatch(
-    //     joinInvestment({
-    //       investmentId: currentInvestment.id,
-    //       amount: Number(amount),
-    //       notes: notes.trim(),
-    //     })
-    //   ).unwrap();
-
-    //   ToastAndroid.show("✅ Successfully joined the investment!", ToastAndroid.SHORT);
-    //   navigation.goBack(); // or refresh screen if needed
-    // } catch (err: any) {
-    //   console.log(err || "Failed to join investment");
-    // }
      if (!amount) return setFormError('Amount is required');
     if (isNaN(Number(amount)) || Number(amount) <= 0)
       return setFormError('Enter a valid positive amount');
@@ -166,16 +147,16 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
         <Text style={styles.sectionTitle}>Performance</Text>
         <View style={styles.txCard}>
           <Text style={styles.txType}>Total Paid Out</Text>
-          <Text style={styles.txAmount}>${currentInvestment.performance.total_paid_out}</Text>
+          <Text style={styles.txAmount}>${currentInvestment.performance?.total_paid_out ?? 0}</Text>
         </View>
         <View style={styles.txCard}>
           <Text style={styles.txType}>Pending Payouts</Text>
-          <Text style={styles.txAmount}>${currentInvestment.performance.pending_payouts}</Text>
+          <Text style={styles.txAmount}>${currentInvestment.performance?.pending_payouts ?? 0}</Text>
         </View>
         {currentInvestment.performance.next_payout_date && (
           <View style={styles.txCard}>
             <Text style={styles.txType}>Next Payout</Text>
-            <Text style={styles.txDate}>{currentInvestment.performance.next_payout_date}</Text>
+            <Text style={styles.txDate}>{currentInvestment.performance?.next_payout_date ?? 0}</Text>
           </View>
         )}
 

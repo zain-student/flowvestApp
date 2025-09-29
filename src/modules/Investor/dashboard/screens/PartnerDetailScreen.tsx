@@ -25,9 +25,9 @@ export const PartnerDetailScreen = () => {
     return <ActivityIndicator size="large" color="#131314ff" />;
   }
 
-  if (error) {
-    return <Text style={{ padding: 20, color: "red" }}>{error}</Text>;
-  }
+  // if (error) {
+  //   return <Text style={{ padding: 20, color: "red" }}>{error}</Text>;
+  // }
 
   if (!selectedPartner) {
     return <Text style={{ padding: 20 }}>No partner data available.</Text>;
@@ -94,7 +94,6 @@ export const PartnerDetailScreen = () => {
         loading={isLoading}
         onPress={() =>
           navigation.navigate("AddPartner", { partner })
-          // console.log("Editing partner.....")
         }
       />
 

@@ -93,13 +93,13 @@ export const InvestmentDetails = ({ navigation }: any) => {
     );
   }
 
-  if (error) {
-    return (
-      <DashboardLayout>
-        <Text style={{ color: "red", marginTop: 50, textAlign: "center" }}>{error}</Text>
-      </DashboardLayout>
-    );
-  }
+  // if (error) {
+  //   return (
+  //     <DashboardLayout>
+  //       <Text style={{ color: "red", marginTop: 50, textAlign: "center" }}>{error}</Text>
+  //     </DashboardLayout>
+  //   );
+  // }
 
   return (
     <DashboardLayout>

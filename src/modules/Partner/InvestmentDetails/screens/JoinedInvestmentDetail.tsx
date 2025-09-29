@@ -85,11 +85,11 @@ export const JoinedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
                 <Text style={styles.sectionTitle}>Performance</Text>
                 <View style={styles.txCard}>
                     <Text style={styles.txType}>Total Paid Out</Text>
-                    <Text style={styles.txAmount}>${currentInvestment.performance.total_paid_out}</Text>
+                    <Text style={styles.txAmount}>${currentInvestment.performance?.total_paid_out ?? 0}</Text>
                 </View>
                 <View style={styles.txCard}>
                     <Text style={styles.txType}>Pending Payouts</Text>
-                    <Text style={styles.txAmount}>${currentInvestment.performance.pending_payouts}</Text>
+                    <Text style={styles.txAmount}>${currentInvestment.performance?.pending_payouts ?? 0}</Text>
                 </View>
                 {currentInvestment.performance.next_payout_date && (
                     <View style={styles.txCard}>

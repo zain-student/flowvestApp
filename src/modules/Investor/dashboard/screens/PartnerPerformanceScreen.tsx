@@ -40,13 +40,13 @@ export const PartnerPerformanceScreen = ({ route }: any) => {
         );
     }
 
-    if (error) {
-        return (
-            <View style={styles.center}>
-                <Text style={{ color: "red" }}>{error}</Text>
-            </View>
-        );
-    }
+    // if (error) {
+    //     return (
+    //         <View style={styles.center}>
+    //             <Text style={{ color: "red" }}>{error}</Text>
+    //         </View>
+    //     );
+    // }
     return (
         <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 80 }}
             showsVerticalScrollIndicator={false}

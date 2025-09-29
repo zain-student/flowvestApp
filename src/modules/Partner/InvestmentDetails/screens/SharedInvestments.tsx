@@ -29,12 +29,12 @@ export const SharedInvestments: React.FC = ({navigation}: any) => {
       </View>
     );
 
-  if (error)
-    return (
-      <View style={styles.centered}>
-        <Text style={styles.errorText}>{error}</Text>
-      </View>
-    );
+  // if (error)
+  //   return (
+  //     <View style={styles.centered}>
+  //       <Text style={styles.errorText}>{error}</Text>
+  //     </View>
+  //   );
 
   if (!list.length)
     return (

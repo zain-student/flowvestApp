@@ -3,7 +3,6 @@ import { API_ENDPOINTS } from "@/config/env";
 import { storage, StorageKeys } from "@/shared/services/storage";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "@shared/services/api"; // Adjust the path as per your structure
-import { ToastAndroid } from "react-native";
 
 export interface CalculationBase {
   method: string; // "fixed" | "percentage"
@@ -52,6 +51,47 @@ export interface PayoutsResponse {
     pagination: Pagination;
   };
 }
+export interface PayoutStatistics {
+  total_payouts: number;
+  total_amount: number;
+  by_status: {
+    scheduled?: {
+      status: string;
+      count: number;
+      total_amount: string;
+    };
+    paid?: {
+      status: string;
+      count: number;
+      total_amount: string;
+    };
+    cancelled?: {
+      status: string;
+      count: number;
+      total_amount: string;
+    };
+    [key: string]: any;
+  };
+  by_type: {
+    [key: string]: {
+      status: string;
+      count: number;
+      total_amount: string;
+      payout_type: string;
+    };
+  };
+  monthly_trends: Array<{
+    status: string;
+    count: number;
+    total_amount: string;
+    payout_type: string;
+    month: string;
+  }>;
+  pending_amount: number;
+  paid_amount: number;
+  missed_amount: number;
+}
+
 interface PayoutState {
   payouts: Payout[];
   isLoading: boolean;
@@ -60,6 +100,8 @@ interface PayoutState {
   totalPayoutAmount: number;
   currentPayout: Payout | null;
   pagination: Pagination;
+  payoutStatistics: PayoutStatistics | null;
+  isStatsLoading: boolean;
 }
 
 const initialState: PayoutState = {
@@ -75,6 +117,8 @@ const initialState: PayoutState = {
     per_page: 15,
     total: 0,
   },
+  payoutStatistics: null,
+  isStatsLoading: false,
 };
 
 // Async thunk to fetch payouts
@@ -119,27 +163,19 @@ export const fetchPayoutsById = createAsyncThunk(
     return response.data.data;
   }
 );
-// Cancel Payout
-// slice.ts
-export const cancelPayout = createAsyncThunk<
-  { id: number }, // what we resolve back to reducers
-  number, // payload we accept (payoutId)
+// Payout Statistics
+export const fetchPayoutStatistics = createAsyncThunk<
+  PayoutStatistics,
+  void,
   { rejectValue: string }
->("v1/payouts/cancel", async (payoutId, { rejectWithValue }) => {
+>("v1/payouts/statistics/summary", async (_, { rejectWithValue }) => {
   try {
-    const response = await api.delete(API_ENDPOINTS.PAYOUTS.CANCEL(payoutId));
-
-    if (!response.data?.success) {
-      return rejectWithValue(
-        response.data?.message || "Failed to cancel payout"
-      );
-    }
-
-    ToastAndroid.show("Payout Cancelled successfully", ToastAndroid.SHORT);
-    return { id: payoutId };
+    const response = await api.get(API_ENDPOINTS.PAYOUTS.STATISTICS);
+    console.log("Payout statistics is :", response.data);
+    return response.data.data as PayoutStatistics;
   } catch (error: any) {
     return rejectWithValue(
-      error.response?.data?.message || "Failed to cancel payout"
+      error.response?.data?.message || "Failed to fetch payout statistics"
     );
   }
 });
@@ -196,6 +232,19 @@ const partnerPayoutSlice = createSlice({
       .addCase(fetchPayoutsById.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
+      })
+      // reducers for payout statistics
+      .addCase(fetchPayoutStatistics.pending, (state) => {
+        state.isStatsLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchPayoutStatistics.fulfilled, (state, action) => {
+        state.payoutStatistics = action.payload;
+        state.isStatsLoading = false;
+      })
+      .addCase(fetchPayoutStatistics.rejected, (state, action) => {
+        state.isStatsLoading = false;
+        state.error = (action.payload as string) || "Something went wrong";
       });
   },
 });

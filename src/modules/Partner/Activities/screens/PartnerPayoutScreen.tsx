@@ -1,7 +1,7 @@
 import { PartnerPayoutStackParamList } from "@/navigation/PartnerStacks/PartnersPayoutStack";
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { fetchPayouts } from "@/shared/store/slices/partner/payout/PartnerPayoutSlice";
+import { fetchPayouts, fetchPayoutStatistics } from "@/shared/store/slices/partner/payout/PartnerPayoutSlice";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -19,7 +19,7 @@ const FILTERS = ["All", "Cancelled", "Scheduled", "Paid"];
 type props = NativeStackNavigationProp<PartnerPayoutStackParamList, "PartnerPayouts">;
 export const PartnerPayoutScreen: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { payouts, totalPayoutAmount, isLoading, isLoadingMore, pagination } = useAppSelector((state) => state.payout);
+  const { payouts, totalPayoutAmount, isLoading, isLoadingMore, pagination,payoutStatistics,isStatsLoading } = useAppSelector((state) => state.userPayouts);
   const [filter, setFilter] = useState("All");
   const navigation = useNavigation<NativeStackNavigationProp<PartnerPayoutStackParamList>>();
 
@@ -39,6 +39,7 @@ export const PartnerPayoutScreen: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchPayouts(1));
+    dispatch(fetchPayoutStatistics());
   }, []);
   //  Load more when reaching end
   const handleLoadMore = () => {
@@ -82,14 +83,22 @@ export const PartnerPayoutScreen: React.FC = () => {
     <DashboardLayout>
       <View style={styles.container}>
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Total Payouts</Text>
-          <Text style={styles.cardValue}>${totalPayoutAmount.toFixed(1) ?? "--"}</Text>
+          <Text style={styles.cardTitle}>Total Payouts Amount</Text>
+          <Text style={styles.cardValue}>${payoutStatistics?.total_amount.toFixed(2) ?? "--"}</Text>
+         <View style={{ flexDirection: "row",justifyContent:'space-between'}}>
           <Text style={styles.cardSubtitle}>
             <Text style={{ color: Colors.gray, fontWeight: "400", fontFamily: "Inter_400Regular" }}>
-              Next payout:{" "}
+              Paid Amount:{" "}
             </Text>
-            July 15, 2024
+            ${payoutStatistics?.paid_amount.toFixed(2) ?? "--"}
           </Text>
+          <Text style={styles.cardSubtitle}>
+            <Text style={{ color: Colors.gray, fontWeight: "400", fontFamily: "Inter_400Regular" }}>
+              Total Payouts:{" "}
+            </Text>
+            {payoutStatistics?.total_payouts ?? "--"}
+          </Text>
+          </View>
           <View style={styles.balanceActionsRow}>
             <TouchableOpacity style={styles.balanceActionBtnDark}>
               <Feather name="plus" size={18} color="#fff" />

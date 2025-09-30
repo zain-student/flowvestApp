@@ -5,6 +5,7 @@ import { Feather } from "@expo/vector-icons";
 import Colors from "@shared/colors/Colors";
 import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 
 export const InvestmentDetails = ({ navigation }: any) => {
   const dispatch = useAppDispatch();
@@ -122,7 +123,9 @@ export const InvestmentDetails = ({ navigation }: any) => {
           </View>
         </View>
 
-
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+      contentContainerStyle={styles.scrollContent}>
         <View style={styles.card}>
           <Text style={styles.title}>Joined Investments Overview</Text>
           <Text style={styles.label}>Total Investments: <Text style={styles.value}>{summary.total_investments}</Text></Text>
@@ -145,6 +148,7 @@ export const InvestmentDetails = ({ navigation }: any) => {
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.5}
           refreshing={isLoading}
+          scrollEnabled={false}
           onRefresh={handleRefresh}
           showsVerticalScrollIndicator={false}
           ListFooterComponent={
@@ -159,6 +163,7 @@ export const InvestmentDetails = ({ navigation }: any) => {
             </View>
           }
         />
+      </ScrollView>
       </View>
     </DashboardLayout>
   );
@@ -166,6 +171,10 @@ export const InvestmentDetails = ({ navigation }: any) => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background, paddingBottom: 80 },
+   scrollContent: {
+    // flex:1,
+    paddingBottom: 100, backgroundColor: Colors.background
+  },
   // innerContainer: { paddingHorizontal: 16 },
   balanceCardDark: {
     backgroundColor: Colors.secondary,

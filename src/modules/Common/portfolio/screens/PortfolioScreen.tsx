@@ -198,7 +198,7 @@ export const PortfolioScreen: React.FC = () => {
 const styles = StyleSheet.create({
   scrollContent: {
     // flex:1,
-    paddingBottom: 100, backgroundColor: Colors.background
+    paddingBottom: 60, backgroundColor: Colors.background
   },
   card: {
     backgroundColor: Colors.secondary,

@@ -3,7 +3,7 @@ import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { fetchPortfolio } from "@/shared/store/slices/investor/portfolio/portfolioSlice";
 import { Feather, Ionicons } from "@expo/vector-icons";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Dimensions,
@@ -54,7 +54,8 @@ const renderAssets = ({ item }: any) => (
 // };
 export const PortfolioScreen: React.FC = () => {
   const dispatch = useAppDispatch()
-  const { isLoading, error, data } = useAppSelector((state) => state.portfolio)
+  const { isLoading, error, data } = useAppSelector((state) => state.portfolio);
+  const [activeChart, setActiveChart] = useState<"roi" | "earned">("roi");
   useEffect(() => {
     dispatch(fetchPortfolio())
   }, [dispatch])
@@ -67,6 +68,31 @@ export const PortfolioScreen: React.FC = () => {
       expected_return_rate: `${Number(inv.expected_return_rate ?? 0).toFixed(2)}%`,
       start: inv.start_date,
     })) ?? [];
+  // Prepare data for the chart
+  const performance = data?.performance;
+
+  const labels = ["All Time", "Year", "Quarter", "Month"];
+  const roiValues = [
+    performance?.all_time?.roi_percentage ?? 30,
+    performance?.year?.roi_percentage ?? 0,
+    performance?.quarter?.roi_percentage ?? 0,
+    performance?.month?.roi_percentage ?? 0,
+  ];
+  const earnedValues = [
+    performance?.all_time?.total_earned ?? 0,
+    performance?.year?.total_earned ?? 0,
+    performance?.quarter?.total_earned ?? 0,
+    performance?.month?.total_earned ?? 0,
+  ];
+  const chartConfig = {
+    backgroundGradientFrom: "#fff",
+    backgroundGradientTo: "#fff",
+    decimalPlaces: 2,
+    color: (opacity = 1) => `rgba(0,0,0,${opacity})`,
+    labelColor: (opacity = 1) => `rgba(0,0,0,${opacity})`,
+    propsForDots: { r: "5", strokeWidth: "2" },
+  };
+
   return (
     <DashboardLayout>
 
@@ -88,93 +114,58 @@ export const PortfolioScreen: React.FC = () => {
 
 
       <View style={styles.chartContainer}>
-        {/* <LineChart
-          data={{
-            labels: ["All Time", "Year", "Quarter", "Month"],
-            datasets: [
-              {
-                data: [
-                  data?.performance?.all_time?.roi_percentage ?? 0,
-                  data?.performance?.year?.roi_percentage ?? 0,
-                  data?.performance?.quarter?.roi_percentage ?? 0,
-                  data?.performance?.month?.roi_percentage ?? 0,
-                ],
-              },
-            ],
-          }}
-          width={screenWidth - 32}
-          height={200}
-          yAxisSuffix="%"
-          fromZero
-          chartConfig={{
-            backgroundGradientFrom: "#fff",
-            backgroundGradientTo: "#fff",
-            color: (opacity = 1) => `rgba(34, 197, 94, ${opacity})`,
-            labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-            propsForBackgroundLines: {
-              strokeWidth: 1,
-              stroke: "#e3e3e3",
-              strokeDasharray: "0",
-            },
-            propsForDots: {
-              r: "5",
-              strokeWidth: "2",
-              stroke: "#22c55e",
-            },
-          }}
-          bezier
-          style={{
-            borderRadius: 12,
-          }}
-        />
-        <Text style={styles.chartLabel}>Performance ROI %</Text> */}
-        <LineChart
-          data={{
-            labels: ["All Time", "Year", "Quarter", "Month"],
-            datasets: [
-              {
-                data: [
-                  data?.performance?.all_time?.roi_percentage ?? 0,
-                  data?.performance?.year?.roi_percentage ?? 0,
-                  data?.performance?.quarter?.roi_percentage ?? 0,
-                  data?.performance?.month?.roi_percentage ?? 0,
-                ],
-              },
-            ],
-          }}
-          width={screenWidth - 32}
-          height={220}
-          yAxisSuffix="%"
-          fromZero
-          withDots
-          withShadow
-          bezier
-          chartConfig={{
-            backgroundGradientFrom: "#fff",
-            backgroundGradientTo: "#fff",
-            decimalPlaces: 2,
-            color: (opacity = 1) => `rgba(34, 197, 94, ${opacity})`,
-            labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-            propsForDots: {
-              r: "5",
-              strokeWidth: "2",
-              stroke: "#22c55e",
-              fill: "#22c55e",
-            },
-            propsForBackgroundLines: {
-              strokeWidth: 1,
-              stroke: "#e3e3e3",
-              strokeDasharray: "0",
-            },
-          }}
-          style={{
-            borderRadius: 12,
-            marginVertical: 8,
-          }}
-        />
-        <Text style={styles.chartLabel}>
-          Performance ROI % — Earned ${data?.performance?.all_time?.total_earned}
-        </Text>
+        <View style={{ flexDirection: "row", justifyContent: "center", marginBottom: 12 }}>
+          <TouchableOpacity
+            style={[styles.toggleBtn, activeChart === "roi" && styles.toggleBtnActive]}
+            onPress={() => setActiveChart("roi")}
+          >
+            <Text style={[styles.toggleBtnText, activeChart === "roi" && styles.toggleBtnTextActive]}>
+              ROI %
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.toggleBtn, activeChart === "earned" && styles.toggleBtnActive]}
+            onPress={() => setActiveChart("earned")}
+          >
+            <Text style={[styles.toggleBtnText, activeChart === "earned" && styles.toggleBtnTextActive]}>
+              Earned
+            </Text>
+          </TouchableOpacity>
+        </View>
+        {activeChart === "roi" ? (
+          <LineChart
+            data={{
+              labels,
+              datasets: [
+                { data: roiValues, color: () => "rgba(34,197,94,1)", strokeWidth: 2 },
+              ],
+              legend: ["ROI %"],
+            }}
+            width={screenWidth - 32}
+            height={220}
+            fromZero
+            bezier
+            chartConfig={chartConfig}
+            style={styles.chart}
+          />
+        ) : (
+          <LineChart
+            data={{
+              labels,
+              datasets: [
+                { data: earnedValues, color: () => "rgba(59,130,246,1)", strokeWidth: 2 },
+              ],
+              legend: ["Total Earned"],
+            }}
+            width={screenWidth - 32}
+            height={220}
+            fromZero
+            bezier
+            chartConfig={chartConfig}
+            style={styles.chart}
+          />
+        )}
 
       </View>
 
@@ -221,6 +212,25 @@ const styles = StyleSheet.create({
     color: Colors.white,
     marginBottom: 4,
   },
+  toggleBtn: {
+    paddingVertical: 6,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: Colors.green,
+    marginHorizontal: 6,
+  },
+  toggleBtnActive: {
+    backgroundColor: Colors.green,
+  },
+  toggleBtnText: {
+    color: Colors.green,
+    fontWeight: "600",
+  },
+  toggleBtnTextActive: {
+    color: "#fff",
+  },
+  chart: { borderRadius: 12, marginVertical: 8 },
 
   cardSubtitle: { fontSize: 14, color: Colors.gray },
   balanceActionBtnDark: {

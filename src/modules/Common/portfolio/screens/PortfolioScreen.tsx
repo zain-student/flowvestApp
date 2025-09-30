@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Dimensions,
   FlatList,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -111,75 +112,80 @@ export const PortfolioScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
       </View>
-
-
-      <View style={styles.chartContainer}>
-        <View style={{ flexDirection: "row", justifyContent: "center", marginBottom: 12 }}>
-          <TouchableOpacity
-            style={[styles.toggleBtn, activeChart === "roi" && styles.toggleBtnActive]}
-            onPress={() => setActiveChart("roi")}
-          >
-            <Text style={[styles.toggleBtnText, activeChart === "roi" && styles.toggleBtnTextActive]}>
-              ROI %
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.toggleBtn, activeChart === "earned" && styles.toggleBtnActive]}
-            onPress={() => setActiveChart("earned")}
-          >
-            <Text style={[styles.toggleBtnText, activeChart === "earned" && styles.toggleBtnTextActive]}>
-              Earned
-            </Text>
-          </TouchableOpacity>
-        </View>
-        {activeChart === "roi" ? (
-          <LineChart
-            data={{
-              labels,
-              datasets: [
-                { data: roiValues, color: () => "rgba(34,197,94,1)", strokeWidth: 2 },
-              ],
-              legend: ["ROI %"],
-            }}
-            width={screenWidth - 32}
-            height={220}
-            fromZero
-            bezier
-            chartConfig={chartConfig}
-            style={styles.chart}
-          />
-        ) : (
-          <LineChart
-            data={{
-              labels,
-              datasets: [
-                { data: earnedValues, color: () => "rgba(59,130,246,1)", strokeWidth: 2 },
-              ],
-              legend: ["Total Earned"],
-            }}
-            width={screenWidth - 32}
-            height={220}
-            fromZero
-            bezier
-            chartConfig={chartConfig}
-            style={styles.chart}
-          />
-        )}
-
-      </View>
-
-      <Text style={styles.sectionTitle}>Investments Assets</Text>
-      <FlatList
-        data={assets}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderAssets}
+      <ScrollView
         showsVerticalScrollIndicator={false}
-        ListFooterComponent={
-          isLoading ? <ActivityIndicator size="small" color={Colors.green} /> : null
-        }
-        contentContainerStyle={styles.scrollContent}
-      />
+      contentContainerStyle={styles.scrollContent}>
+        <View style={styles.chartContainer}>
+          <View style={{ flexDirection: "row", justifyContent: "center", marginTop: 3 }}>
+            <TouchableOpacity
+              style={[styles.toggleBtn, activeChart === "roi" && styles.toggleBtnActive]}
+              onPress={() => setActiveChart("roi")}
+            >
+              <Text style={[styles.toggleBtnText, activeChart === "roi" && styles.toggleBtnTextActive]}>
+                ROI %
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.toggleBtn, activeChart === "earned" && styles.toggleBtnActive]}
+              onPress={() => setActiveChart("earned")}
+            >
+              <Text style={[styles.toggleBtnText, activeChart === "earned" && styles.toggleBtnTextActive]}>
+                Earned
+              </Text>
+            </TouchableOpacity>
+          </View>
+          {activeChart === "roi" ? (
+            <LineChart
+              data={{
+                labels,
+                datasets: [
+                  { data: roiValues, color: () => "rgba(34,197,94,1)", strokeWidth: 2 },
+                ],
+                legend: ["ROI %"],
+              }}
+              width={screenWidth - 32}
+              height={220}
+              fromZero
+              bezier
+              yAxisSuffix="%"
+              chartConfig={chartConfig}
+              style={styles.chart}
+            />
+          ) : (
+            <LineChart
+              data={{
+                labels,
+                datasets: [
+                  { data: earnedValues, color: () => "rgba(59,130,246,1)", strokeWidth: 2 },
+                ],
+                legend: ["Total Earned"],
+              }}
+              width={screenWidth - 32}
+              height={220}
+              fromZero
+              bezier
+              yAxisSuffix="$"
+              chartConfig={chartConfig}
+              style={styles.chart}
+            />
+          )}
+
+        </View>
+
+        <Text style={styles.sectionTitle}>Investments Assets</Text>
+        <FlatList
+          data={assets}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderAssets}
+          showsVerticalScrollIndicator={false}
+          scrollEnabled={false}
+          ListFooterComponent={
+            isLoading ? <ActivityIndicator size="small" color={Colors.green} /> : null
+          }
+          contentContainerStyle={styles.scrollContent}
+        />
+      </ScrollView>
       <TouchableOpacity style={styles.fab}>
 
         <Ionicons name="document-outline" size={24} color={"white"} />

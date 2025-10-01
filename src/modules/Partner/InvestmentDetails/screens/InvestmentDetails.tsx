@@ -123,47 +123,47 @@ export const InvestmentDetails = ({ navigation }: any) => {
           </View>
         </View>
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-      contentContainerStyle={styles.scrollContent}>
-        <View style={styles.card}>
-          <Text style={styles.title}>Joined Investments Overview</Text>
-          <Text style={styles.label}>Total Investments: <Text style={styles.value}>{summary.total_investments}</Text></Text>
-          <Text style={styles.label}>Active Investments: <Text style={styles.value}>{summary.active_investments}</Text></Text>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text style={styles.label}>Current Value: <Text style={styles.value}>${summary.current_value}</Text></Text>
-            {/* <Text style={styles.label}>Duration: <Text style={styles.value}>12 Months</Text></Text> */}
-            <TouchableOpacity style={styles.balanceActionBtnDark} onPress={() => { navigation.navigate('PartnerInvestmentStack', { screen: 'SharedInvestments' }) }}>
-              <Text style={styles.balanceActionTextDark}>
-                Shared Investments
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        {/* Investment List */}
-        <FlatList
-          data={filtered}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={renderInvestment}
-          onEndReached={handleLoadMore}
-          onEndReachedThreshold={0.5}
-          refreshing={isLoading}
-          scrollEnabled={false}
-          onRefresh={handleRefresh}
+        <ScrollView
           showsVerticalScrollIndicator={false}
-          ListFooterComponent={
-            isLoadingMore ? (
-              <ActivityIndicator size="small" color={Colors.green} />
-            ) : null
-          }
-          contentContainerStyle={{ paddingBottom: 10 }}
-          ListEmptyComponent={
-            <View style={styles.emptyState}>
-              <Text style={styles.emptyText}>No shared investments available.</Text>
+          contentContainerStyle={styles.scrollContent}>
+          <View style={styles.card}>
+            <Text style={styles.title}>Joined Investments Overview</Text>
+            <Text style={styles.label}>Total Investments: <Text style={styles.value}>{summary.total_investments}</Text></Text>
+            <Text style={styles.label}>Active Investments: <Text style={styles.value}>{summary.active_investments}</Text></Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text style={styles.label}>Current Value: <Text style={styles.value}>${summary.current_value}</Text></Text>
+              {/* <Text style={styles.label}>Duration: <Text style={styles.value}>12 Months</Text></Text> */}
+              <TouchableOpacity style={styles.balanceActionBtnDark} onPress={() => { navigation.navigate('PartnerInvestmentStack', { screen: 'SharedInvestments' }) }}>
+                <Text style={styles.balanceActionTextDark}>
+                  Shared Investments
+                </Text>
+              </TouchableOpacity>
             </View>
-          }
-        />
-      </ScrollView>
+          </View>
+          {/* Investment List */}
+          <FlatList
+            data={filtered}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={renderInvestment}
+            onEndReached={handleLoadMore}
+            onEndReachedThreshold={0.5}
+            refreshing={isLoading}
+            scrollEnabled={false}
+            onRefresh={handleRefresh}
+            showsVerticalScrollIndicator={false}
+            ListFooterComponent={
+              isLoadingMore ? (
+                <ActivityIndicator size="small" color={Colors.green} />
+              ) : null
+            }
+            contentContainerStyle={{ paddingBottom: 10 }}
+            ListEmptyComponent={
+              <View style={styles.emptyState}>
+                <Text style={styles.emptyText}>No shared investments available.</Text>
+              </View>
+            }
+          />
+        </ScrollView>
       </View>
     </DashboardLayout>
   );
@@ -171,9 +171,9 @@ export const InvestmentDetails = ({ navigation }: any) => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background, paddingBottom: 80 },
-   scrollContent: {
+  scrollContent: {
     // flex:1,
-    paddingBottom: 100, backgroundColor: Colors.background
+    paddingBottom: 0, backgroundColor: Colors.background
   },
   // innerContainer: { paddingHorizontal: 16 },
   balanceCardDark: {
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
   },
   leaveBtn: {
     marginTop: 8,
-    backgroundColor: Colors.error,  
+    backgroundColor: Colors.error,
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 6,
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
   },
   balanceActionsRow: { flexDirection: "row", marginTop: 18 },
   balanceActionBtnDark: {
-    width: '60%',
+    width: '50%',
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",

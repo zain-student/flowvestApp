@@ -74,7 +74,7 @@ export const PortfolioScreen: React.FC = () => {
 
   const labels = ["All Time", "Year", "Quarter", "Month"];
   const roiValues = [
-    performance?.all_time?.roi_percentage ?? 30,
+    performance?.all_time?.roi_percentage ?? 0,
     performance?.year?.roi_percentage ?? 0,
     performance?.quarter?.roi_percentage ?? 0,
     performance?.month?.roi_percentage ?? 0,

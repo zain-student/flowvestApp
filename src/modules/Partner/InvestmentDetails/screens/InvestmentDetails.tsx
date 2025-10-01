@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { fetchPartnerParticipatingInvestments, leaveInvestment } from "@/shared/store/slices/partner/investments/partnerInvestmentSlice";
 import { Feather } from "@expo/vector-icons";
 import Colors from "@shared/colors/Colors";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -16,15 +16,15 @@ export const InvestmentDetails = ({ navigation }: any) => {
   useEffect(() => {
     dispatch(fetchPartnerParticipatingInvestments(1));
   }, [dispatch]);
-  // const handleLoadMore = useCallback(() => {
-  //   if (!isLoadingMore && meta?.pagination?.has_more_pages) {
-  //     dispatch(fetchPartnerParticipatingInvestments(meta.pagination.current_page + 1));
-  //   }
-  // }, [isLoadingMore, meta]);
+  const handleLoadMore = useCallback(() => {
+    if (!isLoadingMore && meta?.pagination?.has_more_pages) {
+      dispatch(fetchPartnerParticipatingInvestments(meta.pagination.current_page + 1));
+    }
+  }, [isLoadingMore, meta]);
 
-  // const handleRefresh = () => {
-  //   dispatch(fetchPartnerParticipatingInvestments(1));
-  // };
+  const handleRefresh = () => {
+    dispatch(fetchPartnerParticipatingInvestments(1));
+  };
   const formattedInvestments = investments.map((inv: any) => ({
     id: inv.id,
     name: inv.name,
@@ -145,11 +145,11 @@ export const InvestmentDetails = ({ navigation }: any) => {
           data={filtered}
           keyExtractor={(item) => item.id.toString()}
           renderItem={renderInvestment}
-          // onEndReached={handleLoadMore}
+          onEndReached={handleLoadMore}
           onEndReachedThreshold={0.5}
           refreshing={isLoading}
           scrollEnabled={false}
-          // onRefresh={handleRefresh}
+          onRefresh={handleRefresh}
           showsVerticalScrollIndicator={false}
           ListFooterComponent={
             isLoadingMore ? (
@@ -222,8 +222,10 @@ const styles = StyleSheet.create({
   },
   balanceActionsRow: { flexDirection: "row", marginTop: 18 },
   balanceActionBtnDark: {
+    width: '60%',
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     backgroundColor: Colors.darkButton,
     borderRadius: 18,
     paddingHorizontal: 10,

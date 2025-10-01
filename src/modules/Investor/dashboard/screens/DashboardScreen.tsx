@@ -314,6 +314,7 @@ const styles = StyleSheet.create({
   },
   balanceActionsRow: { flexDirection: "row", marginTop: 18 },
   balanceActionBtnDark: {
+    width: '40%',
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: Colors.darkButton,

@@ -151,7 +151,7 @@ export const fetchPartnerParticipatingInvestments = createAsyncThunk(
         summary,
         page,
       });
-      ToastAndroid.show("Investments data cached", ToastAndroid.SHORT);
+      // ToastAndroid.show("Investments data cached", ToastAndroid.SHORT);
       console.log("Fetched investments:", investments);
       return { investments, meta, summary, page };
     } catch (error: any) {

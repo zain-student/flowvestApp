@@ -10,8 +10,8 @@ import { AddPartnerScreen } from '../../modules/Investor/dashboard/screens/AddPa
 import { DashboardScreen } from '../../modules/Investor/dashboard/screens/DashboardScreen';
 export type InvestorDashboardStackParamList = {
   InvestorDashboard: undefined;
-  AddPartner: { partner?: any };
-  // AddPartner: undefined;
+  // AddPartner: { partner?: any };
+  AddPartner: undefined;
   PartnerDetail: { id: number };
   PartnerInvestment: { id: number };
   PartnerPayout: { id: number };

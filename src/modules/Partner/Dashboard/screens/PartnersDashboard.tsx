@@ -112,8 +112,10 @@ const styles = StyleSheet.create({
   },
   balanceActionsRow: { flexDirection: "row", marginTop: 18 },
   balanceActionBtnDark: {
+    width: '60%',
     flexDirection: "row",
     alignItems: "center",
+      justifyContent: "center",
     backgroundColor: Colors.darkButton,
     borderRadius: 18,
     paddingHorizontal: 10,

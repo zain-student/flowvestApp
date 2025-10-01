@@ -157,8 +157,10 @@ const styles = StyleSheet.create({
   },
   cardSubtitle: { fontSize: 14, color: Colors.green },
   balanceActionBtnDark: {
+    width: '40%',
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     backgroundColor: Colors.darkButton,
     borderRadius: 18,
     paddingHorizontal: 18,

@@ -56,7 +56,7 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
     );
   }
   const handleJoinInvestment = async () => {
-     if (!amount) return setFormError('Amount is required');
+    if (!amount) return setFormError('Amount is required');
     if (isNaN(Number(amount)) || Number(amount) <= 0)
       return setFormError('Enter a valid positive amount');
 
@@ -110,7 +110,7 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
               type="number"
               placeholder="Enter your investment amount"
               value={amount}
-             onChangeText={(v) => {
+              onChangeText={(v) => {
                 setAmount(v);
                 if (formError) setFormError('');
               }}
@@ -130,16 +130,17 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
             // required
             // autoFocus
             />
-             {formError ? <Text style={styles.error}>{formError}</Text> : null}
-            {joinError ? <Text style={styles.error}>{joinError}</Text> : null}
+            {formError ? <Text style={styles.error}>{formError}</Text> : null}
+            {/* {joinError ? <Text style={styles.error}>{joinError}</Text> : null} */}
 
             <Button
-              title={isJoining ? "Joining..." : "Join Investment"}
+              // title={isJoining ? "Joining..." : "Join Investment"}
+              title="Join Investment"
               onPress={handleJoinInvestment}
               disabled={isJoining}
               style={{ marginTop: 5, backgroundColor: Colors.primary, borderColor: Colors.lightGray }}
             />
-            {joinError && <Text style={{ color: "red", marginTop: 6 }}>{joinError}</Text>}
+            {/* {joinError && <Text style={{ color: "red", marginTop: 6 }}>{joinError}</Text>} */}
           </>
         }
 

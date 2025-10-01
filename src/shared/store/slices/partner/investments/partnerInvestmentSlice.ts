@@ -161,6 +161,7 @@ export const fetchPartnerParticipatingInvestments = createAsyncThunk(
     }
   }
 );
+// Fetch Available Shared Programs that partner can join
 export const fetchAvailableSharedPrograms = createAsyncThunk(
   "/v1/shared-programs",
   async (_, { rejectWithValue }) => {
@@ -195,7 +196,6 @@ export const joinInvestment = createAsyncThunk(
       if (!joined) {
         return rejectWithValue("Join investment failed: No data returned");
       }
-
       ToastAndroid.show(
         response.data?.message || "Investment joined successfully",
         ToastAndroid.SHORT
@@ -320,84 +320,49 @@ const partnerInvestmentSlice = createSlice({
         state.join.isJoining = true;
         state.join.error = null;
       })
-      // .addCase(joinInvestment.rejected, (state, action) => {
-      //   state.join.isJoining = false;
-      //   state.join.error = action.payload as string;
-      // })
-      // .addCase(joinInvestment.fulfilled, (state, action) => {
-      //   state.join.isJoining = false;
 
-      //   const participant = action.payload?.participant;
-      //   const updatedInvestment = participant?.investment;
-
-      //   if (updatedInvestment) {
-      //     // Update in both investments and sharedPrograms lists
-      //     const updateList = (list: PartnerInvestment[]) =>
-      //       list.map((inv) =>
-      //         inv.id === updatedInvestment.id
-      //           ? {
-      //               ...inv,
-      //               ...updatedInvestment,
-      //               is_participant: true,
-      //               my_investment: participant.invested_amount,
-      //               joined_at: participant.joined_at,
-      //             }
-      //           : inv
-      //       );
-
-      //     state.sharedPrograms.list = updateList(state.sharedPrograms.list);
-      //     state.investments = updateList(state.investments);
-      //   }
-      // })
       .addCase(joinInvestment.fulfilled, (state, action) => {
         state.join.isJoining = false;
-
         const participant = action.payload?.participant;
         const updatedInvestment = participant?.investment;
 
-        if (updatedInvestment) {
-          // ✅ 1️⃣ Update if it exists
-          const exists = state.investments.some(
-            (inv) => inv.id === updatedInvestment.id
-          );
-          if (exists) {
-            state.investments = state.investments.map((inv) =>
-              inv.id === updatedInvestment.id
-                ? {
-                    ...inv,
-                    ...updatedInvestment,
-                    is_participant: true,
-                    my_investment: participant.invested_amount,
-                    joined_at: participant.joined_at,
-                  }
-                : inv
-            );
-          } else {
-            // ✅ 2️⃣ Add if it's a brand-new joined investment
-            state.investments = [
-              {
-                ...updatedInvestment,
-                is_participant: true,
-                my_investment: participant.invested_amount,
-                joined_at: participant.joined_at,
-              },
-              ...state.investments, // prepend so it appears at the top
-            ];
-          }
+        if (!updatedInvestment) return;
 
-          // Optional: update sharedPrograms list as well
-          state.sharedPrograms.list = state.sharedPrograms.list.map((inv) =>
-            inv.id === updatedInvestment.id
-              ? {
-                  ...inv,
-                  ...updatedInvestment,
-                  is_participant: true,
-                  my_investment: participant.invested_amount,
-                  joined_at: participant.joined_at,
-                }
-              : inv
+        // Always create a safe object with required defaults
+        const safeInvestment = {
+          ...updatedInvestment,
+          is_participant: true,
+          my_investment: participant?.invested_amount ?? 0,
+          joined_at: participant?.joined_at ?? null,
+          performance: updatedInvestment.performance ?? {
+            total_earned: 0,
+            next_payout_date: null,
+            payouts_count: 0,
+          },
+        };
+
+        // 🔹 Update if already exists
+        const exists = state.investments.some(
+          (inv) => inv.id === safeInvestment.id
+        );
+        if (exists) {
+          state.investments = state.investments.map((inv) =>
+            inv.id === safeInvestment.id ? { ...inv, ...safeInvestment } : inv
           );
+        } else {
+          // 🔹 Add new if not exists
+          state.investments = [safeInvestment, ...state.investments];
         }
+
+        // 🔹 Keep sharedPrograms in sync (safe merge)
+        state.sharedPrograms.list = state.sharedPrograms.list.map((inv) =>
+          inv.id === safeInvestment.id ? { ...inv, ...safeInvestment } : inv
+        );
+      })
+
+      .addCase(joinInvestment.rejected, (state, action) => {
+        state.join.isJoining = false;
+        state.join.error = action.payload as string;
       })
       // Leave Investment
       .addCase(leaveInvestment.fulfilled, (state, action) => {

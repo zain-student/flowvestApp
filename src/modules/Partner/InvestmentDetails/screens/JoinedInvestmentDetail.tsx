@@ -72,7 +72,7 @@ export const JoinedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
                         }
                     />
                     <LabelValue label="Total Participants" value={`${currentInvestment.total_participants ?? 0}`} />
-                    <LabelValue label="Type" value={currentInvestment.type} />
+                    {/* <LabelValue label="Type" value={currentInvestment.type} /> */}
                     <LabelValue
                         label="Returns"
                         value={`${parseFloat(currentInvestment.expected_return_rate).toFixed(1)}%`}

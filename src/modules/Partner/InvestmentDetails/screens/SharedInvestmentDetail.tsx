@@ -101,8 +101,34 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
           <LabelValue label="Start Date" value={currentInvestment.start_date} />
           <LabelValue label="End Date" value={currentInvestment.end_date} />
         </View>
+        <Text style={styles.sectionTitle}>Performance</Text>
+        <View style={styles.txCard}>
+          <Text style={styles.txType}>Total Paid Out</Text>
+          <Text style={styles.txAmount}>${currentInvestment.performance?.total_paid_out ?? 0}</Text>
+        </View>
+        <View style={styles.txCard}>
+          <Text style={styles.txType}>Pending Payouts</Text>
+          <Text style={styles.txAmount}>${currentInvestment.performance?.pending_payouts ?? 0}</Text>
+        </View>
+        {currentInvestment.performance.next_payout_date && (
+          <View style={styles.txCard}>
+            <Text style={styles.txType}>Next Payout</Text>
+            <Text style={styles.txDate}>{currentInvestment.performance?.next_payout_date ?? 0}</Text>
+          </View>
+        )}
         {showJoinForm &&
-          <>
+          <View style={{ marginBottom: 20, marginTop: 5, width: '100%',borderWidth:1,
+            borderColor: Colors.lightGray, borderRadius: 8, padding: 10,
+            backgroundColor: Colors.white,
+            shadowColor: "#000",
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5,
+           }} >
             <Text style={styles.sectionTitle}>Join This Investment</Text>
 
             <Input
@@ -141,25 +167,11 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
               style={{ marginTop: 5, backgroundColor: Colors.primary, borderColor: Colors.lightGray }}
             />
             {/* {joinError && <Text style={{ color: "red", marginTop: 6 }}>{joinError}</Text>} */}
-          </>
+          </View>
         }
 
 
-        <Text style={styles.sectionTitle}>Performance</Text>
-        <View style={styles.txCard}>
-          <Text style={styles.txType}>Total Paid Out</Text>
-          <Text style={styles.txAmount}>${currentInvestment.performance?.total_paid_out ?? 0}</Text>
-        </View>
-        <View style={styles.txCard}>
-          <Text style={styles.txType}>Pending Payouts</Text>
-          <Text style={styles.txAmount}>${currentInvestment.performance?.pending_payouts ?? 0}</Text>
-        </View>
-        {currentInvestment.performance.next_payout_date && (
-          <View style={styles.txCard}>
-            <Text style={styles.txType}>Next Payout</Text>
-            <Text style={styles.txDate}>{currentInvestment.performance?.next_payout_date ?? 0}</Text>
-          </View>
-        )}
+        
 
       </ScrollView>
     </View>
@@ -199,7 +211,7 @@ const styles = StyleSheet.create({
   value: { fontSize: 16, color: Colors.white, fontWeight: "600" },
   statusActive: { color: Colors.green },
   statusCompleted: { color: Colors.gray },
-  sectionTitle: { fontSize: 16, fontWeight: "600", color: Colors.secondary, marginBottom: 10 },
+  sectionTitle: { fontSize: 16, fontWeight: "600", color: Colors.secondary, marginBottom: 5 },
   txCard: {
     backgroundColor: Colors.secondary,
     borderRadius: 10,

@@ -69,6 +69,28 @@ export const InvestmentsScreen: React.FC = () => {
         <Text style={styles.investmentName}>{item.name}</Text>
         <Text style={styles.investmentAmount}>Amount: ${item.amount}</Text>
         <Text style={styles.investmentDate}>Started: {item.date}</Text>
+       <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8 ,justifyContent: 'space-between' }}>
+         {/* View partners of investment */}
+        <TouchableOpacity
+          onPress={() => console.log("View partners for investment ID:", item.id)
+            //  navigation.navigate("InvestmentPartners", { id: item.id })
+          }
+          style={styles.partnerButton}
+        >
+          <Text style={{ color: Colors.gray, marginBottom: 4, fontSize: 18 }}>Partners</Text>
+          <Feather name="users" size={20} color={Colors.gray} />
+        </TouchableOpacity>
+        {/* Add partner to investment button */}
+        <TouchableOpacity
+          onPress={() => console.log("Add partner for investment ID:", item.id)
+            // navigation.navigate("AddInvestmentPartner", { id: item.id })
+          }
+          style={[styles.partnerButton, { marginTop: 8 }]}
+        >
+          <Text style={{ color: Colors.gray, marginBottom: 4, fontSize: 18 }}>Add Partner</Text>
+          <Feather name="user-plus" size={20} color={Colors.gray} />
+        </TouchableOpacity>
+</View>
       </View>
       <Text
         style={[
@@ -78,9 +100,14 @@ export const InvestmentsScreen: React.FC = () => {
       >
         {item.status}
       </Text>
+      {/* <Ionicons name="chevron-forward" size={20} color={Colors.gray} /> */}
+     
+
+
     </TouchableOpacity>
+
   );
-console.log("Filtered investments IDs:", filtered.map((i) => i.id));
+  console.log("Filtered investments IDs:", filtered.map((i) => i.id));
   return (
     <DashboardLayout>
       <View style={styles.container}>
@@ -247,6 +274,7 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   fabLabel: { color: Colors.white, fontWeight: "bold", fontSize: 15 },
+  partnerButton: {marginTop: 8, flexDirection: 'row', alignItems: 'center', gap: 6, borderWidth: 1, borderColor: Colors.gray, padding: 6, borderRadius: 6, width: "45%", justifyContent: 'center' },
 });
 
 export default InvestmentsScreen;

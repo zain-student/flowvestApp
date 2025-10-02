@@ -132,12 +132,43 @@ const initialState: PartnerInvestmentState = {
 };
 
 //  Fetch Partner Investments
+// export const fetchPartnerParticipatingInvestments = createAsyncThunk(
+//   "/v1/partner/investments/participating",
+//   async (page: number = 1, { rejectWithValue }) => {
+//     try {
+//       const response = await api.get(
+//         `${API_ENDPOINTS.INVESTMENTS.LIST}?scope=participating&page=${page}`
+//       );
+
+//       const investments = response.data?.data || [];
+//       const meta = response.data?.meta || {};
+//       const summary = response.data?.summary || {};
+
+//       // Cache in local storage
+//       await storage.setItem(StorageKeys.INVESTMENTS_CACHE, {
+//         investments,
+//         meta,
+//         summary,
+//         page,
+//       });
+//       // ToastAndroid.show("Investments data cached", ToastAndroid.SHORT);
+//       console.log("Fetched investments:", investments);
+//       return { investments, meta, summary, page };
+//     } catch (error: any) {
+//       const cached = await storage.getItem(StorageKeys.INVESTMENTS_CACHE);
+//       if (cached) return cached;
+//       return rejectWithValue(error?.response?.data?.message || "Fetch failed");
+//     }
+//   }
+// );
+
+// ✅ Support search query
 export const fetchPartnerParticipatingInvestments = createAsyncThunk(
   "/v1/partner/investments/participating",
-  async (page: number = 1, { rejectWithValue }) => {
+  async ({ page = 1, search = "" }: { page?: number; search?: string }, { rejectWithValue }) => {
     try {
       const response = await api.get(
-        `${API_ENDPOINTS.INVESTMENTS.LIST}?scope=participating&page=${page}`
+        `${API_ENDPOINTS.INVESTMENTS.LIST}?scope=participating&page=${page}&search=${encodeURIComponent(search)}`
       );
 
       const investments = response.data?.data || [];
@@ -150,10 +181,10 @@ export const fetchPartnerParticipatingInvestments = createAsyncThunk(
         meta,
         summary,
         page,
+        search,
       });
-      // ToastAndroid.show("Investments data cached", ToastAndroid.SHORT);
-      console.log("Fetched investments:", investments);
-      return { investments, meta, summary, page };
+
+      return { investments, meta, summary, page, search };
     } catch (error: any) {
       const cached = await storage.getItem(StorageKeys.INVESTMENTS_CACHE);
       if (cached) return cached;
@@ -161,6 +192,8 @@ export const fetchPartnerParticipatingInvestments = createAsyncThunk(
     }
   }
 );
+
+
 // Fetch Available Shared Programs that partner can join
 export const fetchAvailableSharedPrograms = createAsyncThunk(
   "/v1/shared-programs",
@@ -256,7 +289,7 @@ const partnerInvestmentSlice = createSlice({
       .addCase(
         fetchPartnerParticipatingInvestments.pending,
         (state, action) => {
-          const page = action.meta.arg;
+          const { page = 1 } = action.meta.arg || {};
           if (page > 1) {
             state.isLoadingMore = true;
           } else {

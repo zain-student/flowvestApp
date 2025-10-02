@@ -4,8 +4,7 @@ import { fetchPartnerParticipatingInvestments, leaveInvestment } from "@/shared/
 import { Feather } from "@expo/vector-icons";
 import Colors from "@shared/colors/Colors";
 import React, { useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export const InvestmentDetails = ({ navigation }: any) => {
   const dispatch = useAppDispatch();
@@ -13,17 +12,23 @@ export const InvestmentDetails = ({ navigation }: any) => {
 
   const FILTERS = ["All", "Active", "Paused", "Completed"];
   const [filter, setFilter] = useState("All");
+  const [search, setSearch] = useState("");
   useEffect(() => {
-    dispatch(fetchPartnerParticipatingInvestments(1));
-  }, [dispatch]);
+    if (search === '') {
+      dispatch(fetchPartnerParticipatingInvestments({ page: 1 }));
+    }
+  }, [search, dispatch]);
   const handleLoadMore = useCallback(() => {
     if (!isLoadingMore && meta?.pagination?.has_more_pages) {
-      dispatch(fetchPartnerParticipatingInvestments(meta.pagination.current_page + 1));
+      dispatch(fetchPartnerParticipatingInvestments({ page: meta.pagination.current_page + 1 }));
     }
-  }, [isLoadingMore, meta]);
-
+  }, [isLoadingMore, meta, search]);
+  const handleSearch = () => {
+    // always start at page 1
+    dispatch(fetchPartnerParticipatingInvestments({ page: 1, search }));
+  };
   const handleRefresh = () => {
-    dispatch(fetchPartnerParticipatingInvestments(1));
+    dispatch(fetchPartnerParticipatingInvestments({ page: 1 }));
   };
   const formattedInvestments = investments.map((inv: any) => ({
     id: inv.id,
@@ -86,13 +91,13 @@ export const InvestmentDetails = ({ navigation }: any) => {
       </TouchableOpacity>
     </TouchableOpacity>
   );
-  if (isLoading) {
-    return (
-      <DashboardLayout>
-        <ActivityIndicator size="large" color={Colors.primary} style={{ marginTop: 50 }} />
-      </DashboardLayout>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <DashboardLayout>
+  //       <ActivityIndicator size="large" color={Colors.primary} style={{ marginTop: 50 }} />
+  //     </DashboardLayout>
+  //   );
+  // }
 
   // if (error) {
   //   return (
@@ -122,48 +127,62 @@ export const InvestmentDetails = ({ navigation }: any) => {
             </TouchableOpacity>
           </View>
         </View>
-
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollContent}>
-          <View style={styles.card}>
-            <Text style={styles.title}>Joined Investments Overview</Text>
-            <Text style={styles.label}>Total Investments: <Text style={styles.value}>{summary.total_investments}</Text></Text>
-            <Text style={styles.label}>Active Investments: <Text style={styles.value}>{summary.active_investments}</Text></Text>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text style={styles.label}>Current Value: <Text style={styles.value}>${summary.current_value}</Text></Text>
-              {/* <Text style={styles.label}>Duration: <Text style={styles.value}>12 Months</Text></Text> */}
-              <TouchableOpacity style={styles.balanceActionBtnDark} onPress={() => { navigation.navigate('PartnerInvestmentStack', { screen: 'SharedInvestments' }) }}>
-                <Text style={styles.balanceActionTextDark}>
-                  Shared Investments
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          {/* Investment List */}
-          <FlatList
-            data={filtered}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={renderInvestment}
-            onEndReached={handleLoadMore}
-            onEndReachedThreshold={0.5}
-            refreshing={isLoading}
-            scrollEnabled={false}
-            onRefresh={handleRefresh}
-            showsVerticalScrollIndicator={false}
-            ListFooterComponent={
-              isLoadingMore ? (
-                <ActivityIndicator size="small" color={Colors.green} />
-              ) : null
-            }
-            contentContainerStyle={{ paddingBottom: 10 }}
-            ListEmptyComponent={
-              <View style={styles.emptyState}>
-                <Text style={styles.emptyText}>No shared investments available.</Text>
-              </View>
-            }
+        <View style={styles.searchContainer}>
+          <TextInput
+            placeholder="Search investments..."
+            value={search}
+            onChangeText={setSearch}
+            style={styles.searchInput}
+            returnKeyType="search"
+            onSubmitEditing={handleSearch} // ✅ allow Enter key search
           />
-        </ScrollView>
+          <TouchableOpacity style={styles.searchBtn} onPress={handleSearch}>
+            <Feather name="search" size={20} color="#fff" />
+          </TouchableOpacity>
+        </View>
+
+
+
+
+        {/* Investment List */}
+        <FlatList
+          data={filtered}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderInvestment}
+          onEndReached={handleLoadMore}
+          onEndReachedThreshold={0.5}
+          refreshing={isLoading}
+          // scrollEnabled={false}
+          onRefresh={handleRefresh}
+          showsVerticalScrollIndicator={false}
+          ListFooterComponent={
+            isLoadingMore ? (
+              <ActivityIndicator size="small" color={Colors.green} />
+            ) : null
+          }
+          contentContainerStyle={{ paddingBottom: 10 }}
+          ListHeaderComponent={
+            <View style={styles.card}>
+              <Text style={styles.title}>Joined Investments Overview</Text>
+              <Text style={styles.label}>Total Investments: <Text style={styles.value}>{summary.total_investments}</Text></Text>
+              <Text style={styles.label}>Active Investments: <Text style={styles.value}>{summary.active_investments}</Text></Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Text style={styles.label}>Current Value: <Text style={styles.value}>${summary.current_value}</Text></Text>
+                {/* <Text style={styles.label}>Duration: <Text style={styles.value}>12 Months</Text></Text> */}
+                <TouchableOpacity style={styles.balanceActionBtnDark} onPress={() => { navigation.navigate('PartnerInvestmentStack', { screen: 'SharedInvestments' }) }}>
+                  <Text style={styles.balanceActionTextDark}>
+                    Shared Investments
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          }
+          ListEmptyComponent={
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyText}>No shared investments available.</Text>
+            </View>
+          }
+        />
       </View>
     </DashboardLayout>
   );
@@ -304,4 +323,32 @@ const styles = StyleSheet.create({
   investmentParticipants: { fontSize: 13, color: Colors.gray },
   emptyState: { justifyContent: "center", alignItems: "center", padding: 20 },
   emptyText: { fontSize: 16, color: "#6B7280" },
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: Colors.white,
+    borderRadius: 10,
+    marginHorizontal: 12,
+    marginBottom: 12,
+    paddingHorizontal: 8,
+    elevation: 2,
+  },
+  searchInput: {
+    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    fontSize: 16,
+    color: Colors.secondary,
+  },
+  searchBtn: {
+    height: 40,
+    width: 40,
+    backgroundColor: Colors.secondary,
+    padding: 10,
+    borderRadius: 14,
+    marginLeft: 6,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
 });

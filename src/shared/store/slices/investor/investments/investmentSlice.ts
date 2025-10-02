@@ -60,6 +60,26 @@ export interface InvestmentStats {
   // for investments screen
   initial_amount: number;
 }
+export interface InvestmentPartner {
+  id: number;
+  investment_id: number;
+  invested_amount: string;
+  joined_at: string;
+  status: string;
+  invitation_status: string;
+  participation_percentage: string;
+  expected_returns: string;
+
+  user: {
+    id: number;
+    name: string;
+    email: string;
+    first_name: string;
+    last_name: string;
+    status: string;
+  };
+}
+
 export interface InvestmentState {
   investments: Investment[];
   isLoading: boolean; // For initial fetch
@@ -71,6 +91,17 @@ export interface InvestmentState {
   meta: {
     pagination: PaginationMeta;
   };
+  // Partner sub-state for modal
+  partners: {
+    data: InvestmentPartner[];
+    isLoading: boolean;
+    error: string | null;
+  };
+}
+export interface InvestmentPartnerState {
+  partners: any[];
+  isLoading: boolean;
+  error: string | null;
 }
 
 const initialState: InvestmentState = {
@@ -100,6 +131,12 @@ const initialState: InvestmentState = {
   },
   // Current investment details
   currentInvestment: null,
+  // Partners initial state
+  partners: {
+    data: [],
+    isLoading: false,
+    error: null,
+  },
 };
 
 // Create Investment Slice
@@ -131,14 +168,14 @@ export const fetchInvestments = createAsyncThunk(
       console.log("📦 Investments API Response:", response.data);
       const investments = response.data?.data || [];
       const meta = response.data?.meta || {};
-   const summary = response.data?.summary || {};
+      const summary = response.data?.summary || {};
       await storage.setItem(StorageKeys.INVESTMENTS_CACHE, {
         investments,
         meta,
-          summary,
+        summary,
         page,
       });
-      return { investments, meta,summary, page };
+      return { investments, meta, summary, page };
     } catch (error: any) {
       const cached = await storage.getItem(StorageKeys.INVESTMENTS_CACHE);
       if (cached) return cached;
@@ -146,6 +183,39 @@ export const fetchInvestments = createAsyncThunk(
     }
   }
 );
+// Fetch investment partners (for modal)
+interface FetchPartnersParams {
+  investmentId: number;
+  status?: string; // active, withdrawn, suspended
+  invitation_status?: string; // pending, accepted, declined
+  search?: string; // name/email
+}
+
+export const fetchInvestmentPartners = createAsyncThunk(
+  "investments/fetchPartners",
+  async ({ investmentId, status, invitation_status, search }: FetchPartnersParams, { rejectWithValue }) => {
+    try {
+      const response = await api.get(
+        API_ENDPOINTS.INVESTMENTS.INVESTMENT_PARTNERS(investmentId),
+        {
+          params: { status, invitation_status, search },
+        }
+      );
+      console.log("✅ Investment partners:", response.data);
+      return response.data.data as InvestmentPartner[];
+    } catch (error: any) {
+      return rejectWithValue(
+        error?.response?.data?.message || "Failed to fetch partners"
+      );
+    }
+  }
+);
+
+
+// Reset partners when modal closes
+export const resetPartners = () => ({
+  type: "investments/resetPartners",
+});
 
 //  Investment Details
 export const fetchInvestmentsById = createAsyncThunk(
@@ -227,6 +297,14 @@ const investmentSlice = createSlice({
       state.investments = [];
       state.meta.pagination.current_page = 1;
       state.meta.pagination.has_more_pages = true;
+    },
+    // ✅ Reset partners when modal is closed
+    resetPartner(state) {
+      state.partners = {
+        data: [],
+        isLoading: false,
+        error: null,
+      };
     },
   },
   extraReducers: (builder) => {
@@ -323,6 +401,19 @@ const investmentSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload as string;
       })
+      // reducers for fetching investment partners
+      .addCase(fetchInvestmentPartners.pending, (state) => {
+        state.partners.isLoading = true;
+        state.partners.error = null;
+      })
+      .addCase(fetchInvestmentPartners.fulfilled, (state, action) => {
+        state.partners.isLoading = false;
+        state.partners.data = action.payload;
+      })
+      .addCase(fetchInvestmentPartners.rejected, (state, action) => {
+        state.partners.isLoading = false;
+        state.partners.error = action.payload as string;
+      })
       // reducers for investment details
       .addCase(fetchInvestmentsById.pending, (state, action) => {
         state.isLoading = true;
@@ -407,5 +498,5 @@ const investmentSlice = createSlice({
       });
   },
 });
-export const { resetInvestments } = investmentSlice.actions;
+export const { resetInvestments, resetPartner } = investmentSlice.actions;
 export default investmentSlice.reducer;

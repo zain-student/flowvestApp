@@ -15,6 +15,7 @@ import {
   View,
 } from "react-native";
 import { DashboardLayout } from "../../../Common/components/DashboardLayout";
+import InvestmentPartnersModal from "../components/InvestmentPartnersModal";
 
 const FILTERS = ["All", "Active", "Paused", "Completed"];
 type Props = NativeStackNavigationProp<InvestmentStackParamList, "InvestmentScreen">;
@@ -28,7 +29,18 @@ export const InvestmentsScreen: React.FC = () => {
   );
 
   const [filter, setFilter] = useState("All");
+  const [showPartnersModal, setShowPartnersModal] = useState(false);
+  const [selectedInvestmentId, setSelectedInvestmentId] = useState<number | null>(null);
 
+  const handleOpenPartners = (id: number) => {
+    setSelectedInvestmentId(id);
+    setShowPartnersModal(true);
+  };
+
+  const handleClosePartners = () => {
+    setShowPartnersModal(false);
+    setSelectedInvestmentId(null);
+  };
   const formattedInvestments = investments.map((inv: any) => ({
     id: inv.id,
     name: inv.name,
@@ -69,28 +81,24 @@ export const InvestmentsScreen: React.FC = () => {
         <Text style={styles.investmentName}>{item.name}</Text>
         <Text style={styles.investmentAmount}>Amount: ${item.amount}</Text>
         <Text style={styles.investmentDate}>Started: {item.date}</Text>
-       <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8 ,justifyContent: 'space-between' }}>
-         {/* View partners of investment */}
-        <TouchableOpacity
-          onPress={() => console.log("View partners for investment ID:", item.id)
-            //  navigation.navigate("InvestmentPartners", { id: item.id })
-          }
-          style={styles.partnerButton}
-        >
-          <Text style={{ color: Colors.gray, marginBottom: 4, fontSize: 18 }}>Partners</Text>
-          <Feather name="users" size={20} color={Colors.gray} />
-        </TouchableOpacity>
-        {/* Add partner to investment button */}
-        <TouchableOpacity
-          onPress={() => console.log("Add partner for investment ID:", item.id)
-            // navigation.navigate("AddInvestmentPartner", { id: item.id })
-          }
-          style={[styles.partnerButton, { marginTop: 8 }]}
-        >
-          <Text style={{ color: Colors.gray, marginBottom: 4, fontSize: 18 }}>Add Partner</Text>
-          <Feather name="user-plus" size={20} color={Colors.gray} />
-        </TouchableOpacity>
-</View>
+        <View style={{ flexDirection: 'row', marginTop: 8, justifyContent: 'space-between' }}>
+          {/* View partners of investment */}
+          <TouchableOpacity
+            onPress={() => handleOpenPartners(item.id)}
+            style={styles.partnerButton}>
+            <Text style={{ color: Colors.gray, marginBottom: 4, fontSize: 18 }}>Partners</Text>
+            <Feather name="users" size={20} color={Colors.gray} />
+          </TouchableOpacity>
+          {/* Add partner to investment button */}
+          <TouchableOpacity
+            onPress={() => console.log("Add partner for investment ID:", item.id)
+            }
+            style={[styles.partnerButton, { marginTop: 8 }]}
+          >
+            <Text style={{ color: Colors.gray, marginBottom: 4, fontSize: 18 }}>Add Partner</Text>
+            <Feather name="user-plus" size={20} color={Colors.gray} />
+          </TouchableOpacity>
+        </View>
       </View>
       <Text
         style={[
@@ -101,9 +109,6 @@ export const InvestmentsScreen: React.FC = () => {
         {item.status}
       </Text>
       {/* <Ionicons name="chevron-forward" size={20} color={Colors.gray} /> */}
-     
-
-
     </TouchableOpacity>
 
   );
@@ -174,6 +179,14 @@ export const InvestmentsScreen: React.FC = () => {
           <Text style={styles.fabLabel}>Add Investment</Text>
         </TouchableOpacity>
       </View>
+      {/* Investment Partners Modal */}
+      {selectedInvestmentId && (
+        <InvestmentPartnersModal
+          visible={showPartnersModal}
+          onClose={handleClosePartners}
+          investmentId={selectedInvestmentId}
+        />
+      )}
     </DashboardLayout>
   );
 };
@@ -274,7 +287,7 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   fabLabel: { color: Colors.white, fontWeight: "bold", fontSize: 15 },
-  partnerButton: {marginTop: 8, flexDirection: 'row', alignItems: 'center', gap: 6, borderWidth: 1, borderColor: Colors.gray, padding: 6, borderRadius: 6, width: "45%", justifyContent: 'center' },
+  partnerButton: { marginTop: 8, flexDirection: 'row', alignItems: 'center', gap: 6, borderWidth: 1, borderColor: Colors.gray, padding: 2, borderRadius: 6, width: "45%", justifyContent: 'center' },
 });
 
 export default InvestmentsScreen;

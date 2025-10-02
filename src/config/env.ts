@@ -80,6 +80,7 @@ export const API_ENDPOINTS = {
     SHARED_AVAILABLE: '/v1/investments/shared/available',
     PAYOUTS: (id: number) => `/v1/investments/${id}/payouts`,
     CREATE_MANUAL_PAYOUT: (id: number) => `/v1/investments/${id}/payouts/manual`,
+    INVESTMENT_PARTNERS: (id: number) => `/v1/investments/${id}/partners`,
   },
   
   // Payouts

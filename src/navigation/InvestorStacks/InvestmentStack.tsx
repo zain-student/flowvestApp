@@ -1,3 +1,4 @@
+import AddInvestmentPartner from "@/modules/Investor/investments/screens/AddInvestmentPartner";
 import { AddInvestments } from "@/modules/Investor/investments/screens/AddInvestments";
 import EditInvestments from "@/modules/Investor/investments/screens/EditInvestments";
 import { InvestmentDetailsScreen } from "@/modules/Investor/investments/screens/InvestmentDetailsScreen";
@@ -11,6 +12,7 @@ export type InvestmentStackParamList = {
   InvestmentDetails: { id: number };
   AddInvestments:undefined;
   EditInvestments: { id: number, mode: string };
+  AddPartner:{id: number}
 };
 
 export const Stack = createNativeStackNavigator<InvestmentStackParamList>();
@@ -91,6 +93,34 @@ export const InvestmentStack = () => {
         component={EditInvestments}
         options={({ navigation }) => ({
           title: "Edit Investment",
+          headerTitleAlign: "center",
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => navigation?.goBack()}
+              style={{
+                marginRight: 16,
+                marginLeft:10,
+                marginTop:5,
+                marginBottom:5,
+                backgroundColor: "#F3F4F6",
+                width: 50,
+                height: 50,
+                borderRadius: 25,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Ionicons name="chevron-back" color={"black"} size={30}/>
+            </TouchableOpacity>
+            
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="AddPartner"
+        component={AddInvestmentPartner}
+        options={({ navigation }) => ({
+          title: "Add Partner",
           headerTitleAlign: "center",
           headerLeft: () => (
             <TouchableOpacity

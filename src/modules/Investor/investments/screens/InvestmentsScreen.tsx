@@ -91,7 +91,10 @@ export const InvestmentsScreen: React.FC = () => {
           </TouchableOpacity>
           {/* Add partner to investment button */}
           <TouchableOpacity
-            onPress={() => console.log("Add partner for investment ID:", item.id)
+            onPress={() => {
+              navigation.navigate("AddPartner", { id: item.id })
+              console.log("Investment id is :", item.id)
+            }
             }
             style={[styles.partnerButton, { marginTop: 8 }]}
           >
@@ -120,7 +123,7 @@ export const InvestmentsScreen: React.FC = () => {
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Total Invested Amount</Text>
           <Text style={styles.cardValue}>
-            {stats.total_invested}
+            ${stats.total_invested}
           </Text>
           <Text style={styles.cardSubtitle}>
             +8.2%{" "}
@@ -213,7 +216,7 @@ const styles = StyleSheet.create({
   },
   cardSubtitle: { fontSize: 14, color: Colors.green },
   balanceActionBtnDark: {
-    width: '40%',
+    width: 170,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",

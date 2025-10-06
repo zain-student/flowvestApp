@@ -193,7 +193,10 @@ interface FetchPartnersParams {
 
 export const fetchInvestmentPartners = createAsyncThunk(
   "investments/fetchPartners",
-  async ({ investmentId, status, invitation_status, search }: FetchPartnersParams, { rejectWithValue }) => {
+  async (
+    { investmentId, status, invitation_status, search }: FetchPartnersParams,
+    { rejectWithValue }
+  ) => {
     try {
       const response = await api.get(
         API_ENDPOINTS.INVESTMENTS.INVESTMENT_PARTNERS(investmentId),
@@ -211,6 +214,36 @@ export const fetchInvestmentPartners = createAsyncThunk(
   }
 );
 
+// Invite/Add Partner to an Investment
+export const addInvestmentPartner = createAsyncThunk(
+  "investments/addPartner",
+  async (
+    { investmentId, partnerData }: { investmentId: number; partnerData: any },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await api.post(
+        API_ENDPOINTS.INVESTMENTS.ADD_PARTNER(investmentId),
+        partnerData
+      );
+
+      console.log("✅ Partner invited:", response.data);
+
+      ToastAndroid.show(
+        response.data.message || "Partner invited successfully",
+        ToastAndroid.SHORT
+      );
+
+      return response.data.data;
+    } catch (error: any) {
+      ToastAndroid.show(
+        error?.response?.data?.message || "Failed to invite partner",
+        ToastAndroid.SHORT
+      );
+      return rejectWithValue(error?.response?.data?.message || "Invite failed");
+    }
+  }
+);
 
 // Reset partners when modal closes
 export const resetPartners = () => ({
@@ -411,6 +444,21 @@ const investmentSlice = createSlice({
         state.partners.data = action.payload;
       })
       .addCase(fetchInvestmentPartners.rejected, (state, action) => {
+        state.partners.isLoading = false;
+        state.partners.error = action.payload as string;
+      })
+      // ✅ Add Partner Reducers
+      .addCase(addInvestmentPartner.pending, (state) => {
+        state.partners.isLoading = true;
+        state.partners.error = null;
+      })
+      .addCase(addInvestmentPartner.fulfilled, (state, action) => {
+        state.partners.isLoading = false;
+
+        // ✅ Prepend the new partner to the list
+        state.partners.data = [action.payload, ...state.partners.data];
+      })
+      .addCase(addInvestmentPartner.rejected, (state, action) => {
         state.partners.isLoading = false;
         state.partners.error = action.payload as string;
       })

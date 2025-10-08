@@ -27,7 +27,7 @@ export interface User {
   all_permissions: string[];
   is_superadmin: boolean;
   is_admin: boolean;
-  company?: {
+  company: {
     id: number;
     name: string;
     type?: string;
@@ -82,23 +82,27 @@ const initialState: AuthState = {
 // Async thunks (will be implemented with actual API calls)
 export const loginUser = createAsyncThunk(
   "/v1/auth/login",
-  async (credentials: {
-    email: string;
-    password: string;
-    remember?: boolean;
-  },{rejectWithValue}) => {
-    try { 
+  async (
+    credentials: {
+      email: string;
+      password: string;
+      remember?: boolean;
+    },
+    { rejectWithValue }
+  ) => {
+    try {
       const response = await api.post(API_ENDPOINTS.AUTH.LOGIN, credentials);
       const token = response.data?.data?.token;
       const user = response.data?.data?.user;
       const session = response.data?.data?.session; // Assuming session is returned
-      console.log("Login response:",JSON.stringify(response.data));
+      console.log("Login response:", JSON.stringify(response.data));
       if (!token || !user || !session) {
-        return rejectWithValue("Login failed: No token or user data or session returned");
+        return rejectWithValue(
+          "Login failed: No token or user data or session returned"
+        );
       }
       // Save token and user data to storage
       await storage.multiSet([
-
         [StorageKeys.AUTH_TOKEN, token?.access_token],
         [StorageKeys.USER_DATA, JSON.stringify(user)],
         [StorageKeys.EXPIRES_AT, token?.expires_at], // Save expires_at
@@ -123,9 +127,7 @@ export const loginUser = createAsyncThunk(
       };
     } catch (error: any) {
       const errMsg =
-        error?.response?.data?.message ||
-        error?.message ||
-        "Login failed";
+        error?.response?.data?.message || error?.message || "Login failed";
       ToastAndroid.show(errMsg, ToastAndroid.SHORT);
       console.log("❌ Login error:", errMsg);
       return rejectWithValue(errMsg);
@@ -189,10 +191,10 @@ export const registerUser = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk("/v1/auth/logout", async () => {
   // This will be implemented with actual API call
-   const response = await api.post(
-        API_ENDPOINTS.AUTH.LOGOUT,
-        {}, // No body needed for logout
-      );
+  const response = await api.post(
+    API_ENDPOINTS.AUTH.LOGOUT,
+    {} // No body needed for logout
+  );
   // Clear storage
   console.log("Logout response:", JSON.stringify(response.data));
   // Clear all auth-related data from storage
@@ -202,7 +204,6 @@ export const logoutUser = createAsyncThunk("/v1/auth/logout", async () => {
     StorageKeys.SESSION,
   ]);
 
-  
   // Clear Redux state
   console.log(response.data.message);
 
@@ -214,15 +215,17 @@ export const logoutUser = createAsyncThunk("/v1/auth/logout", async () => {
 });
 
 export const refreshToken = createAsyncThunk("/v1/auth/refresh", async () => {
-  const response = await api.post(API_ENDPOINTS.AUTH.REFRESH, {}, {
-    headers: {
-      Authorization: `Bearer ${await storage.getItem(StorageKeys.AUTH_TOKEN)}`,
-    },
-  });
+  const response = await api.post(
+    API_ENDPOINTS.AUTH.REFRESH,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${await storage.getItem(StorageKeys.AUTH_TOKEN)}`,
+      },
+    }
+  );
   console.log("Refresh token response:", JSON.stringify(response.data));
   if (!response.data?.data?.token) {
-
-
     throw new Error("Failed to refresh token");
   }
   // Save new token and session to storage
@@ -232,7 +235,6 @@ export const refreshToken = createAsyncThunk("/v1/auth/refresh", async () => {
     [StorageKeys.EXPIRES_AT, response.data.data.token.expires_at], // Save new expires_at
     [StorageKeys.USER_DATA, JSON.stringify(response.data.data.user)],
     [StorageKeys.SESSION, JSON.stringify(response.data.data.session)],
-
   ]);
   console.log("✅ Token refreshed successfully");
   // Return new token and session
@@ -249,30 +251,65 @@ export const refreshToken = createAsyncThunk("/v1/auth/refresh", async () => {
         response.data.data.session.refresh_available_until,
     },
   };
-  
 });
 
-export const getCurrentUser = createAsyncThunk<User, void, { rejectValue: RejectError }>(
-  "/v1/auth/me",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await api.get(API_ENDPOINTS.AUTH.ME);
-      const user = response?.data?.data;
-      console.log("✅ Get current user response:", JSON.stringify(response.data));
-      return user;
-    } catch (error: any) {
-      const errMsg = error?.response?.data?.message || error?.message || "Failed to get user profile";
-      const code = error?.response?.data?.code || "SERVER_ERROR";
-      const status = error?.response?.status || 500;
+export const getCurrentUser = createAsyncThunk<
+  User,
+  void,
+  { rejectValue: RejectError }
+>("/v1/auth/me", async (_, { rejectWithValue }) => {
+  try {
+    const response = await api.get(API_ENDPOINTS.PROFILE.GET);
+    const user = response?.data?.data;
+    console.log("✅ Get current user response:", JSON.stringify(response.data));
+    return user;
+  } catch (error: any) {
+    const errMsg =
+      error?.response?.data?.message ||
+      error?.message ||
+      "Failed to get user profile";
+    const code = error?.response?.data?.code || "SERVER_ERROR";
+    const status = error?.response?.status || 500;
 
-      ToastAndroid.show(errMsg, ToastAndroid.SHORT);
-      console.error("❌ Get current user error:", errMsg);
+    ToastAndroid.show(errMsg, ToastAndroid.SHORT);
+    console.error("❌ Get current user error:", errMsg);
 
-      return rejectWithValue({ code, message: errMsg, status });
-    }
+    return rejectWithValue({ code, message: errMsg, status });
   }
-);
+});
+// Update profile thunk
+export const updateUserProfileApi = createAsyncThunk<
+  User, // Return type
+  { name: string; phone: string; company_name: string }, // Input payload
+  { rejectValue: string } // Error type
+>("/v1/auth/update-profile", async (payload, { rejectWithValue }) => {
+  try {
+    const response = await api.put(API_ENDPOINTS.PROFILE.UPDATE, payload);
+    console.log("✅ Update profile response:", JSON.stringify(response.data));
 
+    const updatedUser = response.data?.data;
+    const message = response.data?.message || "Profile updated successfully";
+
+    if (!updatedUser) {
+      throw new Error("No user data returned from update profile API");
+    }
+
+    // Update local storage
+    await storage.setItem(StorageKeys.USER_DATA, JSON.stringify(updatedUser));
+
+    ToastAndroid.show(message, ToastAndroid.SHORT);
+
+    return updatedUser;
+  } catch (err: any) {
+    const errMsg = err?.response?.data?.message || err?.message;
+    ("Failed to update profile");
+
+    console.error("❌ Update profile error:", errMsg);
+    ToastAndroid.show(errMsg, ToastAndroid.SHORT);
+
+    return rejectWithValue(errMsg);
+  }
+});
 
 // Auth slice
 const authSlice = createSlice({
@@ -372,6 +409,26 @@ const authSlice = createSlice({
         // Even if logout fails on server, clear local state
         return { ...initialState };
       });
+    // Update Profile
+    builder
+      .addCase(updateUserProfileApi.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updateUserProfileApi.fulfilled, (state, action) => {
+        state.isLoading = false;
+        if (state.user) {
+          // Merge updated fields into existing user data
+          state.user = { ...state.user, ...action.payload };
+        } else {
+          state.user = action.payload;
+        }
+        ToastAndroid.show("Profile updated successfully", ToastAndroid.SHORT);
+      })
+      .addCase(updateUserProfileApi.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload || "Failed to update profile";
+      });
 
     // Refresh token
     builder
@@ -390,23 +447,27 @@ const authSlice = createSlice({
         state.user = action.payload;
         state.isLoading = false;
       })
-//       .addCase(getCurrentUser.pending, (state) => {
-//   state.isLoading = true;
-//   state.error = null;
-// })
+      //       .addCase(getCurrentUser.pending, (state) => {
+      //   state.isLoading = true;
+      //   state.error = null;
+      // })
 
-    .addCase(getCurrentUser.rejected, (state, action: PayloadAction<RejectError | undefined>) => {
-  state.isLoading = false;
-  state.error = action.payload?.message || "Failed to fetch current user";
-  // Optionally: don't clear all state unless absolutely needed
-  state.isAuthenticated = false;
-  state.user = null;
-});
+      .addCase(
+        getCurrentUser.rejected,
+        (state, action: PayloadAction<RejectError | undefined>) => {
+          state.isLoading = false;
+          state.error =
+            action.payload?.message || "Failed to fetch current user";
+          // Optionally: don't clear all state unless absolutely needed
+          state.isAuthenticated = false;
+          state.user = null;
+        }
+      );
 
-      // .addCase(getCurrentUser.rejected, (state) => {
-      //   // If can't get user, probably invalid token
-      //   return { ...initialState };
-      // });
+    // .addCase(getCurrentUser.rejected, (state) => {
+    //   // If can't get user, probably invalid token
+    //   return { ...initialState };
+    // });
   },
 });
 

@@ -49,11 +49,11 @@ export const ProfileScreen: React.FC = () => {
         )
         }
         {user ? (<View style={styles.card}>
-          <Text style={styles.sectionTitle}>Account Info</Text>
+          <Text style={styles.sectionTitle}>Account Info</Text> 
           <Text style={styles.infoLabel}>Email</Text>
           <Text style={styles.infoValue}>{user.email}</Text>
           <Text style={styles.infoLabel}>Company</Text>
-          <Text style={styles.infoValue}>{mockUser.company}</Text>
+          <Text style={styles.infoValue}>{user.company?.name}</Text>
         </View>)
           :
           (<View style={styles.card}>

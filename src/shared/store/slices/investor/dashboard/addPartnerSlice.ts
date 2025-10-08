@@ -115,7 +115,6 @@ interface partnerState {
   payoutSummary: PayoutSummary | null;
   // For partner performance
   performance: PartnerPerformanceData | null;
-  
 }
 const initialState: partnerState = {
   partners: [],
@@ -236,7 +235,6 @@ export const fetchPartnerPayouts = createAsyncThunk(
   }
 );
 // Partner Performance thunk
-// Partner Performance thunk
 export const fetchPartnerPerformance = createAsyncThunk(
   "v1/admin/partner/performance",
   async (id: number, { rejectWithValue }) => {
@@ -250,6 +248,52 @@ export const fetchPartnerPerformance = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(
         error.message || "Failed to fetch partner performance"
+      );
+    }
+  }
+);
+// Invite Partner to Investment Thunk
+export const invitePartnerToInvestment = createAsyncThunk(
+  "v1/investments/partners/invite",
+  async (
+    {
+      investmentId,
+      partnerId,
+      investedAmount,
+      investmentNotes,
+      invitationMessage,
+      minExperience,
+    }: {
+      investmentId: number;
+      partnerId: number;
+      investedAmount: number;
+      investmentNotes: string;
+      invitationMessage: string;
+      minExperience: string;
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await api.post(
+        API_ENDPOINTS.INVESTMENTS.ADD_PARTNER(investmentId),
+        {
+          partner_id: partnerId,
+          invested_amount: investedAmount,
+          investment_notes: investmentNotes,
+          invitation_message: invitationMessage,
+          requirements: {
+            min_experience: minExperience,
+          },
+        }
+      );
+
+      console.log("✅ Invite Partner Response:", response.data);
+      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+      return response.data.data;
+    } catch (error: any) {
+      console.log("❌ Invite Partner Error:", error);
+      return rejectWithValue(
+        error.message || "Failed to invite partner"
       );
     }
   }
@@ -364,6 +408,23 @@ const partnerSlice = createSlice({
       .addCase(fetchPartnerPerformance.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
+      })
+      // Reducers for app partner
+      .addCase(invitePartnerToInvestment.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(invitePartnerToInvestment.fulfilled, (state) => {
+        state.isLoading = false;
+        // ToastAndroid.show("Partner invited successfully!", ToastAndroid.SHORT);
+      })
+      .addCase(invitePartnerToInvestment.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+        ToastAndroid.show(
+          state.error || "Failed to invite partner",
+          ToastAndroid.SHORT
+        );
       });
   },
 });

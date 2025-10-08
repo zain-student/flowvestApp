@@ -67,6 +67,10 @@ export const ProfileScreen: React.FC = () => {
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>Settings</Text>
           <View style={styles.buttonGroup}>
+             <TouchableOpacity style={styles.buttonItem} onPress={() => navigation.navigate("UpdateProfile")}>
+              <Ionicons name='person-outline' color={"gray"} size={20} />
+              <Text style={styles.buttonText}>Update Profile</Text>
+            </TouchableOpacity>
             <TouchableOpacity style={styles.buttonItem} onPress={() => navigation.navigate("ChangePassword")}>
               <Ionicons name='lock-closed-outline' color={"gray"} size={20} />
               <Text style={styles.buttonText}>Change Password</Text>

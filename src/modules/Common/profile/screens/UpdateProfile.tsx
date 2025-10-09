@@ -34,7 +34,7 @@ export const UpdateProfile = ({navigation}:any) => {
     const handleSubmit = async () => {
         const newErrors: Record<string, string> = {};
 
-        // 🔍 Client-side validation
+        //  Client-side validation
         if (!formData.name.trim()) newErrors.name = "Name is required";
         if (!formData.phone.trim()) newErrors.phone = "Phone is required";
         if (!formData.company_name.trim())
@@ -47,19 +47,18 @@ export const UpdateProfile = ({navigation}:any) => {
 
         setErrors(newErrors);
 
-        // 🚫 Stop if any errors exist
+        //  Stop if any errors exist
         if (Object.keys(newErrors).length > 0) {
             const firstError = Object.values(newErrors)[0];
             // ToastAndroid.show(firstError, ToastAndroid.SHORT);
             return;
         }
 
-        // ✅ Proceed with API call
+        //  Proceed with API call
         try {
             await dispatch(updateUserProfileApi(formData)).unwrap();
             console.log("✅ Profile updated successfully");
             navigation.goBack(); // optional navigation
-            // ToastAndroid.show("✅Profile updated successfully", ToastAndroid.SHORT);
         } catch (err: any) {
             console.error("❌ Profile update failed:", err);
             ToastAndroid.show("Failed to update profile", ToastAndroid.SHORT);

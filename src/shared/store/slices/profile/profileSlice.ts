@@ -5,6 +5,7 @@
 
 import { API_ENDPOINTS } from "@/config/env";
 import { api } from "@/shared/services/api";
+import { storage, StorageKeys } from "@/shared/services/storage";
 import type { RootState } from "@/shared/store";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ToastAndroid } from "react-native";
@@ -36,7 +37,7 @@ export const getCurrentUser = createAsyncThunk<
   { rejectValue: RejectError }
 >("/v1/auth/me", async (_, { rejectWithValue }) => {
   try {
-    const response = await api.get(API_ENDPOINTS.AUTH.ME);
+    const response = await api.get(API_ENDPOINTS.PROFILE.GET);
     const user = response?.data?.data;
     console.log("✅ Get current user response:", JSON.stringify(response.data));
     return user;
@@ -73,6 +74,40 @@ export const changePassword = createAsyncThunk<
     return rejectWithValue(msg);
   }
 });
+// Update profile thunk
+export const updateUserProfileApi = createAsyncThunk<
+  User, // Return type
+  { name: string; phone: string; company_name: string }, // Input payload
+  { rejectValue: string } // Error type
+>("/v1/auth/update-profile", async (payload, { rejectWithValue }) => {
+  try {
+    const response = await api.put(API_ENDPOINTS.PROFILE.UPDATE, payload);
+    console.log("✅ Update profile response:", JSON.stringify(response.data));
+
+    const updatedUser = response.data?.data;
+    const message = response.data?.message || "Profile updated successfully";
+
+    if (!updatedUser) {
+      throw new Error("No user data returned from update profile API");
+    }
+
+    // Update local storage
+    await storage.setItem(StorageKeys.USER_DATA, JSON.stringify(updatedUser));
+
+    // ToastAndroid.show(message, ToastAndroid.SHORT);
+
+    return updatedUser;
+  } catch (err: any) {
+    const errMsg = err?.response?.data?.message || err?.message;
+    ("Failed to update profile");
+
+    console.error("❌ Update profile error:", errMsg);
+    ToastAndroid.show(errMsg, ToastAndroid.SHORT);
+
+    return rejectWithValue(errMsg);
+  }
+});
+
 // ✅ Slice
 const profileSlice = createSlice({
   name: "profile",
@@ -118,7 +153,28 @@ const profileSlice = createSlice({
         state.isLoading = false;
         state.error =
           action.payload || action.error.message || "Change password failed";
-      });
+      })
+       // Update Profile
+          builder
+            .addCase(updateUserProfileApi.pending, (state) => {
+              state.isLoading = true;
+              state.error = null;
+            })
+            .addCase(updateUserProfileApi.fulfilled, (state, action) => {
+              state.isLoading = false;
+              if (state.user) {
+                // Merge updated fields into existing user data
+                state.user = { ...state.user, ...action.payload };
+              } else {
+                state.user = action.payload;
+              }
+              ToastAndroid.show("Profile updated successfully", ToastAndroid.SHORT);
+            })
+            .addCase(updateUserProfileApi.rejected, (state, action) => {
+              state.isLoading = false;
+              state.error = action.payload || "Failed to update profile";
+            });
+      
   },
 });
 

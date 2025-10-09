@@ -277,39 +277,6 @@ export const getCurrentUser = createAsyncThunk<
     return rejectWithValue({ code, message: errMsg, status });
   }
 });
-// Update profile thunk
-export const updateUserProfileApi = createAsyncThunk<
-  User, // Return type
-  { name: string; phone: string; company_name: string }, // Input payload
-  { rejectValue: string } // Error type
->("/v1/auth/update-profile", async (payload, { rejectWithValue }) => {
-  try {
-    const response = await api.put(API_ENDPOINTS.PROFILE.UPDATE, payload);
-    console.log("✅ Update profile response:", JSON.stringify(response.data));
-
-    const updatedUser = response.data?.data;
-    const message = response.data?.message || "Profile updated successfully";
-
-    if (!updatedUser) {
-      throw new Error("No user data returned from update profile API");
-    }
-
-    // Update local storage
-    await storage.setItem(StorageKeys.USER_DATA, JSON.stringify(updatedUser));
-
-    ToastAndroid.show(message, ToastAndroid.SHORT);
-
-    return updatedUser;
-  } catch (err: any) {
-    const errMsg = err?.response?.data?.message || err?.message;
-    ("Failed to update profile");
-
-    console.error("❌ Update profile error:", errMsg);
-    ToastAndroid.show(errMsg, ToastAndroid.SHORT);
-
-    return rejectWithValue(errMsg);
-  }
-});
 
 // Auth slice
 const authSlice = createSlice({
@@ -409,27 +376,7 @@ const authSlice = createSlice({
         // Even if logout fails on server, clear local state
         return { ...initialState };
       });
-    // Update Profile
-    builder
-      .addCase(updateUserProfileApi.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-      })
-      .addCase(updateUserProfileApi.fulfilled, (state, action) => {
-        state.isLoading = false;
-        if (state.user) {
-          // Merge updated fields into existing user data
-          state.user = { ...state.user, ...action.payload };
-        } else {
-          state.user = action.payload;
-        }
-        ToastAndroid.show("Profile updated successfully", ToastAndroid.SHORT);
-      })
-      .addCase(updateUserProfileApi.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload || "Failed to update profile";
-      });
-
+   
     // Refresh token
     builder
       .addCase(refreshToken.fulfilled, (state, action) => {

@@ -2,7 +2,7 @@ import Colors from '@/shared/colors/Colors';
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { Button } from '@components/ui/Button';
 import { Input } from '@components/ui/Input';
-import { updateUserProfileApi } from "@modules/auth/store/authSlice";
+import { updateUserProfileApi } from "@shared/store/slices/profile/profileSlice";
 import React, { useState } from 'react';
 import {
     ScrollView,
@@ -58,8 +58,8 @@ export const UpdateProfile = ({navigation}:any) => {
         try {
             await dispatch(updateUserProfileApi(formData)).unwrap();
             console.log("✅ Profile updated successfully");
-            ToastAndroid.show("Profile updated successfully", ToastAndroid.SHORT);
             navigation.goBack(); // optional navigation
+            // ToastAndroid.show("✅Profile updated successfully", ToastAndroid.SHORT);
         } catch (err: any) {
             console.error("❌ Profile update failed:", err);
             ToastAndroid.show("Failed to update profile", ToastAndroid.SHORT);

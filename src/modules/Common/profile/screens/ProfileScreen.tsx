@@ -20,7 +20,7 @@ type ProfileNavProp = NativeStackNavigationProp<ProfileStackParamList>;
 // const user = useAppSelector(getCurrentUser);
 export const ProfileScreen: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { user, error } = useAppSelector((state) => state.auth); // adjust if it's profileSlice
+  const { user, error } = useAppSelector((state) => state.profile); // adjust if it's profileSlice
   // const isLoading = useAppSelector(selectIsLoading);
   const navigation = useNavigation<ProfileNavProp>();
   useEffect(() => {

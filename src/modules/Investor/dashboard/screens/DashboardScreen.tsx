@@ -239,7 +239,7 @@ const dashboardData = {
       <TouchableOpacity
         style={styles.fab}
         onPress={
-          () => navigation.navigate("AddPartner") // Adjust navigation to your stack
+          () => navigation.navigate("AddPartner", {}) // Adjust navigation to your stack
         }
       >
         {/* <Text style={styles.fabIcon}>＋</Text> */}

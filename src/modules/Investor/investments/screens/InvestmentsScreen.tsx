@@ -215,8 +215,9 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   cardSubtitle: { fontSize: 14, color: Colors.green },
+   balanceActionsRow: { flexDirection: "row", marginTop: 18 },
   balanceActionBtnDark: {
-    width: 170,
+    width: '40%',
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -232,7 +233,6 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_600SemiBold",
     marginLeft: 7,
   },
-  balanceActionsRow: { flexDirection: "row", marginTop: 18 },
   investmentCard: {
     backgroundColor: Colors.secondary,
     borderRadius: 10,

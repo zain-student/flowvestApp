@@ -2,12 +2,13 @@
 import { ProfileStackParamList } from "@/navigation/ProfileStacks/ProfileStack";
 import Colors from '@/shared/colors/Colors';
 import { useAppDispatch, useAppSelector } from '@/shared/store';
-import { getCurrentUser } from '@/shared/store/slices/profile/profileSlice';
+import { getCurrentUser, uploadUserAvatar } from '@/shared/store/slices/profile/profileSlice';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import * as ImagePicker from "expo-image-picker";
 import React, { useEffect } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { DashboardLayout } from '../../components/DashboardLayout';
 const mockUser = {
   name: 'Naomi Carter',
@@ -16,21 +17,57 @@ const mockUser = {
   company: 'FlowVest Inc.',
 };
 type ProfileNavProp = NativeStackNavigationProp<ProfileStackParamList>;
-// const dispatch = useAppDispatch();
-// const user = useAppSelector(getCurrentUser);
 export const ProfileScreen: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { user, error } = useAppSelector((state) => state.profile); // adjust if it's profileSlice
+  const { user, error, isLoading, avatar } = useAppSelector((state) => state.profile); // adjust if it's profileSlice
   // const isLoading = useAppSelector(selectIsLoading);
   const navigation = useNavigation<ProfileNavProp>();
   useEffect(() => {
     dispatch(getCurrentUser());
   }, []);
+  const handlePickImage = async () => {
+    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permission.granted) {
+      Alert.alert("Permission required", "Please allow access to your gallery.");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.7,
+    });
+
+    if (!result.canceled && result.assets?.length > 0) {
+      const imageUri = result.assets[0].uri;
+      dispatch(uploadUserAvatar(imageUri));
+    }
+  };
 
   return (
     <DashboardLayout>
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        {user ? (<View style={styles.avatarContainer}>
+        <View style={styles.container}>
+          <TouchableOpacity onPress={handlePickImage} disabled={isLoading}>
+            {user?.avatar_url ? (
+              <Image source={{ uri: user.avatar_url }} style={styles.avatarImage} />
+            ) : (
+              <View style={styles.avatarPlaceholder}>
+                <Text style={styles.avatarText}>
+                  {user?.name?.charAt(0)?.toUpperCase() ?? "U"}
+                </Text>
+              </View>
+            )}
+            <View style={styles.cameraBadge}>
+              <Ionicons name="camera" size={18} color={Colors.white} />
+            </View>
+          </TouchableOpacity>
+
+          <Text style={styles.name}>{user?.name || "John Doe"}</Text>
+          <Text style={styles.role}>{user?.roles?.[0] || "Investment Manager"}</Text>
+        </View>
+        {/* {user ? (<View style={styles.avatarContainer}>
           <View style={styles.avatar}>
             <Text style={styles.avatarText}>{
               user.name.charAt(0).toUpperCase()
@@ -47,9 +84,9 @@ export const ProfileScreen: React.FC = () => {
             <Text style={styles.role}>Investment Manager</Text>
           </View>
         )
-        }
+        } */}
         {user ? (<View style={styles.card}>
-          <Text style={styles.sectionTitle}>Account Info</Text> 
+          <Text style={styles.sectionTitle}>Account Info</Text>
           <Text style={styles.infoLabel}>Email</Text>
           <Text style={styles.infoValue}>{user.email}</Text>
           <Text style={styles.infoLabel}>Company</Text>
@@ -67,7 +104,7 @@ export const ProfileScreen: React.FC = () => {
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>Settings</Text>
           <View style={styles.buttonGroup}>
-             <TouchableOpacity style={styles.buttonItem} onPress={() => navigation.navigate("UpdateProfile")}>
+            <TouchableOpacity style={styles.buttonItem} onPress={() => navigation.navigate("UpdateProfile")}>
               <Ionicons name='person-outline' color={"gray"} size={20} />
               <Text style={styles.buttonText}>Update Profile</Text>
             </TouchableOpacity>
@@ -105,9 +142,24 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background, // Light background color
     paddingBottom: 100,
   },
-  avatarContainer: {
-    alignItems: 'center',
-    marginBottom: 24,
+  container: { alignItems: "center", marginTop: 30 },
+  avatarImage: { width: 120, height: 120, borderRadius: 60 },
+  avatarPlaceholder: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: "#ccc",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  avatarText: { fontSize: 40, color: "#fff" },
+  cameraBadge: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    backgroundColor: Colors.primary,
+    borderRadius: 16,
+    padding: 6,
   },
   avatar: {
     width: 72,
@@ -118,11 +170,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 10,
-  },
-  avatarText: {
-    color: Colors.white,
-    fontWeight: 'bold',
-    fontSize: 32,
   },
   name: {
     fontSize: 22,

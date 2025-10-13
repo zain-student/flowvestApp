@@ -113,6 +113,7 @@ export const API_ENDPOINTS = {
     UPDATE: '/v1/profile',
     PREFERENCES: '/v1/profile/preferences',
     SETTINGS: '/v1/profile/settings',
+    UPLOAD_AVATAR:"/v1/profile/avatar"
   },
   
   // Notifications

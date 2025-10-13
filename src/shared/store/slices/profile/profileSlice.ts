@@ -8,26 +8,56 @@ import { api } from "@/shared/services/api";
 import { storage, StorageKeys } from "@/shared/services/storage";
 import type { RootState } from "@/shared/store";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import * as FileSystem from "expo-file-system";
 import { ToastAndroid } from "react-native";
-import { User } from "../../../../modules/auth/store/authSlice"; // Reuse the User interface
+// import { User } from "../../../../modules/auth/store/authSlice"; // Reuse the User interface
 
 // Types
-interface RejectError {
+
+// User model
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  roles: string[];
+  company: {
+    id: number;
+    name: string;
+    type?: string;
+    is_independent?: boolean;
+  };
+  avatar_url?: string | null; // ✅ Include avatar in user data
+}
+
+// Avatar upload response model
+export interface AvatarUploadResponse {
+  success: boolean;
+  message: string;
+  data: {
+    avatar_url: string;
+  };
+}
+
+export interface RejectError {
   code: string;
   message: string;
   status: number;
 }
 
+// Profile slice state
 export interface ProfileState {
   user: User | null;
   isLoading: boolean;
   error: string | null;
+  avatar: AvatarUploadResponse | null; // ✅ optional field
 }
 
+// Initial state
 const initialState: ProfileState = {
   user: null,
   isLoading: false,
   error: null,
+  avatar: null, // ✅ properly initialized
 };
 
 // ✅ Thunk to fetch current user
@@ -107,7 +137,56 @@ export const updateUserProfileApi = createAsyncThunk<
     return rejectWithValue(errMsg);
   }
 });
+// ✅ Upload Avatar Thunk
+export const uploadUserAvatar = createAsyncThunk<
+  { avatar_url: string },
+  string,
+  { rejectValue: string }
+>("profile/uploadUserAvatar", async (imageUri, { rejectWithValue }) => {
+  try {
+    // 1️⃣ Validate file existence
+    const fileInfo = await FileSystem.getInfoAsync(imageUri);
+    if (!fileInfo.exists) throw new Error("Image file not found");
 
+    // 2️⃣ Prepare FormData
+    const formData = new FormData();
+    formData.append("avatar", {
+      uri: imageUri,
+      name: "avatar.jpg",
+      type: "image/jpeg",
+    } as any);
+
+    // 3️⃣ Upload to API
+    const response = await api.post<AvatarUploadResponse>(
+      API_ENDPOINTS.PROFILE.UPLOAD_AVATAR,
+      formData,
+      { headers: { "Content-Type": "multipart/form-data" } }
+    );
+
+    const avatar_url = response.data.data.avatar_url;
+
+    // 4️⃣ Update stored user data immediately
+    const userData = await storage.getItem(StorageKeys.USER_DATA);
+    if (userData) {
+      const user = JSON.parse(userData);
+      user.avatar_url = avatar_url;
+      await storage.setItem(StorageKeys.USER_DATA, JSON.stringify(user));
+    }
+
+    ToastAndroid.show(
+      response.data.message || "Avatar updated successfully",
+      ToastAndroid.SHORT
+    );
+
+    return { avatar_url };
+  } catch (error: any) {
+    console.error("❌ Avatar upload error:", error);
+    const msg =
+      error.response?.data?.message || error.message || "Upload failed";
+    ToastAndroid.show(msg, ToastAndroid.SHORT);
+    return rejectWithValue(msg);
+  }
+});
 // ✅ Slice
 const profileSlice = createSlice({
   name: "profile",
@@ -153,28 +232,65 @@ const profileSlice = createSlice({
         state.isLoading = false;
         state.error =
           action.payload || action.error.message || "Change password failed";
+      });
+    // Update Profile
+    builder
+      .addCase(updateUserProfileApi.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
       })
-       // Update Profile
-          builder
-            .addCase(updateUserProfileApi.pending, (state) => {
-              state.isLoading = true;
-              state.error = null;
-            })
-            .addCase(updateUserProfileApi.fulfilled, (state, action) => {
-              state.isLoading = false;
-              if (state.user) {
-                // Merge updated fields into existing user data
-                state.user = { ...state.user, ...action.payload };
-              } else {
-                state.user = action.payload;
-              }
-              ToastAndroid.show("Profile updated successfully", ToastAndroid.SHORT);
-            })
-            .addCase(updateUserProfileApi.rejected, (state, action) => {
-              state.isLoading = false;
-              state.error = action.payload || "Failed to update profile";
-            });
-      
+      .addCase(updateUserProfileApi.fulfilled, (state, action) => {
+        state.isLoading = false;
+        if (state.user) {
+          // Merge updated fields into existing user data
+          state.user = { ...state.user, ...action.payload };
+        } else {
+          state.user = action.payload;
+        }
+        ToastAndroid.show("Profile updated successfully", ToastAndroid.SHORT);
+      })
+      .addCase(updateUserProfileApi.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload || "Failed to update profile";
+      })
+      // Upload Avatar
+      // .addCase(uploadUserAvatar.pending, (state) => {
+      //   state.isLoading = true;
+      //   state.error = null;
+      // })
+      // .addCase(uploadUserAvatar.fulfilled, (state, action) => {
+      //   state.isLoading = false;
+
+      //   // ✅ Update both user and avatar state
+      //   if (state.user) {
+      //     state.user = { ...state.user, avatar_url: action.payload.avatar_url };
+      //   }
+      //   state.avatar = {
+      //     success: true,
+      //     message: "Avatar uploaded successfully",
+      //     data: { avatar_url: action.payload.avatar_url },
+      //   };
+      // })
+
+      // .addCase(uploadUserAvatar.rejected, (state, action) => {
+      //   state.isLoading = false;
+      //   state.error = (action.payload as string) || "Failed to upload avatar";
+      // });
+      .addCase(uploadUserAvatar.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(uploadUserAvatar.fulfilled, (state, action) => {
+        state.isLoading = false;
+        if (state.user) {
+          state.user.avatar_url = action.payload.avatar_url;
+        }
+      })
+      .addCase(uploadUserAvatar.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload || "Failed to upload avatar";
+      });
+
   },
 });
 

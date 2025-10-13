@@ -17,18 +17,6 @@ import {
 import { LineChart } from "react-native-chart-kit";
 
 const screenWidth = Dimensions.get("window").width;
-
-
-
-const mockAssets = [
-  { id: 1, name: "Tech Growth Fund", value: 12000, growth: "+8.2%" },
-  { id: 2, name: "Real Estate Trust", value: 5000, growth: "+2.1%" },
-  { id: 3, name: "Green Energy Bonds", value: 3000, growth: "+5.7%" },
-  { id: 4, name: "Tech Growth Fund", value: 12000, growth: "+8.2%" },
-  { id: 5, name: "Real Estate Trust", value: 5000, growth: "+2.1%" },
-  { id: 6, name: "Green Energy Bonds", value: 3000, growth: "+5.7%" },
-];
-
 const renderAssets = ({ item }: any) => (
   <View style={styles.assetCard}>
     <View style={{ flex: 1 }}>
@@ -48,11 +36,6 @@ const renderAssets = ({ item }: any) => (
 //     dispatch(fetchPayouts(pagination.current_page + 1));
 //   }
 // }; 
-
-// // Pull-to-refresh
-// const handleRefresh = () => {
-//   dispatch(fetchPayouts(1));
-// };
 export const PortfolioScreen: React.FC = () => {
   const dispatch = useAppDispatch()
   const { isLoading, error, data } = useAppSelector((state) => state.portfolio);

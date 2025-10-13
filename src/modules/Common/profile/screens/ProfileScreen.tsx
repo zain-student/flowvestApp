@@ -22,26 +22,55 @@ export const ProfileScreen: React.FC = () => {
   useEffect(() => {
     dispatch(getCurrentUser());
   }, [dispatch]);
+  // const handlePickImage = async () => {
+  //   const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  //   if (!permission.granted) {
+  //     Alert.alert("Permission required", "Please allow access to your gallery.");
+  //     return;
+  //   }
+
+  //   const result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  //     allowsEditing: true,
+  //     aspect: [1, 1],
+  //     quality: 0.7,
+  //   });
+
+  //   if (!result.canceled && result.assets?.length > 0) {
+  //     const imageUri = result.assets[0].uri;
+  //     dispatch(uploadUserAvatar(imageUri));
+  //     dispatch(getCurrentUser());
+  //   }
+  // };
   const handlePickImage = async () => {
-    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (!permission.granted) {
-      Alert.alert("Permission required", "Please allow access to your gallery.");
-      return;
-    }
+  const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  if (!permission.granted) {
+    Alert.alert("Permission required", "Please allow access to your gallery.");
+    return;
+  }
 
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 0.7,
-    });
+  const result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    allowsEditing: true,
+    aspect: [1, 1],
+    quality: 0.7,
+  });
 
-    if (!result.canceled && result.assets?.length > 0) {
-      const imageUri = result.assets[0].uri;
-      dispatch(uploadUserAvatar(imageUri));
-      dispatch(getCurrentUser());
+  if (!result.canceled && result.assets?.length > 0) {
+    const imageUri = result.assets[0].uri;
+
+    try {
+      // ✅ Wait for upload to finish
+      await dispatch(uploadUserAvatar(imageUri)).unwrap();
+
+      // ✅ Then refetch user profile
+      await dispatch(getCurrentUser()).unwrap();
+    } catch (error) {
+      console.error("Avatar upload failed:", error);
     }
-  };
+  }
+};
+
 
   return (
     <DashboardLayout>

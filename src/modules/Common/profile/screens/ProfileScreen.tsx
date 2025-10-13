@@ -16,60 +16,40 @@ export const ProfileScreen: React.FC = () => {
   const dispatch = useAppDispatch();
   const { user, error, isLoading, avatar } = useAppSelector((state) => state.profile); // adjust if it's profileSlice
   const [imageLoading, setImageLoading] = useState(true);
-  const showLoader= isLoading || (!user && imageLoading);
+  const showLoader = isLoading || (!user && imageLoading);
   // const isLoading = useAppSelector(selectIsLoading);
   const navigation = useNavigation<ProfileNavProp>();
   useEffect(() => {
     dispatch(getCurrentUser());
   }, [dispatch]);
-  // const handlePickImage = async () => {
-  //   const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
-  //   if (!permission.granted) {
-  //     Alert.alert("Permission required", "Please allow access to your gallery.");
-  //     return;
-  //   }
-
-  //   const result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
-  //     allowsEditing: true,
-  //     aspect: [1, 1],
-  //     quality: 0.7,
-  //   });
-
-  //   if (!result.canceled && result.assets?.length > 0) {
-  //     const imageUri = result.assets[0].uri;
-  //     dispatch(uploadUserAvatar(imageUri));
-  //     dispatch(getCurrentUser());
-  //   }
-  // };
   const handlePickImage = async () => {
-  const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
-  if (!permission.granted) {
-    Alert.alert("Permission required", "Please allow access to your gallery.");
-    return;
-  }
-
-  const result = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    allowsEditing: true,
-    aspect: [1, 1],
-    quality: 0.7,
-  });
-
-  if (!result.canceled && result.assets?.length > 0) {
-    const imageUri = result.assets[0].uri;
-
-    try {
-      // ✅ Wait for upload to finish
-      await dispatch(uploadUserAvatar(imageUri)).unwrap();
-
-      // ✅ Then refetch user profile
-      await dispatch(getCurrentUser()).unwrap();
-    } catch (error) {
-      console.error("Avatar upload failed:", error);
+    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permission.granted) {
+      Alert.alert("Permission required", "Please allow access to your gallery.");
+      return;
     }
-  }
-};
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.7,
+    });
+
+    if (!result.canceled && result.assets?.length > 0) {
+      const imageUri = result.assets[0].uri;
+
+      try {
+        // ✅ Wait for upload to finish
+        await dispatch(uploadUserAvatar(imageUri)).unwrap();
+
+        // ✅ Then refetch user profile
+        await dispatch(getCurrentUser()).unwrap();
+      } catch (error) {
+        console.error("Avatar upload failed:", error);
+      }
+    }
+  };
 
 
   return (
@@ -160,7 +140,7 @@ const styles = StyleSheet.create({
     paddingBottom: 100,
   },
   container: { alignItems: "center", marginTop: 30, marginBottom: 20 },
-  avatarImage: { width: 120, height: 120, borderRadius: 60,borderWidth: 1, borderColor: '#E5E7EB' },
+  avatarImage: { width: 120, height: 120, borderRadius: 60, borderWidth: 1, borderColor: '#E5E7EB' },
   avatarPlaceholder: {
     width: 120,
     height: 120,

@@ -1,14 +1,8 @@
-/**
- * Profile Redux Slice
- * Manages profile state, user info, and profile-related actions
- */
-
 import { API_ENDPOINTS } from "@/config/env";
 import { api } from "@/shared/services/api";
 import { storage, StorageKeys } from "@/shared/services/storage";
 import type { RootState } from "@/shared/store";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import * as FileSystem from "expo-file-system";
 import { ToastAndroid } from "react-native";
 // import { User } from "../../../../modules/auth/store/authSlice"; // Reuse the User interface
 
@@ -26,7 +20,7 @@ export interface User {
     type?: string;
     is_independent?: boolean;
   };
-  avatar_url?: string | null; // ✅ Include avatar in user data
+  avatar?: string | null; // ✅ Include avatar in user data
 }
 
 // Avatar upload response model
@@ -138,55 +132,28 @@ export const updateUserProfileApi = createAsyncThunk<
   }
 });
 // ✅ Upload Avatar Thunk
-export const uploadUserAvatar = createAsyncThunk<
-  { avatar_url: string },
-  string,
-  { rejectValue: string }
->("profile/uploadUserAvatar", async (imageUri, { rejectWithValue }) => {
-  try {
-    // 1️⃣ Validate file existence
-    const fileInfo = await FileSystem.getInfoAsync(imageUri);
-    if (!fileInfo.exists) throw new Error("Image file not found");
+export const uploadUserAvatar = createAsyncThunk(
+  "profile/uploadUserAvatar",
+  async (imageUri: string, { rejectWithValue }) => {
+    try {
+      const formData = new FormData();
+      formData.append("avatar", {
+        uri: imageUri,
+        type: "image/jpeg",
+        name: "avatar.jpg",
+      } as any);
 
-    // 2️⃣ Prepare FormData
-    const formData = new FormData();
-    formData.append("avatar", {
-      uri: imageUri,
-      name: "avatar.jpg",
-      type: "image/jpeg",
-    } as any);
+      const response = await api.post("/v1/profile/avatar", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
-    // 3️⃣ Upload to API
-    const response = await api.post<AvatarUploadResponse>(
-      API_ENDPOINTS.PROFILE.UPLOAD_AVATAR,
-      formData,
-      { headers: { "Content-Type": "multipart/form-data" } }
-    );
-
-    const avatar_url = response.data.data.avatar_url;
-
-    // 4️⃣ Update stored user data immediately
-    const userData = await storage.getItem(StorageKeys.USER_DATA);
-    if (userData) {
-      const user = JSON.parse(userData);
-      user.avatar_url = avatar_url;
-      await storage.setItem(StorageKeys.USER_DATA, JSON.stringify(user));
+      // Backend returns { data: { avatar_url: "https://..." } }
+      return response.data.data.avatar_url;
+    } catch (err: any) {
+      return rejectWithValue(err.response?.data || "Upload failed");
     }
-
-    ToastAndroid.show(
-      response.data.message || "Avatar updated successfully",
-      ToastAndroid.SHORT
-    );
-
-    return { avatar_url };
-  } catch (error: any) {
-    console.error("❌ Avatar upload error:", error);
-    const msg =
-      error.response?.data?.message || error.message || "Upload failed";
-    ToastAndroid.show(msg, ToastAndroid.SHORT);
-    return rejectWithValue(msg);
   }
-});
+);
 // ✅ Slice
 const profileSlice = createSlice({
   name: "profile",
@@ -278,17 +245,15 @@ const profileSlice = createSlice({
       // });
       .addCase(uploadUserAvatar.pending, (state) => {
         state.isLoading = true;
-        state.error = null;
       })
       .addCase(uploadUserAvatar.fulfilled, (state, action) => {
         state.isLoading = false;
         if (state.user) {
-          state.user.avatar_url = action.payload.avatar_url;
+          state.user.avatar = action.payload; // Update avatar field
         }
       })
       .addCase(uploadUserAvatar.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload || "Failed to upload avatar";
       });
 
   },

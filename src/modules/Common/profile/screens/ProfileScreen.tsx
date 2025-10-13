@@ -7,24 +7,21 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import * as ImagePicker from "expo-image-picker";
-import React, { useEffect } from 'react';
-import { Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { DashboardLayout } from '../../components/DashboardLayout';
-const mockUser = {
-  name: 'Naomi Carter',
-  role: 'Investment Manager',
-  email: 'naomi@flowvest.com',
-  company: 'FlowVest Inc.',
-};
+
 type ProfileNavProp = NativeStackNavigationProp<ProfileStackParamList>;
 export const ProfileScreen: React.FC = () => {
   const dispatch = useAppDispatch();
   const { user, error, isLoading, avatar } = useAppSelector((state) => state.profile); // adjust if it's profileSlice
+  const [imageLoading, setImageLoading] = useState(true);
+  const showLoader= isLoading || (!user && imageLoading);
   // const isLoading = useAppSelector(selectIsLoading);
   const navigation = useNavigation<ProfileNavProp>();
   useEffect(() => {
     dispatch(getCurrentUser());
-  }, []);
+  }, [dispatch]);
   const handlePickImage = async () => {
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permission.granted) {
@@ -42,6 +39,7 @@ export const ProfileScreen: React.FC = () => {
     if (!result.canceled && result.assets?.length > 0) {
       const imageUri = result.assets[0].uri;
       dispatch(uploadUserAvatar(imageUri));
+      dispatch(getCurrentUser());
     }
   };
 
@@ -50,8 +48,15 @@ export const ProfileScreen: React.FC = () => {
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <TouchableOpacity onPress={handlePickImage} disabled={isLoading}>
-            {user?.avatar_url ? (
-              <Image source={{ uri: user.avatar_url }} style={styles.avatarImage} />
+            {showLoader ? (
+              <View style={[styles.avatarPlaceholder, { justifyContent: 'center', alignItems: 'center' }]}>
+                <ActivityIndicator size="small" color={Colors.green} />
+              </View>
+            ) : user?.avatar ? (
+              <Image
+                source={{ uri: `${user.avatar}?t=${Date.now()}` }}
+                style={styles.avatarImage}
+              />
             ) : (
               <View style={styles.avatarPlaceholder}>
                 <Text style={styles.avatarText}>
@@ -59,6 +64,7 @@ export const ProfileScreen: React.FC = () => {
                 </Text>
               </View>
             )}
+
             <View style={styles.cameraBadge}>
               <Ionicons name="camera" size={18} color={Colors.white} />
             </View>
@@ -67,24 +73,6 @@ export const ProfileScreen: React.FC = () => {
           <Text style={styles.name}>{user?.name || "John Doe"}</Text>
           <Text style={styles.role}>{user?.roles?.[0] || "Investment Manager"}</Text>
         </View>
-        {/* {user ? (<View style={styles.avatarContainer}>
-          <View style={styles.avatar}>
-            <Text style={styles.avatarText}>{
-              user.name.charAt(0).toUpperCase()
-            }</Text>
-          </View>
-          <Text style={styles.name}>{user.name}</Text>
-          <Text style={styles.role}>{user.roles}</Text>
-        </View>) : (
-          <View style={styles.avatarContainer}>
-            <View style={styles.avatar}>
-              <Text style={styles.avatarText}>J</Text>
-            </View>
-            <Text style={styles.name}>John Doe</Text>
-            <Text style={styles.role}>Investment Manager</Text>
-          </View>
-        )
-        } */}
         {user ? (<View style={styles.card}>
           <Text style={styles.sectionTitle}>Account Info</Text>
           <Text style={styles.infoLabel}>Email</Text>
@@ -96,9 +84,9 @@ export const ProfileScreen: React.FC = () => {
           (<View style={styles.card}>
             <Text style={styles.sectionTitle}>Account Info</Text>
             <Text style={styles.infoLabel}>Email</Text>
-            <Text style={styles.infoValue}>{mockUser.email}</Text>
+            <Text style={styles.infoValue}>--</Text>
             <Text style={styles.infoLabel}>Company</Text>
-            <Text style={styles.infoValue}>{mockUser.company}</Text>
+            <Text style={styles.infoValue}>--</Text>
           </View>)
         }
         <View style={styles.card}>
@@ -142,8 +130,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background, // Light background color
     paddingBottom: 100,
   },
-  container: { alignItems: "center", marginTop: 30 },
-  avatarImage: { width: 120, height: 120, borderRadius: 60 },
+  container: { alignItems: "center", marginTop: 30, marginBottom: 20 },
+  avatarImage: { width: 120, height: 120, borderRadius: 60,borderWidth: 1, borderColor: '#E5E7EB' },
   avatarPlaceholder: {
     width: 120,
     height: 120,

@@ -102,6 +102,17 @@ export interface PartnerInvestmentState {
       avg_roi: number;
       total_participants: number;
     };
+    meta: {
+      pagination: {
+        current_page: number;
+        last_page: number;
+        per_page: number;
+        total: number;
+        from: number;
+        to: number;
+        has_more_pages: boolean;
+      };
+    };
   };
   join: {
     isJoining: boolean;
@@ -142,6 +153,17 @@ const initialState: PartnerInvestmentState = {
       total_invested: 0,
       avg_roi: 0,
       total_participants: 0,
+    },
+    meta: {
+      pagination: {
+        current_page: 1,
+        last_page: 1,
+        per_page: 15,
+        total: 0,
+        from: 0,
+        to: 0,
+        has_more_pages: false,
+      },
     },
   },
   join: {
@@ -187,16 +209,24 @@ export const fetchPartnerParticipatingInvestments = createAsyncThunk(
 // Fetch Available Shared Programs that partner can join
 export const fetchAvailableSharedPrograms = createAsyncThunk(
   "/v1/shared-programs",
-  async (_, { rejectWithValue }) => {
+  async (
+    { page = 1, search = "" }: { page?: number; search?: string },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await api.get(
-        API_ENDPOINTS.INVESTMENTS.SHARED_AVAILABLE
+        `${API_ENDPOINTS.INVESTMENTS.SHARED_AVAILABLE}${
+          search ? `?search=${encodeURIComponent(search)}` : ""
+        }`
       );
       // assuming API returns { success, message, data: [...] }
       console.log("Fetched shared programs:", response.data?.data);
       return {
         data: response.data?.data || [],
         summary: response.data?.summary || {},
+        meta: response.data?.meta || {},
+        search,
+        page,
       };
     } catch (error: any) {
       return rejectWithValue(
@@ -340,9 +370,21 @@ const partnerInvestmentSlice = createSlice({
       .addCase(fetchAvailableSharedPrograms.fulfilled, (state, action) => {
         state.sharedPrograms.isLoading = false;
 
-        const { data = [], summary = {} } = action.payload;
+        const { data = [], summary = {}, meta = {}, page = 1 } = action.payload;
         state.sharedPrograms.list = data;
-
+        // ✅ Pagination handling
+        if (page > 1) {
+          const existingIds = new Set(
+            state.sharedPrograms.list.map((inv) => inv.id)
+          );
+          const newPrograms = data.filter((inv:any) => !existingIds.has(inv.id));
+          state.sharedPrograms.list = [
+            ...state.sharedPrograms.list,
+            ...newPrograms,
+          ];
+        } else {
+          state.sharedPrograms.list = data;
+        }
         // ✅ Add summary field inside sharedPrograms
         state.sharedPrograms.summary = {
           total_investments: summary.total_investments ?? 0,
@@ -350,6 +392,7 @@ const partnerInvestmentSlice = createSlice({
           avg_roi: summary.avg_roi ?? 0,
           total_participants: summary.total_participants ?? 0,
         };
+        state.sharedPrograms.meta = meta;
       })
 
       .addCase(fetchAvailableSharedPrograms.rejected, (state, action) => {

@@ -2,26 +2,32 @@ import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import type { PartnerInvestment } from "@/shared/store/slices/partner/investments/partnerInvestmentSlice";
 import { fetchAvailableSharedPrograms } from "@/shared/store/slices/partner/investments/partnerInvestmentSlice";
-import { Ionicons } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
 
-export const SharedInvestments: React.FC = ({navigation}: any) => {
+export const SharedInvestments: React.FC = ({ navigation }: any) => {
   const dispatch = useAppDispatch();
-  const { list, isLoading, error,summary } = useAppSelector(
+  const [search, setSearch] = useState("");
+  const { list, isLoading, error, summary } = useAppSelector(
     (state) => state.userInvestments.sharedPrograms
   );
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     dispatch(fetchAvailableSharedPrograms());
   }, [dispatch]);
+    const handleSearch = () => {
+      // always start at page 1
+      // dispatch(fetchPartnerParticipatingInvestments({ page: 1, search }));
+    };
   if (isLoading)
     return (
       <View style={styles.centered}>
@@ -104,21 +110,21 @@ export const SharedInvestments: React.FC = ({navigation}: any) => {
               Participants: {item.total_participants || "N/A"}
             </Text>
           </View>
-            {/* Join Button */}
-        <TouchableOpacity
-          style={styles.joinBtn}
-          activeOpacity={0.7}
-          onPress={() => {
-            navigation.navigate("SharedInvestmentDetail", {
-              id: item.id,
-              showJoinForm: 'true'
-             });
-            console.log("Join investment tapped:", item.id);
-          }}
-        >
-          <Ionicons name="add-circle-outline" size={18} color={Colors.white} />
-          <Text style={styles.joinBtnText}>Join Investment</Text>
-        </TouchableOpacity>
+          {/* Join Button */}
+          <TouchableOpacity
+            style={styles.joinBtn}
+            activeOpacity={0.7}
+            onPress={() => {
+              navigation.navigate("SharedInvestmentDetail", {
+                id: item.id,
+                showJoinForm: 'true'
+              });
+              console.log("Join investment tapped:", item.id);
+            }}
+          >
+            <Ionicons name="add-circle-outline" size={18} color={Colors.white} />
+            <Text style={styles.joinBtnText}>Join Investment</Text>
+          </TouchableOpacity>
         </View>
       </TouchableOpacity>
     </View>
@@ -127,6 +133,19 @@ export const SharedInvestments: React.FC = ({navigation}: any) => {
   return (
 
     <View style={{ flex: 1, backgroundColor: Colors.background }} >
+      <View style={styles.searchContainer}>
+        <TextInput
+          placeholder="Search investments..."
+          value={search}
+          onChangeText={setSearch}
+          style={styles.searchInput}
+          returnKeyType="search"
+          onSubmitEditing={handleSearch} // ✅ allow Enter key search
+        />
+        <TouchableOpacity style={styles.searchBtn} onPress={handleSearch}>
+          <Feather name="search" size={20} color="#fff" />
+        </TouchableOpacity>
+      </View>
 
       <FlatList
         contentContainerStyle={{ padding: 12 }}
@@ -170,6 +189,34 @@ const styles = StyleSheet.create({
   errorText: { color: Colors.error, fontSize: 16 },
   emptyState: { justifyContent: "center", alignItems: "center", padding: 20 },
   emptyText: { fontSize: 16, color: Colors.gray },
+  searchContainer: {
+    marginTop: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: Colors.white,
+    borderRadius: 10,
+    marginHorizontal: 12,
+    marginBottom: 12,
+    paddingHorizontal: 8,
+    elevation: 2,
+  },
+  searchInput: {
+    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    fontSize: 16,
+    color: Colors.secondary,
+  },
+  searchBtn: {
+    height: 40,
+    width: 40,
+    backgroundColor: Colors.secondary,
+    padding: 10,
+    borderRadius: 14,
+    marginLeft: 6,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   summaryRow: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -227,20 +274,20 @@ const styles = StyleSheet.create({
   statusActive: { color: Colors.green },
   statusClosed: { backgroundColor: Colors.inActiveStatusBg, color: Colors.gray },
   joinBtn: {
-  marginTop: 10,
-  flexDirection: "row",
-  alignItems: "center",
-  alignSelf: "flex-end",
-  backgroundColor: Colors.primary,
-  paddingHorizontal: 12,
-  paddingVertical: 6,
-  borderRadius: 8,
-},
-joinBtnText: {
-  color: Colors.white,
-  fontSize: 14,
-  fontWeight: "600",
-  marginLeft: 6,
-},
+    marginTop: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "flex-end",
+    backgroundColor: Colors.primary,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+  },
+  joinBtnText: {
+    color: Colors.white,
+    fontSize: 14,
+    fontWeight: "600",
+    marginLeft: 6,
+  },
 
 });

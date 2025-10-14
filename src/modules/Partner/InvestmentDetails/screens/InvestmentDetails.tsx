@@ -91,22 +91,6 @@ export const InvestmentDetails = ({ navigation }: any) => {
       </TouchableOpacity>
     </TouchableOpacity>
   );
-  // if (isLoading) {
-  //   return (
-  //     <DashboardLayout>
-  //       <ActivityIndicator size="large" color={Colors.primary} style={{ marginTop: 50 }} />
-  //     </DashboardLayout>
-  //   );
-  // }
-
-  // if (error) {
-  //   return (
-  //     <DashboardLayout>
-  //       <Text style={{ color: "red", marginTop: 50, textAlign: "center" }}>{error}</Text>
-  //     </DashboardLayout>
-  //   );
-  // }
-
   return (
     <DashboardLayout>
       <View style={styles.container}>

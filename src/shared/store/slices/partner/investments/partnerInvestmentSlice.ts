@@ -150,7 +150,7 @@ const initialState: PartnerInvestmentState = {
   },
 };
 
-// ✅ Support search query
+// ✅ partners investment thun Support search query
 export const fetchPartnerParticipatingInvestments = createAsyncThunk(
   "/v1/partner/investments/participating",
   async (

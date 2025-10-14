@@ -15,7 +15,7 @@ import {
 
 export const SharedInvestments: React.FC = ({navigation}: any) => {
   const dispatch = useAppDispatch();
-  const { list, isLoading, error } = useAppSelector(
+  const { list, isLoading, error,summary } = useAppSelector(
     (state) => state.userInvestments.sharedPrograms
   );
   const [loading, setLoading] = useState(true);
@@ -29,40 +29,33 @@ export const SharedInvestments: React.FC = ({navigation}: any) => {
       </View>
     );
 
-  // if (error)
-  //   return (
-  //     <View style={styles.centered}>
-  //       <Text style={styles.errorText}>{error}</Text>
-  //     </View>
-  //   );
-
   if (!list.length)
     return (
       <View style={styles.centered}>
         <Text style={styles.emptyText}>No shared programs available.</Text>
       </View>
     );
-  const summary = {
-    totalPrograms: 8,
-    totalInvested: 5000,
-    avgRoi: 14.5,
-    participants: 2,
-  };
+  // const summary = {
+  //   totalPrograms: 8,
+  //   totalInvested: 5000,
+  //   avgRoi: 14.5,
+  //   participants: 2,
+  // };
 
   const renderSummary = () => (
     <View style={styles.summaryRow}>
       <SummaryCard
         label="Total Invested"
-        value={`$${summary.totalInvested.toLocaleString()}`}
+        value={`$${summary.total_invested.toLocaleString()}`}
         style={{ backgroundColor: "#E0F2FE" }}
       />
-      <SummaryCard label="Programs" value={summary.totalPrograms}
+      <SummaryCard label="Total Investments" value={summary.total_investments}
         style={{ backgroundColor: "#FEF3C7" }}
       />
-      <SummaryCard label="Avg ROI" value={`${summary.avgRoi.toFixed(1)}%`}
+      <SummaryCard label="Avg ROI" value={`${summary.avg_roi.toFixed(1)}%`}
         style={{ backgroundColor: "#ECFDF5" }}
       />
-      <SummaryCard label="Participants" value={summary.participants}
+      <SummaryCard label="Participants" value={summary.total_participants}
         style={{ backgroundColor: "#FEE2E2" }}
       />
     </View>

@@ -53,6 +53,13 @@ export interface PartnerInvestment {
   };
   created_at: string;
   updated_at: string;
+
+  summary: {
+    total_invested: number;
+    total_investments: number;
+    avg_roi: number;
+    total_participants: number;
+  };
 }
 
 export interface summary {
@@ -89,6 +96,12 @@ export interface PartnerInvestmentState {
     list: PartnerInvestment[]; // reuse PartnerInvestment type
     isLoading: boolean;
     error: string | null;
+    summary: {
+      total_investments: number;
+      total_invested: number;
+      avg_roi: number;
+      total_participants: number;
+    };
   };
   join: {
     isJoining: boolean;
@@ -124,6 +137,12 @@ const initialState: PartnerInvestmentState = {
     list: [],
     isLoading: false,
     error: null,
+    summary: {
+      total_investments: 0,
+      total_invested: 0,
+      avg_roi: 0,
+      total_participants: 0,
+    },
   },
   join: {
     isJoining: false,
@@ -131,41 +150,13 @@ const initialState: PartnerInvestmentState = {
   },
 };
 
-//  Fetch Partner Investments
-// export const fetchPartnerParticipatingInvestments = createAsyncThunk(
-//   "/v1/partner/investments/participating",
-//   async (page: number = 1, { rejectWithValue }) => {
-//     try {
-//       const response = await api.get(
-//         `${API_ENDPOINTS.INVESTMENTS.LIST}?scope=participating&page=${page}`
-//       );
-
-//       const investments = response.data?.data || [];
-//       const meta = response.data?.meta || {};
-//       const summary = response.data?.summary || {};
-
-//       // Cache in local storage
-//       await storage.setItem(StorageKeys.INVESTMENTS_CACHE, {
-//         investments,
-//         meta,
-//         summary,
-//         page,
-//       });
-//       // ToastAndroid.show("Investments data cached", ToastAndroid.SHORT);
-//       console.log("Fetched investments:", investments);
-//       return { investments, meta, summary, page };
-//     } catch (error: any) {
-//       const cached = await storage.getItem(StorageKeys.INVESTMENTS_CACHE);
-//       if (cached) return cached;
-//       return rejectWithValue(error?.response?.data?.message || "Fetch failed");
-//     }
-//   }
-// );
-
 // ✅ Support search query
 export const fetchPartnerParticipatingInvestments = createAsyncThunk(
   "/v1/partner/investments/participating",
-  async ({ page = 1, search = "" }: { page?: number; search?: string }, { rejectWithValue }) => {
+  async (
+    { page = 1, search = "" }: { page?: number; search?: string },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await api.get(
         `${API_ENDPOINTS.INVESTMENTS.LIST}?scope=participating&page=${page}&search=${encodeURIComponent(search)}`
@@ -193,7 +184,6 @@ export const fetchPartnerParticipatingInvestments = createAsyncThunk(
   }
 );
 
-
 // Fetch Available Shared Programs that partner can join
 export const fetchAvailableSharedPrograms = createAsyncThunk(
   "/v1/shared-programs",
@@ -204,7 +194,10 @@ export const fetchAvailableSharedPrograms = createAsyncThunk(
       );
       // assuming API returns { success, message, data: [...] }
       console.log("Fetched shared programs:", response.data?.data);
-      return response.data?.data || [];
+      return {
+        data: response.data?.data || [],
+        summary: response.data?.summary || {},
+      };
     } catch (error: any) {
       return rejectWithValue(
         error?.response?.data?.message || "Failed to fetch shared programs"
@@ -340,10 +333,25 @@ const partnerInvestmentSlice = createSlice({
         state.sharedPrograms.isLoading = true;
         state.sharedPrograms.error = null;
       })
+      // .addCase(fetchAvailableSharedPrograms.fulfilled, (state, action) => {
+      //   state.sharedPrograms.isLoading = false;
+      //   state.sharedPrograms.list = action.payload;
+      // })
       .addCase(fetchAvailableSharedPrograms.fulfilled, (state, action) => {
         state.sharedPrograms.isLoading = false;
-        state.sharedPrograms.list = action.payload;
+
+        const { data = [], summary = {} } = action.payload;
+        state.sharedPrograms.list = data;
+
+        // ✅ Add summary field inside sharedPrograms
+        state.sharedPrograms.summary = {
+          total_investments: summary.total_investments ?? 0,
+          total_invested: summary.total_invested ?? 0,
+          avg_roi: summary.avg_roi ?? 0,
+          total_participants: summary.total_participants ?? 0,
+        };
       })
+
       .addCase(fetchAvailableSharedPrograms.rejected, (state, action) => {
         state.sharedPrograms.isLoading = false;
         state.sharedPrograms.error = action.payload as string;

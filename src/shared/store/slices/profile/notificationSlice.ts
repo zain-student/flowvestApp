@@ -38,20 +38,44 @@ const initialState: NotificationState = {
   error: null,
 };
 
-// --- Thunk for GET notification settings ---
+// Thunk for GET notification settings
 export const fetchNotificationSettings = createAsyncThunk(
   "notifications/fetchSettings",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await api.get(API_ENDPOINTS.ADMIN.NOTIFICATIONS.SETTINGS);
+      const response = await api.get(
+        API_ENDPOINTS.ADMIN.NOTIFICATIONS.SETTINGS
+      );
       console.log("Fetched notification settings:", response.data);
       ToastAndroid.show("Notification settings loaded", ToastAndroid.SHORT);
       return response.data.data;
     } catch (err: any) {
-      return rejectWithValue(err.response?.data?.message || "Failed to load settings");
+      return rejectWithValue(
+        err.response?.data?.message || "Failed to load settings"
+      );
     }
   }
 );
+// Thunk for UPDATE notification settings
+export const updateNotificationSettings = createAsyncThunk(
+  "notifications/updateSettings",
+  async (payload: NotificationSettings, { rejectWithValue }) => {
+    try {
+      const response = await api.put(
+        API_ENDPOINTS.ADMIN.NOTIFICATIONS.UPDATE_SETTINGS,
+        payload
+      );
+      console.log("Updated notification settings:", response.data);
+      ToastAndroid.show("Notification settings updated", ToastAndroid.SHORT);
+      return response.data.data;
+    } catch (err: any) {
+      return rejectWithValue(
+        err.response?.data?.message || "Failed to update settings"
+      );
+    }
+  }
+);
+
 
 const notificationSlice = createSlice({
   name: "notifications",
@@ -59,6 +83,7 @@ const notificationSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+        // FETCH SETTINGS
       .addCase(fetchNotificationSettings.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -68,6 +93,19 @@ const notificationSlice = createSlice({
         state.settings = action.payload;
       })
       .addCase(fetchNotificationSettings.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      // UPDATE SETTINGS
+      .addCase(updateNotificationSettings.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updateNotificationSettings.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.settings = action.payload; // replace with updated data
+      })
+      .addCase(updateNotificationSettings.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       });

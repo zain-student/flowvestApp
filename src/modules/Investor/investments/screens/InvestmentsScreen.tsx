@@ -71,7 +71,6 @@ export const InvestmentsScreen: React.FC = () => {
   const handleRefresh = () => {
     dispatch(fetchInvestments(1));
   };
-
   const renderInvestment = ({ item }: any) => (
     <TouchableOpacity
       style={styles.investmentCard}
@@ -80,7 +79,17 @@ export const InvestmentsScreen: React.FC = () => {
       <View style={{ flex: 1 }}>
         <Text style={styles.investmentName}>{item.name}</Text>
         <Text style={styles.investmentAmount}>Amount: ${item.amount}</Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <Text style={styles.investmentDate}>Started: {item.date}</Text>
+        <Text
+        style={[
+          styles.investmentStatus,
+          item.status === "Active" ? styles.statusActive : styles.statusClosed,
+        ]}
+      >
+        {item.status}
+      </Text>
+        </View>
         <View style={{ flexDirection: 'row', marginTop: 8, justifyContent: 'space-between' }}>
           {/* View partners of investment */}
           <TouchableOpacity
@@ -103,14 +112,7 @@ export const InvestmentsScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <Text
-        style={[
-          styles.investmentStatus,
-          item.status === "Active" ? styles.statusActive : styles.statusClosed,
-        ]}
-      >
-        {item.status}
-      </Text>
+      
       {/* <Ionicons name="chevron-forward" size={20} color={Colors.gray} /> */}
     </TouchableOpacity>
 

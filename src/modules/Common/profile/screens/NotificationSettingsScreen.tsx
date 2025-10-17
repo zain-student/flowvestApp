@@ -22,6 +22,8 @@ export const NotificationSettingsScreen: React.FC = () => {
         (state) => state.notifications
     );
     const [localSettings, setLocalSettings] = useState(settings);
+    const isChanged = JSON.stringify(localSettings) !== JSON.stringify(settings);
+    const [isSaving, setIsSaving] = useState(false);
 
     // Fetch once on mount
     useEffect(() => {
@@ -47,14 +49,18 @@ export const NotificationSettingsScreen: React.FC = () => {
     };
 
     const handleSave = async () => {
-        if (!localSettings) return;
+        if (!localSettings || !isChanged) return;
+        setIsSaving(true);
         try {
             await dispatch(updateNotificationSettings(localSettings)).unwrap();
             ToastAndroid.show("Settings updated successfully", ToastAndroid.SHORT);
         } catch (err: any) {
             ToastAndroid.show(err || "Failed to update", ToastAndroid.SHORT);
+        } finally {
+            setIsSaving(false);
         }
     };
+
 
     if (isLoading && !localSettings) {
         return (
@@ -143,10 +149,21 @@ export const NotificationSettingsScreen: React.FC = () => {
                 </Text>
             </Section>
 
-            {/* Save Button */}
-            <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-                <Text style={styles.saveButtonText}>Save Changes</Text>
+            <TouchableOpacity
+                style={[
+                    styles.saveButton,
+                    (!isChanged || isSaving) && styles.saveButtonDisabled,
+                ]}
+                onPress={handleSave}
+                disabled={!isChanged || isSaving}
+            >
+                {isSaving ? (
+                    <ActivityIndicator color="#fff" />
+                ) : (
+                    <Text style={styles.saveButtonText}>Save Changes</Text>
+                )}
             </TouchableOpacity>
+
         </ScrollView>
     );
 };
@@ -242,4 +259,9 @@ const styles = StyleSheet.create({
         fontWeight: "600",
         fontSize: 16,
     },
+    saveButtonDisabled: {
+        backgroundColor: Colors.gray, // or a lighter variant of Colors.primary
+        opacity: 0.6,
+    },
+
 });

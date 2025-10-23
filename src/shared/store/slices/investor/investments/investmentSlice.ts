@@ -160,29 +160,32 @@ export const addInvestments = createAsyncThunk(
 // This will fetch the first page by default, or a specific page if provided
 export const fetchInvestments = createAsyncThunk(
   "/v1/investments",
-  async (page: number = 1, { rejectWithValue }) => {
+  async ({ page = 1, search = "" }: { page?: number; search?: string }, { signal, rejectWithValue }) => {
     try {
+      const controller = new AbortController();
+      signal.addEventListener("abort", () => controller.abort());
+
       const response = await api.get(
-        `${API_ENDPOINTS.INVESTMENTS.LIST}?page=${page}`
+        `${API_ENDPOINTS.INVESTMENTS.LIST}?page=${page}&search=${encodeURIComponent(search)}`,
+        { signal: controller.signal }
       );
-      console.log("📦 Investments API Response:", response.data);
+
       const investments = response.data?.data || [];
       const meta = response.data?.meta || {};
       const summary = response.data?.summary || {};
-      await storage.setItem(StorageKeys.INVESTMENTS_CACHE, {
-        investments,
-        meta,
-        summary,
-        page,
-      });
-      return { investments, meta, summary, page };
+
+      await storage.setItem(StorageKeys.INVESTMENTS_CACHE, { investments, meta, summary, page, search });
+
+      return { investments, meta, summary, page, search };
     } catch (error: any) {
+      if (signal.aborted) return;
       const cached = await storage.getItem(StorageKeys.INVESTMENTS_CACHE);
       if (cached) return cached;
       return rejectWithValue(error?.response?.data?.message || "Fetch failed");
     }
   }
 );
+
 // Fetch investment partners (for modal)
 interface FetchPartnersParams {
   investmentId: number;
@@ -367,21 +370,19 @@ const investmentSlice = createSlice({
 
       // reducers for fetching investments
       .addCase(fetchInvestments.pending, (state, action) => {
-        const page = action.meta.arg;
+        const { page = 1 } = action.meta.arg || {};
         if (page > 1) {
           state.isLoadingMore = true;
         } else {
           state.isLoading = true;
         }
-
-        // state.isLoading = true;
         state.error = null;
       })
       .addCase(fetchInvestments.fulfilled, (state, action) => {
         const { investments, meta, page, summary } = action.payload;
 
         // state.isLoading = false;
-        state.meta = meta; // full pagination meta from backend
+        state.meta = meta ?? {}; // full pagination meta from backend
 
         if (page > 1) {
           // Remove duplicates by id
@@ -395,21 +396,6 @@ const investmentSlice = createSlice({
           // Replace for first page
           state.investments = investments;
         }
-
-        // // ✅ Always use backend total for total investments
-        // const totalFromBackend =
-        //   meta?.pagination?.total || state.investments.length;
-
-        // // ✅ Active count from all accumulated investments
-        // const activeCount = state.investments.filter(
-        //   (inv) => inv.status === "active"
-        // ).length;
-
-        // // ✅ Calculate total amount invested
-        // const totalAmountInvested = state.investments.reduce(
-        //   (sum, inv) => sum + parseFloat(inv.initial_amount || "0"),
-        //   0
-        // );
         state.stats = {
           total_investments: summary?.total_investments ?? 0,
           active_investments: summary?.active_investments ?? 0,
@@ -418,14 +404,6 @@ const investmentSlice = createSlice({
           total_partners: 0, // if API adds later
           initial_amount: 0, // optional, keep for UI
         };
-        // state.stats = {
-        //   total_investments: totalFromBackend,
-        //   active_investments: activeCount,
-        //   average_roi: 0, // you can calculate this later
-        //   total_partners: 0,
-        //   total_invested: totalAmountInvested,
-        //   initial_amount: 0, // not clear from your API what this should be
-        // };
         state.isLoading = false;
         state.isLoadingMore = false;
       })

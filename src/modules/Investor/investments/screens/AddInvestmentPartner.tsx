@@ -109,6 +109,7 @@ export default function AddInvestmentPartner() {
       <FlatList
         data={partners}
         keyExtractor={(item) => item.id.toString()}
+        showsVerticalScrollIndicator={false}
         ListHeaderComponent={
           <View style={styles.card}>
             <Text style={styles.cardTitle}>Investment Details</Text>
@@ -182,7 +183,7 @@ export default function AddInvestmentPartner() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: "#F9FAFB" },
+  container: { flex: 1, padding: 16,paddingBottom:80, backgroundColor: "#F9FAFB" },
   loaderContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
   card: {
     backgroundColor: "#fff",
@@ -213,7 +214,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 16,
     marginTop: 16,
-    marginBottom: 80,
+    marginBottom: 10,
     elevation: 2,
     shadowColor: "#000",
     shadowOpacity: 0.05,

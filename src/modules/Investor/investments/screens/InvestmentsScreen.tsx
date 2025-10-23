@@ -11,8 +11,9 @@ import {
   FlatList,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { DashboardLayout } from "../../../Common/components/DashboardLayout";
 import InvestmentPartnersModal from "../components/InvestmentPartnersModal";
@@ -31,7 +32,7 @@ export const InvestmentsScreen: React.FC = () => {
   const [filter, setFilter] = useState("All");
   const [showPartnersModal, setShowPartnersModal] = useState(false);
   const [selectedInvestmentId, setSelectedInvestmentId] = useState<number | null>(null);
-
+  const [search, setSearch] = useState("");
   const handleOpenPartners = (id: number) => {
     setSelectedInvestmentId(id);
     setShowPartnersModal(true);
@@ -57,19 +58,44 @@ export const InvestmentsScreen: React.FC = () => {
 
   // First page load
   useEffect(() => {
-    dispatch(fetchInvestments(1));
-  }, []);
+    dispatch(fetchInvestments({ page: 1 }));
+  }, [dispatch]);
+  const handleSearch = () => {
+    // always start at page 1
+    dispatch(fetchInvestments({ page: 1, search }));
+  };
+  // Auto reload when search is cleared (with debounce)
+  // 🔹 When user types
+  const handleSearchChange = (text: string) => {
+    setSearch(text);
+  };
+
+  // 🔹 When search text changes
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      if (search.trim() === "") {
+        // 🔹 User cleared the search bar — reload all investments
+        dispatch(fetchInvestments({ page: 1, search: "" }));
+      } else {
+        // 🔹 Normal search (debounced)
+        dispatch(fetchInvestments({ page: 1, search }));
+      }
+    }, 500); // debounce time to avoid too many API calls
+
+    return () => clearTimeout(delayDebounce);
+  }, [search]);
+
 
   // Load more when reaching end
   const handleLoadMore = useCallback(() => {
     if (!isLoadingMore && meta.pagination.has_more_pages) {
-      dispatch(fetchInvestments(meta.pagination.current_page + 1));
+      dispatch(fetchInvestments({ page: meta.pagination.current_page + 1 }));
     }
   }, [isLoadingMore, meta.pagination]);
 
   // Pull-to-refresh
   const handleRefresh = () => {
-    dispatch(fetchInvestments(1));
+    dispatch(fetchInvestments({ page: 1 }));
   };
   const renderInvestment = ({ item }: any) => (
     <TouchableOpacity
@@ -80,15 +106,15 @@ export const InvestmentsScreen: React.FC = () => {
         <Text style={styles.investmentName}>{item.name}</Text>
         <Text style={styles.investmentAmount}>Amount: ${item.amount}</Text>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Text style={styles.investmentDate}>Started: {item.date}</Text>
-        <Text
-        style={[
-          styles.investmentStatus,
-          item.status === "Active" ? styles.statusActive : styles.statusClosed,
-        ]}
-      >
-        {item.status}
-      </Text>
+          <Text style={styles.investmentDate}>Started: {item.date}</Text>
+          <Text
+            style={[
+              styles.investmentStatus,
+              item.status === "Active" ? styles.statusActive : styles.statusClosed,
+            ]}
+          >
+            {item.status}
+          </Text>
         </View>
         <View style={{ flexDirection: 'row', marginTop: 8, justifyContent: 'space-between' }}>
           {/* View partners of investment */}
@@ -112,7 +138,7 @@ export const InvestmentsScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
       </View>
-      
+
       {/* <Ionicons name="chevron-forward" size={20} color={Colors.gray} /> */}
     </TouchableOpacity>
 
@@ -159,7 +185,19 @@ export const InvestmentsScreen: React.FC = () => {
             </TouchableOpacity>
           ))}
         </View>
-
+        <View style={styles.searchContainer}>
+          <TextInput
+            placeholder="Search investments..."
+            value={search}
+            onChangeText={setSearch}
+            style={styles.searchInput}
+            returnKeyType="search"
+            onSubmitEditing={handleSearch} // ✅ allow Enter key search
+          />
+          <TouchableOpacity style={styles.searchBtn} onPress={handleSearch}>
+            <Feather name="search" size={20} color="#fff" />
+          </TouchableOpacity>
+        </View>
         {/* Investment list */}
         <FlatList
           data={filtered}
@@ -217,7 +255,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   cardSubtitle: { fontSize: 14, color: Colors.green },
-   balanceActionsRow: { flexDirection: "row", marginTop: 18 },
+  balanceActionsRow: { flexDirection: "row", marginTop: 18 },
   balanceActionBtnDark: {
     width: '40%',
     flexDirection: "row",
@@ -234,6 +272,33 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: "Inter_600SemiBold",
     marginLeft: 7,
+  },
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: Colors.white,
+    borderRadius: 10,
+    marginHorizontal: 12,
+    marginBottom: 12,
+    paddingHorizontal: 8,
+    elevation: 2,
+  },
+  searchInput: {
+    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    fontSize: 16,
+    color: Colors.secondary,
+  },
+  searchBtn: {
+    height: 40,
+    width: 40,
+    backgroundColor: Colors.secondary,
+    padding: 10,
+    borderRadius: 14,
+    marginLeft: 6,
+    justifyContent: "center",
+    alignItems: "center",
   },
   investmentCard: {
     backgroundColor: Colors.secondary,

@@ -11,9 +11,10 @@ import {
     StyleSheet,
     Switch,
     Text,
+    TextInput,
     ToastAndroid,
     TouchableOpacity,
-    View,
+    View
 } from "react-native";
 
 export const NotificationSettingsScreen: React.FC = () => {
@@ -134,17 +135,49 @@ export const NotificationSettingsScreen: React.FC = () => {
 
             {/* Reminder Settings */}
             <Section title="Reminder Settings">
-                <Text style={styles.text}>
-                    Payout reminder days:{" "}
-                    {localSettings.reminder_settings.payout_reminder_days.join(", ")}
-                </Text>
-                <Text style={styles.text}>
-                    Overdue alert days: {localSettings.reminder_settings.overdue_alert_days}
-                </Text>
+                <Text style={styles.label}>Payout reminder days (comma-separated)</Text>
+                <TextInput
+                    style={styles.input}
+                    keyboardType="numeric"
+                    value={localSettings.reminder_settings.payout_reminder_days.join(", ")}
+                    onChangeText={(text) => {
+                        const days = text
+                            .split(",")
+                            .map((d) => parseInt(d.trim(), 10))
+                            .filter((n) => !isNaN(n));
+                        setLocalSettings({
+                            ...localSettings,
+                            reminder_settings: {
+                                ...localSettings.reminder_settings,
+                                payout_reminder_days: days,
+                            },
+                        });
+                    }}
+                />
+
+                <Text style={[styles.label, { marginTop: 10 }]}>Overdue alert days</Text>
+                <TextInput
+                    style={styles.input}
+                    keyboardType="numeric"
+                    value={String(localSettings.reminder_settings.overdue_alert_days)}
+                    onChangeText={(text) => {
+                        const day = parseInt(text, 10) || 0;
+                        setLocalSettings({
+                            ...localSettings,
+                            reminder_settings: {
+                                ...localSettings.reminder_settings,
+                                overdue_alert_days: day,
+                            },
+                        });
+                    }}
+                />
+
                 <ToggleRow
                     label="Investment milestone alerts"
                     value={localSettings.reminder_settings.investment_milestone_alerts}
-                    onToggle={() => handleToggle("reminder_settings", "investment_milestone_alerts")}
+                    onToggle={() =>
+                        handleToggle("reminder_settings", "investment_milestone_alerts")
+                    }
                 />
             </Section>
 
@@ -207,6 +240,16 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: "#E5E7EB",
+        borderRadius: 8,
+        paddingHorizontal: 10,
+        paddingVertical: 8,
+        color: Colors.secondary,
+        fontSize: 14,
+        backgroundColor: Colors.background,
     },
     title: {
         fontSize: 18,

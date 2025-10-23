@@ -141,12 +141,11 @@ export const NotificationSettingsScreen: React.FC = () => {
                 <Text style={styles.text}>
                     Overdue alert days: {localSettings.reminder_settings.overdue_alert_days}
                 </Text>
-                <Text style={styles.text}>
-                    Investment milestone alerts:{" "}
-                    {localSettings.reminder_settings.investment_milestone_alerts
-                        ? "Enabled"
-                        : "Disabled"}
-                </Text>
+                <ToggleRow
+                    label="Investment milestone alerts"
+                    value={localSettings.reminder_settings.investment_milestone_alerts}
+                    onToggle={() => handleToggle("reminder_settings", "investment_milestone_alerts")}
+                />
             </Section>
 
             <TouchableOpacity

@@ -14,6 +14,7 @@ import payoutSlice from './slices/investor/payouts/payoutSlice';
 import portfolioSlice from './slices/investor/portfolio/portfolioSlice';
 import partnerInvestmentSlice from './slices/partner/investments/partnerInvestmentSlice';
 import PartnerPayoutSlice from './slices/partner/payout/PartnerPayoutSlice';
+import notificationTemplateSlice from './slices/profile/notifications/notificationTemplateSlice';
 import notificationSlice from './slices/profile/notificationSlice';
 import profileSlice from './slices/profile/profileSlice';
 // Import shared reducers
@@ -32,9 +33,10 @@ export const rootReducer = combineReducers({
   payout: payoutSlice,
   portfolio: portfolioSlice,
   profile: profileSlice,
-  notifications: notificationSlice,
+  notificationSettings: notificationSlice,
   userInvestments: partnerInvestmentSlice,
   userPayouts: PartnerPayoutSlice,
+  notifications: notificationTemplateSlice,
   // Shared/Global state (will be created later)
   // theme: themeSlice,
   // loading: loadingSlice,

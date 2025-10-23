@@ -74,13 +74,13 @@ export const InvestmentsScreen: React.FC = () => {
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       if (search.trim() === "") {
-        // 🔹 User cleared the search bar — reload all investments
+        // When User cleared the search bar — reload all investment
         dispatch(fetchInvestments({ page: 1, search: "" }));
       } else {
-        // 🔹 Normal search (debounced)
+        // Normal search 
         dispatch(fetchInvestments({ page: 1, search }));
       }
-    }, 500); // debounce time to avoid too many API calls
+    }, 1300); // 1.3 seconds debounce
 
     return () => clearTimeout(delayDebounce);
   }, [search]);

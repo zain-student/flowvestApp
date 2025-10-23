@@ -181,6 +181,13 @@ export const ProfileScreen: React.FC = () => {
               }
             }}
           />
+          {user?.roles?.includes("admin") &&
+          <SettingsButton
+            // icon="document-text-outline"
+            icon="megaphone-outline"
+            label="Notifications Templates"
+            onPress={() => navigation.navigate("NotificationsTemplates")}
+          />}
         </View>
 
         {/*  Support Section */}

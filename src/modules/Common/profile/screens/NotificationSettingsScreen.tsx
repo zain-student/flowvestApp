@@ -20,7 +20,7 @@ import {
 export const NotificationSettingsScreen: React.FC = () => {
     const dispatch = useAppDispatch();
     const { settings, isLoading, error } = useAppSelector(
-        (state) => state.notifications
+        (state) => state.notificationSettings
     );
     const [localSettings, setLocalSettings] = useState(settings);
     const isChanged = JSON.stringify(localSettings) !== JSON.stringify(settings);

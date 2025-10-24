@@ -3,16 +3,18 @@ import { Ionicons } from '@expo/vector-icons';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import { TouchableOpacity } from "react-native";
+import { NotificationButtons } from "../../modules/Common/notifications/screens/NotificationButtons";
+import { NotificationSettingsScreen } from "../../modules/Common/notifications/screens/NotificationSettingsScreen";
+import { NotificationTemplatesScreen } from "../../modules/Common/notifications/screens/NotificationTemplatesScreen";
+import { TemplateDetailScreen } from '../../modules/Common/notifications/screens/TemplateDetailScreen';
 import { ChangePasswordScreen } from "../../modules/Common/profile/screens/ChangePasswordScreen";
-import { NotificationSettingsScreen } from "../../modules/Common/profile/screens/NotificationSettingsScreen";
-import { NotificationTemplatesScreen } from "../../modules/Common/profile/screens/NotificationTemplatesScreen";
 import ProfileScreen from "../../modules/Common/profile/screens/ProfileScreen";
-import { TemplateDetailScreen } from '../../modules/Common/profile/screens/TemplateDetailScreen';
 import { UpdateProfile } from "../../modules/Common/profile/screens/UpdateProfile";
 export type ProfileStackParamList = {
   Profile: undefined;
   ChangePassword: undefined;
   UpdateProfile: undefined;
+  NotificationButtons: undefined;
   NotificationSettings: undefined;
   NotificationsTemplates: undefined;
   TemplateDetail:{template: NotificationTemplate};
@@ -63,6 +65,34 @@ export const ProfileStack = () => {
         options={({ navigation }) => ({
           // gestureEnabled: false,
           title: 'Update Profile',
+          headerTitleAlign: 'center',
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={{
+                marginRight: 16,
+                marginLeft: 10,
+                marginTop: 5,
+                marginBottom: 5,
+                backgroundColor: "#F3F4F6",
+                width: 40,
+                height: 40,
+                borderRadius: 25,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Ionicons name="chevron-back" color={"black"} size={30} />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+       <Stack.Screen
+        name="NotificationButtons"
+        component={NotificationButtons}
+        options={({ navigation }) => ({
+          // gestureEnabled: false,
+          title: 'Notification Buttons',
           headerTitleAlign: 'center',
           headerLeft: () => (
             <TouchableOpacity

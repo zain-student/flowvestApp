@@ -175,19 +175,12 @@ export const ProfileScreen: React.FC = () => {
             label="Notifications"
             onPress={() => {
               if (user?.roles?.includes("admin")) {
-                navigation.navigate("NotificationSettings");
+                navigation.navigate("NotificationButtons");
               } else {
                 Alert.alert("Access Denied", "You do not have permission to access Notification Settings.");
               }
             }}
           />
-          {user?.roles?.includes("admin") &&
-          <SettingsButton
-            // icon="document-text-outline"
-            icon="megaphone-outline"
-            label="Notifications Templates"
-            onPress={() => navigation.navigate("NotificationsTemplates")}
-          />}
         </View>
 
         {/*  Support Section */}

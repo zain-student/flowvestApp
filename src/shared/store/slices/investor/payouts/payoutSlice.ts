@@ -100,6 +100,7 @@ export const fetchPayouts = createAsyncThunk<
       pagination,
       page,
     });
+    console.log("Fetched payouts:", payouts);
     return { payouts, pagination, page };
   } catch (error: any) {
     const cached = await storage.getItem(StorageKeys.PAYOUTS_CACHE);

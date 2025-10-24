@@ -26,7 +26,8 @@ export const PayoutsScreen: React.FC = () => {
   const formattedPayouts = payouts.map((pay: any) => ({
     id: pay.id,
     title: pay.investment_title,
-    name: pay.participent_name,
+    participant: pay.participant_name,
+    email: pay.participant_email,
     amount: pay.amount,
     status: pay.status.charAt(0).toUpperCase() + pay.status.slice(1),
     due_date: pay.scheduled_date,
@@ -40,9 +41,9 @@ export const PayoutsScreen: React.FC = () => {
   useEffect(() => {
     dispatch(fetchPayouts(1));
   }, []);
-//  Load more when reaching end
+  //  Load more when reaching end
   const handleLoadMore = () => {
-    if (!isLoadingMore && pagination.current_page!== pagination.last_page) {
+    if (!isLoadingMore && pagination.current_page !== pagination.last_page) {
       dispatch(fetchPayouts(pagination.current_page + 1));
     }
   };
@@ -51,7 +52,7 @@ export const PayoutsScreen: React.FC = () => {
   const handleRefresh = () => {
     dispatch(fetchPayouts(1));
   };
- const renderPayout = ({ item }: any) => (
+  const renderPayout = ({ item }: any) => (
     <TouchableOpacity
       key={item.id}
       style={styles.payoutCard}
@@ -59,7 +60,8 @@ export const PayoutsScreen: React.FC = () => {
     >
       <View style={{ flex: 1 }}>
         <Text style={styles.payoutAmount}>${item.amount.toLocaleString()}</Text>
-                <Text style={styles.payoutAmount}>{item.title}</Text>
+        <Text style={styles.payoutAmount}>{item.title}</Text>
+        <Text style={styles.payoutDate}>Participant:{item.email}</Text>
         <Text style={styles.payoutDate}>Scheduled: {item.due_date}</Text>
       </View>
       <Text
@@ -74,8 +76,8 @@ export const PayoutsScreen: React.FC = () => {
       </Text>
     </TouchableOpacity>
   );
-console.log("Payout IDs:", filtered.map(p => p.id));
-return (
+  console.log("Payout IDs:", filtered.map(p => p.id));
+  return (
     <DashboardLayout>
       <View style={styles.container}>
         <View style={styles.card}>

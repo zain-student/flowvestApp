@@ -75,7 +75,8 @@ export const InvestmentDetails = ({ navigation }: any) => {
         onPress={() =>
           Alert.alert(
             "Leave Investment",
-            `Are you sure you want to leave "${item.name}"?`,
+            `Are you sure you want to leave "${item.name}"? You will no longer receive payouts from this investment.
+            `,
             [
               { text: "Cancel", style: "cancel" },
               {

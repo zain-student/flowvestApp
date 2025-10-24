@@ -88,6 +88,8 @@ const delPayout = async () => {
           >
             {payouts.status.charAt(0).toUpperCase() + payouts.status.slice(1)}
           </Text>
+          <Text style={styles.label}>Participant</Text>
+          <Text style={styles.value}>{payouts.participant_name}({payouts.participant_email})</Text>
           <Text style={styles.label}>Recipient</Text>
           <Text style={styles.value}>{mockPayout.recipient}</Text>
           <Text style={styles.label}>Method</Text>
@@ -124,7 +126,7 @@ const delPayout = async () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Colors.background },
+  container: { flex: 1, backgroundColor: Colors.background,marginBottom:40 },
   closeBtn: {
     position: "absolute",
     top: 32,

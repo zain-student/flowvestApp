@@ -93,11 +93,11 @@ export const NotificationTemplatesScreen: React.FC<{ navigation: any }> = ({ nav
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff", padding: 16 },
+  container: { flex: 1, backgroundColor: Colors.background, padding: 16 },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#f5f5f5",
+    backgroundColor: Colors.white,
     borderRadius: 10,
     paddingHorizontal: 12,
     marginBottom: 10,
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   card: {
-    backgroundColor: "#f9f9f9",
+    backgroundColor: Colors.white,
     padding: 15,
     borderRadius: 12,
     marginBottom: 10,

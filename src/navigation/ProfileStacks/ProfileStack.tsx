@@ -92,7 +92,7 @@ export const ProfileStack = () => {
         component={NotificationButtons}
         options={({ navigation }) => ({
           // gestureEnabled: false,
-          title: 'Notification Buttons',
+          title: 'Notifications Center',
           headerTitleAlign: 'center',
           headerLeft: () => (
             <TouchableOpacity

@@ -8,6 +8,7 @@ import { RouteProp, useRoute } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useEffect } from "react";
 import {
+  Alert,
   ScrollView,
   StyleSheet,
   Text,
@@ -99,18 +100,27 @@ const delPayout = async () => {
 
           {payouts.status.toLowerCase() !== "cancelled" && (<View style={styles.footer}>
             <Button
-              title="Cancel Payout"
-              icon={<Ionicons name="trash" size={20} color={Colors.white} />}
-              onPress={() => {
-                console.log("Editing investment:"); // full object
-                console.log("Editing investment ID:")
-                delPayout()
-              }
-              }
-              style={styles.cancelButton}
-              textStyle={styles.footerButtonText}
-              variant="primary"
-            />
+                title="Cancel Payout"
+                icon={<Ionicons name="trash" size={20} color={Colors.white} />}
+                onPress={() => {
+                  Alert.alert(
+                    "Confirm Cancellation",
+                    "Are you sure you want to cancel this payout?",
+                    [
+                      { text: "No", style: "cancel" },
+                      {
+                        text: "Yes",
+                        style: "destructive",
+                        onPress: () => delPayout()
+                      },
+                    ]
+                  );
+                }
+                }
+                style={styles.cancelButton}
+                textStyle={styles.footerButtonText}
+                variant="primary"
+              />
           </View>)}
         </View>
         <Text style={styles.sectionTitle}>Timeline</Text>

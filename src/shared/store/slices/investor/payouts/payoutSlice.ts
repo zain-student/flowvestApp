@@ -120,6 +120,21 @@ export const fetchPayoutsById = createAsyncThunk(
     return response.data.data;
   }
 );
+// Mark Payout as Paid
+export const markPayoutAsPaid = createAsyncThunk(
+  "payouts/markAsPaid",
+  async ({ id, data }: { id: number; data: any }, { rejectWithValue }) => {
+    try {
+      const response = await api.put(API_ENDPOINTS.PAYOUTS.MARK_PAID(id), data);
+      console.log("Mark Payout as Paid response:", response.data);
+      return response.data.data.payout;
+    } catch (error: any) {
+      ToastAndroid.show(error.message, ToastAndroid.SHORT);
+      return rejectWithValue(error.response?.data.message || "Failed to mark payout as paid");
+    }
+  }
+);
+
 // Cancel Payout
 // slice.ts
 export const cancelPayout = createAsyncThunk<
@@ -220,6 +235,18 @@ const payoutSlice = createSlice({
       })
 
       .addCase(cancelPayout.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      // reducers for mark payout as paid
+      .addCase(markPayoutAsPaid.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(markPayoutAsPaid.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.currentPayout = action.payload;
+      })
+      .addCase(markPayoutAsPaid.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       });

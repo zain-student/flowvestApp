@@ -2,7 +2,7 @@ import { PayoutStackParamList } from "@/navigation/InvestorStacks/PayoutStack";
 import Colors from "@/shared/colors/Colors";
 import { Button } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { cancelPayout, fetchPayoutsById } from "@/shared/store/slices/investor/payouts/payoutSlice";
+import { cancelPayout, fetchPayoutsById, markPayoutAsPaid } from "@/shared/store/slices/investor/payouts/payoutSlice";
 import { Ionicons } from "@expo/vector-icons";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -16,6 +16,7 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
+import { MarkAsPaidModal } from "../components/MarkAsPaidModal";
 const mockPayout = {
   id: 1,
   date: "2024-07-15",
@@ -39,6 +40,7 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
   const payouts = useAppSelector(
     (state) => state.payout.currentPayout
   );
+   const [showPayModal, setShowPayModal] = React.useState(false);
   useEffect(() => {
     dispatch(fetchPayoutsById(id));
 
@@ -50,14 +52,25 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
       </View>
     );
   }
-const delPayout = async () => {
-  try {
-    await dispatch(cancelPayout(payouts.id)).unwrap();
-  } catch (err) {
-    console.error("❌ Cancel payout failed:", err);
-    ToastAndroid.show("Failed to cancel payout", ToastAndroid.SHORT);
-  }
-};
+  const delPayout = async () => {
+    try {
+      await dispatch(cancelPayout(payouts.id)).unwrap();
+    } catch (err) {
+      console.error("❌ Cancel payout failed:", err);
+      ToastAndroid.show("Failed to cancel payout", ToastAndroid.SHORT);
+    }
+  };
+  const handleSubmitPayment = async (data: any) => {
+    try {
+      await dispatch(markPayoutAsPaid({ id: payouts.id, data })).unwrap();
+      ToastAndroid.show("✅ Payout marked as paid", ToastAndroid.SHORT);
+      setShowPayModal(false);
+      navigation.goBack();
+    } catch (err) {
+      console.error("❌ Mark as paid failed:", err);
+      ToastAndroid.show("❌ Failed to mark payout as paid", ToastAndroid.SHORT);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -96,32 +109,62 @@ const delPayout = async () => {
           <Text style={styles.label}>Method</Text>
           <Text style={styles.value}>{payouts.notes ?? "Not Paid Yet"}</Text>
           <Text style={styles.label}>Date</Text>
-          <Text style={styles.value}>{payouts.scheduled_date}</Text>
-
-          {payouts.status.toLowerCase() !== "cancelled" && (<View style={styles.footer}>
-            <Button
-                title="Cancel Payout"
-                icon={<Ionicons name="trash" size={20} color={Colors.white} />}
-                onPress={() => {
-                  Alert.alert(
-                    "Confirm Cancellation",
-                    "Are you sure you want to cancel this payout?",
-                    [
-                      { text: "No", style: "cancel" },
-                      {
-                        text: "Yes",
-                        style: "destructive",
-                        onPress: () => delPayout()
-                      },
-                    ]
-                  );
-                }
-                }
-                style={styles.cancelButton}
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Text style={styles.value}>{payouts.scheduled_date}</Text>
+            {/* pay payout button */}
+            {payouts.status.toLowerCase() !== "paid" && payouts.status.toLowerCase() !== "cancelled" && (<View
+            // style={styles.footer}
+            >
+              <Button
+                title="Pay"
+                icon={<Ionicons name="send-sharp" size={20} color={Colors.white} />}
+                onPress={() => setShowPayModal(true)}
+                style={styles.payButton}
                 textStyle={styles.footerButtonText}
                 variant="primary"
               />
+
+              <MarkAsPaidModal
+                visible={showPayModal}
+                onClose={() => setShowPayModal(false)}
+                onSubmit={handleSubmitPayment}
+                payoutSummary={{
+                  investmentName: payouts.investment_title,
+                  participantName: payouts.participant_name,
+                  amount: payouts.amount,
+                  scheduledDate: payouts.scheduled_date,
+                }}
+              />
+
+            </View>)
+            }
+          </View>
+
+          {payouts.status.toLowerCase() !== "paid" && payouts.status.toLowerCase() !== "cancelled" && (<View style={styles.footer}>
+            <Button
+              title="Cancel Payout"
+              icon={<Ionicons name="trash" size={20} color={Colors.white} />}
+              onPress={() => {
+                Alert.alert(
+                  "Confirm Cancellation",
+                  "Are you sure you want to cancel this payout?",
+                  [
+                    { text: "No", style: "cancel" },
+                    {
+                      text: "Yes",
+                      style: "destructive",
+                      onPress: () => delPayout()
+                    },
+                  ]
+                );
+              }
+              }
+              style={styles.cancelButton}
+              textStyle={styles.footerButtonText}
+              variant="primary"
+            />
           </View>)}
+
         </View>
         <Text style={styles.sectionTitle}>Timeline</Text>
         {mockPayout.timeline.map((item) => (
@@ -136,7 +179,7 @@ const delPayout = async () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Colors.background,marginBottom:40 },
+  container: { flex: 1, backgroundColor: Colors.background, marginBottom: 40 },
   closeBtn: {
     position: "absolute",
     top: 32,
@@ -190,6 +233,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginHorizontal: 5,
     backgroundColor: "#EF4444", // Blue
+  },
+  payButton: {
+    flex: 1,
+    paddingVertical: 5,
+    borderRadius: 6,
+    alignItems: "center",
+    marginHorizontal: 5,
+    backgroundColor: Colors.primary,
   },
   footerButtonText: {
     color: "#fff",

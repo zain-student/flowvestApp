@@ -88,7 +88,7 @@ export const API_ENDPOINTS = {
   PAYOUTS: {
     LIST: '/v1/payouts/managed',
     DETAIL: (id: number) => `/v1/payouts/managed/${id}`,
-    MARK_PAID: (id: number) => `/v1/payouts/${id}/mark-paid`,
+    MARK_PAID: (id: number) => `/v1/payouts/managed/${id}`,
     CANCEL: (id: number) => `/v1/payouts/managed/${id}`,
     RESCHEDULE: (id: number) => `/v1/payouts/${id}/reschedule`,
     UPCOMING: '/v1/payouts/upcoming/all',

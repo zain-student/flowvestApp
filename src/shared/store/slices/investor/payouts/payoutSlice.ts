@@ -37,12 +37,12 @@ interface Pagination {
   per_page: number;
   total: number;
 }
-interface summary{
-  total_payouts: number,
-  total_amount: number,
-  paid_amount: number,
-  pending_amount: number,
-  overdue_amount: number
+interface summary {
+  total_payouts: number;
+  total_amount: number;
+  paid_amount: number;
+  pending_amount: number;
+  overdue_amount: number;
 }
 export interface PayoutsResponse {
   success: boolean;
@@ -87,7 +87,7 @@ export const fetchPayouts = createAsyncThunk<
     const response = await api.get(
       `${API_ENDPOINTS.PAYOUTS.LIST}?page=${page}`
     );
-    console.log("Payouts API response:",response.data)
+    console.log("Payouts API response:", response.data);
     const payouts = response.data?.data?.payouts || [];
     const pagination = response.data?.data?.pagination || {
       current_page: 1,
@@ -130,7 +130,9 @@ export const markPayoutAsPaid = createAsyncThunk(
       return response.data.data.payout;
     } catch (error: any) {
       ToastAndroid.show(error.message, ToastAndroid.SHORT);
-      return rejectWithValue(error.response?.data.message || "Failed to mark payout as paid");
+      return rejectWithValue(
+        error.response?.data.message || "Failed to mark payout as paid"
+      );
     }
   }
 );
@@ -151,7 +153,7 @@ export const cancelPayout = createAsyncThunk<
       );
     }
 
-    ToastAndroid.show("Payout Cancelled successfully",ToastAndroid.SHORT)
+    ToastAndroid.show("Payout Cancelled successfully", ToastAndroid.SHORT);
     return { id: payoutId };
   } catch (error: any) {
     return rejectWithValue(
@@ -217,21 +219,20 @@ const payoutSlice = createSlice({
       .addCase(cancelPayout.pending, (state) => {
         state.isLoading = true;
         state.error = null;
-      });
-    builder
+      })
       .addCase(cancelPayout.fulfilled, (state, action) => {
         const { id } = action.payload;
         const payout = state.payouts.find((p) => p.id === id);
         if (payout) {
           payout.status = "cancelled";
         }
-        if(state.currentPayout?.id === id){
-          state.currentPayout={
-            ...state.currentPayout, 
-            status: "cancelled"
-          }
+        if (state.currentPayout?.id === id) {
+          state.currentPayout = {
+            ...state.currentPayout,
+            status: "cancelled",
+          };
         }
-        state.isLoading= false;
+        state.isLoading = false;
       })
 
       .addCase(cancelPayout.rejected, (state, action) => {
@@ -243,8 +244,17 @@ const payoutSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(markPayoutAsPaid.fulfilled, (state, action) => {
+        // state.isLoading = false;
+        // state.currentPayout = action.payload;
+        const { id } = action.payload;
+
+        // Find the payout inside the list
+        const payout = state.payouts.find((p) => p.id === id);
+        if (payout) {
+          payout.status = "paid"; // ✅ Update status to paid
+        }
+        // End loading state
         state.isLoading = false;
-        state.currentPayout = action.payload;
       })
       .addCase(markPayoutAsPaid.rejected, (state, action) => {
         state.isLoading = false;

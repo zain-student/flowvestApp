@@ -24,6 +24,7 @@ export interface Investment {
   can_pause: boolean;
   can_resume: boolean;
   can_complete: boolean;
+  current_total_invested: string;
   performance: InvestmentPerformance;
   created_at: string;
   updated_at: string;

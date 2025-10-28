@@ -136,7 +136,7 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
 
           <Text style={styles.label}>Amount Invested</Text>
           <Text style={styles.value}>
-            ${currentInvestment.initial_amount ?? " --"}
+            ${currentInvestment.type.toLowerCase()==="shared"?currentInvestment.current_total_invested:currentInvestment.initial_amount}
           </Text>
           <Text style={styles.label}>Status</Text>
           <Text
@@ -159,6 +159,8 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
               : "--"}
             %
           </Text>
+           <Text style={styles.label}>Frequency</Text>
+          <Text style={styles.returns}>{currentInvestment.frequency.charAt(0).toUpperCase()+currentInvestment.frequency.slice(1)}</Text>
           <Text style={styles.label}>Start Date</Text>
           <Text style={styles.value}>{currentInvestment.start_date}</Text>
           <Text style={styles.label}>End Date</Text>

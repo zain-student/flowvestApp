@@ -45,7 +45,9 @@ export const InvestmentsScreen: React.FC = () => {
   const formattedInvestments = investments.map((inv: any) => ({
     id: inv.id,
     name: inv.name,
+    type: inv.type,
     amount: inv.initial_amount,
+    shared_amount: inv.current_total_invested,
     status: inv.status.charAt(0).toUpperCase() + inv.status.slice(1),
     returns: inv.expected_return_rate,
     date: inv.start_date,
@@ -64,13 +66,7 @@ export const InvestmentsScreen: React.FC = () => {
     // always start at page 1
     dispatch(fetchInvestments({ page: 1, search }));
   };
-  // Auto reload when search is cleared (with debounce)
-  // 🔹 When user types
-  const handleSearchChange = (text: string) => {
-    setSearch(text);
-  };
-
-  // 🔹 When search text changes
+  // When search text changes
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       if (search.trim() === "") {
@@ -104,7 +100,7 @@ export const InvestmentsScreen: React.FC = () => {
     >
       <View style={{ flex: 1 }}>
         <Text style={styles.investmentName}>{item.name}</Text>
-        <Text style={styles.investmentAmount}>Amount: ${item.amount}</Text>
+        <Text style={styles.investmentAmount}>Amount: ${item.type === "shared" ? item.shared_amount : item.amount}</Text>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <Text style={styles.investmentDate}>Started: {item.date}</Text>
           <Text

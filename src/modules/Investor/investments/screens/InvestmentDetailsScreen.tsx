@@ -138,6 +138,9 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
           <Text style={styles.value}>
             ${currentInvestment.type.toLowerCase()==="shared"?currentInvestment.current_total_invested:currentInvestment.initial_amount}
           </Text>
+           {currentInvestment.type==="shared"&&(<Text style={styles.value}>
+            Min: ${currentInvestment.min_investment_amount} - Max: ${currentInvestment.max_investment_amount}
+          </Text>)}
           <Text style={styles.label}>Status</Text>
           <Text
             style={[
@@ -151,7 +154,7 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
               currentInvestment.status.slice(1)}
           </Text>
           <Text style={styles.label}>Type</Text>
-          <Text style={styles.returns}>{currentInvestment.type}</Text>
+          <Text style={styles.returns}>{currentInvestment.type.charAt(0).toUpperCase()+currentInvestment.type.slice(1)}</Text>
           <Text style={styles.label}>Returns</Text>
           <Text style={styles.returns}>
             {currentInvestment.expected_return_rate != null

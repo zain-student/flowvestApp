@@ -17,6 +17,8 @@ export interface Investment {
   status: string;
   return_type: string;
   initial_amount: string;
+  min_investment_amount: string;
+  max_investment_amount: string;
   is_creator: boolean;
   is_participant: boolean;
   can_edit: boolean;

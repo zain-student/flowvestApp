@@ -34,7 +34,7 @@ export const InvestmentDetails = ({ navigation }: any) => {
     id: inv.id,
     name: inv.name,
     amount: inv.current_total_invested,
-    targetAmouunt: inv.total_target_amount,
+    targetAmount: inv.total_target_amount,
     status: inv.status.charAt(0).toUpperCase() + inv.status.slice(1),
     returns: inv.expected_return_rate,
     date: inv.start_date,
@@ -54,7 +54,7 @@ export const InvestmentDetails = ({ navigation }: any) => {
       <View style={{ flex: 1 }}>
         <Text style={styles.investmentName}>{item.name}</Text>
         <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-          <Text style={styles.investmentAmount}>Amount: ${item.amount} / ${item.targetAmouunt}</Text>
+          <Text style={styles.investmentAmount}>Amount Invested: ${item.amount}</Text>
           <Text
             style={[
               styles.investmentStatus,
@@ -64,6 +64,7 @@ export const InvestmentDetails = ({ navigation }: any) => {
             {item.status}
           </Text>
         </View>
+            <Text style={styles.investmentAmount}>Target Amount:  ${item.targetAmount}</Text>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <Text style={styles.investmentDate}>Started: {item.date}</Text>
           <Text style={styles.investmentParticipants}>Participants: {item.participants}</Text>

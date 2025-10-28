@@ -135,8 +135,10 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
 
         <View style={styles.row}>
           <Text style={styles.amount}>
-            Amount: ${item.current_total_invested ?? "N/A"} / $
-            {item.total_target_amount ?? "N/A"}
+            Amount: ${item.current_total_invested ?? "N/A"} 
+          </Text>
+          <Text style={styles.amount}>
+            Min: ${item.min_investment_amount ?? "N/A"} - Max: ${item.max_investment_amount ?? "N/A"} 
           </Text>
         </View>
 

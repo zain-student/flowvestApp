@@ -90,13 +90,14 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
 
         <View style={styles.summaryCard}>
           <LabelValue label="Amount Invested" value={`$${currentInvestment.current_total_invested ?? "0"}`} />
+
           <LabelValue
             label="Status"
             value={capitalize(currentInvestment.status)}
             valueStyle={currentInvestment.status === "active" ? styles.statusActive : styles.statusCompleted}
           />
           <LabelValue label="Total Participants" value={`${currentInvestment.total_participants ?? 0}`} />
-          <LabelValue label="Type" value={currentInvestment.type} />
+          <LabelValue label="Type" value={currentInvestment.type.charAt(0).toUpperCase() + currentInvestment.type.slice(1)} />
           <LabelValue label="Returns" value={`${parseFloat(currentInvestment.expected_return_rate).toFixed(1)}%`} />
           <LabelValue label="Start Date" value={currentInvestment.start_date} />
           <LabelValue label="End Date" value={currentInvestment.end_date} />

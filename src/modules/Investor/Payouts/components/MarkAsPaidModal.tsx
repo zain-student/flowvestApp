@@ -1,5 +1,5 @@
 import Colors from "@/shared/colors/Colors";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 
@@ -27,6 +27,15 @@ export const MarkAsPaidModal: React.FC<MarkAsPaidModalProps> = ({
   const [referenceNumber, setReferenceNumber] = useState("");
   const [notes, setNotes] = useState("");
   const [isFocus, setIsFocus] = useState(false);
+// 👇 Reset form fields when modal opens/closes
+useEffect(() => {
+  if (!visible) {
+    setPaymentMethod("Bank Transfer");
+    setReferenceNumber("");
+    setNotes("");
+    setIsFocus(false);
+  }
+}, [visible]);
 
   const paymentOptions = [
     { label: "Bank Transfer", value: "Bank Transfer" },

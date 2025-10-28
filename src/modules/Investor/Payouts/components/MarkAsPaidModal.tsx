@@ -7,12 +7,13 @@ interface MarkAsPaidModalProps {
   visible: boolean;
   onClose: () => void;
   onSubmit: (data: any) => void;
-  payoutSummary: {
+  payoutSummary?: {
     investmentName: string;
     participantName: string;
     amount: number;
     scheduledDate: string;
   };
+  isBulk?: boolean;
 }
 
 export const MarkAsPaidModal: React.FC<MarkAsPaidModalProps> = ({
@@ -20,6 +21,7 @@ export const MarkAsPaidModal: React.FC<MarkAsPaidModalProps> = ({
   onClose,
   onSubmit,
   payoutSummary,
+  isBulk,
 }) => {
   const [paymentMethod, setPaymentMethod] = useState("Bank Transfer");
   const [referenceNumber, setReferenceNumber] = useState("");
@@ -54,6 +56,7 @@ export const MarkAsPaidModal: React.FC<MarkAsPaidModalProps> = ({
           <Text style={styles.header}>Process Payment</Text>
 
           {/* Payout Summary */}
+          {!isBulk && payoutSummary &&(
           <View style={styles.summaryBox}>
             <Text style={styles.summaryTitle}>Payout Summary</Text>
             <View style={styles.summaryRow}>
@@ -73,6 +76,7 @@ export const MarkAsPaidModal: React.FC<MarkAsPaidModalProps> = ({
               <Text style={styles.value}>{payoutSummary.scheduledDate}</Text>
             </View>
           </View>
+         ) }
 
           {/* Payment Method */}
           <Text style={styles.inputLabel}>Payment Method</Text>

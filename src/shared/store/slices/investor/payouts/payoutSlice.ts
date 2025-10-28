@@ -136,6 +136,30 @@ export const markPayoutAsPaid = createAsyncThunk(
     }
   }
 );
+// Bulk Update Payouts
+export const bulkUpdatePayouts = createAsyncThunk(
+  "payouts/bulkUpdatePayouts",
+  async (payload: {
+    payout_ids: number[];
+    status: string;
+    payment_method: string;
+    reference_number: string;
+    notes?: string;
+  }, { rejectWithValue }) => {
+    try {
+      const response = await api.post(
+        API_ENDPOINTS.PAYOUTS.BULK_MARK_PAID,
+        payload
+      );
+      console.log("Bulk Update Payouts response:", response.data);
+      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+      return response.data;
+    } catch (error: any) {
+      console.error("Bulk Update Payouts error:", error);
+      return rejectWithValue(error.response?.data.message || "Failed to bulk update payouts");
+    }
+  }
+);
 
 // Cancel Payout
 // slice.ts
@@ -259,7 +283,25 @@ const payoutSlice = createSlice({
       .addCase(markPayoutAsPaid.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
+      })
+      // reducers for bulk update payouts
+      .addCase(bulkUpdatePayouts.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(bulkUpdatePayouts.fulfilled, (state, action) => {
+        const updatedIds= action.meta.arg.payout_ids;
+        state.payouts = state.payouts.map((payout) =>
+          updatedIds.includes(payout.id)
+            ? { ...payout, status: "paid" }
+            : payout
+        );
+        state.isLoading = false;
+      })
+      .addCase(bulkUpdatePayouts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
       });
+      
   },
 });
 

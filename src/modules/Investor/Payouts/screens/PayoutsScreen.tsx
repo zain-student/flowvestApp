@@ -229,7 +229,7 @@
 import { PayoutStackParamList } from "@/navigation/InvestorStacks/PayoutStack";
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { fetchPayouts } from "@/shared/store/slices/investor/payouts/payoutSlice";
+import { bulkUpdatePayouts, fetchPayouts } from "@/shared/store/slices/investor/payouts/payoutSlice";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -239,10 +239,12 @@ import {
   FlatList,
   StyleSheet,
   Text,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from "react-native";
 import { DashboardLayout } from "../../../Common/components/DashboardLayout";
+import { MarkAsPaidModal } from "../components/MarkAsPaidModal";
 
 const FILTERS = ["All", "Cancelled", "Scheduled", "Paid"];
 
@@ -257,6 +259,7 @@ export const PayoutsScreen: React.FC = () => {
   // ✅ Selection state
   const [selectedPayouts, setSelectedPayouts] = useState<number[]>([]);
   const [selectionMode, setSelectionMode] = useState(false);
+  const [showMarkAsPaidModal, setShowMarkAsPaidModal] = useState(false);
 
   const formattedPayouts = payouts.map((pay: any) => ({
     id: pay.id,
@@ -299,7 +302,10 @@ export const PayoutsScreen: React.FC = () => {
     setSelectionMode(true);
     toggleSelection(id);
   };
-
+  const handleOpenMarkAsPaid = () => {
+    if (selectedPayouts.length === 0) return;
+    setShowMarkAsPaidModal(true);
+  };
   const handlePayoutPress = (item: any) => {
     if (selectionMode) {
       toggleSelection(item.id);
@@ -316,16 +322,27 @@ export const PayoutsScreen: React.FC = () => {
     }
   };
 
-  const handleBulkPaid = () => {
-    console.log("Marking as paid:", selectedPayouts);
-    // For now, only reset selection
-    setSelectionMode(false);
-    setSelectedPayouts([]);
-  };
-
   const handleCancelSelection = () => {
     setSelectionMode(false);
     setSelectedPayouts([]);
+  };
+  const handleBulkMarkAsPaid = async (formData: any) => {
+    try {
+      const payload = {
+        payout_ids: selectedPayouts,
+        ...formData, // includes status, payment_method, reference_number, notes
+      };
+      console.log("Bulk Mark as Paid payload:", payload);
+      await dispatch(bulkUpdatePayouts(payload)).unwrap();
+
+
+      setShowMarkAsPaidModal(false);
+      setSelectionMode(false);
+      setSelectedPayouts([]);
+      dispatch(fetchPayouts(1)); // refresh list
+    } catch (error: any) {
+      ToastAndroid.show(error?.message || "Failed to mark payouts as paid.", ToastAndroid.SHORT);
+    }
   };
 
   // ✅ Render payout card
@@ -433,12 +450,19 @@ export const PayoutsScreen: React.FC = () => {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.bulkPaidBtn} onPress={handleBulkPaid}>
+            <TouchableOpacity style={styles.bulkPaidBtn} onPress={handleOpenMarkAsPaid}>
               <Feather name="check" size={18} color="#fff" />
               <Text style={styles.bulkPaidText}>Mark as Paid</Text>
             </TouchableOpacity>
           </View>
         )}
+        <MarkAsPaidModal
+          visible={showMarkAsPaidModal}
+          onClose={() => setShowMarkAsPaidModal(false)}
+          onSubmit={handleBulkMarkAsPaid}
+          isBulk={true} // 👈 Hide details
+        />
+
         {/* List */}
         <Text style={styles.sectionTitle}>Payouts</Text>
         <FlatList

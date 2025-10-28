@@ -94,7 +94,7 @@ export const API_ENDPOINTS = {
     UPCOMING: '/v1/payouts/upcoming/all',
     OVERDUE: '/v1/payouts/overdue/all',
     STATISTICS: '/v1/payouts/managed/statistics',
-    BULK_MARK_PAID: '/v1/payouts/bulk/mark-paid',
+    BULK_MARK_PAID: '/v1/payouts/managed/bulk-update',
   },
   
   // Portfolio

@@ -40,7 +40,7 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
   const payouts = useAppSelector(
     (state) => state.payout.currentPayout
   );
-   const [showPayModal, setShowPayModal] = React.useState(false);
+  const [showPayModal, setShowPayModal] = React.useState(false);
   useEffect(() => {
     dispatch(fetchPayoutsById(id));
 
@@ -106,18 +106,22 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
           <Text style={styles.value}>{payouts.participant_name}({payouts.participant_email})</Text>
           <Text style={styles.label}>Recipient</Text>
           <Text style={styles.value}>{mockPayout.recipient}</Text>
-          {/* <Text style={styles.label}>Method</Text> */}
-          { payouts.status.toLowerCase() === "cancelled" &&(
-          <Text style={styles.value}>{payouts.notes ?? "N/A"}</Text>
+          {payouts.status.toLowerCase() === "cancelled" && (
+            <>
+              <Text style={styles.label}>Notes</Text>
+              <Text style={styles.value}>{payouts.notes ?? "N/A"}</Text>
+            </>
           )
           }
-          {payouts.status.toLowerCase() === "paid" &&(
+          {payouts.status.toLowerCase() === "paid" && (
             <>
-            <Text style={styles.label}>Method</Text>
-           <Text style={styles.value}>{payouts.payment_method ?? "Not Paid Yet"}</Text>
-           </>
+              <Text style={styles.label}>Method</Text>
+              <Text style={styles.value}>{payouts.payment_method ?? "Not Paid Yet"}</Text>
+              <Text style={styles.label}>Reference No</Text>
+              <Text style={styles.value}>{payouts.reference_number || "N/A"}</Text>
+            </>
           )
-            }
+          }
           <Text style={styles.label}>Date</Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <Text style={styles.value}>{payouts.scheduled_date}</Text>

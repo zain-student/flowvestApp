@@ -143,7 +143,7 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
               }}
               // error={errors.email}
               required
-              autoFocus
+              // autoFocus
             />
             {/* {errors.amount && <Text style={styles.error}>{errors.amount.message}</Text>} */}
 

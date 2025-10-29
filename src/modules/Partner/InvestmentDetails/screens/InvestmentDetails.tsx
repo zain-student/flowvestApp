@@ -63,8 +63,8 @@ export const InvestmentDetails = ({ navigation }: any) => {
           >
             {item.status}
           </Text>
-            <Text style={styles.investmentAmount}>Target Amount:  ${item.targetAmount}</Text>
         </View>
+        <Text style={styles.investmentAmount}>Target Amount:  ${item.targetAmount}</Text>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <Text style={styles.investmentDate}>Started: {item.date}</Text>
           <Text style={styles.investmentParticipants}>Participants: {item.participants}</Text>

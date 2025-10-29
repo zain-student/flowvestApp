@@ -227,6 +227,8 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
             </View>
           }
         </View>
+        {showJoinForm ? null :
+       <>
         <Text style={styles.sectionTitle}>Transactions</Text>
         {currentInvestment?.recent_payouts?.map((tx: any) => (
           <View key={tx.id} style={styles.txCard}>
@@ -235,6 +237,8 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
             <Text style={styles.txDate}>Due: {tx.due_date}</Text>
           </View>
         ))}
+        </>
+        }
         {showJoinForm &&
           <View style={{
             marginBottom: 20, marginTop: 5, width: '100%', borderWidth: 1,

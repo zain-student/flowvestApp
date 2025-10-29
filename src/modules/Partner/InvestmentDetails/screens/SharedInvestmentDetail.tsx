@@ -102,6 +102,8 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
           <LabelValue label="Start Date" value={currentInvestment.start_date} />
           <LabelValue label="End Date" value={currentInvestment.end_date} />
         </View>
+        {showJoinForm ? null :
+          <>
         <Text style={styles.sectionTitle}>Performance</Text>
         <View style={styles.txCard}>
           <Text style={styles.txType}>Total Paid Out</Text>
@@ -117,6 +119,7 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
             <Text style={styles.txDate}>{currentInvestment.performance?.next_payout_date ?? 0}</Text>
           </View>
         )}
+        </>}
         {showJoinForm &&
           <View style={{ marginBottom: 20, marginTop: 5, width: '100%',borderWidth:1,
             borderColor: Colors.lightGray, borderRadius: 8, padding: 10,

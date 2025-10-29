@@ -229,13 +229,15 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
         </View>
         {showJoinForm ? null :
        <>
-        <Text style={styles.sectionTitle}>Transactions</Text>
         {currentInvestment?.recent_payouts?.map((tx: any) => (
+          <>
+        <Text style={styles.sectionTitle}>Transactions</Text>
           <View key={tx.id} style={styles.txCard}>
             <Text style={styles.txType}>{tx.payout_type.charAt(0).toUpperCase() + tx.payout_type.slice(1)}</Text>
             <Text style={styles.txAmount}>${tx.amount.toLocaleString()}</Text>
             <Text style={styles.txDate}>Due: {tx.due_date}</Text>
           </View>
+          </>
         ))}
         </>
         }

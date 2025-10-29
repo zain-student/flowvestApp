@@ -104,28 +104,27 @@ export const InvestmentsScreen: React.FC = () => {
         <View
           style={{
             flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
+            justifyContent: "flex-end",
           }}
         >
-          <Text style={styles.investmentName}>{item.name}({item.type.charAt(0).toUpperCase()+ item.type.slice(1)})</Text>
           {item.type === "shared" && item.status === "Active" && item.can_join===true && (
             <TouchableOpacity
-              style={styles.joinBtn}
-              activeOpacity={0.7}
-              onPress={() => {
-                navigation.navigate("InvestmentDetails", {
-                  id: item.id,
-                  showJoinForm: "true",
-                });
-                console.log("Join investment tapped:", item.id);
-              }}
+            style={styles.joinBtn}
+            activeOpacity={0.7}
+            onPress={() => {
+              navigation.navigate("InvestmentDetails", {
+                id: item.id,
+                showJoinForm: "true",
+              });
+              console.log("Join investment tapped:", item.id);
+            }}
             >
               <Ionicons name="add-circle-outline" size={18} color={Colors.white} />
               <Text style={styles.joinBtnText}>Join Investment</Text>
             </TouchableOpacity>)
           }
         </View>
+          <Text style={styles.investmentName}>{item.name}(<Text style={styles.investmentAmount}>{item.type.charAt(0).toUpperCase()+ item.type.slice(1)}</Text>)</Text>
         <Text style={styles.investmentAmount}>Amount: ${item.type === "shared" ? item.shared_amount : item.amount}</Text>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <Text style={styles.investmentDate}>Started: {item.date}</Text>

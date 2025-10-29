@@ -53,7 +53,7 @@ export const MyInvestments = ({ navigation }: Props) => {
                 </View>
                 <Text style={styles.investmentAmount}>Target Amount:  ${item.total_target_amount}</Text>
                 <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                    <Text style={styles.investmentDate}>Started: {item.start_date}</Text>
+                    <Text style={styles.investmentDate}>Joined: {item.joined_at}</Text>
                     <Text style={styles.investmentParticipants}>Participants: {item.total_participants}</Text>
                 </View>
             </View>
@@ -107,7 +107,6 @@ export const MyInvestments = ({ navigation }: Props) => {
                 keyExtractor={(item) => item.id.toString()}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom: 24 }}
-
                 onEndReached={handleLoadMore}
                 onEndReachedThreshold={0.5}
                 refreshing={isLoading}
@@ -118,6 +117,32 @@ export const MyInvestments = ({ navigation }: Props) => {
                         <ActivityIndicator size="small" color={Colors.green} />
                     ) : null
                 }
+
+                ListHeaderComponent={
+                    <View style={styles.card}>
+                        <Text style={styles.title}>Joined Investments Overview</Text>
+                        <Text style={styles.label}>Total Investments: <Text style={styles.value}>{summary.total_investments}</Text></Text>
+                        <Text style={styles.label}>Active Investments: <Text style={styles.value}>{summary.active_investments}</Text></Text>
+                        <Text style={styles.label}>Average ROI: <Text style={styles.value}>{summary.average_roi}%</Text></Text>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <Text style={styles.label}>Invested: <Text style={styles.value}>${summary.total_invested}</Text></Text>
+                            {/* <Text style={styles.label}>Duration: <Text style={styles.value}>12 Months</Text></Text> */}
+                            <TouchableOpacity style={styles.balanceActionBtnDark}
+                            // onPress={() => { navigation.navigate('PartnerInvestmentStack', { screen: 'SharedInvestments' }) }}
+                            >
+                                <Text style={styles.balanceActionTextDark}>
+                                    Browse Investments
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                }
+                ListEmptyComponent={
+                    <View style={styles.emptyState}>
+                        <Text style={styles.emptyText}>No shared investments available.</Text>
+                    </View>
+                }
+
             />
         </View>
     );
@@ -158,6 +183,37 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
     },
+    card: {
+        backgroundColor: Colors.white,
+        padding: 16, borderRadius: 8,
+        paddingHorizontal: 16,
+        // marginHorizontal: 12,
+        marginBottom: 16,
+        shadowColor: "#000",
+        shadowOpacity: 0.05,
+        shadowRadius: 6,
+        elevation: 2,
+
+    },
+    title: { fontSize: 16, fontWeight: 'bold', color: Colors.secondary, marginBottom: 8 },
+    label: { fontSize: 14, color: Colors.gray, marginBottom: 4 },
+    value: { color: Colors.secondary, fontWeight: '600' },
+    balanceActionBtnDark: {
+        width: '60%',
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: Colors.darkButton,
+        borderRadius: 18,
+        paddingHorizontal: 10,
+        paddingVertical: 10,
+    },
+    balanceActionTextDark: {
+        color: Colors.white,
+        fontSize: 15,
+        fontFamily: "Inter_600SemiBold",
+        marginLeft: 7,
+    },
     investmentCard: {
         backgroundColor: Colors.secondary,
         borderRadius: 10,
@@ -178,6 +234,8 @@ const styles = StyleSheet.create({
     statusClosed: { color: "#6B7280" },
     investmentDate: { fontSize: 13, color: Colors.gray },
     investmentParticipants: { fontSize: 13, color: Colors.gray },
+    emptyState: { justifyContent: "center", alignItems: "center", padding: 20 },
+    emptyText: { fontSize: 16, color: "#6B7280" },
     leaveBtn: {
         marginTop: 8,
         backgroundColor: Colors.error,

@@ -9,7 +9,7 @@ import React from "react";
 import { TouchableOpacity } from "react-native";
 export type InvestmentStackParamList = {
   InvestmentScreen: undefined;
-  InvestmentDetails: { id: number };
+  InvestmentDetails: { id: number,showJoinForm?: String, };
   AddInvestments:undefined;
   EditInvestments: { id: number, mode: string };
   AddPartner:{id: number}

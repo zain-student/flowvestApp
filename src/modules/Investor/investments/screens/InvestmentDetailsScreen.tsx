@@ -24,6 +24,7 @@ type Props = NativeStackScreenProps<
 type RouteProps = RouteProp<InvestmentStackParamList, "InvestmentDetails">;
 export const InvestmentDetailsScreen = ({ navigation }: Props) => {
   const route = useRoute<RouteProps>();
+  const {showJoinForm } = route.params;
   const { id } =
     useRoute<RouteProp<InvestmentStackParamList, "InvestmentDetails">>().params;
   const dispatch = useAppDispatch();
@@ -168,7 +169,8 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
           <Text style={styles.value}>{currentInvestment.start_date}</Text>
           <Text style={styles.label}>End Date</Text>
           <Text style={styles.value}>{currentInvestment.end_date}</Text>
-          <View style={styles.footer}>
+          {!showJoinForm&&
+            <View style={styles.footer}>
             <Button
               title="Update"
               icon={<Ionicons name="create-outline" size={20} color={Colors.white} />}
@@ -195,6 +197,7 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
               variant="primary"
             />
           </View>
+}
         </View>
         <Text style={styles.sectionTitle}>Transactions</Text>
         {currentInvestment?.recent_payouts?.map((tx: any) => (

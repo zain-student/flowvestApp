@@ -119,10 +119,12 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
               <Text style={styles.value}>{payouts.payment_method ?? "Not Paid Yet"}</Text>
               <Text style={styles.label}>Reference No</Text>
               <Text style={styles.value}>{payouts.reference_number || "N/A"}</Text>
+              <Text style={styles.label}>Paid Date</Text>
+              <Text style={styles.value}>{payouts.paid_date}</Text>
             </>
           )
           }
-          <Text style={styles.label}>Date</Text>
+          <Text style={styles.label}>Scheduled Date</Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <Text style={styles.value}>{payouts.scheduled_date}</Text>
             {/* pay payout button */}

@@ -169,7 +169,7 @@ export const fetchInvestments = createAsyncThunk(
       signal.addEventListener("abort", () => controller.abort());
 
       const response = await api.get(
-        `${API_ENDPOINTS.INVESTMENTS.LIST}?page=${page}&search=${encodeURIComponent(search)}`,
+        `${API_ENDPOINTS.INVESTMENTS.LIST}?scope=owned&page=${page}&search=${encodeURIComponent(search)}`,
         { signal: controller.signal }
       );
 

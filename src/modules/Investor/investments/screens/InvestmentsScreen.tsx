@@ -61,6 +61,7 @@ export const InvestmentsScreen: React.FC = () => {
   // First page load
   useEffect(() => {
     dispatch(fetchInvestments({ page: 1 }));
+    console.log("Investments loaded",stats.total_investments)
   }, [dispatch]);
   const handleSearch = () => {
     // always start at page 1
@@ -99,7 +100,31 @@ export const InvestmentsScreen: React.FC = () => {
       onPress={() => navigation.navigate("InvestmentDetails", { id: item.id })}
     >
       <View style={{ flex: 1 }}>
-        <Text style={styles.investmentName}>{item.name}</Text>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Text style={styles.investmentName}>{item.name}</Text>
+          {item.type === "shared" && item.status === "Active" && (
+          <TouchableOpacity
+            style={styles.joinBtn}
+            activeOpacity={0.7}
+            onPress={() => {
+              navigation.navigate("InvestmentDetails", {
+                id: item.id,
+                showJoinForm: "true",
+              });
+              console.log("Join investment tapped:", item.id);
+            }}
+          >
+            <Ionicons name="add-circle-outline" size={18} color={Colors.white} />
+            <Text style={styles.joinBtnText}>Join Investment</Text>
+          </TouchableOpacity>)
+          }
+        </View>
         <Text style={styles.investmentAmount}>Amount: ${item.type === "shared" ? item.shared_amount : item.amount}</Text>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <Text style={styles.investmentDate}>Started: {item.date}</Text>
@@ -295,6 +320,22 @@ const styles = StyleSheet.create({
     marginLeft: 6,
     justifyContent: "center",
     alignItems: "center",
+  },
+  joinBtn: {
+    marginTop: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "flex-end",
+    backgroundColor: Colors.primary,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+  },
+  joinBtnText: {
+    color: Colors.white,
+    fontSize: 14,
+    fontWeight: "600",
+    marginLeft: 6,
   },
   investmentCard: {
     backgroundColor: Colors.secondary,

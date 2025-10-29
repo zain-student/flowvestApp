@@ -1,10 +1,11 @@
 import { InvestmentStackParamList } from "@/navigation/InvestorStacks/InvestmentStack";
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
+import { Feather } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { fetchPartnerParticipatingInvestments, leaveInvestment } from "@shared/store/slices/shared/investments/partnerInvestmentSlice";
-import React, { useCallback, useEffect } from "react";
-import { ActivityIndicator, Alert, FlatList, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { ActivityIndicator, Alert, FlatList, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 type Props = NativeStackScreenProps<
     InvestmentStackParamList,
@@ -14,16 +15,23 @@ type Props = NativeStackScreenProps<
 export const MyInvestments = ({ navigation }: Props) => {
     const dispatch = useAppDispatch();
     const { investments, summary, isLoading, error, meta, isLoadingMore } = useAppSelector((state) => state.userInvestments);
+    const [search, setSearch] = useState("");
     useEffect(() => {
-        dispatch(fetchPartnerParticipatingInvestments({ page: 1 }));
-    }, [dispatch]);
+        if (search === "") {
+            dispatch(fetchPartnerParticipatingInvestments({ page: 1 }));
+        }
+    }, [search, dispatch]);
     const handleLoadMore = useCallback(() => {
         if (!isLoadingMore && meta?.pagination?.has_more_pages) {
             dispatch(fetchPartnerParticipatingInvestments({ page: meta.pagination.current_page + 1 }));
         }
-    }, [isLoadingMore, meta]);
+    }, [isLoadingMore, meta, search]);
     const handleRefresh = () => {
         dispatch(fetchPartnerParticipatingInvestments({ page: 1 }));
+    };
+    const handleSearch = () => {
+        // always start at page 1
+        dispatch(fetchPartnerParticipatingInvestments({ page: 1, search }));
     };
     const renderItem = ({ item }: any) => (
         <TouchableOpacity style={styles.investmentCard} onPress={() => {
@@ -79,6 +87,20 @@ export const MyInvestments = ({ navigation }: Props) => {
                 barStyle="light-content" // or "dark-content"
                 backgroundColor="#000" // set to match your theme
             />
+            <View style={styles.searchContainer}>
+                <TextInput
+                    placeholder="Search investments..."
+                    value={search}
+                    onChangeText={setSearch}
+                    style={styles.searchInput}
+                    returnKeyType="search"
+                    onSubmitEditing={handleSearch} // ✅ allow Enter key search
+                />
+                <TouchableOpacity style={styles.searchBtn} onPress={handleSearch}>
+                    <Feather name="search" size={20} color="#fff" />
+                </TouchableOpacity>
+            </View>
+
             <FlatList
                 data={investments}
                 renderItem={renderItem}
@@ -108,6 +130,33 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         paddingTop: 16,
         paddingBottom: 80,
+    },
+    searchContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        backgroundColor: Colors.white,
+        borderRadius: 10,
+        // marginHorizontal: 12,
+        marginBottom: 12,
+        paddingHorizontal: 8,
+        elevation: 2,
+    },
+    searchInput: {
+        flex: 1,
+        paddingVertical: 10,
+        paddingHorizontal: 12,
+        fontSize: 16,
+        color: Colors.secondary,
+    },
+    searchBtn: {
+        height: 40,
+        width: 40,
+        backgroundColor: Colors.secondary,
+        padding: 10,
+        borderRadius: 14,
+        marginLeft: 6,
+        justifyContent: "center",
+        alignItems: "center",
     },
     investmentCard: {
         backgroundColor: Colors.secondary,

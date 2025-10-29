@@ -3,6 +3,7 @@ import { AddInvestments } from "@/modules/Investor/investments/screens/AddInvest
 import EditInvestments from "@/modules/Investor/investments/screens/EditInvestments";
 import { InvestmentDetailsScreen } from "@/modules/Investor/investments/screens/InvestmentDetailsScreen";
 import { InvestmentsScreen } from "@/modules/Investor/investments/screens/InvestmentsScreen";
+import { MyInvestments } from "@/modules/Investor/investments/screens/MyInvestments";
 import { Ionicons } from "@expo/vector-icons";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
@@ -13,6 +14,7 @@ export type InvestmentStackParamList = {
   AddInvestments:undefined;
   EditInvestments: { id: number, mode: string };
   AddPartner:{id: number}
+  MyInvestments: undefined;
 };
 
 export const Stack = createNativeStackNavigator<InvestmentStackParamList>();
@@ -121,6 +123,33 @@ export const InvestmentStack = () => {
         component={AddInvestmentPartner}
         options={({ navigation }) => ({
           title: "Add Partner",
+          headerTitleAlign: "center",
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => navigation?.goBack()}
+              style={{
+                marginRight: 16,
+                marginLeft:10,
+                marginTop:5,
+                marginBottom:5,
+                backgroundColor: "#F3F4F6",
+                width: 50,
+                height: 50,
+                borderRadius: 25,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Ionicons name="chevron-back" color={"black"} size={30}/>
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="MyInvestments"
+        component={MyInvestments}
+        options={({ navigation }) => ({
+          title: "My Investments",
           headerTitleAlign: "center",
           headerLeft: () => (
             <TouchableOpacity

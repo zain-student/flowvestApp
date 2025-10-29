@@ -187,13 +187,15 @@ export const InvestmentsScreen: React.FC = () => {
           </Text>
           </View>
           <View style={styles.balanceActionsRow}>
-            <TouchableOpacity style={styles.balanceActionBtnDark}>
+            {/* <TouchableOpacity style={styles.balanceActionBtnDark}>
               <Feather name="plus" size={18} color="#fff" />
               <Text style={styles.balanceActionTextDark}>Top Up</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.balanceActionBtnDark}>
+            </TouchableOpacity> */}
+            <TouchableOpacity style={styles.balanceActionBtnDark}
+              onPress={() => navigation.navigate("MyInvestments")}
+            >
               <Feather name="arrow-up-right" size={18} color="#fff" />
-              <Text style={styles.balanceActionTextDark}>Send Money</Text>
+              <Text style={styles.balanceActionTextDark}>My Investments</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -286,7 +288,7 @@ const styles = StyleSheet.create({
   cardSubtitle: { fontSize: 14, color: Colors.green },
   balanceActionsRow: { flexDirection: "row", marginTop: 18 },
   balanceActionBtnDark: {
-    width: '40%',
+    width: '60%',
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",

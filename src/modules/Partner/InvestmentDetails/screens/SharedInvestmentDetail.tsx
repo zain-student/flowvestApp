@@ -2,7 +2,7 @@ import type { PartnersInvestmentDetailStackParamList } from "@/navigation/Partne
 import Colors from "@/shared/colors/Colors";
 import { Button, Input } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { joinInvestment } from "@/shared/store/slices/partner/investments/partnerInvestmentSlice";
+import { joinInvestment } from "@/shared/store/slices/shared/investments/partnerInvestmentSlice";
 import { Ionicons } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 

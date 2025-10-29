@@ -1,6 +1,6 @@
 import { DashboardLayout } from "@/modules/Common/components/DashboardLayout";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { fetchPartnerParticipatingInvestments, leaveInvestment } from "@/shared/store/slices/partner/investments/partnerInvestmentSlice";
+import { fetchPartnerParticipatingInvestments, leaveInvestment } from "@/shared/store/slices/shared/investments/partnerInvestmentSlice";
 import { Feather } from "@expo/vector-icons";
 import Colors from "@shared/colors/Colors";
 import React, { useCallback, useEffect, useState } from "react";

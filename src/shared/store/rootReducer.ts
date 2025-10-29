@@ -12,11 +12,11 @@ import authSlice from '../../modules/auth/store/authSlice';
 import addPartnerSlice from './slices/investor/dashboard/addPartnerSlice';
 import payoutSlice from './slices/investor/payouts/payoutSlice';
 import portfolioSlice from './slices/investor/portfolio/portfolioSlice';
-import partnerInvestmentSlice from './slices/partner/investments/partnerInvestmentSlice';
 import PartnerPayoutSlice from './slices/partner/payout/PartnerPayoutSlice';
 import notificationTemplateSlice from './slices/profile/notifications/notificationTemplateSlice';
 import notificationSlice from './slices/profile/notificationSlice';
 import profileSlice from './slices/profile/profileSlice';
+import partnerInvestmentSlice from './slices/shared/investments/partnerInvestmentSlice';
 // Import shared reducers
 // import themeSlice from './slices/themeSlice';
 // import loadingSlice from './slices/loadingSlice';

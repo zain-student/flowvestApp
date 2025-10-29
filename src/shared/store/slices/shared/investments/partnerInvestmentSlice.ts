@@ -196,7 +196,7 @@ export const fetchPartnerParticipatingInvestments = createAsyncThunk(
         page,
         search,
       });
-
+console.log("Fetched partner investments:", investments);
       return { investments, meta, summary, page, search };
     } catch (error: any) {
       const cached = await storage.getItem(StorageKeys.INVESTMENTS_CACHE);

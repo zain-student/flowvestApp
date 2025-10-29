@@ -1,9 +1,9 @@
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import type { PartnerInvestment } from "@/shared/store/slices/partner/investments/partnerInvestmentSlice";
+import type { PartnerInvestment } from "@/shared/store/slices/shared/investments/partnerInvestmentSlice";
 import {
   fetchAvailableSharedPrograms,
-} from "@/shared/store/slices/partner/investments/partnerInvestmentSlice";
+} from "@/shared/store/slices/shared/investments/partnerInvestmentSlice";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import React, { useCallback, useEffect, useState } from "react";
 import {

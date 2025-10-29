@@ -112,13 +112,13 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
 
         <View style={styles.summaryCard}>
           {/* 3 Dots Button */}
-          <TouchableOpacity
+        {!showJoinForm &&  <TouchableOpacity
             style={styles.menuBtn}
             onPress={() => setShowMenu((prev) => !prev)}
           >
             <Ionicons name="ellipsis-vertical" size={24} color="white" />
           </TouchableOpacity>
-
+        }
           {/* Simple Dropdown */}
           {showMenu && (
             <TouchableOpacity

@@ -47,6 +47,7 @@ export const InvestmentsScreen: React.FC = () => {
     name: inv.name,
     type: inv.type,
     amount: inv.initial_amount,
+    can_join:inv.can_join_as_admin,
     shared_amount: inv.current_total_invested,
     status: inv.status.charAt(0).toUpperCase() + inv.status.slice(1),
     returns: inv.expected_return_rate,
@@ -61,7 +62,7 @@ export const InvestmentsScreen: React.FC = () => {
   // First page load
   useEffect(() => {
     dispatch(fetchInvestments({ page: 1 }));
-    console.log("Investments loaded",stats.total_investments)
+    console.log("Investments loaded", stats.total_investments)
   }, [dispatch]);
   const handleSearch = () => {
     // always start at page 1
@@ -107,22 +108,22 @@ export const InvestmentsScreen: React.FC = () => {
             alignItems: "center",
           }}
         >
-          <Text style={styles.investmentName}>{item.name}</Text>
-          {item.type === "shared" && item.status === "Active" && (
-          <TouchableOpacity
-            style={styles.joinBtn}
-            activeOpacity={0.7}
-            onPress={() => {
-              navigation.navigate("InvestmentDetails", {
-                id: item.id,
-                showJoinForm: "true",
-              });
-              console.log("Join investment tapped:", item.id);
-            }}
-          >
-            <Ionicons name="add-circle-outline" size={18} color={Colors.white} />
-            <Text style={styles.joinBtnText}>Join Investment</Text>
-          </TouchableOpacity>)
+          <Text style={styles.investmentName}>{item.name}({item.type.charAt(0).toUpperCase()+ item.type.slice(1)})</Text>
+          {item.type === "shared" && item.status === "Active" && item.can_join===true && (
+            <TouchableOpacity
+              style={styles.joinBtn}
+              activeOpacity={0.7}
+              onPress={() => {
+                navigation.navigate("InvestmentDetails", {
+                  id: item.id,
+                  showJoinForm: "true",
+                });
+                console.log("Join investment tapped:", item.id);
+              }}
+            >
+              <Ionicons name="add-circle-outline" size={18} color={Colors.white} />
+              <Text style={styles.joinBtnText}>Join Investment</Text>
+            </TouchableOpacity>)
           }
         </View>
         <Text style={styles.investmentAmount}>Amount: ${item.type === "shared" ? item.shared_amount : item.amount}</Text>
@@ -174,10 +175,17 @@ export const InvestmentsScreen: React.FC = () => {
           <Text style={styles.cardValue}>
             ${stats.total_invested}
           </Text>
+         <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
           <Text style={styles.cardSubtitle}>
             +8.2%{" "}
             <Text style={{ color: Colors.gray, fontWeight: "400" }}>this year</Text>
           </Text>
+          <Text style={{ color: Colors.gray, fontWeight: "400" }}>Total Investments:
+            <Text style={styles.cardSubtitle}>
+              {stats.total_investments}{" "}
+            </Text>
+          </Text>
+          </View>
           <View style={styles.balanceActionsRow}>
             <TouchableOpacity style={styles.balanceActionBtnDark}>
               <Feather name="plus" size={18} color="#fff" />

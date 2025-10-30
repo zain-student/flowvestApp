@@ -89,7 +89,11 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
         <Text style={styles.title}>{currentInvestment.name}</Text>
 
         <View style={styles.summaryCard}>
-          <LabelValue label="Amount Invested" value={`$${currentInvestment.current_total_invested ?? "0"}`} />
+          <LabelValue label="Target Amount" value={`$${currentInvestment.total_target_amount ?? "0"}`} />
+          <LabelValue label="Currently Invested" value={`$${currentInvestment.current_total_invested ?? "0"}`} />
+          <LabelValue label="Remaining Capacity" value={
+            `$${Number(currentInvestment.total_target_amount ?? 0) - Number(currentInvestment.current_total_invested ?? 0)}`
+          } />
 
           <LabelValue
             label="Status"
@@ -104,24 +108,25 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
         </View>
         {showJoinForm ? null :
           <>
-        <Text style={styles.sectionTitle}>Performance</Text>
-        <View style={styles.txCard}>
-          <Text style={styles.txType}>Total Paid Out</Text>
-          <Text style={styles.txAmount}>${currentInvestment.performance?.total_paid_out ?? 0}</Text>
-        </View>
-        <View style={styles.txCard}>
-          <Text style={styles.txType}>Pending Payouts</Text>
-          <Text style={styles.txAmount}>${currentInvestment.performance?.pending_payouts ?? 0}</Text>
-        </View>
-        {currentInvestment.performance.next_payout_date && (
-          <View style={styles.txCard}>
-            <Text style={styles.txType}>Next Payout</Text>
-            <Text style={styles.txDate}>{currentInvestment.performance?.next_payout_date ?? 0}</Text>
-          </View>
-        )}
-        </>}
+            <Text style={styles.sectionTitle}>Performance</Text>
+            <View style={styles.txCard}>
+              <Text style={styles.txType}>Total Paid Out</Text>
+              <Text style={styles.txAmount}>${currentInvestment.performance?.total_paid_out ?? 0}</Text>
+            </View>
+            <View style={styles.txCard}>
+              <Text style={styles.txType}>Pending Payouts</Text>
+              <Text style={styles.txAmount}>${currentInvestment.performance?.pending_payouts ?? 0}</Text>
+            </View>
+            {currentInvestment.performance.next_payout_date && (
+              <View style={styles.txCard}>
+                <Text style={styles.txType}>Next Payout</Text>
+                <Text style={styles.txDate}>{currentInvestment.performance?.next_payout_date ?? 0}</Text>
+              </View>
+            )}
+          </>}
         {showJoinForm &&
-          <View style={{ marginBottom: 20, marginTop: 5, width: '100%',borderWidth:1,
+          <View style={{
+            marginBottom: 20, marginTop: 5, width: '100%', borderWidth: 1,
             borderColor: Colors.lightGray, borderRadius: 8, padding: 10,
             backgroundColor: Colors.white,
             shadowColor: "#000",
@@ -132,7 +137,7 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
             shadowOpacity: 0.25,
             shadowRadius: 3.84,
             elevation: 5,
-           }} >
+          }} >
             <Text style={styles.sectionTitle}>Join This Investment</Text>
 
             <Input
@@ -146,7 +151,7 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
               }}
               // error={errors.email}
               required
-              // autoFocus
+            // autoFocus
             />
             {/* {errors.amount && <Text style={styles.error}>{errors.amount.message}</Text>} */}
 
@@ -175,7 +180,7 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
         }
 
 
-        
+
 
       </ScrollView>
     </View>

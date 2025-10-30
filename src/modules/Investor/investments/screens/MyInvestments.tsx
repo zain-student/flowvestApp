@@ -35,7 +35,7 @@ export const MyInvestments = ({ navigation }: Props) => {
     };
     const renderItem = ({ item }: any) => (
         <TouchableOpacity style={styles.investmentCard} onPress={() => {
-              navigation.navigate("JoinedInvestmentDetail", { id: item.id });
+            navigation.navigate("JoinedInvestmentDetail", { id: item.id });
             console.log('navigating to JoinedInvestmentDetail with id:', item.id);
         }}>
             <View style={{ flex: 1 }}>
@@ -128,7 +128,7 @@ export const MyInvestments = ({ navigation }: Props) => {
                             <Text style={styles.label}>Invested: <Text style={styles.value}>${summary.total_invested}</Text></Text>
                             {/* <Text style={styles.label}>Duration: <Text style={styles.value}>12 Months</Text></Text> */}
                             <TouchableOpacity style={styles.balanceActionBtnDark}
-                            onPress={() => { navigation.navigate("BrowseInvestments") }}
+                                onPress={() => { navigation.navigate("SharedInvestments") }}
                             >
                                 <Text style={styles.balanceActionTextDark}>
                                     Browse Investments

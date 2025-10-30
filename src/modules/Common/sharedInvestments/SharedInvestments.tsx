@@ -33,10 +33,10 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
 
   // ✅ Initial load
   useEffect(() => {
-   if (search === '') {
-    dispatch(fetchAvailableSharedPrograms({ page: 1, search: "" }));
+    if (search === '') {
+      dispatch(fetchAvailableSharedPrograms({ page: 1, search: "" }));
     }
-  }, [search,dispatch]);
+  }, [search, dispatch]);
 
   // ✅ Search handler
   const handleSearch = useCallback(() => {
@@ -72,12 +72,7 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
       </View>
     );
 
-  if (!list.length && !isLoading)
-    return (
-      <View style={styles.centered}>
-        <Text style={styles.emptyText}>No shared programs available.</Text>
-      </View>
-    );
+
 
   const renderSummary = () => (
     <View style={styles.summaryRow}>
@@ -135,10 +130,10 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
 
         <View style={styles.row}>
           <Text style={styles.amount}>
-            Amount: ${item.current_total_invested ?? "N/A"} 
+            Amount: ${item.current_total_invested ?? "N/A"}
           </Text>
           <Text style={styles.amount}>
-            Min: ${item.min_investment_amount ?? "N/A"} - Max: ${item.max_investment_amount ?? "N/A"} 
+            Min: ${item.min_investment_amount ?? "N/A"} - Max: ${item.max_investment_amount ?? "N/A"}
           </Text>
         </View>
 
@@ -146,7 +141,7 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
           <Text style={styles.meta}>
             ROI:{" "}
             {item.expected_return_rate !== undefined &&
-            item.expected_return_rate !== null
+              item.expected_return_rate !== null
               ? Number(item.expected_return_rate).toFixed(1)
               : "N/A"}
             %
@@ -175,7 +170,7 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
   );
 
   return (
-    <View style={{ flex: 1, backgroundColor: Colors.background }}>
+    <View style={{ flex: 1, backgroundColor: Colors.background, marginBottom: 70 }}>
       <View style={styles.searchContainer}>
         <TextInput
           placeholder="Search investments..."
@@ -213,6 +208,11 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
               style={{ marginVertical: 16 }}
             />
           ) : null
+        }
+        ListEmptyComponent={
+      <View style={styles.centered}>
+        <Text style={styles.emptyText}>No shared programs available.</Text>
+      </View>
         }
       />
     </View>
@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
   },
-  title: { fontSize: 16, fontWeight: "600", color: Colors.white },
+  title: { fontSize: 16, fontWeight: "600", color: Colors.white, width: '80%' },
   row: { flexDirection: "row", justifyContent: "space-between", marginTop: 8 },
   amount: { fontSize: 14, color: Colors.white, fontWeight: "500" },
   meta: { fontSize: 13, color: Colors.gray },

@@ -1,8 +1,8 @@
+import { SharedInvestmentDetail } from "@/modules/Common/sharedInvestments/SharedInvestmentDetail";
+import { SharedInvestments } from '@/modules/Common/sharedInvestments/SharedInvestments';
 import { JoinedInvestmentDetail } from "@/modules/Partner/InvestmentDetails/screens/JoinedInvestmentDetail";
 import { Ionicons } from "@expo/vector-icons";
 import { InvestmentDetails } from "@modules/Partner/InvestmentDetails/screens/InvestmentDetails";
-import { SharedInvestmentDetail } from "@modules/Partner/InvestmentDetails/screens/SharedInvestmentDetail";
-import { SharedInvestments } from '@modules/Partner/InvestmentDetails/screens/SharedInvestments';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { TouchableOpacity } from "react-native";

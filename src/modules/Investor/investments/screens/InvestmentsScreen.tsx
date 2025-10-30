@@ -291,7 +291,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: Colors.darkButton,
+    backgroundColor: Colors.success,
     borderRadius: 18,
     paddingHorizontal: 18,
     paddingVertical: 8,

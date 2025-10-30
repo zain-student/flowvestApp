@@ -79,6 +79,7 @@ export const JoinedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
                     />
                     <LabelValue label="Start Date" value={formatDate(currentInvestment.start_date)} />
                     <LabelValue label="End Date" value={formatDate(currentInvestment.end_date)} />
+                    <LabelValue label="Joined Date" value={formatDate(currentInvestment.joined_at)} />
                 </View>
 
                 {/*  Performance  */}

@@ -35,7 +35,7 @@ export const MyInvestments = ({ navigation }: Props) => {
     };
     const renderItem = ({ item }: any) => (
         <TouchableOpacity style={styles.investmentCard} onPress={() => {
-            //   navigation.navigate('PartnerInvestmentStack', { screen: 'JoinedInvestmentDetail', params: { id: item.id } })
+              navigation.navigate("JoinedInvestmentDetail", { id: item.id });
             console.log('navigating to JoinedInvestmentDetail with id:', item.id);
         }}>
             <View style={{ flex: 1 }}>

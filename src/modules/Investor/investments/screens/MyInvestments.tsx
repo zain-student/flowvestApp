@@ -128,7 +128,7 @@ export const MyInvestments = ({ navigation }: Props) => {
                             <Text style={styles.label}>Invested: <Text style={styles.value}>${summary.total_invested}</Text></Text>
                             {/* <Text style={styles.label}>Duration: <Text style={styles.value}>12 Months</Text></Text> */}
                             <TouchableOpacity style={styles.balanceActionBtnDark}
-                            // onPress={() => { navigation.navigate('PartnerInvestmentStack', { screen: 'SharedInvestments' }) }}
+                            onPress={() => { navigation.navigate("BrowseInvestments") }}
                             >
                                 <Text style={styles.balanceActionTextDark}>
                                     Browse Investments

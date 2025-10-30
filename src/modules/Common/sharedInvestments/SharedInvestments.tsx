@@ -193,7 +193,7 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: Colors.background, marginBottom: 70 }}>
+    <View style={{ flex: 1, backgroundColor: Colors.background, marginBottom: 0 }}>
       <View style={styles.searchContainer}>
         <TextInput
           placeholder="Search investments..."
@@ -209,7 +209,7 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
       </View>
 
       <FlatList
-        contentContainerStyle={{ padding: 12 }}
+        contentContainerStyle={{ padding: 12,paddingBottom: 70 }}
         data={list}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}

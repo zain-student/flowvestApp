@@ -178,10 +178,6 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
             {/* {joinError && <Text style={{ color: "red", marginTop: 6 }}>{joinError}</Text>} */}
           </View>
         }
-
-
-
-
       </ScrollView>
     </View>
   );
@@ -198,7 +194,7 @@ const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 /* ---------- styles (same as your file) ---------- */
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Colors.background, paddingBottom: 100 },
+  container: { flex: 1, backgroundColor: Colors.background, paddingBottom: 0 },
   centered: { flex: 1, justifyContent: "center", alignItems: "center" },
   notFound: { fontSize: 16, color: Colors.secondary },
   closeBtn: {
@@ -213,7 +209,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  scrollContent: { padding: 24, paddingTop: 60, paddingBottom: 40 },
+  scrollContent: { padding: 24, paddingTop: 60,paddingBottom: 70 },
   title: { fontSize: 24, fontWeight: "bold", color: Colors.secondary, marginBottom: 1 },
   summaryCard: { backgroundColor: Colors.secondary, borderRadius: 14, padding: 18, marginBottom: 24 },
   label: { fontSize: 13, color: Colors.gray, marginTop: 8 },

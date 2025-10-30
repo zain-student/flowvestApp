@@ -126,7 +126,7 @@ const formatNum = (n?: string | number | null) =>
 
 /* -- Styles -- */
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: Colors.background },
+    container: { flex: 1,marginBottom:70, backgroundColor: Colors.background },
     centered: { flex: 1, justifyContent: "center", alignItems: "center" },
     notFound: { fontSize: 16, color: Colors.secondary },
     closeBtn: {
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
     },
-    scrollContent: { padding: 24, paddingTop: 60, paddingBottom: 40 },
+    scrollContent: { padding: 24, paddingTop: 60 },
     title: {
         fontSize: 24,
         fontWeight: "bold",

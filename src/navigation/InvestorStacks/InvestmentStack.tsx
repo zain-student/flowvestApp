@@ -238,7 +238,7 @@ export const InvestmentStack = () => {
         name="SharedInvestmentDetail"
         component={SharedInvestmentDetail}
         options={({ navigation }) => ({
-          title: "Investments Detail",
+          title: "Browse Investments Detail",
           headerTitleAlign: "center",
           headerLeft: () => (
             <TouchableOpacity

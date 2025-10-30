@@ -99,75 +99,98 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
     </View>
   );
 
-  const renderItem = ({ item }: { item: PartnerInvestment }) => (
-    <TouchableOpacity
-      style={styles.card}
-      activeOpacity={0.8}
-      onPress={() =>
-        navigation.navigate("SharedInvestmentDetail", { id: item.id })
-      }
-    >
-      <View style={{ flex: 1 }}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Text style={styles.title}>{item.name}</Text>
-          <Text
-            style={[
-              styles.status,
-              item.status.toLowerCase() === "active"
-                ? styles.statusActive
-                : styles.statusClosed,
-            ]}
+  const renderItem = ({ item }: { item: PartnerInvestment }) => {
+    const progress =
+      item.total_target_amount && item.current_total_invested
+        ? (Number(item.current_total_invested) / Number(item.total_target_amount)) * 100
+        : 0;
+
+    return (
+      <TouchableOpacity
+        style={styles.card}
+        activeOpacity={0.8}
+        onPress={() =>
+          navigation.navigate("SharedInvestmentDetail", { id: item.id })
+        }
+      >
+        <View style={{ flex: 1 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
           >
-            {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-          </Text>
-        </View>
+            <Text style={styles.title}>{item.name}</Text>
+            <Text
+              style={[
+                styles.status,
+                item.status.toLowerCase() === "active"
+                  ? styles.statusActive
+                  : styles.statusClosed,
+              ]}
+            >
+              {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+            </Text>
+          </View>
 
-        <View style={styles.row}>
-          <Text style={styles.amount}>
-            Amount: ${item.current_total_invested ?? "N/A"}
-          </Text>
-          <Text style={styles.amount}>
-            Min: ${item.min_investment_amount ?? "N/A"} - Max: ${item.max_investment_amount ?? "N/A"}
-          </Text>
-        </View>
+          <View style={styles.row}>
+            <Text style={styles.amount}>
+              Amount: ${item.current_total_invested ?? "N/A"}
+            </Text>
+            <Text style={styles.amount}>
+              Min: ${item.min_investment_amount ?? "N/A"} - Max: ${item.max_investment_amount ?? "N/A"}
+            </Text>
+          </View>
+          {/* Investment Progress */}
+          <View style={{ marginTop: 10 }}>
+            <Text style={styles.meta}>
+              Investment Progress ({progress.toFixed(0)}% funded)
+            </Text>
+            <View style={styles.progressContainer}>
+              <View
+                style={[
+                  styles.progressBar,
+                  { width: `${Math.min(progress, 100)}%` },
+                ]}
+              />
+            </View>
+            <Text style={styles.meta}>
+              ${item.current_total_invested} / ${item.total_target_amount}
+            </Text>
+          </View>
+          <View style={styles.row}>
+            <Text style={styles.meta}>
+              ROI:{" "}
+              {item.expected_return_rate !== undefined &&
+                item.expected_return_rate !== null
+                ? Number(item.expected_return_rate).toFixed(1)
+                : "N/A"}
+              %
+            </Text>
+            <Text style={styles.meta}>
+              Participants: {item.total_participants || "N/A"}
+            </Text>
+          </View>
 
-        <View style={styles.row}>
-          <Text style={styles.meta}>
-            ROI:{" "}
-            {item.expected_return_rate !== undefined &&
-              item.expected_return_rate !== null
-              ? Number(item.expected_return_rate).toFixed(1)
-              : "N/A"}
-            %
-          </Text>
-          <Text style={styles.meta}>
-            Participants: {item.total_participants || "N/A"}
-          </Text>
+          <TouchableOpacity
+            style={styles.joinBtn}
+            activeOpacity={0.7}
+            onPress={() => {
+              navigation.navigate("SharedInvestmentDetail", {
+                id: item.id,
+                showJoinForm: "true",
+              });
+              console.log("Join investment tapped:", item.id);
+            }}
+          >
+            <Ionicons name="add-circle-outline" size={18} color={Colors.white} />
+            <Text style={styles.joinBtnText}>Join Investment</Text>
+          </TouchableOpacity>
         </View>
-
-        <TouchableOpacity
-          style={styles.joinBtn}
-          activeOpacity={0.7}
-          onPress={() => {
-            navigation.navigate("SharedInvestmentDetail", {
-              id: item.id,
-              showJoinForm: "true",
-            });
-            console.log("Join investment tapped:", item.id);
-          }}
-        >
-          <Ionicons name="add-circle-outline" size={18} color={Colors.white} />
-          <Text style={styles.joinBtnText}>Join Investment</Text>
-        </TouchableOpacity>
-      </View>
-    </TouchableOpacity>
-  );
+      </TouchableOpacity>
+    )
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: Colors.background, marginBottom: 70 }}>
@@ -210,9 +233,9 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
           ) : null
         }
         ListEmptyComponent={
-      <View style={styles.centered}>
-        <Text style={styles.emptyText}>No shared programs available.</Text>
-      </View>
+          <View style={styles.centered}>
+            <Text style={styles.emptyText}>No shared programs available.</Text>
+          </View>
         }
       />
     </View>
@@ -311,6 +334,19 @@ const styles = StyleSheet.create({
   },
   statusActive: { color: Colors.green },
   statusClosed: { backgroundColor: Colors.inActiveStatusBg, color: Colors.gray },
+  progressContainer: {
+    height: 8,
+    backgroundColor: "#E6E6E6",
+    borderRadius: 10,
+    overflow: "hidden",
+    marginVertical: 4,
+  },
+  progressBar: {
+    height: "100%",
+    backgroundColor: Colors.primary,
+    borderRadius: 10,
+  },
+
   joinBtn: {
     marginTop: 10,
     flexDirection: "row",

@@ -3,8 +3,10 @@
  * Main navigation component that switches between Auth and App flows
  */
 
+import { NotificationsScreen } from '@/modules/Common/notifications/screens/NotificationsScreen';
 import { InvestmentStack } from "@/navigation/InvestorStacks/InvestmentStack";
 import { PayoutStack } from "@/navigation/InvestorStacks/PayoutStack";
+import { Ionicons } from "@expo/vector-icons";
 import {
   selectIsAuthenticated,
   selectIsLoading,
@@ -14,6 +16,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { authService } from "@services/authService";
 import { useAppDispatch, useAppSelector } from "@store/index";
 import React, { useEffect, useState } from "react";
+import { TouchableOpacity } from "react-native";
 import { LoadingScreen } from "../app/LoadingScreen";
 import { AppTabNavigator } from "./AppTabNavigator";
 import { AuthStack } from "./AuthStack";
@@ -21,7 +24,6 @@ import { InvestorDashboardStack } from "./InvestorStacks/InvestorDashboardStack"
 import { PartnerDashboardStack } from "./PartnerStacks/PartnerDashboardStack";
 import { PartnersInvestmentDetailStack } from "./PartnerStacks/PartnersInvestmentDetailStack";
 import { PartnersPayoutStack } from "./PartnerStacks/PartnersPayoutStack";
-
 // Navigation types
 export type RootStackParamList = {
   AuthStack: undefined;
@@ -33,7 +35,7 @@ export type RootStackParamList = {
   PayoutStack: undefined;
   AppTabs: undefined;
   Loading: undefined;
-
+  Notifications: undefined;
   // InvestmentDetails: { id: number };
   // PayoutDetails: { id: number };
 };
@@ -89,7 +91,9 @@ export const RootNavigator: React.FC = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator 
+      screenOptions={{ headerShown: false }}
+      >
         {isAuthenticated ? (
           <>
             {userRole === "admin" && (
@@ -136,17 +140,36 @@ export const RootNavigator: React.FC = () => {
                 />
               </>
             )}
-
-            {/* <Stack.Screen
-              name="InvestmentDetails"
-              component={require('../modules/investments/screens/InvestmentDetailsScreen').default}
-              options={{ presentation: 'modal', headerShown: true, title: 'Investment Details' }}
-            /> */}
-            {/* <Stack.Screen
-              name="PayoutDetails"
-              component={require('../modules/payouts/screens/PayoutDetailsScreen').default}
-              options={{ presentation: 'modal', headerShown: true, title: 'Payout Details' }}
-            /> */}
+            {/* <Stack.Screen name="Notifications" component={NotificationsScreen} /> */}
+            <Stack.Screen
+              name="Notifications"
+              component={NotificationsScreen}
+              options={({ navigation }) => ({
+                // gestureEnabled: false,
+                title: 'Notifications',
+                headerTitleAlign: 'center',
+                headerShown: true,
+                headerLeft: () => (
+                  <TouchableOpacity
+                    onPress={() => navigation.goBack()}
+                    style={{
+                      marginRight: 16,
+                      marginLeft: 10,
+                      marginTop: 5,
+                      marginBottom: 5,
+                      backgroundColor: "#F3F4F6",
+                      width: 40,
+                      height: 40,
+                      borderRadius: 25,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Ionicons name="chevron-back" color={"black"} size={30} />
+                  </TouchableOpacity>
+                ),
+              })}
+            />
           </>
         ) : (
           <Stack.Screen

@@ -1,3 +1,4 @@
+import { NotificationsScreen } from '@/modules/Common/notifications/screens/NotificationsScreen';
 import { NotificationTemplate } from '@/shared/store/slices/profile/notifications/notificationTemplateSlice';
 import { Ionicons } from '@expo/vector-icons';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -18,6 +19,7 @@ export type ProfileStackParamList = {
   NotificationSettings: undefined;
   NotificationsTemplates: undefined;
   TemplateDetail:{template: NotificationTemplate};
+  NotificationsScreen: undefined;
 };
 
 const Stack = createNativeStackNavigator<ProfileStackParamList>();
@@ -177,6 +179,34 @@ export const ProfileStack = () => {
         options={({ navigation }) => ({
           // gestureEnabled: false,
           title: 'Templates Detail',
+          headerTitleAlign: 'center',
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={{
+                marginRight: 16,
+                marginLeft: 10,
+                marginTop: 5,
+                marginBottom: 5,
+                backgroundColor: "#F3F4F6",
+                width: 40,
+                height: 40,
+                borderRadius: 25,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Ionicons name="chevron-back" color={"black"} size={30} />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="NotificationsScreen"
+        component={NotificationsScreen}
+        options={({ navigation }) => ({
+          // gestureEnabled: false,
+          title: 'Notifications',
           headerTitleAlign: 'center',
           headerLeft: () => (
             <TouchableOpacity

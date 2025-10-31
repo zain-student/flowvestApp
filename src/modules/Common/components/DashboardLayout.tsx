@@ -1,9 +1,9 @@
-import type { AppTabParamList } from "@/navigation/AppTabNavigator";
+import { RootStackParamList } from "@/navigation/RootNavigator";
 import Colors from "@/shared/colors/Colors";
 import { Feather } from "@expo/vector-icons";
 import { logoutUser } from "@modules/auth/store/authSlice";
-import type { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useAppDispatch } from "@store/index";
 import React from "react";
 import { Alert, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -15,17 +15,21 @@ interface DashboardLayoutProps {
 
 const Avatar = () => (
   <View style={styles.avatar}>
-    <Feather name="user" size={20} color="#fff" />
+    <Feather name="bell" size={20} color="#fff" />
   </View>
 );
 
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   children,
 }) => {
+  // const navigation =
+  //   useNavigation<BottomTabNavigationProp<AppTabParamList, "Dashboard">>();
   const navigation =
-    useNavigation<BottomTabNavigationProp<AppTabParamList, "Dashboard">>();
-  const dispatch = useAppDispatch();
+  useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
+  const dispatch = useAppDispatch();
+// const navigation =
+//     useNavigation<NativeStackNavigationProp<ProfileStackParamList, "Profile">>();
   // Sign out handler
   const handleSignOut = async () => {
     Alert.alert("Sign Out", "Are you sure you want to sign out?", [
@@ -43,7 +47,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     try {
       await dispatch(logoutUser());
       // await storage.clear(); 
-      navigation.navigate("Profile"); // Or use navigation.reset if you have a root stack
+      // navigation.navigate("Profile"); // Or use navigation.reset if you have a root stack
     } catch (error) {
       Alert.alert("Error", "Failed to sign out. Please try again.");
     }
@@ -60,7 +64,8 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       <View style={styles.header}>
         <Text style={styles.logo}>FlowVest</Text>
         <View style={styles.headerRight}>
-          <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+          <TouchableOpacity onPress={() => 
+            navigation.navigate("Notifications")}>
             <Avatar />
           </TouchableOpacity>
           <TouchableOpacity

@@ -25,6 +25,7 @@ import {
 } from "react-native";
 import { PartnerDashboardStack } from "./PartnerStacks/PartnerDashboardStack";
 import PartnersPayoutStack from "./PartnerStacks/PartnersPayoutStack";
+import type { ProfileStackParamList } from "./ProfileStacks/ProfileStack";
 import { ProfileStack } from "./ProfileStacks/ProfileStack";
 
 // Tab navigation types
@@ -33,7 +34,7 @@ export type AppTabParamList = {
   Investments: undefined;
   Payouts: undefined;
   Portfolio: undefined;
-  Profile: undefined;
+  Profile: undefined | { screen?: keyof ProfileStackParamList; params?: any };
   PartnerDashboard: undefined;
   PartnerPayouts:undefined;
   InvestmentDetails :undefined;

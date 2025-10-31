@@ -1,52 +1,83 @@
+import Colors from "@/shared/colors/Colors";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { Notification } from "../components/dummyNotifications";
 
-type NotificationDetailRouteProp = RouteProp<{ NotificationDetail: { notification: Notification } }, "NotificationDetail">;
+type NotificationDetailRouteProp = RouteProp<
+  { NotificationDetail: { notification: Notification } },
+  "NotificationDetail"
+>;
 
-export const NotificationDetailScreen=()=> {
+export const NotificationDetailScreen = () => {
   const route = useRoute<NotificationDetailRouteProp>();
   const { notification } = route.params;
 
+  const statusColors = { scheduled: "yellow", sent: Colors.primary, read: Colors.green };
+  const priorityColors = { high: Colors.error, medium: "yellow", low: Colors.green };
+
+  const renderInfoRow = (label: string, value: string | React.ReactNode, icon?: JSX.Element) => (
+    <View style={styles.infoRow}>
+      <View style={styles.rowLeft}>
+        {icon && <View style={{ marginRight: 6 }}>{icon}</View>}
+        <Text style={styles.label}>{label}</Text>
+      </View>
+      <Text style={[styles.value, { color: typeof value === "string" ? Colors.white : undefined }]}>
+        {value}
+      </Text>
+    </View>
+  );
+
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.title}>{notification.title}</Text>
-      <Text style={styles.message}>{notification.message}</Text>
+    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 30 }}>
+      <View style={styles.card}>
+        <Text style={styles.title}>{notification.title}</Text>
+        <Text style={styles.message}>{notification.message}</Text>
 
-      <View style={styles.infoBlock}>
-        <Text style={styles.label}>From:</Text>
-        <Text style={styles.value}>{notification.senderName}</Text>
-      </View>
-
-      <View style={styles.infoBlock}>
-        <Text style={styles.label}>To:</Text>
-        <Text style={styles.value}>{notification.recipientName}</Text>
-      </View>
-
-      <View style={styles.infoBlock}>
-        <Text style={styles.label}>Status:</Text>
-        <Text style={styles.value}>{notification.status.toUpperCase()}</Text>
-      </View>
-
-      <View style={styles.infoBlock}>
-        <Text style={styles.label}>Priority:</Text>
-        <Text style={styles.value}>{notification.priority.toUpperCase()}</Text>
-      </View>
-
-      <View style={styles.infoBlock}>
-        <Text style={styles.label}>Scheduled At:</Text>
-        <Text style={styles.value}>{new Date(notification.scheduledAt).toLocaleString()}</Text>
+        {renderInfoRow("From:", notification.senderName)}
+        {renderInfoRow("To:", notification.recipientName)}
+        {renderInfoRow(
+          "Status:",
+          notification.status.toUpperCase(),
+          <Ionicons name="time-outline" size={16} color={statusColors[notification.status]} />
+        )}
+        {renderInfoRow(
+          "Priority:",
+          notification.priority.toUpperCase(),
+          <Ionicons name="alert-circle-outline" size={16} color={priorityColors[notification.priority]} />
+        )}
+        {renderInfoRow(
+          "Scheduled At:",
+          new Date(notification.scheduledAt).toLocaleString(),
+          <Ionicons name="calendar-outline" size={16} color={Colors.gray} />
+        )}
       </View>
     </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: "#fff" },
-  title: { fontSize: 20, fontWeight: "bold", marginBottom: 10 },
-  message: { fontSize: 16, color: "#333", marginBottom: 20 },
-  infoBlock: { flexDirection: "row", marginBottom: 10 },
-  label: { fontWeight: "bold", marginRight: 10 },
-  value: { color: "#555" },
+  container: { flex: 1, backgroundColor: Colors.background, padding: 12 },
+  card: {
+    backgroundColor: Colors.secondary,
+    borderRadius: 12,
+    padding: 18,
+    shadowColor: "#000",
+    shadowOpacity: 0.03,
+    shadowRadius: 6,
+    elevation: 2,
+  },
+  title: { fontSize: 20, fontWeight: "700", color: Colors.white, marginBottom: 8 },
+  message: { fontSize: 16, color: Colors.gray, marginBottom: 18 },
+
+  infoRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  rowLeft: { flexDirection: "row", alignItems: "center" },
+  label: { fontWeight: "600", color: Colors.gray, fontSize: 14 },
+  value: { fontWeight: "500", fontSize: 16, color: Colors.white },
 });

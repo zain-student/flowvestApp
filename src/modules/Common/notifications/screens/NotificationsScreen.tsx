@@ -1,35 +1,39 @@
+import Colors from "@/shared/colors/Colors";
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
+import { FlatList, RefreshControl, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { dummyNotifications, Notification } from "../components/dummyNotifications";
 
-export const NotificationsScreen =()=> {
+export const NotificationsScreen = () => {
   const navigation = useNavigation();
+  const [notifications, setNotifications] = useState<Notification[]>(dummyNotifications);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setNotifications(prev => [...prev].reverse());
+      setRefreshing(false);
+    }, 1000);
+  };
 
   const renderItem = ({ item }: { item: Notification }) => {
-    const statusColors = {
-      scheduled: "#FFA500",
-      sent: "#1E90FF",
-      read: "#32CD32",
-    };
-
-    const priorityColors = {
-      high: "#FF0000",
-      medium: "#FFA500",
-      low: "#32CD32",
-    };
+    const statusColors = { scheduled: Colors.green, sent: Colors.primary, read: Colors.green };
+    const priorityColors = { high: Colors.error, medium: Colors.green, low: Colors.green };
 
     return (
       <TouchableOpacity
         style={styles.card}
-        // onPress={() => navigation.navigate("NotificationDetail", { notification: item })}
-      >
-        <View style={styles.row}>
+        onPress={() => (navigation as any).navigate("NotificationDetail", { notification: item })}
+        >
+        <View style={styles.header}>
           <Text style={styles.title}>{item.title}</Text>
           <View style={[styles.priorityDot, { backgroundColor: priorityColors[item.priority] }]} />
         </View>
-        <Text numberOfLines={1} style={styles.message}>{item.message}</Text>
-        <View style={styles.row}>
+
+        <Text style={styles.message} numberOfLines={2}>{item.message}</Text>
+
+        <View style={styles.footer}>
           <Text style={styles.sender}>From: {item.senderName}</Text>
           <View style={[styles.statusBadge, { backgroundColor: statusColors[item.status] }]}>
             <Text style={styles.statusText}>{item.status.toUpperCase()}</Text>
@@ -40,26 +44,39 @@ export const NotificationsScreen =()=> {
   };
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={dummyNotifications}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderItem}
-        contentContainerStyle={{ padding: 10 }}
-        ListEmptyComponent={<Text style={{ textAlign: "center", marginTop: 20 }}>No notifications yet</Text>}
-      />
-    </View>
+      <View style={styles.container}>
+        <FlatList
+          data={notifications}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderItem}
+          contentContainerStyle={{ paddingBottom: 100 }}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />}
+          ListEmptyComponent={<Text style={styles.emptyText}>No notifications yet</Text>}
+        />
+      </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#F5F5F5" },
-  card: { backgroundColor: "#fff", padding: 15, borderRadius: 10, marginVertical: 5 },
-  row: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
-  title: { fontSize: 16, fontWeight: "bold" },
-  message: { fontSize: 14, color: "#555", marginVertical: 5 },
-  sender: { fontSize: 12, color: "#777" },
-  statusBadge: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: 5 },
-  statusText: { color: "#fff", fontSize: 10, fontWeight: "bold" },
-  priorityDot: { width: 10, height: 10, borderRadius: 5 },
+  container: { flex: 1, backgroundColor: Colors.background },
+  card: {
+    backgroundColor: Colors.secondary,
+    borderRadius: 12,
+    padding: 16,
+    marginHorizontal: 12,
+    marginVertical: 6,
+    shadowColor: "#000",
+    shadowOpacity: 0.03,
+    shadowRadius: 6,
+    elevation: 2,
+  },
+  header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 6 },
+  title: { fontSize: 16, fontWeight: "600", color: Colors.white, flex: 1, marginRight: 8 },
+  message: { fontSize: 14, color: Colors.gray, marginBottom: 10 },
+  footer: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
+  sender: { fontSize: 12, color: Colors.gray },
+  statusBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
+  statusText: { color: Colors.white, fontSize: 10, fontWeight: "600" },
+  priorityDot: { width: 12, height: 12, borderRadius: 6 },
+  emptyText: { textAlign: "center", marginTop: 20, color: Colors.gray, fontSize: 14 },
 });

@@ -21,7 +21,10 @@ export interface PartnerInvestment {
   max_investment_amount?: string;
   current_total_invested?: string;
   total_participants?: number;
-
+  creator: {
+    id: number;
+    name: string;
+  };
   // ✅ New participant-specific fields
   my_investment?: string;
   my_participation_percentage?: string;
@@ -196,7 +199,7 @@ export const fetchPartnerParticipatingInvestments = createAsyncThunk(
         page,
         search,
       });
-console.log("Fetched partner investments:", investments);
+      console.log("Fetched partner investments:", investments);
       return { investments, meta, summary, page, search };
     } catch (error: any) {
       const cached = await storage.getItem(StorageKeys.INVESTMENTS_CACHE);
@@ -377,7 +380,9 @@ const partnerInvestmentSlice = createSlice({
           const existingIds = new Set(
             state.sharedPrograms.list.map((inv) => inv.id)
           );
-          const newPrograms = data.filter((inv:any) => !existingIds.has(inv.id));
+          const newPrograms = data.filter(
+            (inv: any) => !existingIds.has(inv.id)
+          );
           state.sharedPrograms.list = [
             ...state.sharedPrograms.list,
             ...newPrograms,

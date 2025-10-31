@@ -89,6 +89,7 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
         <Text style={styles.title}>{currentInvestment.name}</Text>
 
         <View style={styles.summaryCard}>
+          <LabelValue label="Creator" value={currentInvestment.creator.name || "N/A"} />
           <LabelValue label="Target Amount" value={`$${currentInvestment.total_target_amount ?? "0"}`} />
           <LabelValue label="Currently Invested" value={`$${currentInvestment.current_total_invested ?? "0"}`} />
           <LabelValue label="Remaining Capacity" value={

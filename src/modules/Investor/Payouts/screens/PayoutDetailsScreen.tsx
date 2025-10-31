@@ -104,8 +104,10 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
           </Text>
           <Text style={styles.label}>Participant</Text>
           <Text style={styles.value}>{payouts.participant_name}({payouts.participant_email})</Text>
-          <Text style={styles.label}>Recipient</Text>
-          <Text style={styles.value}>{mockPayout.recipient}</Text>
+          <Text style={styles.label}>Investment ROI</Text>
+          <Text style={styles.value}>{Number(payouts.investment_roi).toFixed(1)}%</Text>
+          <Text style={styles.label}>Payout Method</Text>
+          <Text style={styles.value}>{payouts.payment_method}</Text>
           {payouts.status.toLowerCase() === "cancelled" && (
             <>
               <Text style={styles.label}>Notes</Text>

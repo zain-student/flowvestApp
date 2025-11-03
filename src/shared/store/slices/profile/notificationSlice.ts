@@ -116,23 +116,6 @@ export const updateNotificationSettings = createAsyncThunk(
   }
 );
 // Thunk for fetch all notifications
-// export const fetchNotifications = createAsyncThunk(
-//   "notifications/fetchAll",
-//   async (page: number = 1, { rejectWithValue }) => {
-//     try {
-//       const response = await api.get(
-//         `${API_ENDPOINTS.ADMIN.NOTIFICATIONS.LIST}?page=${page}`
-//       );
-//       const { notifications, pagination } = response.data.data;
-//       console.log("Notifications:",response.data);
-//       return { notifications, pagination, page };
-//     } catch (err: any) {
-//       return rejectWithValue(
-//         err.response?.data?.message || "Failed to fetch notifications"
-//       );
-//     }
-//   }
-// );
 export const fetchNotifications = createAsyncThunk(
   "notifications/fetchAll",
   async (
@@ -189,11 +172,6 @@ const notificationSlice = createSlice({
         state.error = action.payload as string;
       })
       // Fetch notifications reducers
-      // .addCase(fetchNotifications.pending, (state, action) => {
-      //   if (action.meta.arg > 1) state.isPaginating = true;
-      //   else state.isLoading = true;
-      //   state.error = null;
-      // })
       .addCase(fetchNotifications.pending, (state, action) => {
         const page = action.meta.arg?.page ?? 1; // safely extract page number
         if (page > 1) state.isPaginating = true;

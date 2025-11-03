@@ -146,7 +146,7 @@ export const InvestmentDetails = ({ navigation }: any) => {
               <ActivityIndicator size="small" color={Colors.green} />
             ) : null
           }
-          contentContainerStyle={{ paddingBottom: 10 }}
+          contentContainerStyle={{ paddingBottom: 80 }}
           ListHeaderComponent={
             <View style={styles.card}>
               <Text style={styles.title}>Joined Investments Overview</Text>
@@ -175,7 +175,7 @@ export const InvestmentDetails = ({ navigation }: any) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Colors.background, paddingBottom: 80 },
+  container: { flex: 1, backgroundColor: Colors.background },
   scrollContent: {
     // flex:1,
     paddingBottom: 0, backgroundColor: Colors.background

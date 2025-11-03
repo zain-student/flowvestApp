@@ -8,6 +8,7 @@ const Colors = {
   green: "#22C55E", // Green for accents like returns
   darkButton: "#232326", // Dark button background
   lightGray: "#E5E7EB", // Light gray for backgrounds
+  yellow:"yellow",
   activeStatusBg: "#d1f7c4",
   activeStatus: "#1a7f37",
   inActiveStatusBg:'#ffe0e0',

@@ -129,11 +129,10 @@ export const fetchNotifications = createAsyncThunk(
 
       const { notifications, pagination } = response.data.data;
       console.log("Fetched Notifications:", response.data);
-
       return { notifications, pagination, page };
     } catch (err: any) {
       return rejectWithValue(
-        err.response?.data?.message || "Failed to fetch notifications"
+        err.response?.data?.message 
       );
     }
   }

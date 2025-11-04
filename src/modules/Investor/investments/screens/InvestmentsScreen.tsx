@@ -186,10 +186,6 @@ export const InvestmentsScreen: React.FC = () => {
           </Text>
           </View>
           <View style={styles.balanceActionsRow}>
-            {/* <TouchableOpacity style={styles.balanceActionBtnDark}>
-              <Feather name="plus" size={18} color="#fff" />
-              <Text style={styles.balanceActionTextDark}>Top Up</Text>
-            </TouchableOpacity> */}
             <TouchableOpacity style={styles.balanceActionBtnDark}
               onPress={() => navigation.navigate("MyInvestments")}
             >

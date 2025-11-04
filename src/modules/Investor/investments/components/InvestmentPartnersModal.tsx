@@ -1,17 +1,17 @@
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { fetchInvestmentPartners, resetPartner } from "@/shared/store/slices/investor/investments/investmentSlice";
+import { approveInvestmentPartner, fetchInvestmentPartners, resetPartner } from "@/shared/store/slices/investor/investments/investmentSlice";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    FlatList,
-    Modal,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  FlatList,
+  Modal,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 
@@ -63,46 +63,46 @@ const InvestmentPartnersModal: React.FC<PartnersModalProps> = ({ visible, onClos
           {/* Only show search + filters if partners exist
           {partners && partners.length > 0 && (
             <> */}
-              {/* 🔍 Search Bar */}
-              <View style={styles.searchContainer}>
-                <Ionicons name="search" size={18} color="#888" style={{ marginLeft: 8 }} />
-                <TextInput
-                  placeholder="Search by name or email"
-                  placeholderTextColor="#888"
-                  value={search}
-                  onChangeText={setSearch}
-                  style={styles.searchInput}
-                />
-              </View>
+          {/* 🔍 Search Bar */}
+          <View style={styles.searchContainer}>
+            <Ionicons name="search" size={18} color="#888" style={{ marginLeft: 8 }} />
+            <TextInput
+              placeholder="Search by name or email"
+              placeholderTextColor="#888"
+              value={search}
+              onChangeText={setSearch}
+              style={styles.searchInput}
+            />
+          </View>
 
-              {/* Dropdown Filters */}
-              <View style={styles.dropdownRow}>
-                <Dropdown
-                  style={styles.dropdown}
-                  placeholderStyle={styles.placeholderStyle}
-                  selectedTextStyle={styles.selectedTextStyle}
-                  data={StatusFilters}
-                  labelField="label"
-                  valueField="value"
-                  placeholder="Filter by Status"
-                  value={status}
-                  onChange={(item:any) => setStatus(item.value === status ? undefined : item.value)}
-                />
-                <Dropdown
-                  style={styles.dropdown}
-                  placeholderStyle={styles.placeholderStyle}
-                  selectedTextStyle={styles.selectedTextStyle}
-                  data={InvitationFilters}
-                  labelField="label"
-                  valueField="value"
-                  placeholder="Filter by Invitation"
-                  value={invitationStatus}
-                  onChange={(item:any) =>
-                    setInvitationStatus(item.value === invitationStatus ? undefined : item.value)
-                  }
-                />
-              </View>
-            {/* </>
+          {/* Dropdown Filters */}
+          <View style={styles.dropdownRow}>
+            <Dropdown
+              style={styles.dropdown}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              data={StatusFilters}
+              labelField="label"
+              valueField="value"
+              placeholder="Filter by Status"
+              value={status}
+              onChange={(item: any) => setStatus(item.value === status ? undefined : item.value)}
+            />
+            <Dropdown
+              style={styles.dropdown}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              data={InvitationFilters}
+              labelField="label"
+              valueField="value"
+              placeholder="Filter by Invitation"
+              value={invitationStatus}
+              onChange={(item: any) =>
+                setInvitationStatus(item.value === invitationStatus ? undefined : item.value)
+              }
+            />
+          </View>
+          {/* </>
           )} */}
 
           {/* Loading / Error */}
@@ -124,6 +124,22 @@ const InvestmentPartnersModal: React.FC<PartnersModalProps> = ({ visible, onClos
                   <Text style={styles.badge}>Status: {item.status}</Text>
                   <Text style={styles.badge}>Invitation: {item.invitation_status}</Text>
                 </View>
+                {item.invitation_status === "pending" &&(
+                <TouchableOpacity
+                  style={styles.joinBtn}
+                  activeOpacity={0.7}
+                  onPress={() => {
+                    console.log("Accepting...");
+                    dispatch(approveInvestmentPartner({
+                      investmentId:item.investment_id,
+                      partnerId:item.user.id,
+                    }))
+                    console.log("user id:", item.user.id,"investment id",item.investment_id);
+                  }}
+                >
+                  <Ionicons name="person-add-outline" size={18} color={Colors.white} />
+                  <Text style={styles.joinBtnText}>Approve</Text>
+                </TouchableOpacity>)}
               </View>
             )}
             ListEmptyComponent={
@@ -210,7 +226,22 @@ const styles = StyleSheet.create({
   email: { fontSize: 13, color: "#aaa", marginBottom: 6 },
   cardRow: { flexDirection: "row", justifyContent: "space-between" },
   badge: { fontSize: 12, color: "#bbb" },
-
+joinBtn: {
+    marginTop: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "flex-end",
+    backgroundColor: Colors.primary,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+  },
+  joinBtnText: {
+    color: Colors.white,
+    fontSize: 14,
+    fontWeight: "600",
+    marginLeft: 6,
+  },
   error: { color: "red", marginVertical: 8 },
   empty: { color: "#888", textAlign: "center", marginTop: 30 },
 });

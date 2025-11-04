@@ -82,6 +82,7 @@ export const API_ENDPOINTS = {
     CREATE_MANUAL_PAYOUT: (id: number) => `/v1/investments/${id}/payouts/manual`,
     INVESTMENT_PARTNERS: (id: number) => `/v1/investments/${id}/partners`,
     ADD_PARTNER:(id: number) => `/v1/investments/${id}/partners/invite`,
+    APPROVE_PARTNER: (investmentId: number, partnerId: number) =>`/v1/investments/${investmentId}/partners/${partnerId}/approve`,
   },
   
   // Payouts

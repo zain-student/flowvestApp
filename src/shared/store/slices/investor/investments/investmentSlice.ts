@@ -163,7 +163,10 @@ export const addInvestments = createAsyncThunk(
 // This will fetch the first page by default, or a specific page if provided
 export const fetchInvestments = createAsyncThunk(
   "/v1/investments",
-  async ({ page = 1, search = "" }: { page?: number; search?: string }, { signal, rejectWithValue }) => {
+  async (
+    { page = 1, search = "" }: { page?: number; search?: string },
+    { signal, rejectWithValue }
+  ) => {
     try {
       const controller = new AbortController();
       signal.addEventListener("abort", () => controller.abort());
@@ -177,7 +180,13 @@ export const fetchInvestments = createAsyncThunk(
       const meta = response.data?.meta || {};
       const summary = response.data?.summary || {};
 
-      await storage.setItem(StorageKeys.INVESTMENTS_CACHE, { investments, meta, summary, page, search });
+      await storage.setItem(StorageKeys.INVESTMENTS_CACHE, {
+        investments,
+        meta,
+        summary,
+        page,
+        search,
+      });
 
       return { investments, meta, summary, page, search };
     } catch (error: any) {
@@ -323,6 +332,34 @@ export const deleteInvestment = createAsyncThunk(
       // console.error("Error response:", error.message);
 
       return rejectWithValue(error || "Delete failed");
+    }
+  }
+);
+// Approve Partner Participation
+export const approveInvestmentPartner = createAsyncThunk(
+  "investments/approvePartner",
+  async (
+    { investmentId, partnerId }: { investmentId: number; partnerId: number },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await api.post(
+        API_ENDPOINTS.INVESTMENTS.APPROVE_PARTNER(investmentId, partnerId)
+      );
+
+      console.log("✅ Partner participation approved:", response.data);
+
+      ToastAndroid.show(
+        response.data?.message || "Partner participation approved",
+        ToastAndroid.SHORT
+      );
+
+      return response.data.data.participant;
+    } catch (error: any) {
+      const message =
+        error?.response?.data?.message || "Failed to approve partner";
+      ToastAndroid.show(message, ToastAndroid.SHORT);
+      return rejectWithValue(message);
     }
   }
 );
@@ -524,6 +561,29 @@ const investmentSlice = createSlice({
       .addCase(deleteInvestment.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
+      })
+      // Approve partner participation
+      .addCase(approveInvestmentPartner.pending, (state) => {
+        state.partners.isLoading = true;
+        state.partners.error = null;
+      })
+      .addCase(approveInvestmentPartner.fulfilled, (state, action) => {
+        state.partners.isLoading = false;
+
+        const approvedPartner = action.payload;
+
+        // Update partner status in existing list
+        state.partners.data = state.partners.data.map((partner) =>
+          partner.id === approvedPartner.id
+            ? { ...partner, ...approvedPartner }
+            : partner
+        );
+
+        // Optionally also update investment stats or details if needed later
+      })
+      .addCase(approveInvestmentPartner.rejected, (state, action) => {
+        state.partners.isLoading = false;
+        state.partners.error = action.payload as string;
       });
   },
 });

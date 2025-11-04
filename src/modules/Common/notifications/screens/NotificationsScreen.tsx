@@ -62,30 +62,35 @@ export const NotificationsScreen = () => {
     <TouchableOpacity
       style={styles.card}
       activeOpacity={0.8}
-        onPress={() =>
-          (navigation as any).navigate("NotificationDetail", {
-            notification: item,
-          })
-        }
+      onPress={() =>
+        (navigation as any).navigate("NotificationDetail", {
+          notification: item,
+        })
+      }
     >
       <View style={styles.row}>
         <Ionicons
           name={
             item.type === "payout_reminder"
               ? "cash-outline"
-              : "notifications-outline"
+              : item.type === "overdue_alert"
+                ? "alert-circle-outline"
+                : item.type === "system_alert"
+                  ? "warning-outline"
+                  : "notifications-outline"
           }
           size={22}
           color={Colors.primary}
         />
+
         <View style={styles.content}>
           <Text style={styles.title}>{item.title}</Text>
           <Text style={styles.message}>{item.message}</Text>
           <Text style={styles.time}>
             {new Date(item.created_at).toLocaleString()}
           </Text>
-          <Text style={{color:Colors.white,alignSelf:"flex-end"}}>From:
-          <Text style={styles.sender}>{item.sender.name}</Text></Text>
+          <Text style={{ color: Colors.white, alignSelf: "flex-end" }}>From:
+            <Text style={styles.sender}>{item.sender.name}</Text></Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -172,10 +177,10 @@ const styles = StyleSheet.create({
     color: Colors.gray,
     marginTop: 4,
   },
-   sender: {
+  sender: {
     fontSize: 12,
     color: Colors.gray,
-    alignSelf:'flex-end',
+    alignSelf: 'flex-end',
     marginTop: 4,
   },
   loaderContainer: {

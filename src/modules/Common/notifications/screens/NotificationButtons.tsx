@@ -44,7 +44,14 @@ export const NotificationButtons: React.FC = () => {
                     label="Notification Templates"
                     description="Create and manage message templates"
                     onPress={() => navigation.navigate("NotificationsTemplates")}
-                    gradient={["#b2bdbeff", "#053e44ff"]}
+                    gradient={["#677171ff", "#0a1314ff"]}
+                />
+                <SettingsButton
+                    icon="notifications-outline"
+                    label="Send Notifications"
+                    description="Create and send notifications to users"
+                    onPress={() => console.log("Sending Notifications")}
+                    gradient={["#6b1c1cff", "#252556ff"]}
                 />
             </View>
         </ScrollView>

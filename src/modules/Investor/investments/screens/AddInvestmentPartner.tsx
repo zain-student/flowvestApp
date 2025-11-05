@@ -49,10 +49,10 @@ export default function AddInvestmentPartner() {
 
   const handleAddPartner = async () => {
     if (
-      !selectedPartner ||
-      !investedAmount 
+      !selectedPartner 
+      // || !investedAmount 
     ) {
-      ToastAndroid.show("Please enter investment amount.", ToastAndroid.SHORT);
+      ToastAndroid.show("Please select a partner first!.", ToastAndroid.SHORT);
       return;
     }
 
@@ -141,7 +141,7 @@ export default function AddInvestmentPartner() {
 
           <TextInput
             style={styles.input}
-            placeholder="Invested Amount"
+            placeholder="Investment Amount(Optional)"
             keyboardType="numeric"
             value={investedAmount}
             onChangeText={setInvestedAmount}

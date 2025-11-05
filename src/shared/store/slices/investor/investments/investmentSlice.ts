@@ -378,7 +378,7 @@ export const removeInvestmentPartner = createAsyncThunk(
       const response = await api.delete(
         API_ENDPOINTS.INVESTMENTS.REMOVE_PARTNER(investmentId, partnerId),
         {
-          data: { reason }, // 👈 Axios supports sending a body in DELETE like this
+          data: { reason }, 
         }
       );
 
@@ -613,8 +613,6 @@ const investmentSlice = createSlice({
             ? { ...partner, ...approvedPartner }
             : partner
         );
-
-        // Optionally also update investment stats or details if needed later
       })
       .addCase(approveInvestmentPartner.rejected, (state, action) => {
         state.partners.isLoading = false;

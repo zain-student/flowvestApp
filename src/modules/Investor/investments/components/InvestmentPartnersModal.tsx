@@ -4,7 +4,6 @@ import { approveInvestmentPartner, fetchInvestmentPartners, resetPartner } from 
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
   FlatList,
   Modal,
   StyleSheet,
@@ -59,11 +58,7 @@ const InvestmentPartnersModal: React.FC<PartnersModalProps> = ({ visible, onClos
               <Ionicons name="close" size={24} color="#fff" />
             </TouchableOpacity>
           </View>
-
-          {/* Only show search + filters if partners exist
-          {partners && partners.length > 0 && (
-            <> */}
-          {/* 🔍 Search Bar */}
+          {/* Search Bar */}
           <View style={styles.searchContainer}>
             <Ionicons name="search" size={18} color="#888" style={{ marginLeft: 8 }} />
             <TextInput
@@ -102,12 +97,6 @@ const InvestmentPartnersModal: React.FC<PartnersModalProps> = ({ visible, onClos
               }
             />
           </View>
-          {/* </>
-          )} */}
-
-          {/* Loading / Error
-          {isLoading && <ActivityIndicator size="large" color="#3b82f6" style={{ marginTop: 20 }} />}
-          {error && <Text style={styles.error}>{error}</Text>} */}
 
           {/* Partner List */}
           <FlatList
@@ -137,46 +126,10 @@ const InvestmentPartnersModal: React.FC<PartnersModalProps> = ({ visible, onClos
                       );
                     }}
                   >
-                    {isLoading ? (
-                      <ActivityIndicator color={Colors.white} size="small" />
-                    ) : (
-                      <>
                         <Ionicons name="person-add-outline" size={18} color={Colors.white} />
                         <Text style={styles.joinBtnText}>Approve</Text>
-                      </>
-                    )}
                   </TouchableOpacity>)}
-                {/* {item.invitation_status === "accepted" && (
-                  <TouchableOpacity
-                    style={[styles.removeBtn, isLoading && { opacity: 0.6 }]}
-                    disabled={isLoading}
-                    onPress={() => {
-                      console.log(
-                        "Removing Partner...",
-                        "Investment id:", item.investment_id,
-                        "Partner id:", item.user.id
-                      );
-
-                      dispatch(
-                        removeInvestmentPartner({
-                          investmentId: item.investment_id,
-                          partnerId: item.user.id,
-                          reason: "Partner requested withdrawal",
-                        })
-                      );
-                    }}
-                  >
-                    {isLoading ? (
-                      <ActivityIndicator color={Colors.white} size="small" />
-                    ) : (
-                      <>
-                        <Ionicons name="trash-outline" size={18} color={Colors.white} />
-                        <Text style={styles.joinBtnText}>Remove</Text>
-                      </>
-                    )}
-                  </TouchableOpacity>
-                )} */}
-                <RemovePartnerButton item={item} />
+                <RemovePartnerButton item={item} investmentId={investmentId}/>
 
 
               </View>

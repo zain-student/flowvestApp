@@ -13,7 +13,7 @@ import Colors from "@shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@store/index";
 import React, { useState } from "react";
 import {
-  Alert,
+  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -28,8 +28,7 @@ import { AuthStackParamList } from "../../../navigation/AuthStack";
 import {
   clearError,
   registerUser,
-  selectAuthError,
-  selectIsLoading,
+  selectAuthError
 } from "../store/authSlice";
 import {
   createRegistrationSchema,
@@ -68,7 +67,8 @@ const companyTypeOptions: SelectOption[] = [
 export const RegisterScreen: React.FC = () => {
   const navigation = useNavigation<RegisterScreenNavigationProp>();
   const dispatch = useAppDispatch();
-  const isLoading = useAppSelector(selectIsLoading);
+  // const isLoading = useAppSelector(selectIsLoading);
+  const {isLoading}=useAppSelector((state)=>(state.auth))
   const authError = useAppSelector(selectAuthError);
 
   // Form state - starts with basic fields
@@ -144,12 +144,7 @@ export const RegisterScreen: React.FC = () => {
   // Handle form submission
   const handleSubmit = async () => {
     // Get the appropriate schema based on role and registration type
-    const schema = createRegistrationSchema(
-      formData.role,
-      formData.registration_type
-    );
-
-    // Validate form data
+    const schema = createRegistrationSchema(formData.role,formData.registration_type);
     const validation = validateFormData(schema, formData);
 
     if (!validation.success && validation.errors) {
@@ -164,40 +159,13 @@ export const RegisterScreen: React.FC = () => {
       const result = await dispatch(registerUser(validation.data));
       if (registerUser.fulfilled.match(result)) {
         console.log("✅ Registration successful:", result);
-        // ToastAndroid.show(
-        //   'Registration successful',
-        //   ToastAndroid.SHORT
-        // );
-        // Navigate to login screen after successful registration
-        // navigation.navigate("Login");
       } else if (registerUser.rejected.match(result)) {
-        // Registration failed - error will be shown via authError
         console.log("❌ Registration failed:", result.error.message);
-        // ToastAndroid.show(
-        //   `Registration failed: ${result.payload || result.error.message}`,
-        //   ToastAndroid.LONG
-        // );
-        // It will aalow the user to change the email or password and remain on the same screen
-        // Clear auth error to allow user to retry
         dispatch(clearError());
-
-        // console.error("❌ Registration failed:", result.payload || result.error.message);
-      // Handle specific registration errors
-
-      // } else {
-      //   console.log(
-      //     "❌ Registration failed:",
-      //     result.payload || result.error.message
-      //   );
-        // ToastAndroid.show(
-        //   `Registration failed: ${result.payload || result.error.message}`,
-        //   ToastAndroid.LONG
-        // );
         return;
       }
     } catch (error) {
       console.error("Registration error1:", error);
-      Alert.alert("Error", "An unexpected error occurred. Please try again.");
     }
   };
 
@@ -288,9 +256,9 @@ export const RegisterScreen: React.FC = () => {
     return (
       <View style={styles.stepContent}>
         <StatusBar
-                          barStyle="dark-content" // or "dark-content"
-                          // backgroundColor="#000" // set to match your theme
-                        />
+          barStyle="dark-content" // or "dark-content"
+        // backgroundColor="#000" // set to match your theme
+        />
         <Text style={styles.stepTitle}>Create Your Account</Text>
         <Text style={styles.stepDescription}>
           Fill in your details to get started
@@ -411,9 +379,9 @@ export const RegisterScreen: React.FC = () => {
             ]}
           >
             {formData.terms_accepted &&
-            //  <Text style={styles.checkmark}>✓</Text>
-            <Ionicons name='checkmark' size={16}  color={"white"}/>
-             }
+              //  <Text style={styles.checkmark}>✓</Text>
+              <Ionicons name='checkmark' size={16} color={"white"} />
+            }
           </View>
           <Text style={styles.termsText}>
             I agree to the Terms of Service and Privacy Policy
@@ -431,6 +399,7 @@ export const RegisterScreen: React.FC = () => {
         )} */}
 
         {/* Submit Button */}
+        {isLoading ?<ActivityIndicator size={"small"} color={"black"}/>:(
         <Button
           title="Create Account"
           onPress={handleSubmit}
@@ -438,7 +407,8 @@ export const RegisterScreen: React.FC = () => {
           fullWidth
           style={styles.submitButton}
         />
-
+        )
+        }
 
         {/* Back Button */}
         <TouchableOpacity

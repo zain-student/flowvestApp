@@ -3,6 +3,7 @@
  * Main navigation component that switches between Auth and App flows
  */
 
+import { LoadingScreen } from '@/app/LoadingScreen';
 import { NotificationDetailScreen } from '@/modules/Common/notifications/screens/NotificationDetailScreen';
 import { NotificationsScreen } from '@/modules/Common/notifications/screens/NotificationsScreen';
 import { InvestmentStack } from "@/navigation/InvestorStacks/InvestmentStack";
@@ -18,7 +19,6 @@ import { authService } from "@services/authService";
 import { useAppDispatch, useAppSelector } from "@store/index";
 import React, { useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
-import { LoadingScreen } from "../app/LoadingScreen";
 import { AppTabNavigator } from "./AppTabNavigator";
 import { AuthStack } from "./AuthStack";
 import { InvestorDashboardStack } from "./InvestorStacks/InvestorDashboardStack";
@@ -75,7 +75,7 @@ export const RootNavigator: React.FC = () => {
   }, [dispatch]);
 
   // Show loading screen during initialization or auth operations
-  if (isInitializing || isLoading) {
+  if (isInitializing ) {
     return (
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>

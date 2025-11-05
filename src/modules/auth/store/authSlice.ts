@@ -147,7 +147,7 @@ export const registerUser = createAsyncThunk(
       const token = response.data?.data?.token;
       const user = response.data?.data?.user;
       const session = response.data?.data?.session; // Assuming session is returned
-      console.log("Registration response:", JSON.stringify(response.data));
+      console.log("Registration response:", response.data);
       if (!token || !user) {
         return rejectWithValue(
           "Registration failed: No token or user data returned"
@@ -162,7 +162,7 @@ export const registerUser = createAsyncThunk(
         [StorageKeys.SESSION, JSON.stringify(session)],
         // [StorageKeys.REFRESH_TOKEN, token?.refresh_token],
       ]);
-      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+      // ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       console.log("✅ User registered successfully:", response.data.message);
       // return { user, token, session };
       return {
@@ -184,7 +184,7 @@ export const registerUser = createAsyncThunk(
         error?.message ||
         "Registration failed";
       ToastAndroid.show(errMsg, ToastAndroid.SHORT);
-      // console.error("❌ Registration error:", errMsg);
+      console.error("❌ Registration error:", errMsg);
       return rejectWithValue(errMsg);
     }
   }
@@ -332,10 +332,9 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.isAuthenticated = false;
         state.error = action.error.message || "Login failed";
-      });
+      })
 
     // Register
-    builder
       .addCase(registerUser.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -363,10 +362,8 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.isAuthenticated = false;
         state.error = action.error.message || "Registration failed";
-      });
-
+      })
     // Logout
-    builder
       .addCase(logoutUser.pending, (state) => {
         state.isLoading = true;
       })
@@ -376,10 +373,9 @@ const authSlice = createSlice({
       .addCase(logoutUser.rejected, (state) => {
         // Even if logout fails on server, clear local state
         return { ...initialState };
-      });
+      })
    
     // Refresh token
-    builder
       .addCase(refreshToken.fulfilled, (state, action) => {
         state.token = action.payload.token;
         state.session = action.payload.session;
@@ -387,10 +383,8 @@ const authSlice = createSlice({
       .addCase(refreshToken.rejected, (state) => {
         // If refresh fails, logout user
         return { ...initialState };
-      });
-
+      })
     // Get current user
-    builder
       .addCase(getCurrentUser.fulfilled, (state, action) => {
         state.user = action.payload;
         state.isLoading = false;

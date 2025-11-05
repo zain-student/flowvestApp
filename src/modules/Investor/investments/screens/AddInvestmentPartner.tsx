@@ -114,7 +114,7 @@ export default function AddInvestmentPartner() {
           <View style={styles.card}>
             <Text style={styles.cardTitle}>Investment Details</Text>
             <Text style={styles.detail}>Name: {investment.name}</Text>
-            <Text style={styles.detail}>Total: ${investment.initial_amount}</Text>
+            <Text style={styles.detail}>Total: ${investment.type==="solo"?investment.initial_amount:investment.current_total_invested}</Text>
             <Text style={styles.detail}>Status: {investment.status}</Text>
             <Text style={styles.detail}>
               Expected Return: {parseFloat(investment.expected_return_rate).toFixed(1)}%

@@ -363,6 +363,41 @@ export const approveInvestmentPartner = createAsyncThunk(
     }
   }
 );
+// Remove Partner from Investment
+export const removeInvestmentPartner = createAsyncThunk(
+  "investments/removePartner",
+  async (
+    {
+      investmentId,
+      partnerId,
+      reason = "Partner requested withdrawal",
+    }: { investmentId: number; partnerId: number; reason?: string },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await api.delete(
+        API_ENDPOINTS.INVESTMENTS.REMOVE_PARTNER(investmentId, partnerId),
+        {
+          data: { reason }, // 👈 Axios supports sending a body in DELETE like this
+        }
+      );
+
+      console.log("✅ Partner removed successfully:", response.data);
+
+      ToastAndroid.show(
+        response.data?.message || "Partner removed successfully",
+        ToastAndroid.SHORT
+      );
+
+      return { partnerId };
+    } catch (error: any) {
+      const message =
+        error?.response?.data?.message || "Failed to remove partner";
+      ToastAndroid.show(message, ToastAndroid.SHORT);
+      return rejectWithValue(message);
+    }
+  }
+);
 
 // Update Investment
 const investmentSlice = createSlice({
@@ -582,6 +617,25 @@ const investmentSlice = createSlice({
         // Optionally also update investment stats or details if needed later
       })
       .addCase(approveInvestmentPartner.rejected, (state, action) => {
+        state.partners.isLoading = false;
+        state.partners.error = action.payload as string;
+      })
+      // Remove partner participation
+      .addCase(removeInvestmentPartner.pending, (state) => {
+        state.partners.isLoading = true;
+        state.partners.error = null;
+      })
+      .addCase(removeInvestmentPartner.fulfilled, (state, action) => {
+        state.partners.isLoading = false;
+
+        const { partnerId } = action.payload;
+
+        // Remove partner from state
+        state.partners.data = state.partners.data.filter(
+          (partner) => partner.id !== partnerId
+        );
+      })
+      .addCase(removeInvestmentPartner.rejected, (state, action) => {
         state.partners.isLoading = false;
         state.partners.error = action.payload as string;
       });

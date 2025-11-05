@@ -83,6 +83,8 @@ export const API_ENDPOINTS = {
     INVESTMENT_PARTNERS: (id: number) => `/v1/investments/${id}/partners`,
     ADD_PARTNER:(id: number) => `/v1/investments/${id}/partners/invite`,
     APPROVE_PARTNER: (investmentId: number, partnerId: number) =>`/v1/investments/${investmentId}/partners/${partnerId}/approve`,
+    REMOVE_PARTNER: (investmentId: number, partnerId: number) =>`/v1/investments/${investmentId}/partners/${partnerId}`,
+
   },
   
   // Payouts

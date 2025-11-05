@@ -14,7 +14,7 @@ import {
   View
 } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
-
+import { RemovePartnerButton } from "./RemovePartnerButton";
 interface PartnersModalProps {
   visible: boolean;
   onClose: () => void;
@@ -105,9 +105,9 @@ const InvestmentPartnersModal: React.FC<PartnersModalProps> = ({ visible, onClos
           {/* </>
           )} */}
 
-          {/* Loading / Error */}
+          {/* Loading / Error
           {isLoading && <ActivityIndicator size="large" color="#3b82f6" style={{ marginTop: 20 }} />}
-          {error && <Text style={styles.error}>{error}</Text>}
+          {error && <Text style={styles.error}>{error}</Text>} */}
 
           {/* Partner List */}
           <FlatList
@@ -124,22 +124,61 @@ const InvestmentPartnersModal: React.FC<PartnersModalProps> = ({ visible, onClos
                   <Text style={styles.badge}>Status: {item.status}</Text>
                   <Text style={styles.badge}>Invitation: {item.invitation_status}</Text>
                 </View>
-                {item.invitation_status === "pending" &&(
-                <TouchableOpacity
-                  style={styles.joinBtn}
-                  activeOpacity={0.7}
-                  onPress={() => {
-                    console.log("Accepting...");
-                    dispatch(approveInvestmentPartner({
-                      investmentId:item.investment_id,
-                      partnerId:item.user.id,
-                    }))
-                    console.log("user id:", item.user.id,"investment id",item.investment_id);
-                  }}
-                >
-                  <Ionicons name="person-add-outline" size={18} color={Colors.white} />
-                  <Text style={styles.joinBtnText}>Approve</Text>
-                </TouchableOpacity>)}
+                {item.invitation_status === "pending" && (
+                  <TouchableOpacity
+                    style={[styles.joinBtn, isLoading && { opacity: 0.6 }]}
+                    disabled={isLoading}
+                    onPress={() => {
+                      dispatch(
+                        approveInvestmentPartner({
+                          investmentId: item.investment_id,
+                          partnerId: item.user.id,
+                        })
+                      );
+                    }}
+                  >
+                    {isLoading ? (
+                      <ActivityIndicator color={Colors.white} size="small" />
+                    ) : (
+                      <>
+                        <Ionicons name="person-add-outline" size={18} color={Colors.white} />
+                        <Text style={styles.joinBtnText}>Approve</Text>
+                      </>
+                    )}
+                  </TouchableOpacity>)}
+                {/* {item.invitation_status === "accepted" && (
+                  <TouchableOpacity
+                    style={[styles.removeBtn, isLoading && { opacity: 0.6 }]}
+                    disabled={isLoading}
+                    onPress={() => {
+                      console.log(
+                        "Removing Partner...",
+                        "Investment id:", item.investment_id,
+                        "Partner id:", item.user.id
+                      );
+
+                      dispatch(
+                        removeInvestmentPartner({
+                          investmentId: item.investment_id,
+                          partnerId: item.user.id,
+                          reason: "Partner requested withdrawal",
+                        })
+                      );
+                    }}
+                  >
+                    {isLoading ? (
+                      <ActivityIndicator color={Colors.white} size="small" />
+                    ) : (
+                      <>
+                        <Ionicons name="trash-outline" size={18} color={Colors.white} />
+                        <Text style={styles.joinBtnText}>Remove</Text>
+                      </>
+                    )}
+                  </TouchableOpacity>
+                )} */}
+                <RemovePartnerButton item={item} />
+
+
               </View>
             )}
             ListEmptyComponent={
@@ -226,12 +265,22 @@ const styles = StyleSheet.create({
   email: { fontSize: 13, color: "#aaa", marginBottom: 6 },
   cardRow: { flexDirection: "row", justifyContent: "space-between" },
   badge: { fontSize: 12, color: "#bbb" },
-joinBtn: {
+  joinBtn: {
     marginTop: 10,
     flexDirection: "row",
     alignItems: "center",
     alignSelf: "flex-end",
     backgroundColor: Colors.primary,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+  },
+  removeBtn: {
+    marginTop: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "flex-end",
+    backgroundColor: Colors.error,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,

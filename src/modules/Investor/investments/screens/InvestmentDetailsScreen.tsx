@@ -2,7 +2,7 @@ import { InvestmentStackParamList } from "@/navigation/InvestorStacks/Investment
 import Colors from "@/shared/colors/Colors";
 import { Button, Input } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { deleteInvestment, duplicateInvestment, fetchInvestmentsById } from "@/shared/store/slices/investor/investments/investmentSlice";
+import { deleteInvestment, duplicateInvestment, fetchInvestments, fetchInvestmentsById } from "@/shared/store/slices/investor/investments/investmentSlice";
 import { joinInvestment } from "@/shared/store/slices/shared/investments/partnerInvestmentSlice";
 import { Ionicons } from "@expo/vector-icons";
 import { RouteProp, useRoute } from "@react-navigation/native";
@@ -107,19 +107,24 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
 
     setFormError('');
     try {
-      await dispatch(
+      const resultAction=await dispatch(
         joinInvestment({
           investmentId: currentInvestment!.id,
           amount: Number(amount),
           notes: notes.trim(),
         })
-      ).unwrap();
+      );
+      // .unwrap();
+      if(joinInvestment.fulfilled.match(resultAction)){
+      dispatch(fetchInvestments({ page: 1 }));
       navigation.goBack();
+      }
     } catch (err) {
       // Error toast already handled inside thunk
       console.log('Join failed', err);
     }
   };
+
 
   return (
     <View style={styles.container}>

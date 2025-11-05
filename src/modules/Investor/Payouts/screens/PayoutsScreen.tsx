@@ -236,7 +236,7 @@ export const PayoutsScreen: React.FC = () => {
         />
 
         {/* List */}
-        <Text style={styles.sectionTitle}>Payouts</Text>
+
         <FlatList
           data={filtered}
           keyExtractor={(item) => item.id.toString()}
@@ -245,10 +245,18 @@ export const PayoutsScreen: React.FC = () => {
           onEndReachedThreshold={0.5}
           refreshing={isLoading}
           onRefresh={handleRefresh}
+          ListHeaderComponent={
+           payouts.length === 0 ? null : <Text style={styles.sectionTitle}>Payouts</Text>
+          }
           ListFooterComponent={
             isLoadingMore ? (
               <ActivityIndicator size="small" color={Colors.green} />
             ) : null
+          }
+          ListEmptyComponent={
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyText}>No payouts available.</Text>
+            </View>
           }
           contentContainerStyle={styles.scrollContent}
         />
@@ -308,6 +316,8 @@ const styles = StyleSheet.create({
     padding: 4,
     justifyContent: "space-around",
   },
+  emptyState: { justifyContent: "center", alignItems: "center", padding: 20 },
+  emptyText: { fontSize: 16, color: "#6B7280" },
   filterBtn: {
     paddingHorizontal: 16,
     paddingVertical: 8,

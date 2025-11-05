@@ -47,7 +47,7 @@ export const InvestmentsScreen: React.FC = () => {
     name: inv.name,
     type: inv.type,
     amount: inv.initial_amount,
-    can_join:inv.can_join_as_admin,
+    can_join: inv.can_join_as_admin,
     shared_amount: inv.current_total_invested,
     status: inv.status.charAt(0).toUpperCase() + inv.status.slice(1),
     returns: inv.expected_return_rate,
@@ -107,24 +107,24 @@ export const InvestmentsScreen: React.FC = () => {
             justifyContent: "flex-end",
           }}
         >
-          {item.type === "shared" && item.status === "Active" && item.can_join===true && (
+          {item.type === "shared" && item.status === "Active" && item.can_join === true && (
             <TouchableOpacity
-            style={styles.joinBtn}
-            activeOpacity={0.7}
-            onPress={() => {
-              navigation.navigate("InvestmentDetails", {
-                id: item.id,
-                showJoinForm: "true",
-              });
-              console.log("Join investment tapped:", item.id);
-            }}
+              style={styles.joinBtn}
+              activeOpacity={0.7}
+              onPress={() => {
+                navigation.navigate("InvestmentDetails", {
+                  id: item.id,
+                  showJoinForm: "true",
+                });
+                console.log("Join investment tapped:", item.id);
+              }}
             >
               <Ionicons name="add-circle-outline" size={18} color={Colors.white} />
               <Text style={styles.joinBtnText}>Join Investment</Text>
             </TouchableOpacity>)
           }
         </View>
-          <Text style={styles.investmentName}>{item.name}(<Text style={styles.investmentAmount}>{item.type.charAt(0).toUpperCase()+ item.type.slice(1)}</Text>)</Text>
+        <Text style={styles.investmentName}>{item.name}(<Text style={styles.investmentAmount}>{item.type.charAt(0).toUpperCase() + item.type.slice(1)}</Text>)</Text>
         <Text style={styles.investmentAmount}>Amount: ${item.type === "shared" ? item.shared_amount : item.amount}</Text>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <Text style={styles.investmentDate}>Started: {item.date}</Text>
@@ -174,16 +174,16 @@ export const InvestmentsScreen: React.FC = () => {
           <Text style={styles.cardValue}>
             ${stats.total_invested}
           </Text>
-         <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-          <Text style={styles.cardSubtitle}>
-            +8.2%{" "}
-            <Text style={{ color: Colors.gray, fontWeight: "400" }}>this year</Text>
-          </Text>
-          <Text style={{ color: Colors.gray, fontWeight: "400" }}>Total Investments:
+          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
             <Text style={styles.cardSubtitle}>
-              {stats.total_investments}{" "}
+              +8.2%{" "}
+              <Text style={{ color: Colors.gray, fontWeight: "400" }}>this year</Text>
             </Text>
-          </Text>
+            <Text style={{ color: Colors.gray, fontWeight: "400" }}>Total Investments:
+              <Text style={styles.cardSubtitle}>
+                {stats.total_investments}{" "}
+              </Text>
+            </Text>
           </View>
           <View style={styles.balanceActionsRow}>
             <TouchableOpacity style={styles.balanceActionBtnDark}
@@ -235,6 +235,11 @@ export const InvestmentsScreen: React.FC = () => {
           onRefresh={handleRefresh}
           ListFooterComponent={
             isLoadingMore ? <ActivityIndicator size="small" color={Colors.green} /> : null
+          }
+          ListEmptyComponent={
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyText}>No investments available.</Text>
+            </View>
           }
           contentContainerStyle={{ paddingBottom: 100 }}
         />

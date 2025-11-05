@@ -97,7 +97,7 @@ export const PortfolioScreen: React.FC = () => {
       </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
-      contentContainerStyle={styles.scrollContent}>
+        contentContainerStyle={styles.scrollContent}>
         <View style={styles.chartContainer}>
           <View style={{ flexDirection: "row", justifyContent: "center", marginTop: 3 }}>
             <TouchableOpacity
@@ -166,6 +166,11 @@ export const PortfolioScreen: React.FC = () => {
           ListFooterComponent={
             isLoading ? <ActivityIndicator size="small" color={Colors.green} /> : null
           }
+          ListEmptyComponent={
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyText}>No investments available.</Text>
+            </View>
+          }
           contentContainerStyle={styles.scrollContent}
         />
       </ScrollView>
@@ -183,6 +188,8 @@ const styles = StyleSheet.create({
     // flex:1,
     paddingBottom: 60, backgroundColor: Colors.background
   },
+  emptyState: { justifyContent: "center", alignItems: "center", padding: 20 },
+  emptyText: { fontSize: 16, color: "#6B7280" },
   card: {
     backgroundColor: Colors.secondary,
     borderBottomLeftRadius: 32, borderBottomRightRadius: 32,

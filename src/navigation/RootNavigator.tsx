@@ -75,6 +75,7 @@ export const RootNavigator: React.FC = () => {
   }, [dispatch]);
 
   // Show loading screen during initialization or auth operations
+  // || isLoading
   if (isInitializing ) {
     return (
       <NavigationContainer>

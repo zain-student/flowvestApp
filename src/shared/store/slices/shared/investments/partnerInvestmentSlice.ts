@@ -219,7 +219,7 @@ export const fetchAvailableSharedPrograms = createAsyncThunk(
     try {
       const response = await api.get(
         `${API_ENDPOINTS.INVESTMENTS.SHARED_AVAILABLE}?page=${page}${
-          search ? `?search=${encodeURIComponent(search)}` : ""
+          search ? `&search=${encodeURIComponent(search)}` : ""
         }`
       );
       // assuming API returns { success, message, data: [...] }

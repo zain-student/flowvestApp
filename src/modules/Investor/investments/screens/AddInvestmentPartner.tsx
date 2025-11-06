@@ -49,7 +49,7 @@ export default function AddInvestmentPartner() {
 
   const handleAddPartner = async () => {
     if (
-      !selectedPartner 
+      !selectedPartner
       // || !investedAmount 
     ) {
       ToastAndroid.show("Please select a partner first!.", ToastAndroid.SHORT);
@@ -114,7 +114,7 @@ export default function AddInvestmentPartner() {
           <View style={styles.card}>
             <Text style={styles.cardTitle}>Investment Details</Text>
             <Text style={styles.detail}>Name: {investment.name}</Text>
-            <Text style={styles.detail}>Total: ${investment.type==="solo"?investment.initial_amount:investment.current_total_invested}</Text>
+            <Text style={styles.detail}>Total: ${investment.type === "solo" ? investment.initial_amount : investment.current_total_invested}</Text>
             <Text style={styles.detail}>Status: {investment.status}</Text>
             <Text style={styles.detail}>
               Expected Return: {parseFloat(investment.expected_return_rate).toFixed(1)}%
@@ -133,6 +133,11 @@ export default function AddInvestmentPartner() {
             <Text style={styles.partnerEmail}>{item.email}</Text>
           </TouchableOpacity>
         )}
+        ListEmptyComponent={
+          <View style={styles.emptyState}>
+            <Text style={styles.emptyText}>No partner available.</Text>
+          </View>
+        }
       />
 
       {selectedPartner && (
@@ -183,7 +188,7 @@ export default function AddInvestmentPartner() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16,paddingBottom:80, backgroundColor: "#F9FAFB" },
+  container: { flex: 1, padding: 16, paddingBottom: 80, backgroundColor: "#F9FAFB" },
   loaderContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
   card: {
     backgroundColor: "#fff",
@@ -209,6 +214,8 @@ const styles = StyleSheet.create({
   selectedPartner: { borderColor: "#2563EB", backgroundColor: "#EFF6FF" },
   partnerName: { fontSize: 15, fontWeight: "500", color: "#111827" },
   partnerEmail: { fontSize: 13, color: "#6B7280" },
+  emptyState: { justifyContent: "center", alignItems: "center", padding: 20 },
+  emptyText: { fontSize: 16, color: "#6B7280" },
   formCard: {
     backgroundColor: "#fff",
     borderRadius: 12,

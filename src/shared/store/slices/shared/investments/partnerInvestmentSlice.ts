@@ -218,7 +218,7 @@ export const fetchAvailableSharedPrograms = createAsyncThunk(
   ) => {
     try {
       const response = await api.get(
-        `${API_ENDPOINTS.INVESTMENTS.SHARED_AVAILABLE}${
+        `${API_ENDPOINTS.INVESTMENTS.SHARED_AVAILABLE}?page=${page}${
           search ? `?search=${encodeURIComponent(search)}` : ""
         }`
       );
@@ -372,25 +372,24 @@ const partnerInvestmentSlice = createSlice({
       // })
       .addCase(fetchAvailableSharedPrograms.fulfilled, (state, action) => {
         state.sharedPrograms.isLoading = false;
-
         const { data = [], summary = {}, meta = {}, page = 1 } = action.payload;
-        state.sharedPrograms.list = data;
-        // ✅ Pagination handling
+
         if (page > 1) {
+          // ✅ Append new page to existing list
           const existingIds = new Set(
             state.sharedPrograms.list.map((inv) => inv.id)
           );
-          const newPrograms = data.filter(
-            (inv: any) => !existingIds.has(inv.id)
-          );
+          const newPrograms = data.filter((inv:any) => !existingIds.has(inv.id));
           state.sharedPrograms.list = [
             ...state.sharedPrograms.list,
             ...newPrograms,
           ];
         } else {
+          // ✅ First page or search reset
           state.sharedPrograms.list = data;
         }
-        // ✅ Add summary field inside sharedPrograms
+
+        // ✅ Update summary and pagination meta
         state.sharedPrograms.summary = {
           total_investments: summary.total_investments ?? 0,
           total_invested: summary.total_invested ?? 0,
@@ -399,6 +398,36 @@ const partnerInvestmentSlice = createSlice({
         };
         state.sharedPrograms.meta = meta;
       })
+
+      // .addCase(fetchAvailableSharedPrograms.fulfilled, (state, action) => {
+      //   state.sharedPrograms.isLoading = false;
+
+      //   const { data = [], summary = {}, meta = {}, page = 1 } = action.payload;
+      //   state.sharedPrograms.list = data;
+      //   // ✅ Pagination handling
+      //   if (page > 1) {
+      //     const existingIds = new Set(
+      //       state.sharedPrograms.list.map((inv) => inv.id)
+      //     );
+      //     const newPrograms = data.filter(
+      //       (inv: any) => !existingIds.has(inv.id)
+      //     );
+      //     state.sharedPrograms.list = [
+      //       ...state.sharedPrograms.list,
+      //       ...newPrograms,
+      //     ];
+      //   } else {
+      //     state.sharedPrograms.list = data;
+      //   }
+      //   // ✅ Add summary field inside sharedPrograms
+      //   state.sharedPrograms.summary = {
+      //     total_investments: summary.total_investments ?? 0,
+      //     total_invested: summary.total_invested ?? 0,
+      //     avg_roi: summary.avg_roi ?? 0,
+      //     total_participants: summary.total_participants ?? 0,
+      //   };
+      //   state.sharedPrograms.meta = meta;
+      // })
 
       .addCase(fetchAvailableSharedPrograms.rejected, (state, action) => {
         state.sharedPrograms.isLoading = false;

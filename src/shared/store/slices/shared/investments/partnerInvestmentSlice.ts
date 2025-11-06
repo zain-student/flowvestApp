@@ -366,10 +366,6 @@ const partnerInvestmentSlice = createSlice({
         state.sharedPrograms.isLoading = true;
         state.sharedPrograms.error = null;
       })
-      // .addCase(fetchAvailableSharedPrograms.fulfilled, (state, action) => {
-      //   state.sharedPrograms.isLoading = false;
-      //   state.sharedPrograms.list = action.payload;
-      // })
       .addCase(fetchAvailableSharedPrograms.fulfilled, (state, action) => {
         state.sharedPrograms.isLoading = false;
         const { data = [], summary = {}, meta = {}, page = 1 } = action.payload;
@@ -398,37 +394,6 @@ const partnerInvestmentSlice = createSlice({
         };
         state.sharedPrograms.meta = meta;
       })
-
-      // .addCase(fetchAvailableSharedPrograms.fulfilled, (state, action) => {
-      //   state.sharedPrograms.isLoading = false;
-
-      //   const { data = [], summary = {}, meta = {}, page = 1 } = action.payload;
-      //   state.sharedPrograms.list = data;
-      //   // ✅ Pagination handling
-      //   if (page > 1) {
-      //     const existingIds = new Set(
-      //       state.sharedPrograms.list.map((inv) => inv.id)
-      //     );
-      //     const newPrograms = data.filter(
-      //       (inv: any) => !existingIds.has(inv.id)
-      //     );
-      //     state.sharedPrograms.list = [
-      //       ...state.sharedPrograms.list,
-      //       ...newPrograms,
-      //     ];
-      //   } else {
-      //     state.sharedPrograms.list = data;
-      //   }
-      //   // ✅ Add summary field inside sharedPrograms
-      //   state.sharedPrograms.summary = {
-      //     total_investments: summary.total_investments ?? 0,
-      //     total_invested: summary.total_invested ?? 0,
-      //     avg_roi: summary.avg_roi ?? 0,
-      //     total_participants: summary.total_participants ?? 0,
-      //   };
-      //   state.sharedPrograms.meta = meta;
-      // })
-
       .addCase(fetchAvailableSharedPrograms.rejected, (state, action) => {
         state.sharedPrograms.isLoading = false;
         state.sharedPrograms.error = action.payload as string;
@@ -463,14 +428,6 @@ const partnerInvestmentSlice = createSlice({
         const exists = state.investments.some(
           (inv) => inv.id === safeInvestment.id
         );
-        if (exists) {
-          state.investments = state.investments.map((inv) =>
-            inv.id === safeInvestment.id ? { ...inv, ...safeInvestment } : inv
-          );
-        } else {
-          // 🔹 Add new if not exists
-          state.investments = [safeInvestment, ...state.investments];
-        }
 
         // 🔹 Keep sharedPrograms in sync (safe merge)
         state.sharedPrograms.list = state.sharedPrograms.list.map((inv) =>

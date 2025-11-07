@@ -1,113 +1,199 @@
-import { API_ENDPOINTS } from "@/config/env";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { api } from "@shared/services/api"; // Axios instance
+// import { API_ENDPOINTS } from "@/config/env";
+// import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+// import { api } from "@shared/services/api"; // Axios instance
 
-// 🔹 Types
-export interface Overview {
-  total_investments: number;
+// // 🔹 Types
+// export interface Overview {
+//   total_investments: number;
+//   active_investments: number;
+//   total_partners: number;
+//   total_payouts_scheduled: number;
+//   overdue_payouts: number;
+//   total_payout_amount: string;
+//   this_month_payouts: string;
+//   roi_average: number;
+// }
+
+// export interface RecentActivity {
+//   id: number;
+//   type: string;
+//   description: string;
+//   user: string;
+//   timestamp: string;
+// }
+
+// export interface UpcomingPayout {
+//   id: number;
+//   amount: string;
+//   partner: string;
+//   investment: string;
+//   due_date: string;
+// }
+
+// export interface InvestmentPerformance {
+//   investment_type: string;
+//   total_invested: number;
+//   current_value: number;
+//   roi_percentage: number;
+// }
+
+// export interface AdminDashboardState {
+//   overview: Overview | null;
+//   recent_activities: RecentActivity[];
+//   upcoming_payouts: UpcomingPayout[];
+//   investment_performance: InvestmentPerformance[];
+//   isLoading: boolean;
+//   error: string | null;
+// }
+
+// // 🔹 Initial State
+// const initialState: AdminDashboardState = {
+//   overview: null,
+//   recent_activities: [],
+//   upcoming_payouts: [],
+//   investment_performance: [],
+//   isLoading: false,
+//   error: null,
+// };
+
+// // 🔹 Async thunk
+// export const fetchAdminDashboard = createAsyncThunk( 
+//   "adminDashboard/fetch",
+//   async (_, { rejectWithValue }) => {
+//     try {
+//       const response = await api.get(
+//         API_ENDPOINTS.DASHBOARD.ADMIN
+//       );
+//       console.log("📊 Admin Dashboard Response:", response.data);
+//       return response.data.data;
+//     } catch (error: any) {
+//       return rejectWithValue(
+//         error.response?.data?.message || "Failed to fetch dashboard"
+//       );
+//     }
+//   }
+// );
+
+// // 🔹 Slice
+// const adminDashboardSlice = createSlice({
+//   name: "adminDashboard",
+//   initialState,
+//   reducers: {
+//     resetDashboard(state) {
+//       state.overview = null;
+//       state.recent_activities = [];
+//       state.upcoming_payouts = [];
+//       state.investment_performance = [];
+//       state.isLoading = false;
+//       state.error = null;
+//     },
+//   },
+//   extraReducers: (builder) => {
+//     builder
+//       // Fetch Dashboard
+//       .addCase(fetchAdminDashboard.pending, (state) => {
+//         state.isLoading = true;
+//         state.error = null;
+//       })
+//       .addCase(fetchAdminDashboard.fulfilled, (state, action) => {
+//         state.isLoading = false;
+//         state.overview = action.payload.overview;
+//         state.recent_activities = action.payload.recent_activities;
+//         state.upcoming_payouts = action.payload.upcoming_payouts;
+//         state.investment_performance = action.payload.investment_performance;
+//       })
+//       .addCase(fetchAdminDashboard.rejected, (state, action) => {
+//         state.isLoading = false;
+//         state.error = action.payload as string;
+//       });
+//   },
+// });
+
+// export const { resetDashboard } = adminDashboardSlice.actions;
+// export default adminDashboardSlice.reducer;
+
+
+import { API_ENDPOINTS } from "@/config/env";
+import { api } from "@/shared/services/api";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { ToastAndroid } from "react-native";
+
+interface DashboardStats {
+  total_managed_portfolio: number;
+  portfolio_change: number;
+  portfolio_change_type: "positive" | "negative";
   active_investments: number;
+  new_investments_this_month: number;
+  partner_returns: number;
+  partner_returns_change: number;
+  partner_returns_change_type: "positive" | "negative";
+  pending_payouts: number;
+  pending_payouts_count: number;
   total_partners: number;
-  total_payouts_scheduled: number;
-  overdue_payouts: number;
-  total_payout_amount: string;
-  this_month_payouts: string;
+  new_partners_this_month: number;
   roi_average: number;
 }
 
-export interface RecentActivity {
-  id: number;
+interface ActivityItem {
+  id: string;
   type: string;
+  title: string;
   description: string;
-  user: string;
-  timestamp: string;
-}
-
-export interface UpcomingPayout {
-  id: number;
   amount: string;
-  partner: string;
-  investment: string;
-  due_date: string;
+  time: string;
+  status: string;
+  created_at: string;
 }
 
-export interface InvestmentPerformance {
-  investment_type: string;
-  total_invested: number;
-  current_value: number;
-  roi_percentage: number;
-}
-
-export interface AdminDashboardState {
-  overview: Overview | null;
-  recent_activities: RecentActivity[];
-  upcoming_payouts: UpcomingPayout[];
-  investment_performance: InvestmentPerformance[];
+interface AdminDashboardState {
   isLoading: boolean;
   error: string | null;
+  stats: DashboardStats | null;
+  recent_activities: ActivityItem[];
 }
 
-// 🔹 Initial State
 const initialState: AdminDashboardState = {
-  overview: null,
-  recent_activities: [],
-  upcoming_payouts: [],
-  investment_performance: [],
   isLoading: false,
   error: null,
+  stats: null,
+  recent_activities: [],
 };
 
-// 🔹 Async thunk
-export const fetchAdminDashboard = createAsyncThunk( 
+export const fetchAdminDashboard = createAsyncThunk(
   "adminDashboard/fetch",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await api.get(
-        API_ENDPOINTS.DASHBOARD.ADMIN
-      );
-      console.log("📊 Admin Dashboard Response:", response.data);
+      const response = await api.get(API_ENDPOINTS.DASHBOARD.ADMIN_DASHBOARD);
       return response.data.data;
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.message || "Failed to fetch dashboard"
+        error?.response?.data?.message || "Failed to load dashboard data"
       );
     }
   }
 );
 
-// 🔹 Slice
 const adminDashboardSlice = createSlice({
   name: "adminDashboard",
   initialState,
-  reducers: {
-    resetDashboard(state) {
-      state.overview = null;
-      state.recent_activities = [];
-      state.upcoming_payouts = [];
-      state.investment_performance = [];
-      state.isLoading = false;
-      state.error = null;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
-      // Fetch Dashboard
       .addCase(fetchAdminDashboard.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
       .addCase(fetchAdminDashboard.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.overview = action.payload.overview;
-        state.recent_activities = action.payload.recent_activities;
-        state.upcoming_payouts = action.payload.upcoming_payouts;
-        state.investment_performance = action.payload.investment_performance;
+        state.stats = action.payload.stats || null;
+        state.recent_activities = action.payload.recent_activities || [];
       })
       .addCase(fetchAdminDashboard.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
+        ToastAndroid.show(state.error, ToastAndroid.SHORT);
       });
   },
 });
 
-export const { resetDashboard } = adminDashboardSlice.actions;
 export default adminDashboardSlice.reducer;

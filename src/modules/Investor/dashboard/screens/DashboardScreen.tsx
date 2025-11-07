@@ -14,11 +14,13 @@ import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect } from "react";
 import {
+  FlatList,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { DashboardLayout } from "../../../Common/components/DashboardLayout";
 SplashScreen.preventAutoHideAsync(); // Keep splash visible
@@ -46,71 +48,43 @@ export const DashboardScreen: React.FC = () => {
     hide();
   }, []);
   const dispatch = useAppDispatch();
-  const { overview, recent_activities, upcoming_payouts } = useAppSelector(
-    (state) => state.dashboard
+  const { stats, recent_activities, isLoading } = useAppSelector(
+    (state) => state.adminDashboard
   );
+  useEffect(() => {
+    dispatch(fetchAdminDashboard());
+  }, [dispatch]);
   const statCards = [
     {
       icon: "layers",
-      label: "Total Investments",
+      label: "Pending Payouts",
 
-      value: overview?.total_investments ?? "--",
+      value: stats?.pending_payouts_count
+        ?? "--",
       bg: "#E0F2FE", // pastel blue
     },
     {
       icon: "activity",
       label: "Active Investments",
-    
-      value: overview?.active_investments ?? "--",
+      value: stats?.active_investments ?? "--",
       bg: "#DCFCE7", // pastel green
     },
     {
       icon: "users",
       label: "Partners",
-    
-      value: overview?.total_partners ?? "--",
+
+      value: stats?.total_partners ?? "--",
       bg: "#FDE68A", // pastel yellow
     },
     {
       icon: "percent",
       label: "Avg ROI",
-      value: overview?.roi_average ? `${overview.roi_average.toFixed(2)}` : "--",
+      value: stats?.roi_average.toFixed(1) ?? "--",
       bg: "#FCE7F3", // pastel pink
     },
   ];
-  // Mock dashboard data (structure matches backend)
-const dashboardData = {
-  recent_activities: [
-    {
-      id: 1,
-      icon: "arrow-down-right",
-      text: "Payout received",
-      date: "Jul 1",
-      amount: "+$1,200",
-    },
-    {
-      id: 2,
-      icon: "arrow-up-right",
-      text: 'Invested in "Tech Fund"',
-      date: "Jun 28",
-      amount: "-$500",
-    },
-  ],
-  upcoming_payouts: [
-    {
-      id: 1,
-      icon: "calendar",
-      text: "Payout scheduled",
-      date: "Jul 15",
-      amount: "$2,000",
-    },
-  ],
-  investment_performance: [],
-};
 
-  useEffect(() => {
-    dispatch(fetchAdminDashboard());
-  }, []);
+
   // const activeInvestments = investments.filter((i) => i.status === "active");
   if (!fontsLoaded) return null;
 
@@ -118,12 +92,12 @@ const dashboardData = {
     <DashboardLayout headerStyle="dark">
       {/* Main Balance Card (dark, rounded) */}
       <View style={styles.balanceCardDark}>
-        <Text style={styles.balanceLabelDark}>Total Payout Amount</Text>
+        <Text style={styles.balanceLabelDark}>Total Maneged Portfolio</Text>
         <Text style={styles.balanceValueDark}>
-          ${overview?.total_payout_amount ?? "--"}
+          ${stats?.total_managed_portfolio ?? "--"}
         </Text>
         <Text style={styles.balanceChangeDark}>
-          ${overview?.this_month_payouts ?? "--"}{" "}
+          ${stats?.new_investments_this_month ?? "--"}{" "}
           <Text
             style={{
               color: Colors.gray,
@@ -177,62 +151,59 @@ const dashboardData = {
             </View>
           ))}
         </View>
-
-        {/* Recent Activities */}
-        <View style={styles.sectionRow}>
-          <Text style={styles.sectionTitle}>Recent Activities</Text>
-        </View>
         <View style={styles.activityList}>
-          {recent_activities?.length === 0 ? (
+          <Text style={styles.sectionTitle}>Recent Activities</Text>
+          {isLoading ? (
+            <Text style={styles.emptyText}>Loading...</Text>
+          ) : recent_activities?.length === 0 ? (
             <Text style={styles.emptyText}>No recent activities.</Text>
           ) : (
-            recent_activities.map((act) => (
-              <View key={act.id} style={styles.activityItem}>
-                <Feather
-                  name={ act.type.includes("payout")
-              ? "arrow-down-right"
-              : "arrow-up-right"}
-                  size={20}
-                  color="colors.secondary"
-                  style={styles.activityIcon}
-                />
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.activityText}>{act.type}</Text>
-                  <Text style={styles.activityDate}>{
-                    new Date(act.timestamp).toLocaleDateString()
-                    }</Text>
+            <FlatList
+              data={recent_activities}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={({ item: act }) => (
+                <View style={styles.activityItem}>
+                  <Feather
+                    name={
+                      act.type === "payout"
+                        ? "arrow-down-right"
+                        : act.type === "investment"
+                          ? "arrow-up-right"
+                          : "users"
+                    }
+                    size={20}
+                    color={Colors.secondary}
+                    style={styles.activityIcon}
+                  />
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.activityText}>{act.title}</Text>
+                    <Text style={styles.activityDate}>{act.time}</Text>
+                  </View>
+                  <Text
+                    style={[
+                      styles.activityAmount,
+                      { color: act.status === "completed" ? Colors.green : Colors.gray },
+                    ]}
+                  >
+                    {act.amount}
+                  </Text>
                 </View>
-                <Text style={styles.activityAmount}>{act.user}</Text>
-              </View>
-            ))
-          )}
-        </View>
-
-        {/* Upcoming Payouts */}
-        <View style={styles.sectionRow}>
-          <Text style={styles.sectionTitle}>Upcoming Payouts</Text>
-        </View>
-        <View style={styles.activityList}>
-          {upcoming_payouts.length === 0 ? (
-            <Text style={styles.emptyText}>No upcoming payouts.</Text>
-          ) : (
-            upcoming_payouts.map((up) => (
-              <View key={up.id} style={styles.activityItem}>
-                <Feather
-                  name="calendar"
-                  size={20}
-                  color="colors.secondary"
-                  style={styles.activityIcon}
+              )}
+              showsVerticalScrollIndicator={false}
+              refreshControl={
+                <RefreshControl
+                  refreshing={isLoading}
+                  onRefresh={() => dispatch(fetchAdminDashboard())}
+                  tintColor={Colors.primary}
                 />
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.activityText}>{up.investment}</Text>
-                  <Text style={styles.activityDate}>{
-                  
-                  new Date(up.due_date).toLocaleDateString()}</Text>
-                </View>
-                <Text style={styles.activityAmount}>${up.amount}</Text>
-              </View>
-            ))
+              }
+              scrollEnabled={false}
+              ListEmptyComponent={
+                !isLoading && (
+                  <Text style={styles.emptyText}>No recent activities found</Text>
+                )
+              }
+            />
           )}
         </View>
       </ScrollView>

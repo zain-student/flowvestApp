@@ -29,7 +29,7 @@ export const rootReducer = combineReducers({
   partner: addPartnerSlice,
   investments: investmentSlice,
   // Module reducers (will be uncommented as we create them)
-  dashboard: adminDashboardSlice,
+  adminDashboard: adminDashboardSlice,
   payout: payoutSlice,
   portfolio: portfolioSlice,
   profile: profileSlice,

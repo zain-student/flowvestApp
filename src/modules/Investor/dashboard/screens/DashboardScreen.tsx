@@ -88,6 +88,35 @@ export const DashboardScreen: React.FC = () => {
   // const activeInvestments = investments.filter((i) => i.status === "active");
   if (!fontsLoaded) return null;
 
+  const renderActivityItem = ({ item }: any) => (
+    <View style={styles.activityItem}>
+      <Feather
+        name={
+          item.type === "payout"
+            ? "arrow-down-right"
+            : item.type === "investment"
+              ? "arrow-up-right"
+              : "users"
+        }
+        size={20}
+        color={Colors.secondary}
+        style={styles.activityIcon}
+      />
+      <View style={{ flex: 1 }}>
+        <Text style={styles.activityText}>{item.title}</Text>
+        <Text style={styles.activityDate}>{item.time}</Text>
+      </View>
+      <Text
+        style={[
+          styles.activityAmount,
+          { color: item.status === "completed" ? Colors.green : Colors.gray },
+        ]}
+      >
+        {item.amount}
+      </Text>
+    </View>
+  );
+
   return (
     <DashboardLayout headerStyle="dark">
       {/* Main Balance Card (dark, rounded) */}
@@ -158,37 +187,56 @@ export const DashboardScreen: React.FC = () => {
           ) : recent_activities?.length === 0 ? (
             <Text style={styles.emptyText}>No recent activities.</Text>
           ) : (
+            // <FlatList
+            //   data={recent_activities}
+            //   keyExtractor={(item) => item.id.toString()}
+            //   renderItem={({ item: act }) => (
+            //     <View style={styles.activityItem}>
+            //       <Feather
+            //         name={
+            //           act.type === "payout"
+            //             ? "arrow-down-right"
+            //             : act.type === "investment"
+            //               ? "arrow-up-right"
+            //               : "users"
+            //         }
+            //         size={20}
+            //         color={Colors.secondary}
+            //         style={styles.activityIcon}
+            //       />
+            //       <View style={{ flex: 1 }}>
+            //         <Text style={styles.activityText}>{act.title}</Text>
+            //         <Text style={styles.activityDate}>{act.time}</Text>
+            //       </View>
+            //       <Text
+            //         style={[
+            //           styles.activityAmount,
+            //           { color: act.status === "completed" ? Colors.green : Colors.gray },
+            //         ]}
+            //       >
+            //         {act.amount}
+            //       </Text>
+            //     </View>
+            //   )}
+            //   showsVerticalScrollIndicator={false}
+            //   refreshControl={
+            //     <RefreshControl
+            //       refreshing={isLoading}
+            //       onRefresh={() => dispatch(fetchAdminDashboard())}
+            //       tintColor={Colors.primary}
+            //     />
+            //   }
+            //   scrollEnabled={false}
+            //   ListEmptyComponent={
+            //     !isLoading && (
+            //       <Text style={styles.emptyText}>No recent activities found</Text>
+            //     )
+            //   }
+            // />
             <FlatList
               data={recent_activities}
               keyExtractor={(item) => item.id.toString()}
-              renderItem={({ item: act }) => (
-                <View style={styles.activityItem}>
-                  <Feather
-                    name={
-                      act.type === "payout"
-                        ? "arrow-down-right"
-                        : act.type === "investment"
-                          ? "arrow-up-right"
-                          : "users"
-                    }
-                    size={20}
-                    color={Colors.secondary}
-                    style={styles.activityIcon}
-                  />
-                  <View style={{ flex: 1 }}>
-                    <Text style={styles.activityText}>{act.title}</Text>
-                    <Text style={styles.activityDate}>{act.time}</Text>
-                  </View>
-                  <Text
-                    style={[
-                      styles.activityAmount,
-                      { color: act.status === "completed" ? Colors.green : Colors.gray },
-                    ]}
-                  >
-                    {act.amount}
-                  </Text>
-                </View>
-              )}
+              renderItem={renderActivityItem}
               showsVerticalScrollIndicator={false}
               refreshControl={
                 <RefreshControl
@@ -204,6 +252,7 @@ export const DashboardScreen: React.FC = () => {
                 )
               }
             />
+
           )}
         </View>
       </ScrollView>

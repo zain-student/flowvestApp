@@ -87,7 +87,9 @@ export const DashboardScreen: React.FC = () => {
 
   // const activeInvestments = investments.filter((i) => i.status === "active");
   if (!fontsLoaded) return null;
-
+  const pullToRefresh = () => {
+    dispatch(fetchAdminDashboard())
+  }
   const renderActivityItem = ({ item }: any) => (
     <TouchableOpacity style={styles.activityItem}>
 
@@ -114,7 +116,7 @@ export const DashboardScreen: React.FC = () => {
             { color: item.status === "completed" ? Colors.green : Colors.gray },
           ]}
         >
-          {item.status.charAt(0).toUpperCase()+item.status.slice(1) }
+          {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
         </Text>
       </View>
       <View style={{ flexDirection: 'row', justifyContent: "space-between", marginVertical: 5 }}>
@@ -128,12 +130,12 @@ export const DashboardScreen: React.FC = () => {
     <DashboardLayout headerStyle="dark">
       {/* Main Balance Card (dark, rounded) */}
       <View style={styles.balanceCardDark}>
-        <Text style={styles.balanceLabelDark}>Total Maneged Portfolio</Text>
+        <Text style={styles.balanceLabelDark}>Total Managed Portfolio</Text>
         <Text style={styles.balanceValueDark}>
           ${stats?.total_managed_portfolio ?? "--"}
         </Text>
         <Text style={styles.balanceChangeDark}>
-          ${stats?.new_investments_this_month ?? "--"}{" "}
+          {stats?.new_investments_this_month ?? "--"}{" "}
           <Text
             style={{
               color: Colors.gray,
@@ -142,7 +144,7 @@ export const DashboardScreen: React.FC = () => {
             }}
           >
             {/* than last month */}
-            this month payouts
+            investments this month
           </Text>
         </Text>
         <View style={styles.balanceActionsRow}>
@@ -159,6 +161,13 @@ export const DashboardScreen: React.FC = () => {
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+          refreshing={isLoading}
+          onRefresh={pullToRefresh}
+          tintColor={Colors.primary}
+          />
+        }
       >
         {/* Stat Cards - 2x2 Grid */}
         <View style={styles.statCardGrid}>
@@ -200,13 +209,6 @@ export const DashboardScreen: React.FC = () => {
               contentContainerStyle={styles.list}
               renderItem={renderActivityItem}
               showsVerticalScrollIndicator={false}
-              refreshControl={
-                <RefreshControl
-                  refreshing={isLoading}
-                  onRefresh={() => dispatch(fetchAdminDashboard())}
-                  tintColor={Colors.primary}
-                />
-              }
               scrollEnabled={false}
               ListEmptyComponent={
                 !isLoading && (

@@ -78,7 +78,8 @@ export const PartnersDashboard = () => {
           <View style={styles.balanceActionsRow}>
             <TouchableOpacity
               style={styles.balanceActionBtnDark}
-              onPress={() => console.log("Recent Payouts pressed")}
+              onPress={() =>
+                navigation.navigate("RecentPayouts")}
             >
               <Feather name="arrow-down-right" size={18} color="#fff" />
               <Text style={styles.balanceActionTextDark}>Recent Payouts</Text>
@@ -89,7 +90,9 @@ export const PartnersDashboard = () => {
                 styles.balanceActionBtnDark,
                 // { backgroundColor: Colors.gray },
               ]}
-              onPress={() => console.log("Upcoming Payouts pressed")}
+              onPress={() => 
+              navigation.navigate("UpcomingPayouts")  
+              }
             >
               <Feather name="calendar" size={18} color="#fff" />
               <Text style={styles.balanceActionTextDark}>Upcoming Payouts</Text>

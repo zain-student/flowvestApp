@@ -3,11 +3,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
 // import { AddPartnerScreen } from '../../modules/dashboard/Investor/screens/AddPartnerScreen';
-import { AssignedInvestments } from '../../modules/Partner/Dashboard/screens/AssignedInvestments';
 import { PartnersDashboard } from '../../modules/Partner/Dashboard/screens/PartnersDashboard';
+import { RecentPayouts } from '../../modules/Partner/Dashboard/screens/RecentPayouts';
+import { UpcomingPayouts } from '../../modules/Partner/Dashboard/screens/UpcomingPayouts';
 export type PartnerDashboardStackParamList = {
   PartnersDashboard: undefined;
- AssignedInvestments:undefined;
+  RecentPayouts: undefined;
+  UpcomingPayouts:undefined;
 };
 const Stack = createNativeStackNavigator<PartnerDashboardStackParamList>();
 export const PartnerDashboardStack = () => {
@@ -17,7 +19,7 @@ export const PartnerDashboardStack = () => {
       screenOptions={{
         animation: 'slide_from_right',
       }}
-      >
+    >
       <Stack.Screen
         name="PartnersDashboard"
         component={PartnersDashboard}
@@ -26,19 +28,19 @@ export const PartnerDashboardStack = () => {
           gestureEnabled: false,
         }}
       />
-      <Stack.Screen name="AssignedInvestments" component={AssignedInvestments} 
-       options={({navigation})=>({
+      <Stack.Screen name="RecentPayouts" component={RecentPayouts}
+        options={({ navigation }) => ({
           // gestureEnabled: false,
-          title: 'Assigned Investments',
+          title: 'Recent Payouts',
           headerTitleAlign: 'center',
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => navigation.goBack()}
               style={{
                 marginRight: 16,
-                marginLeft:10,
-                marginTop:5,
-                marginBottom:5,
+                marginLeft: 10,
+                marginTop: 5,
+                marginBottom: 5,
                 backgroundColor: "#F3F4F6",
                 width: 50,
                 height: 50,
@@ -47,7 +49,33 @@ export const PartnerDashboardStack = () => {
                 alignItems: "center",
               }}
             >
-              <Ionicons name="chevron-back" color={"black"} size={30}/>
+              <Ionicons name="chevron-back" color={"black"} size={30} />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <Stack.Screen name="UpcomingPayouts" component={UpcomingPayouts}
+        options={({ navigation }) => ({
+          // gestureEnabled: false,
+          title: 'Upcoming Payouts',
+          headerTitleAlign: 'center',
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={{
+                marginRight: 16,
+                marginLeft: 10,
+                marginTop: 5,
+                marginBottom: 5,
+                backgroundColor: "#F3F4F6",
+                width: 50,
+                height: 50,
+                borderRadius: 25,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Ionicons name="chevron-back" color={"black"} size={30} />
             </TouchableOpacity>
           ),
         })}

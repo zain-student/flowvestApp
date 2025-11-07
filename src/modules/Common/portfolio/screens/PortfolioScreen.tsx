@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Dimensions,
   FlatList,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -31,11 +32,6 @@ const renderAssets = ({ item }: any) => (
     <Text style={styles.assetGrowth}>{item.expected_return_rate}</Text>
   </View>
 )
-// const handleLoadMore = () => {
-//   if (!isLoadingMore && pagination.current_page!== pagination.last_page) {
-//     dispatch(fetchPayouts(pagination.current_page + 1));
-//   }
-// }; 
 export const PortfolioScreen: React.FC = () => {
   const dispatch = useAppDispatch()
   const { isLoading, error, data } = useAppSelector((state) => state.portfolio);
@@ -76,7 +72,9 @@ export const PortfolioScreen: React.FC = () => {
     labelColor: (opacity = 1) => `rgba(0,0,0,${opacity})`,
     propsForDots: { r: "5", strokeWidth: "2" },
   };
-
+const pullToRefresh=()=>{
+  dispatch(fetchPortfolio());
+}
   return (
     <DashboardLayout>
 
@@ -97,7 +95,15 @@ export const PortfolioScreen: React.FC = () => {
       </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}>
+        contentContainerStyle={styles.scrollContent}
+         refreshControl={
+          <RefreshControl
+          refreshing={isLoading}
+          onRefresh={pullToRefresh}
+          tintColor={Colors.primary}
+          />
+        }
+        >
         <View style={styles.chartContainer}>
           <View style={{ flexDirection: "row", justifyContent: "center", marginTop: 3 }}>
             <TouchableOpacity

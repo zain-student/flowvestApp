@@ -1,86 +1,153 @@
-import { DashboardLayout } from '@/modules/Common/components/DashboardLayout';
-import { PartnerDashboardStackParamList } from '@/navigation/PartnerStacks/PartnerDashboardStack';
-import Colors from '@/shared/colors/Colors';
-import { Feather } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-// import { AssignedInvestments } from '../components/AssignedInvestments';
-import { PayoutDueThisWeek } from '../components/PayoutDueThisWeek';
-import { RecentPaymentsLog } from '../components/RecentPaymentsLog';
-const  stats= {
-    total_investments: 12,
-    active_investments: 5,
-    total_payouts_scheduled: 3,
-    overdue_payouts: 1,
-    total_partners: 4,
-    total_payout_amount: 8200,
-    this_month_payouts: 2,
-    roi_average: 8.2,
-}
+import { Feather } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import React from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+
+import { DashboardLayout } from "@/modules/Common/components/DashboardLayout";
+import { PartnerDashboardStackParamList } from "@/navigation/PartnerStacks/PartnerDashboardStack";
+import Colors from "@/shared/colors/Colors";
+import { RecentPaymentsLog } from "../components/RecentPaymentsLog";
+
 type Props = NativeStackNavigationProp<
   PartnerDashboardStackParamList,
   "PartnersDashboard"
 >;
+
+const mockStats = {
+  pending_payouts_count: 2,
+  active_investments: 5,
+  total_partners: 4,
+  roi_average: 8.2,
+  total_payout_amount: 8200,
+};
+
 export const PartnersDashboard = () => {
-  const navigation=useNavigation<NativeStackNavigationProp<PartnerDashboardStackParamList>>();
+  const navigation = useNavigation<Props>();
+
+  const statCards = [
+    {
+      icon: "layers",
+      label: "Pending Payouts",
+      value: mockStats.pending_payouts_count ?? "--",
+      bg: "#E0F2FE", // pastel blue
+    },
+    {
+      icon: "activity",
+      label: "Active Investments",
+      value: mockStats.active_investments ?? "--",
+      bg: "#DCFCE7", // pastel green
+    },
+    {
+      icon: "users",
+      label: "Partners",
+      value: mockStats.total_partners ?? "--",
+      bg: "#FDE68A",  // pastel yellow
+    },
+    {
+      icon: "percent",
+      label: "Avg ROI",
+      value:
+        mockStats.roi_average !== undefined
+          ? `${mockStats.roi_average.toFixed(1)}%`
+          : "--",
+      bg: "#FCE7F3", // pastel pink
+    },
+  ];
+
   return (
     <DashboardLayout>
-      <View style={styles.container}
-        >
-          {/* <StatusBar
-                  barStyle="light-content" // or "dark-content"
-                  backgroundColor="#000" // set to match your theme
-                /> */}
-          <View style={styles.balanceCardDark}>
-          <Text style={styles.balanceLabelDark}>Total Investment</Text>
+      <View style={styles.container}>
+        {/* 💰 Portfolio Summary Card */}
+        <View style={styles.balanceCardDark}>
+          <Text style={styles.balanceLabelDark}>Portfolio Value</Text>
           <Text style={styles.balanceValueDark}>
-            ${stats.total_payout_amount.toLocaleString()}
+            ${mockStats.total_payout_amount.toLocaleString()}
           </Text>
           <Text style={styles.balanceChangeDark}>
-            +${(11915.28).toLocaleString()}{" "}
-            <Text
-              style={{
-                color: Colors.gray,
-                fontWeight: "400",
-                fontFamily: "Inter_400Regular",
-              }}
-            >
-              than last month
-            </Text>
+            +$11,915.28{" "}
+            <Text style={styles.changeSubLabel}>than last month</Text>
           </Text>
+
           <View style={styles.balanceActionsRow}>
-            <TouchableOpacity style={styles.balanceActionBtnDark} onPress={()=>navigation.navigate("AssignedInvestments")}>
-              <Feather name="arrow-up-right" size={18} color="#fff" />
-              <Text style={styles.balanceActionTextDark}>Assigned Investments</Text>
+            <TouchableOpacity
+              style={styles.balanceActionBtnDark}
+              onPress={() => console.log("Recent Payouts pressed")}
+            >
+              <Feather name="arrow-down-right" size={18} color="#fff" />
+              <Text style={styles.balanceActionTextDark}>Recent Payouts</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.balanceActionBtnDark,
+                // { backgroundColor: Colors.gray },
+              ]}
+              onPress={() => console.log("Upcoming Payouts pressed")}
+            >
+              <Feather name="calendar" size={18} color="#fff" />
+              <Text style={styles.balanceActionTextDark}>Upcoming Payouts</Text>
             </TouchableOpacity>
           </View>
         </View>
-        {/* <AssignedInvestments /> */}
-        <ScrollView style={styles.innerContainer} 
-        showsVerticalScrollIndicator={false}
-        // scrollEnabled={false}
+
+        {/* 📊 Dashboard Content */}
+        <ScrollView
+          style={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
         >
-        <PayoutDueThisWeek />
-        <RecentPaymentsLog/>
+          {/* 🔹 Stats Grid */}
+          <View style={styles.statsGrid}>
+            {statCards.map((card, idx) => (
+              <View
+                key={card.label}
+                style={[
+                  styles.statCardLarge,
+                  {
+                    backgroundColor: card.bg,
+                    marginRight: idx % 2 === 0 ? 8 : 0,
+                    marginLeft: idx % 2 === 1 ? 8 : 0,
+                  },
+                ]}
+              >
+
+                <View style={styles.iconContainer}>
+                  <Feather
+                    name={card.icon as any}
+                    size={38}
+                    color="#888"
+                    style={{ alignSelf: "flex-end" }}
+                  />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.statLabel}>{card.label}</Text>
+                  <Text style={styles.statValue}>{card.value}</Text>
+                </View>
+              </View>
+            ))}
+          </View>
+
+
+          <RecentPaymentsLog />
         </ScrollView>
       </View>
-   </DashboardLayout>
+    </DashboardLayout>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
-    // paddingHorizontal: 0,
-    paddingBottom: 80,
+    flex: 1,
     backgroundColor: Colors.background,
+    paddingBottom: 80,
   },
-  innerContainer:{
-    paddingHorizontal:8
-  },
-   balanceCardDark: {
+  balanceCardDark: {
     backgroundColor: Colors.secondary,
     borderBottomLeftRadius: 32,
     borderBottomRightRadius: 32,
@@ -90,7 +157,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 12,
     elevation: 6,
-    marginBottom: 18,
   },
   balanceLabelDark: {
     color: Colors.gray,
@@ -101,26 +167,32 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontSize: 36,
     fontFamily: "Inter_700Bold",
-    fontWeight: "700",
     marginVertical: 2,
   },
   balanceChangeDark: {
     color: Colors.green,
     fontSize: 14,
     fontFamily: "Inter_600SemiBold",
-    // marginBottom: 8
   },
-  balanceActionsRow: { flexDirection: "row", marginTop: 18 },
+  changeSubLabel: {
+    color: Colors.gray,
+    fontWeight: "400",
+    fontFamily: "Inter_400Regular",
+  },
+  balanceActionsRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 18,
+  },
   balanceActionBtnDark: {
-    width: '60%',
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
-      justifyContent: "center",
-    backgroundColor: Colors.darkButton,
+    justifyContent: "center",
+    backgroundColor: Colors.green,
     borderRadius: 18,
-    paddingHorizontal: 10,
     paddingVertical: 10,
-    // marginRight: 12,
+    marginHorizontal: 5,
   },
   balanceActionTextDark: {
     color: Colors.white,
@@ -128,7 +200,60 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_600SemiBold",
     marginLeft: 7,
   },
+  scrollContent: {
+    paddingHorizontal: 12,
+    paddingTop: 10,
+  },
+  statsGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    marginBottom: 12,
+  },
+   statCardLarge: {
+    width: "47%",
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: 22,
+    padding: 20,
+    minHeight: 90,
+    marginVertical: 8,
+    shadowColor: "#000",
+    shadowOpacity: 0.04,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  statCard: {
+    width: "48%",
+    borderRadius: 14,
+    paddingVertical: 16,
+    paddingHorizontal: 14,
+    flexDirection: "row",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.06,
+    shadowRadius: 4,
+    elevation: 2,
+    marginBottom: 12,
+  },
+  iconContainer: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 8,
+    marginRight: 10,
+  },
+  statLabel: {
+    color: "colors.secondary",
+    fontSize: 16,
+    fontFamily: "Inter_400Regular",
+    marginBottom: 2,
+  },
+  statValue: {
+    color: "colors.secondary",
+    fontSize: 32,
+    fontFamily: "Inter_700Bold",
+    fontWeight: "700",
+  },
 });
 
-// export default PartnersDashboard;
-
+export default PartnersDashboard;

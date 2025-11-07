@@ -89,32 +89,39 @@ export const DashboardScreen: React.FC = () => {
   if (!fontsLoaded) return null;
 
   const renderActivityItem = ({ item }: any) => (
-    <View style={styles.activityItem}>
-      <Feather
-        name={
-          item.type === "payout"
-            ? "arrow-down-right"
-            : item.type === "investment"
-              ? "arrow-up-right"
-              : "users"
-        }
-        size={20}
-        color={Colors.secondary}
-        style={styles.activityIcon}
-      />
-      <View style={{ flex: 1 }}>
-        <Text style={styles.activityText}>{item.title}</Text>
-        <Text style={styles.activityDate}>{item.time}</Text>
+    <TouchableOpacity style={styles.activityItem}>
+
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 5 }}>
+        <View style={{ flexDirection: 'row' }}>
+          <Feather
+            name={
+              item.type === "payout"
+                ? "arrow-down-right"
+                : item.type === "investment"
+                  ? "arrow-up-right"
+                  : "users"
+            }
+            size={20}
+            color={Colors.white}
+            style={styles.activityIcon}
+          />
+          <Text style={styles.activityText}>{item.title}</Text>
+        </View>
+
+        <Text
+          style={[
+            styles.activityStatus,
+            { color: item.status === "completed" ? Colors.green : Colors.gray },
+          ]}
+        >
+          {item.status.charAt(0).toUpperCase()+item.status.slice(1) }
+        </Text>
       </View>
-      <Text
-        style={[
-          styles.activityAmount,
-          { color: item.status === "completed" ? Colors.green : Colors.gray },
-        ]}
-      >
-        {item.amount}
-      </Text>
-    </View>
+      <View style={{ flexDirection: 'row', justifyContent: "space-between", marginVertical: 5 }}>
+        <Text style={styles.activityDate}>{item.time}</Text>
+        <Text style={styles.activityAmount}>{item.amount}</Text>
+      </View>
+    </TouchableOpacity>
   );
 
   return (
@@ -187,55 +194,10 @@ export const DashboardScreen: React.FC = () => {
           ) : recent_activities?.length === 0 ? (
             <Text style={styles.emptyText}>No recent activities.</Text>
           ) : (
-            // <FlatList
-            //   data={recent_activities}
-            //   keyExtractor={(item) => item.id.toString()}
-            //   renderItem={({ item: act }) => (
-            //     <View style={styles.activityItem}>
-            //       <Feather
-            //         name={
-            //           act.type === "payout"
-            //             ? "arrow-down-right"
-            //             : act.type === "investment"
-            //               ? "arrow-up-right"
-            //               : "users"
-            //         }
-            //         size={20}
-            //         color={Colors.secondary}
-            //         style={styles.activityIcon}
-            //       />
-            //       <View style={{ flex: 1 }}>
-            //         <Text style={styles.activityText}>{act.title}</Text>
-            //         <Text style={styles.activityDate}>{act.time}</Text>
-            //       </View>
-            //       <Text
-            //         style={[
-            //           styles.activityAmount,
-            //           { color: act.status === "completed" ? Colors.green : Colors.gray },
-            //         ]}
-            //       >
-            //         {act.amount}
-            //       </Text>
-            //     </View>
-            //   )}
-            //   showsVerticalScrollIndicator={false}
-            //   refreshControl={
-            //     <RefreshControl
-            //       refreshing={isLoading}
-            //       onRefresh={() => dispatch(fetchAdminDashboard())}
-            //       tintColor={Colors.primary}
-            //     />
-            //   }
-            //   scrollEnabled={false}
-            //   ListEmptyComponent={
-            //     !isLoading && (
-            //       <Text style={styles.emptyText}>No recent activities found</Text>
-            //     )
-            //   }
-            // />
             <FlatList
               data={recent_activities}
               keyExtractor={(item) => item.id.toString()}
+              contentContainerStyle={styles.list}
               renderItem={renderActivityItem}
               showsVerticalScrollIndicator={false}
               refreshControl={
@@ -371,6 +333,9 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 2,
   },
+  list: {
+    marginBottom: 40
+  },
   statLabelLarge: {
     color: "colors.secondary",
     fontSize: 16,
@@ -398,10 +363,8 @@ const styles = StyleSheet.create({
   },
   activityList: { paddingHorizontal: 8 },
   activityItem: {
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.secondary,
     marginVertical: 6,
-    flexDirection: "row",
-    alignItems: "center",
     paddingVertical: 12,
     borderWidth: 1,
     borderColor: Colors.lightGray,
@@ -410,7 +373,7 @@ const styles = StyleSheet.create({
   },
   activityIcon: { marginRight: 12 },
   activityText: {
-    color: Colors.secondary,
+    color: Colors.white,
     fontSize: 15,
     fontFamily: "Inter_700Bold",
     fontWeight: "700",
@@ -421,6 +384,12 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_400Regular",
   },
   activityAmount: {
+    color: Colors.white,
+    fontSize: 15,
+    fontFamily: "Inter_700Bold",
+    fontWeight: "700",
+  },
+  activityStatus: {
     color: "colors.secondary",
     fontSize: 15,
     fontFamily: "Inter_700Bold",

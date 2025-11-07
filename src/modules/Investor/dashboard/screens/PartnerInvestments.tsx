@@ -59,14 +59,6 @@ export const PartnerInvestments = ({ route }: any) => {
     );
   }
 
-  // if (error) {
-  //   return (
-  //     <View style={styles.center}>
-  //       <Text style={{ color: "red" }}>{error}</Text>
-  //     </View>
-  //   );
-  // }
-
   return (
     <View style={styles.container}>
       {/* Summary Card */}

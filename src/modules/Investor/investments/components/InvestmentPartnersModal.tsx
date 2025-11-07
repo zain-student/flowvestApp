@@ -118,6 +118,7 @@ const InvestmentPartnersModal: React.FC<PartnersModalProps> = ({ visible, onClos
                     style={[styles.joinBtn, isLoading && { opacity: 0.6 }]}
                     disabled={isLoading}
                     onPress={() => {
+                      console.log("Investment id:",item.investment_id,"Partner id:",item.user.id)
                       dispatch(
                         approveInvestmentPartner({
                           investmentId: item.investment_id,

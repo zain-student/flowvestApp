@@ -357,7 +357,7 @@ export const approveInvestmentPartner = createAsyncThunk(
       return response.data.data.participant;
     } catch (error: any) {
       const message =
-        error?.response?.data?.message || "Failed to approve partner";
+        error.message || "Failed to approve partner";
       ToastAndroid.show(message, ToastAndroid.SHORT);
       return rejectWithValue(message);
     }
@@ -392,7 +392,7 @@ export const removeInvestmentPartner = createAsyncThunk(
       return { partnerId };
     } catch (error: any) {
       const message =
-        error?.response?.data?.message || "Failed to remove partner";
+        error.message || "Failed to remove partner";
       ToastAndroid.show(message, ToastAndroid.SHORT);
       return rejectWithValue(message);
     }

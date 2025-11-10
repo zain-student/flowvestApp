@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import Colors from "../../../../shared/colors/Colors";
 export const RecentPaymentsLog = () => {
-  const {recent_activities}=useAppSelector((state)=>state.partnerDashboard)
+  const { recent_activities } = useAppSelector((state) => state.partnerDashboard)
   const renderActivityItem = ({ item }: any) => (
     <View style={styles.activityItem}>
       {/* Row 1: Icon + Title + Status */}
@@ -51,6 +51,7 @@ export const RecentPaymentsLog = () => {
         <Text style={styles.activityDate}>{item.time}</Text>
         <Text style={styles.activityAmount}>{item.amount}</Text>
       </View>
+      <Text style={styles.activityDate}>Created: {item.created_at}</Text>
     </View>
   );
 
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
   container: {
     // paddingHorizontal: 12,
     marginTop: 4,
-    marginBottom: 40,
+    marginBottom: 80,
   },
   list: {
     paddingBottom: 20,

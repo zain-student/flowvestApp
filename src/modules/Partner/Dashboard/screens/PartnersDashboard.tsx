@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
-    paddingBottom: 80,
+    // paddingBottom: 80,
   },
   balanceCardDark: {
     backgroundColor: Colors.secondary,

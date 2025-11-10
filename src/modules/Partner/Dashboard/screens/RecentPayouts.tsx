@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
   },
   card: {
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.secondary,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   },
   investmentName: {
     fontSize: 16,
-    color: Colors.secondary,
+    color: Colors.white,
     fontFamily: "Inter_700Bold",
     fontWeight: "700",
   },
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
   },
   amountValue: {
     fontSize: 18,
-    color: Colors.secondary,
+    color: Colors.white,
     fontFamily: "Inter_700Bold",
     fontWeight: "700",
   },

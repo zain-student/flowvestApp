@@ -8,16 +8,16 @@ export const UpcomingPayouts = () => {
     const { upcoming_payouts } = useAppSelector((state) => state.partnerDashboard);
     const renderItem = ({ item }: any) => {
         const statusColor =
-            item.status === "paid"
+            item.status === "scheduled"
                 ? Colors.green
-                : item.status === "scheduled"
+                : item.status === "paid"
                     ? Colors.gray
                     : Colors.error;
 
         return (
             <View style={styles.card}>
                 <View style={styles.iconContainer}>
-                    <Feather name="clock" size={20} color={Colors.secondary} />
+                    <Feather name="clock" size={20} color={Colors.gray} />
                 </View>
 
                 <View style={styles.infoContainer}>
@@ -51,16 +51,16 @@ export const UpcomingPayouts = () => {
     return (
         <View style={styles.container}>
 
-                <FlatList
-                    data={upcoming_payouts}
-                    keyExtractor={(item) => item.id.toString()}
-                    renderItem={renderItem}
-                    contentContainerStyle={styles.listContent}
-                    showsVerticalScrollIndicator={false}
-                    ListEmptyComponent={
-                        <Text style={styles.emptyText}>No upcoming payouts scheduled.</Text>
-                    }
-                />
+            <FlatList
+                data={upcoming_payouts}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={renderItem}
+                contentContainerStyle={styles.listContent}
+                showsVerticalScrollIndicator={false}
+                ListEmptyComponent={
+                    <Text style={styles.emptyText}>No upcoming payouts scheduled.</Text>
+                }
+            />
         </View>
     );
 };
@@ -70,26 +70,13 @@ const styles = StyleSheet.create({
         marginTop: 8,
         marginBottom: 16,
     },
-    sectionHeader: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        paddingHorizontal: 16,
-        marginBottom: 6,
-    },
-    sectionTitle: {
-        fontSize: 17,
-        fontFamily: "Inter_700Bold",
-        fontWeight: "700",
-        color: Colors.secondary,
-    },
     listContent: {
         paddingHorizontal: 12,
     },
     card: {
         flexDirection: "row",
         alignItems: "center",
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.secondary,
         borderRadius: 12,
         padding: 12,
         marginBottom: 10,
@@ -108,9 +95,10 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     title: {
-        fontSize: 15,
-        fontFamily: "Inter_600SemiBold",
-        color: Colors.secondary,
+        fontSize: 16,
+        color: Colors.white,
+        fontFamily: "Inter_700Bold",
+        fontWeight: "700",
     },
     statusBadge: {
         color: Colors.white,
@@ -131,9 +119,10 @@ const styles = StyleSheet.create({
         color: Colors.gray,
     },
     amount: {
-        fontSize: 15,
+        fontSize: 18,
+        color: Colors.white,
         fontFamily: "Inter_700Bold",
-        color: Colors.secondary,
+        fontWeight: "700",
     },
     emptyText: {
         color: Colors.gray,

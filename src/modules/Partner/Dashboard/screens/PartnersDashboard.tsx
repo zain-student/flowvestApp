@@ -218,7 +218,8 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     paddingVertical: 10,
     marginHorizontal: 5,
-  },
+    width: '45%',
+},
   balanceActionTextDark: {
     color: Colors.white,
     fontSize: 15,

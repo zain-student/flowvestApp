@@ -3,11 +3,14 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import * as ImagePicker from "expo-image-picker";
 import React, { useCallback, useState } from "react";
+
 import {
   ActivityIndicator,
   Alert,
   Dimensions,
-  Image, Modal, ScrollView,
+  Image, Modal,
+  RefreshControl,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -42,7 +45,9 @@ export const ProfileScreen: React.FC = () => {
   const [isImageModalVisible, setImageModalVisible] = useState(false);
   const [imageLoading, setImageLoading] = useState(false);
   const [initialLoadDone, setInitialLoadDone] = useState(false);
-
+  const pullToRefresh = () => {
+    dispatch(getCurrentUser());
+  }
   //  Refetch user when screen is focused
   // useFocusEffect(
   //   useCallback(() => {
@@ -134,6 +139,13 @@ export const ProfileScreen: React.FC = () => {
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+          refreshing={isLoading}
+          onRefresh={pullToRefresh}
+          // tintColor={}
+          />
+        }
       >
         {/* Avatar Section */}
         <View style={styles.container}>

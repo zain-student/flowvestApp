@@ -54,8 +54,8 @@ export const RecentPaymentsLog = () => {
               item.type === "payout"
                 ? "arrow-down-right"
                 : item.type === "investment"
-                ? "arrow-up-right"
-                : "activity"
+                  ? "arrow-up-right"
+                  : "activity"
             }
             size={20}
             color={Colors.white}
@@ -71,8 +71,8 @@ export const RecentPaymentsLog = () => {
                 item.status === "completed"
                   ? Colors.green
                   : item.status === "processing"
-                  ? Colors.yellow
-                  : Colors.gray,
+                    ? Colors.yellow
+                    : Colors.gray,
             },
           ]}
         >

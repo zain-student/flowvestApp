@@ -90,8 +90,8 @@ export const PartnersDashboard = () => {
                 styles.balanceActionBtnDark,
                 // { backgroundColor: Colors.gray },
               ]}
-              onPress={() => 
-              navigation.navigate("UpcomingPayouts")  
+              onPress={() =>
+                navigation.navigate("UpcomingPayouts")
               }
             >
               <Feather name="calendar" size={18} color="#fff" />
@@ -120,18 +120,19 @@ export const PartnersDashboard = () => {
                 ]}
               >
 
-                <View style={styles.iconContainer}>
-                  <Feather
-                    name={card.icon as any}
-                    size={38}
-                    color="#888"
-                    style={{ alignSelf: "flex-end" }}
-                  />
-                </View>
+                {/* <View style={styles.iconContainer}>
+                  
+                </View> */}
                 <View style={{ flex: 1 }}>
                   <Text style={styles.statLabel}>{card.label}</Text>
                   <Text style={styles.statValue}>{card.value}</Text>
                 </View>
+                <Feather
+                  name={card.icon as any}
+                  size={38}
+                  color="#888"
+                  style={{ alignSelf: "flex-end" }}
+                />
               </View>
             ))}
           </View>
@@ -170,7 +171,8 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontSize: 36,
     fontFamily: "Inter_700Bold",
-    marginVertical: 2,
+    fontWeight: "700",
+    marginVertical: 2
   },
   balanceChangeDark: {
     color: Colors.green,
@@ -213,7 +215,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: 12,
   },
-   statCardLarge: {
+  statCardLarge: {
     width: "47%",
     flexDirection: "row",
     alignItems: "center",

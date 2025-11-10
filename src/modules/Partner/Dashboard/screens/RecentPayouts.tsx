@@ -52,8 +52,8 @@ export const RecentPayouts = ({ navigation }: Props) => {
       item.status === "paid"
         ? Colors.green
         : item.status === "scheduled"
-        ? Colors.gray
-        : Colors.error;
+          ? Colors.gray
+          : Colors.error;
 
     return (
       <View style={styles.card}>

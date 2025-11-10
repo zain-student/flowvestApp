@@ -1,18 +1,20 @@
+import { DashboardLayout } from "@/modules/Common/components/DashboardLayout";
+import { PartnerDashboardStackParamList } from "@/navigation/PartnerStacks/PartnerDashboardStack";
+import Colors from "@/shared/colors/Colors";
+import { useAppDispatch, useAppSelector } from "@/shared/store";
+import { fetchPartnerDashboard } from "@/shared/store/slices/partner/dashboard/partnerDashboardSlice";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import React from "react";
+import React, { useEffect } from "react";
 import {
+  ActivityIndicator,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
-
-import { DashboardLayout } from "@/modules/Common/components/DashboardLayout";
-import { PartnerDashboardStackParamList } from "@/navigation/PartnerStacks/PartnerDashboardStack";
-import Colors from "@/shared/colors/Colors";
 import { RecentPaymentsLog } from "../components/RecentPaymentsLog";
 
 type Props = NativeStackNavigationProp<
@@ -20,42 +22,50 @@ type Props = NativeStackNavigationProp<
   "PartnersDashboard"
 >;
 
-const mockStats = {
-  pending_payouts_count: 2,
-  active_investments: 5,
-  total_partners: 4,
-  roi_average: 8.2,
-  total_payout_amount: 8200,
-};
-
 export const PartnersDashboard = () => {
   const navigation = useNavigation<Props>();
+  const dispatch = useAppDispatch();
+  const { stats, loading, error } = useAppSelector((state) => state.partnerDashboard);
 
+
+  useEffect(() => {
+    dispatch(fetchPartnerDashboard());
+  }, [dispatch]);
+
+   if (loading) {
+    return (
+      <DashboardLayout>
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <ActivityIndicator size="large" color={Colors.secondary} />
+        </View>
+      </DashboardLayout>
+    );
+  }
   const statCards = [
     {
       icon: "layers",
       label: "Pending Payouts",
-      value: mockStats.pending_payouts_count ?? "--",
+      value: stats?.pending_payouts_count ?? "--",
       bg: "#E0F2FE", // pastel blue
     },
     {
       icon: "activity",
       label: "Active Investments",
-      value: mockStats.active_investments ?? "--",
+      value: stats?.active_investments ?? "--",
       bg: "#DCFCE7", // pastel green
     },
     {
-      icon: "users",
-      label: "Partners",
-      value: mockStats.total_partners ?? "--",
+      icon: "dollar-sign",
+      label: "Total Earned",
+      value: stats?.total_earned.toFixed(1)?? "--",
       bg: "#FDE68A",  // pastel yellow
     },
     {
       icon: "percent",
-      label: "Avg ROI",
+      label: "ROI %",
       value:
-        mockStats.roi_average !== undefined
-          ? `${mockStats.roi_average.toFixed(1)}%`
+        stats?.roi_percentage !== undefined
+          ? `${stats?.roi_percentage.toFixed(1)}`
           : "--",
       bg: "#FCE7F3", // pastel pink
     },
@@ -68,7 +78,7 @@ export const PartnersDashboard = () => {
         <View style={styles.balanceCardDark}>
           <Text style={styles.balanceLabelDark}>Portfolio Value</Text>
           <Text style={styles.balanceValueDark}>
-            ${mockStats.total_payout_amount.toLocaleString()}
+            ${stats?.portfolio_value?.toLocaleString?.() ?? "--"}
           </Text>
           <Text style={styles.balanceChangeDark}>
             +$11,915.28{" "}
@@ -228,25 +238,6 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 2,
   },
-  statCard: {
-    width: "48%",
-    borderRadius: 14,
-    paddingVertical: 16,
-    paddingHorizontal: 14,
-    flexDirection: "row",
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.06,
-    shadowRadius: 4,
-    elevation: 2,
-    marginBottom: 12,
-  },
-  iconContainer: {
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    padding: 8,
-    marginRight: 10,
-  },
   statLabel: {
     color: "colors.secondary",
     fontSize: 16,
@@ -262,3 +253,4 @@ const styles = StyleSheet.create({
 });
 
 export default PartnersDashboard;
+

@@ -59,9 +59,9 @@ export const API_ENDPOINTS = {
   
   // Dashboard
   DASHBOARD: {
-    ADMIN: '/v1/admin/reports/dashboard-summary',
+    // ADMIN: '/v1/admin/reports/dashboard-summary',
     ADMIN_DASHBOARD:'/v1/admin/dashboard',
-    USER: '/v1/user/dashboard',
+    USER_DASHBOARD: '/v1/user/dashboard',
   },
   
   // Investments

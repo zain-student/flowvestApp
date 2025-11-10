@@ -1,3 +1,4 @@
+import { useAppSelector } from "@/shared/store";
 import { Feather } from "@expo/vector-icons";
 import React from "react";
 import {
@@ -8,42 +9,43 @@ import {
 } from "react-native";
 import Colors from "../../../../shared/colors/Colors";
 
-const recent_payments = [
-  {
-    id: 1,
-    type: "payout",
-    title: "Payout Received",
-    date: "Jul 1",
-    amount: "+$1,200",
-    status: "completed",
-  },
-  {
-    id: 2,
-    type: "investment",
-    title: "Invested in Tech Fund",
-    date: "Jun 28",
-    amount: "-$500",
-    status: "processing",
-  },
-  {
-    id: 3,
-    type: "payout",
-    title: "Payout Received",
-    date: "Jun 25",
-    amount: "+$850",
-    status: "completed",
-  },
-  {
-    id: 4,
-    type: "investment",
-    title: "Reinvested Earnings",
-    date: "Jun 20",
-    amount: "-$300",
-    status: "completed",
-  },
-];
+// const recent_payments = [
+//   {
+//     id: 1,
+//     type: "payout",
+//     title: "Payout Received",
+//     date: "Jul 1",
+//     amount: "+$1,200",
+//     status: "completed",
+//   },
+//   {
+//     id: 2,
+//     type: "investment",
+//     title: "Invested in Tech Fund",
+//     date: "Jun 28",
+//     amount: "-$500",
+//     status: "processing",
+//   },
+//   {
+//     id: 3,
+//     type: "payout",
+//     title: "Payout Received",
+//     date: "Jun 25",
+//     amount: "+$850",
+//     status: "completed",
+//   },
+//   {
+//     id: 4,
+//     type: "investment",
+//     title: "Reinvested Earnings",
+//     date: "Jun 20",
+//     amount: "-$300",
+//     status: "completed",
+//   },
+// ];
 
 export const RecentPaymentsLog = () => {
+  const {recent_activities}=useAppSelector((state)=>state.partnerDashboard)
   const renderActivityItem = ({ item }: any) => (
     <View style={styles.activityItem}>
       {/* Row 1: Icon + Title + Status */}
@@ -82,7 +84,7 @@ export const RecentPaymentsLog = () => {
 
       {/* Row 2: Date + Amount */}
       <View style={styles.rowBetween}>
-        <Text style={styles.activityDate}>{item.date}</Text>
+        <Text style={styles.activityDate}>{item.time}</Text>
         <Text style={styles.activityAmount}>{item.amount}</Text>
       </View>
     </View>
@@ -91,11 +93,11 @@ export const RecentPaymentsLog = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.sectionTitle}>Recent Activities</Text>
-      {recent_payments.length === 0 ? (
+      {recent_activities.length === 0 ? (
         <Text style={styles.emptyText}>No recent activities.</Text>
       ) : (
         <FlatList
-          data={recent_payments}
+          data={recent_activities}
           keyExtractor={(item) => item.id.toString()}
           renderItem={renderActivityItem}
           showsVerticalScrollIndicator={false}

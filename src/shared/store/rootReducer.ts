@@ -12,6 +12,7 @@ import authSlice from '../../modules/auth/store/authSlice';
 import addPartnerSlice from './slices/investor/dashboard/addPartnerSlice';
 import payoutSlice from './slices/investor/payouts/payoutSlice';
 import portfolioSlice from './slices/investor/portfolio/portfolioSlice';
+import partnerDashboardSlice from './slices/partner/dashboard/partnerDashboardSlice';
 import PartnerPayoutSlice from './slices/partner/payout/PartnerPayoutSlice';
 import notificationTemplateSlice from './slices/profile/notifications/notificationTemplateSlice';
 import notificationSlice from './slices/profile/notificationSlice';
@@ -30,6 +31,7 @@ export const rootReducer = combineReducers({
   investments: investmentSlice,
   // Module reducers (will be uncommented as we create them)
   adminDashboard: adminDashboardSlice,
+  partnerDashboard:partnerDashboardSlice,
   payout: payoutSlice,
   portfolio: portfolioSlice,
   profile: profileSlice,

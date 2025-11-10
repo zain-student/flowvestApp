@@ -1,5 +1,6 @@
 import { PartnerDashboardStackParamList } from "@/navigation/PartnerStacks/PartnerDashboardStack";
 import Colors from "@/shared/colors/Colors";
+import { useAppSelector } from "@/shared/store";
 import { Feather } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
@@ -14,39 +15,12 @@ type Props = NativeStackScreenProps<
   PartnerDashboardStackParamList,
   "RecentPayouts"
 >;
-
-const recentPayouts = [
-  {
-    id: 85,
-    amount: 0,
-    paid_date: "2025-10-28",
-    status: "paid",
-    investment_name: "kdgddv",
-    payout_type: "regular",
-  },
-  {
-    id: 97,
-    amount: 0,
-    paid_date: "2025-10-27",
-    status: "paid",
-    investment_name: "ZainMalik",
-    payout_type: "regular",
-  },
-  {
-    id: 94,
-    amount: 0,
-    paid_date: "2025-10-27",
-    status: "paid",
-    investment_name: "AhmedZa",
-    payout_type: "regular",
-  },
-];
-
 export const RecentPayouts = ({ navigation }: Props) => {
+  const {recent_payouts}=useAppSelector((state)=>state.partnerDashboard);
   const renderPayoutItem = ({
     item,
   }: {
-    item: (typeof recentPayouts)[0];
+    item: (typeof recent_payouts)[0];
   }) => {
     const statusColor =
       item.status === "paid"
@@ -79,10 +53,10 @@ export const RecentPayouts = ({ navigation }: Props) => {
         {/* Middle Row */}
         <View style={styles.metaRow}>
           <Text style={styles.metaText}>
-            Type: {item.payout_type.replace(/_/g, " ")}
+            Type: {item.payout_type.charAt(0).toUpperCase()+item.payout_type.slice(1)}
           </Text>
           <Text style={styles.metaText}>
-            Date: {item.paid_date}
+           Paid : {item.paid_date}
           </Text>
         </View>
 
@@ -100,7 +74,7 @@ export const RecentPayouts = ({ navigation }: Props) => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={recentPayouts}
+        data={recent_payouts}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderPayoutItem}
         showsVerticalScrollIndicator={false}

@@ -33,11 +33,19 @@ interface UpcomingPayout {
   status: string;
   days_until_due: number;
 }
-
+interface RecentPayouts {
+  id: number;
+  amount: number;
+  paid_date: string;
+  status: string;
+  investment_name: string;
+  payout_type: string;
+}
 interface PartnerDashboardData {
   stats: Stats;
   recent_activities: RecentActivity[];
   upcoming_payouts: UpcomingPayout[];
+  recent_payouts:RecentPayouts[];
 }
 
 // Redux state interface
@@ -45,6 +53,7 @@ interface PartnerDashboardState {
   stats: Stats | null;
   recent_activities: RecentActivity[];
   upcoming_payouts: UpcomingPayout[];
+  recent_payouts:RecentPayouts[];
   loading: boolean;
   error: string | null;
 }
@@ -53,6 +62,7 @@ const initialState: PartnerDashboardState = {
   stats: null,
   recent_activities: [],
   upcoming_payouts: [],
+  recent_payouts:[],
   loading: false,
   error: null,
 };
@@ -90,6 +100,7 @@ const partnerDashboardSlice = createSlice({
           state.stats = action.payload?.stats ?? null;
           state.recent_activities = action.payload?.recent_activities ?? [];
           state.upcoming_payouts = action.payload?.upcoming_payouts ?? [];
+          state.recent_payouts=action.payload?.recent_payouts??[];
         }
       )
       .addCase(fetchPartnerDashboard.rejected, (state, action) => {

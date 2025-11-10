@@ -1,11 +1,13 @@
 import { PartnerDashboardStackParamList } from "@/navigation/PartnerStacks/PartnerDashboardStack";
 import Colors from "@/shared/colors/Colors";
-import { useAppSelector } from "@/shared/store";
+import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { Feather } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { fetchPartnerDashboard } from "@store/slices/partner/dashboard/partnerDashboardSlice";
 import React from "react";
 import {
   FlatList,
+  RefreshControl,
   StyleSheet,
   Text,
   View
@@ -16,7 +18,11 @@ type Props = NativeStackScreenProps<
   "RecentPayouts"
 >;
 export const RecentPayouts = ({ navigation }: Props) => {
-  const {recent_payouts}=useAppSelector((state)=>state.partnerDashboard);
+  const dispatch = useAppDispatch();
+  const { recent_payouts, loading } = useAppSelector((state) => state.partnerDashboard);
+  const pullToRefresh = () => {
+      dispatch(fetchPartnerDashboard())
+    }
   const renderPayoutItem = ({
     item,
   }: {
@@ -28,7 +34,6 @@ export const RecentPayouts = ({ navigation }: Props) => {
         : item.status === "scheduled"
           ? Colors.gray
           : Colors.error;
-
     return (
       <View style={styles.card}>
         {/* Top Row */}
@@ -53,10 +58,10 @@ export const RecentPayouts = ({ navigation }: Props) => {
         {/* Middle Row */}
         <View style={styles.metaRow}>
           <Text style={styles.metaText}>
-            Type: {item.payout_type.charAt(0).toUpperCase()+item.payout_type.slice(1)}
+            Type: {item.payout_type.charAt(0).toUpperCase() + item.payout_type.slice(1)}
           </Text>
           <Text style={styles.metaText}>
-           Paid : {item.paid_date}
+            Paid : {item.paid_date}
           </Text>
         </View>
 
@@ -81,6 +86,13 @@ export const RecentPayouts = ({ navigation }: Props) => {
         contentContainerStyle={styles.listContainer}
         ListEmptyComponent={
           <Text style={styles.emptyText}>No recent payouts found.</Text>
+        }
+        refreshControl={
+          <RefreshControl
+            refreshing={loading}
+            onRefresh={pullToRefresh}
+            tintColor={Colors.primary}
+          />
         }
       />
     </View>

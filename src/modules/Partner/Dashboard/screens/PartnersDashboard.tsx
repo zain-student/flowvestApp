@@ -9,6 +9,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useEffect } from "react";
 import {
   ActivityIndicator,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -70,7 +71,9 @@ export const PartnersDashboard = () => {
       bg: "#FCE7F3", // pastel pink
     },
   ];
-
+ const pullToRefresh = () => {
+    dispatch(fetchPartnerDashboard())
+  }
   return (
     <DashboardLayout>
       <View style={styles.container}>
@@ -114,6 +117,13 @@ export const PartnersDashboard = () => {
         <ScrollView
           style={styles.scrollContent}
           showsVerticalScrollIndicator={false}
+          refreshControl={
+          <RefreshControl
+          refreshing={loading}
+          onRefresh={pullToRefresh}
+          tintColor={Colors.primary}
+          />
+        }
         >
           {/* 🔹 Stats Grid */}
           <View style={styles.statsGrid}>

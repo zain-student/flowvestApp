@@ -1,11 +1,15 @@
-import { useAppSelector } from "@/shared/store";
+import { useAppDispatch, useAppSelector } from "@/shared/store";
+import { fetchPartnerDashboard } from "@/shared/store/slices/partner/dashboard/partnerDashboardSlice";
 import { Feather } from "@expo/vector-icons";
 import React from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
 import Colors from "../../../../shared/colors/Colors";
-
 export const UpcomingPayouts = () => {
-    const { upcoming_payouts } = useAppSelector((state) => state.partnerDashboard);
+    const dispatch = useAppDispatch()
+    const { upcoming_payouts,loading } = useAppSelector((state) => state.partnerDashboard);
+    const pullToRefresh = () => {
+        dispatch(fetchPartnerDashboard());
+    }
     const renderItem = ({ item }: any) => {
         const statusColor =
             item.status === "scheduled"
@@ -59,6 +63,13 @@ export const UpcomingPayouts = () => {
                 showsVerticalScrollIndicator={false}
                 ListEmptyComponent={
                     <Text style={styles.emptyText}>No upcoming payouts scheduled.</Text>
+                }
+                refreshControl={
+                    <RefreshControl
+                    refreshing={loading}
+                    onRefresh={pullToRefresh}
+                    tintColor={Colors.primary}
+                    />
                 }
             />
         </View>

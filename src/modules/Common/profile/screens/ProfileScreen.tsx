@@ -41,12 +41,33 @@ export const ProfileScreen: React.FC = () => {
   const { user, isLoading } = useAppSelector((state) => state.profile);
   const [isImageModalVisible, setImageModalVisible] = useState(false);
   const [imageLoading, setImageLoading] = useState(false);
+  const [initialLoadDone, setInitialLoadDone] = useState(false);
 
   //  Refetch user when screen is focused
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     dispatch(getCurrentUser());
+  //   }, [dispatch])
+  // );
   useFocusEffect(
     useCallback(() => {
-      dispatch(getCurrentUser());
-    }, [dispatch])
+      const loadUser = async () => {
+        if (!user) {
+          // if Redux has no user, load from API
+          await dispatch(getCurrentUser());
+        }
+        //  else {
+        //   // optional: refresh if older than 10 mins
+        //   const lastFetched = user?.lastFetchedAt;
+        //   const now = Date.now();
+        //   if (!lastFetched || now - lastFetched > 10 * 60 * 1000) {
+        //     dispatch(getCurrentUser());
+        //   }
+        // }
+        setInitialLoadDone(true);
+      };
+      loadUser();
+    }, [dispatch, user])
   );
 
   //  Image picker handler

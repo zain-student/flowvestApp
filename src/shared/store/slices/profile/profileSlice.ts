@@ -64,6 +64,7 @@ export const getCurrentUser = createAsyncThunk<
     const response = await api.get(API_ENDPOINTS.PROFILE.GET);
     const user = response?.data?.data;
     console.log("✅ Get current user response:", JSON.stringify(response.data));
+    await storage.setItem(StorageKeys.USER_DATA,JSON.stringify(user));
     return user;
   } catch (error: any) {
     const errMsg =
@@ -220,29 +221,6 @@ const profileSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload || "Failed to update profile";
       })
-      // Upload Avatar
-      // .addCase(uploadUserAvatar.pending, (state) => {
-      //   state.isLoading = true;
-      //   state.error = null;
-      // })
-      // .addCase(uploadUserAvatar.fulfilled, (state, action) => {
-      //   state.isLoading = false;
-
-      //   // ✅ Update both user and avatar state
-      //   if (state.user) {
-      //     state.user = { ...state.user, avatar_url: action.payload.avatar_url };
-      //   }
-      //   state.avatar = {
-      //     success: true,
-      //     message: "Avatar uploaded successfully",
-      //     data: { avatar_url: action.payload.avatar_url },
-      //   };
-      // })
-
-      // .addCase(uploadUserAvatar.rejected, (state, action) => {
-      //   state.isLoading = false;
-      //   state.error = (action.payload as string) || "Failed to upload avatar";
-      // });
       .addCase(uploadUserAvatar.pending, (state) => {
         state.isLoading = true;
       })

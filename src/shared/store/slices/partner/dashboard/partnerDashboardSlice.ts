@@ -11,6 +11,7 @@ interface Stats {
   active_investments: number;
   total_earned: number;
   roi_percentage: number;
+  total_invested:number
 }
 
 interface RecentActivity {

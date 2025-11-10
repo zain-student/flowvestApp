@@ -8,42 +8,6 @@ import {
   View,
 } from "react-native";
 import Colors from "../../../../shared/colors/Colors";
-
-// const recent_payments = [
-//   {
-//     id: 1,
-//     type: "payout",
-//     title: "Payout Received",
-//     date: "Jul 1",
-//     amount: "+$1,200",
-//     status: "completed",
-//   },
-//   {
-//     id: 2,
-//     type: "investment",
-//     title: "Invested in Tech Fund",
-//     date: "Jun 28",
-//     amount: "-$500",
-//     status: "processing",
-//   },
-//   {
-//     id: 3,
-//     type: "payout",
-//     title: "Payout Received",
-//     date: "Jun 25",
-//     amount: "+$850",
-//     status: "completed",
-//   },
-//   {
-//     id: 4,
-//     type: "investment",
-//     title: "Reinvested Earnings",
-//     date: "Jun 20",
-//     amount: "-$300",
-//     status: "completed",
-//   },
-// ];
-
 export const RecentPaymentsLog = () => {
   const {recent_activities}=useAppSelector((state)=>state.partnerDashboard)
   const renderActivityItem = ({ item }: any) => (

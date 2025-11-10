@@ -56,8 +56,8 @@ export const PartnersDashboard = () => {
     },
     {
       icon: "dollar-sign",
-      label: "Total Earned",
-      value: stats?.total_earned.toFixed(1)?? "--",
+      label: "Total Invested",
+      value: stats?.total_invested?? "--",
       bg: "#FDE68A",  // pastel yellow
     },
     {
@@ -81,8 +81,8 @@ export const PartnersDashboard = () => {
             ${stats?.portfolio_value?.toLocaleString?.() ?? "--"}
           </Text>
           <Text style={styles.balanceChangeDark}>
-            +$11,915.28{" "}
-            <Text style={styles.changeSubLabel}>than last month</Text>
+            ${stats?.total_earned}{" "}
+            <Text style={styles.changeSubLabel}>Total Earned</Text>
           </Text>
 
           <View style={styles.balanceActionsRow}>

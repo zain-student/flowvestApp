@@ -1,44 +1,11 @@
+import { useAppSelector } from "@/shared/store";
 import { Feather } from "@expo/vector-icons";
 import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import Colors from "../../../../shared/colors/Colors";
 
-const dummyUpcomingPayouts = [
-    {
-        id: 1,
-        investment_name: "Tech Fund",
-        amount: 1200,
-        due_date: "2025-11-29",
-        days_until_due: 22,
-        status: "scheduled",
-    },
-    {
-        id: 2,
-        investment_name: "Real Estate Pro",
-        amount: 850,
-        due_date: "2025-12-10",
-        days_until_due: 33,
-        status: "scheduled",
-    },
-    {
-        id: 3,
-        investment_name: "Smart Energy",
-        amount: 620,
-        due_date: "2025-12-25",
-        days_until_due: 48,
-        status: "scheduled",
-    },
-    {
-        id: 4,
-        investment_name: "Growth Equity",
-        amount: 1050,
-        due_date: "2026-01-10",
-        days_until_due: 64,
-        status: "scheduled",
-    },
-];
-
 export const UpcomingPayouts = () => {
+    const { upcoming_payouts } = useAppSelector((state) => state.partnerDashboard);
     const renderItem = ({ item }: any) => {
         const statusColor =
             item.status === "paid"
@@ -73,11 +40,9 @@ export const UpcomingPayouts = () => {
                         <Text style={styles.amount}>${item.amount.toFixed(2)}</Text>
                     </View>
                     <Text style={styles.daysRemaining}>
-                        {item.days_until_due} days remaining
+                        {item.days_until_due.toFixed()} days remaining
                     </Text>
                 </View>
-
-
             </View>
 
         )
@@ -85,21 +50,17 @@ export const UpcomingPayouts = () => {
 
     return (
         <View style={styles.container}>
-            {/* <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>Upcoming Payouts</Text>
-      </View> */}
 
-            {dummyUpcomingPayouts.length === 0 ? (
-                <Text style={styles.emptyText}>No upcoming payouts scheduled.</Text>
-            ) : (
                 <FlatList
-                    data={dummyUpcomingPayouts}
+                    data={upcoming_payouts}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={renderItem}
                     contentContainerStyle={styles.listContent}
                     showsVerticalScrollIndicator={false}
+                    ListEmptyComponent={
+                        <Text style={styles.emptyText}>No upcoming payouts scheduled.</Text>
+                    }
                 />
-            )}
         </View>
     );
 };

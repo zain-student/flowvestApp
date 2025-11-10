@@ -11,11 +11,10 @@ interface Stats {
   active_investments: number;
   total_earned: number;
   roi_percentage: number;
-  total_invested:number
+  total_invested: number;
 }
 
 interface RecentActivity {
-  
   id: string;
   title: string;
   type: string; // e.g., "payout" | "investment"
@@ -29,8 +28,10 @@ interface RecentActivity {
 interface UpcomingPayout {
   id: number;
   investment_name: string;
-  payout_date: string;
-  amount: string;
+  amount: number;
+  due_date: string;
+  status: string;
+  days_until_due: number;
 }
 
 interface PartnerDashboardData {

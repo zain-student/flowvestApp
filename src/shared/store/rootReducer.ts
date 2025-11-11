@@ -11,13 +11,14 @@ import investmentSlice from '@/shared/store/slices/investor/investments/investme
 import authSlice from '../../modules/auth/store/authSlice';
 import addPartnerSlice from './slices/investor/dashboard/addPartnerSlice';
 import payoutSlice from './slices/investor/payouts/payoutSlice';
-import portfolioSlice from './slices/investor/portfolio/portfolioSlice';
 import partnerDashboardSlice from './slices/partner/dashboard/partnerDashboardSlice';
 import PartnerPayoutSlice from './slices/partner/payout/PartnerPayoutSlice';
 import notificationTemplateSlice from './slices/profile/notifications/notificationTemplateSlice';
 import notificationSlice from './slices/profile/notificationSlice';
 import profileSlice from './slices/profile/profileSlice';
 import partnerInvestmentSlice from './slices/shared/investments/partnerInvestmentSlice';
+import exportReportSlice from './slices/shared/portfolio/exportReportSlice';
+import portfolioSlice from './slices/shared/portfolio/portfolioSlice';
 // Import shared reducers
 // import themeSlice from './slices/themeSlice';
 // import loadingSlice from './slices/loadingSlice';
@@ -34,6 +35,7 @@ export const rootReducer = combineReducers({
   partnerDashboard:partnerDashboardSlice,
   payout: payoutSlice,
   portfolio: portfolioSlice,
+  exportReport:exportReportSlice,
   profile: profileSlice,
   notificationSettings: notificationSlice,
   userInvestments: partnerInvestmentSlice,

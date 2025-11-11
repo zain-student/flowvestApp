@@ -129,6 +129,7 @@ export const DashboardScreen: React.FC = () => {
   return (
     <DashboardLayout headerStyle="dark">
       {/* Main Balance Card (dark, rounded) */}
+      <View style={styles.container}>
       <View style={styles.balanceCardDark}>
         <Text style={styles.balanceLabelDark}>Total Managed Portfolio</Text>
         <Text style={styles.balanceValueDark}>
@@ -230,12 +231,13 @@ export const DashboardScreen: React.FC = () => {
         <Ionicons name="add" size={24} color={"white"} />
         <Text style={styles.fabLabel}>Add Partner</Text>
       </TouchableOpacity>
+      </View>
     </DashboardLayout>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, paddingBottom: 80, backgroundColor: Colors.background },
+  container: { flex: 1, backgroundColor: Colors.background },
   header: {
     flexDirection: "row",
     alignItems: "center",

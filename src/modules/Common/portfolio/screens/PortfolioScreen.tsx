@@ -1,7 +1,8 @@
 import { DashboardLayout } from "@/modules/Common/components/DashboardLayout";
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { fetchPortfolio } from "@/shared/store/slices/investor/portfolio/portfolioSlice";
+import { exportReport } from "@/shared/store/slices/shared/portfolio/exportReportSlice";
+import { fetchPortfolio } from "@/shared/store/slices/shared/portfolio/portfolioSlice";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
@@ -16,6 +17,7 @@ import {
   View
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
+import ExportReportModal from "../components/ExportReportModal";
 
 const screenWidth = Dimensions.get("window").width;
 const renderAssets = ({ item }: any) => (
@@ -35,9 +37,14 @@ const renderAssets = ({ item }: any) => (
 export const PortfolioScreen: React.FC = () => {
   const dispatch = useAppDispatch()
   const { isLoading, error, data } = useAppSelector((state) => state.portfolio);
-  const { user } = useAppSelector((state) => state.profile);
   const [activeChart, setActiveChart] = useState<"roi" | "earned">("roi");
-  const user1=
+  const { loading, dataExpo } = useAppSelector((state) => state.exportReport);
+  const [showExportModal, setShowExportModal] = useState(false);
+  const handleExport = (reportType: string, fileType: string) => {
+    dispatch(exportReport({ reportType, fileType }));
+  };
+  const { user } = useAppSelector((state) => state.profile);
+  const isAdmin = user?.roles?.includes("admin");
   useEffect(() => {
     dispatch(fetchPortfolio())
   }, [dispatch])
@@ -74,9 +81,9 @@ export const PortfolioScreen: React.FC = () => {
     labelColor: (opacity = 1) => `rgba(0,0,0,${opacity})`,
     propsForDots: { r: "5", strokeWidth: "2" },
   };
-const pullToRefresh=()=>{
-  dispatch(fetchPortfolio());
-}
+  const pullToRefresh = () => {
+    dispatch(fetchPortfolio());
+  }
   return (
     <DashboardLayout>
 
@@ -98,14 +105,14 @@ const pullToRefresh=()=>{
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
-         refreshControl={
+        refreshControl={
           <RefreshControl
-          refreshing={isLoading}
-          onRefresh={pullToRefresh}
-          tintColor={Colors.primary}
+            refreshing={isLoading}
+            onRefresh={pullToRefresh}
+            tintColor={Colors.primary}
           />
         }
-        >
+      >
         <View style={styles.chartContainer}>
           <View style={{ flexDirection: "row", justifyContent: "center", marginTop: 3 }}>
             <TouchableOpacity
@@ -182,13 +189,20 @@ const pullToRefresh=()=>{
           contentContainerStyle={styles.scrollContent}
         />
       </ScrollView>
-      {user?.roles?.includes("admin") && 
-      <TouchableOpacity style={styles.fab}>
-
-        <Ionicons name="document-outline" size={24} color={"white"} />
-        <Text style={styles.fabLabel}>Export Report</Text>
-      </TouchableOpacity>
-}
+      {/* {isAdmin && */}
+        {/* ( */}
+          <TouchableOpacity style={styles.fab} onPress={() => {
+          setShowExportModal(true)
+        }}>
+          <Ionicons name="document-outline" size={24} color={"white"} />
+          <Text style={styles.fabLabel}>Export Report</Text>
+        </TouchableOpacity>
+        {/* )} */}
+      <ExportReportModal
+        visible={showExportModal}
+        onClose={() => setShowExportModal(false)}
+        onExport={handleExport}
+      />
     </DashboardLayout>
   );
 };

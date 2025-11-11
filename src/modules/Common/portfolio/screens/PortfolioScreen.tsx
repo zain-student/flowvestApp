@@ -35,7 +35,9 @@ const renderAssets = ({ item }: any) => (
 export const PortfolioScreen: React.FC = () => {
   const dispatch = useAppDispatch()
   const { isLoading, error, data } = useAppSelector((state) => state.portfolio);
+  const { user } = useAppSelector((state) => state.profile);
   const [activeChart, setActiveChart] = useState<"roi" | "earned">("roi");
+  const user1=
   useEffect(() => {
     dispatch(fetchPortfolio())
   }, [dispatch])
@@ -180,11 +182,13 @@ const pullToRefresh=()=>{
           contentContainerStyle={styles.scrollContent}
         />
       </ScrollView>
+      {user?.roles?.includes("admin") && 
       <TouchableOpacity style={styles.fab}>
 
         <Ionicons name="document-outline" size={24} color={"white"} />
         <Text style={styles.fabLabel}>Export Report</Text>
       </TouchableOpacity>
+}
     </DashboardLayout>
   );
 };

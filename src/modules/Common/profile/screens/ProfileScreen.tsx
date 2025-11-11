@@ -48,12 +48,6 @@ export const ProfileScreen: React.FC = () => {
   const pullToRefresh = () => {
     dispatch(getCurrentUser());
   }
-  //  Refetch user when screen is focused
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     dispatch(getCurrentUser());
-  //   }, [dispatch])
-  // );
   useFocusEffect(
     useCallback(() => {
       const loadUser = async () => {
@@ -61,14 +55,6 @@ export const ProfileScreen: React.FC = () => {
           // if Redux has no user, load from API
           await dispatch(getCurrentUser());
         }
-        //  else {
-        //   // optional: refresh if older than 10 mins
-        //   const lastFetched = user?.lastFetchedAt;
-        //   const now = Date.now();
-        //   if (!lastFetched || now - lastFetched > 10 * 60 * 1000) {
-        //     dispatch(getCurrentUser());
-        //   }
-        // }
         setInitialLoadDone(true);
       };
       loadUser();

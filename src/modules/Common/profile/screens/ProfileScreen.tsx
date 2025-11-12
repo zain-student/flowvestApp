@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import * as ImagePicker from "expo-image-picker";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import {
   ActivityIndicator,
@@ -60,7 +60,9 @@ export const ProfileScreen: React.FC = () => {
       loadUser();
     }, [dispatch, user])
   );
-
+  useEffect(() => {
+    dispatch(getCurrentUser());
+  }, [dispatch])
   //  Image picker handler
   const handlePickImage = useCallback(async () => {
     try {
@@ -127,8 +129,8 @@ export const ProfileScreen: React.FC = () => {
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
-          refreshing={isLoading}
-          onRefresh={pullToRefresh}
+            refreshing={isLoading}
+            onRefresh={pullToRefresh}
           // tintColor={}
           />
         }

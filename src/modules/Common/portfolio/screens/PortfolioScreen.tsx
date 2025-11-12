@@ -40,7 +40,7 @@ export const PortfolioScreen: React.FC = () => {
   const [activeChart, setActiveChart] = useState<"roi" | "earned">("roi");
   const { loading, dataExpo } = useAppSelector((state) => state.exportReport);
   const [showExportModal, setShowExportModal] = useState(false);
-  const handleExport = (reportType: string, fileType: string) => {
+  const handleExport = (reportType: string, fileType: "pdf" | "csv") => {
     dispatch(exportReport({ reportType, fileType }));
   };
   const { user } = useAppSelector((state) => state.profile);

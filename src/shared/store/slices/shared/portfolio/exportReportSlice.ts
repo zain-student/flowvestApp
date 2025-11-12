@@ -1,8 +1,8 @@
-// src/features/exportReport/exportReportSlice.ts
 import { API_ENDPOINTS } from "@/config/env";
-import { api } from "@/shared/services/api"; // Your axios instance
+import { api } from "@/shared/services/api";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ToastAndroid } from "react-native";
+
 interface ExportReportState {
   loading: boolean;
   error: string | null;
@@ -17,28 +17,58 @@ const initialState: ExportReportState = {
 
 // Async thunk
 export const exportReport = createAsyncThunk<
-  any, // return type
-  { reportType: string; fileType: string }, // argument
+  any,
+  { reportType: string; fileType: "pdf" | "csv" },
   { rejectValue: string }
->("exportReport/exportReport", async ({ reportType, fileType }, { rejectWithValue }) => {
-  try {
-    const response = await api.post(API_ENDPOINTS.ADMIN.REPORTS.EXPORT_PDF, {
-      report_type: reportType,
-      file_type: fileType,
-    });
+>(
+  "exportReport/exportReport",
+  async ({ reportType, fileType }, { rejectWithValue }) => {
+    try {
+      let endpoint =
+        fileType === "csv"
+          ? API_ENDPOINTS.ADMIN.REPORTS.EXPORT_CSV
+          : API_ENDPOINTS.ADMIN.REPORTS.EXPORT_PDF;
 
-    if (response.data.success) {
-      ToastAndroid.show("Report generated successfully!", ToastAndroid.SHORT);
-      console.log("Response of Report:",response.data.data);
-      return response.data.data;
-    } else {
-      return rejectWithValue(response.data.message || "Failed to generate report");
+      const response = await api.post(
+        endpoint,
+        { report_type: reportType },
+        {
+          responseType: fileType === "csv" ? "text" : "json", // Important for CSV
+        }
+      );
+
+      if (fileType === "csv") {
+        // CSV data comes as raw text
+        const csvData = response.data;
+        ToastAndroid.show(
+          "CSV report generated successfully!",
+          ToastAndroid.SHORT
+        );
+        console.log("CSV Response:", csvData);
+        return csvData; // Return raw CSV string
+      } else {
+        // PDF API assumed to return { success, data, message }
+        if (response.data.success) {
+          ToastAndroid.show(
+            "PDF report generated successfully!",
+            ToastAndroid.SHORT
+          );
+          console.log("PDF Response:", response.data.data);
+          return response.data.data;
+        } else {
+          return rejectWithValue(
+            response.data.message || "Failed to generate PDF report"
+          );
+        }
+      }
+    } catch (error: any) {
+      console.log("Export report error: ", error);
+      return rejectWithValue(
+        error.response?.data?.message || error.message || "Something went wrong"
+      );
     }
-  } catch (error: any) {
-    console.log("Export report error: ", error);
-    return rejectWithValue(error.message || "Something went wrong");
   }
-});
+);
 
 const exportReportSlice = createSlice({
   name: "exportReport",

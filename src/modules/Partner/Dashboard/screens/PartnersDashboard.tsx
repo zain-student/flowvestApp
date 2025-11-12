@@ -206,8 +206,10 @@ const styles = StyleSheet.create({
   },
   balanceActionsRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 18,
+    // justifyContent: "space-between",
+
+    // marginTop: 18,
+    
   },
   balanceActionBtnDark: {
     flex: 1,
@@ -217,6 +219,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.green,
     borderRadius: 18,
     paddingVertical: 10,
+    paddingHorizontal: 8,
     marginHorizontal: 5,
     width: '45%',
 },
@@ -224,7 +227,8 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontSize: 15,
     fontFamily: "Inter_600SemiBold",
-    marginLeft: 7,
+    flexWrap:'wrap'
+    // marginLeft: 7,
   },
   scrollContent: {
     paddingHorizontal: 12,

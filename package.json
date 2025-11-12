@@ -50,7 +50,8 @@
     "redux-persist": "^6.0.0",
     "zod": "^3.23.8",
     "expo-image-picker": "~16.0.6",
-    "expo-file-system": "~18.0.12"
+    "expo-file-system": "~18.0.12",
+    "expo-sharing": "~13.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

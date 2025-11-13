@@ -17,6 +17,9 @@ export interface CreatePartnerPayload {
   description?: string;
   initial_investment?: string;
   notes?: string;
+  send_email?: boolean;
+  generate_password?: boolean;
+  password?: string;
 }
 
 export interface Company {
@@ -292,9 +295,7 @@ export const invitePartnerToInvestment = createAsyncThunk(
       return response.data.data;
     } catch (error: any) {
       console.log("❌ Invite Partner Error:", error);
-      return rejectWithValue(
-        error.message || "Failed to invite partner"
-      );
+      return rejectWithValue(error.message || "Failed to invite partner");
     }
   }
 );

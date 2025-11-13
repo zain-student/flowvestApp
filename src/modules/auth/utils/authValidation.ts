@@ -215,19 +215,40 @@ export const sharedInvestmentSchema = z.object({
   ),
 });
 // Add partner schema
-export const addPartnerSchema = z.object({
-  name: z.string().min(2, "Name is required"),
-  email: z.string().email("Invalid email"),
-  phone: z.string().regex(/^\d{10,15}$/, "Phone number must be 10–15 digits"),
-
-  status: z.enum(["active", "inactive"]),
-  company_name: z.string().min(2, "Company name is required"),
-  company_type: z.enum(["individual", "private", "silent", "holding"]),
-  address: z.string().min(5, "Address is required"),
-  initial_investment: z.string().min(1, "Investment is required"),
-  description: z.string().optional().or(z.literal("")),
-  notes: z.string().optional().or(z.literal("")),
-});
+export const addPartnerSchema = z
+  .object({
+    name: z.string().min(2, "Name is required"),
+    email: z.string().email("Enter a valid email"),
+    phone: z
+      .string()
+      .regex(/^\d{10,15}$/, "Enter Phone number between 10–15 digits"),
+    status: z.enum(["active", "inactive"]),
+    company_name: z.string().min(2, "Company name is required"),
+    company_type: z.enum(["individual", "private", "silent", "holding"]),
+    address: z.string().min(5, "Address is required"),
+    initial_investment: z.string().min(1, "Investment is required"),
+    description: z.string().optional().or(z.literal("")),
+    notes: z.string().optional().or(z.literal("")),
+    send_email: z.boolean().optional(),
+    generate_password: z.boolean().optional(),
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .optional(),
+  })
+  .refine(
+    (data) => {
+      // ✅ if generate_password = false → password is required
+      if (data.generate_password === false && !data.password) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: "Password is required when auto-generate password is disabled",
+      path: ["password"],
+    }
+  );
 // Join Investment Schema
 export const joinInvestmentSchema = z.object({
   amount: z.preprocess(

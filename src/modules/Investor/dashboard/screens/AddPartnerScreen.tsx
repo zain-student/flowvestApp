@@ -10,14 +10,14 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
-    Modal,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    ToastAndroid,
-    TouchableOpacity,
-    View
+  Modal,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  TouchableOpacity,
+  View
 } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import Colors from "../../../../shared/colors/Colors";
@@ -32,6 +32,9 @@ export const AddPartnerScreen = () => {
   const [selectedPartner, setSelectedPartner] = useState<Partner | undefined>();
   const [modalVisible, setModalVisible] = useState(!!editingPartner);
   const navigation = useNavigation<Props>();
+  const [isEmailEnabled, setIsEmailEnabled] = useState(false);
+  const [isAutoPassword, setIsAutoPassword] = useState(true);
+  const [customPassword, setCustomPassword] = useState("");
 
   const {
     control,
@@ -87,8 +90,13 @@ export const AddPartnerScreen = () => {
           ToastAndroid.show("Update failed: " + error, ToastAndroid.LONG);
         });
     } else {
-
-      dispatch(addPartners(data)) // from addPartnerSlice
+      const finalData = {
+        ...data,
+        send_email: isEmailEnabled,
+        generate_password: isAutoPassword,
+        password: !isAutoPassword ? customPassword : undefined,
+      };
+      dispatch(addPartners(finalData)) // from addPartnerSlice
         .unwrap()
         .then(() => {
           // ToastAndroid.show("Partner created successfully", ToastAndroid.SHORT);
@@ -362,6 +370,139 @@ export const AddPartnerScreen = () => {
                       />
                     )}
                   />
+
+                  {/* --- Account Credentials Section --- */}
+                  {!editingPartner && (<View
+                    style={{
+                      marginTop: 10,
+                      marginBottom: 20,
+                      backgroundColor: Colors.lightGray,
+                      borderRadius: 12,
+                      padding: 16,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        fontWeight: "600",
+                        color: Colors.secondary,
+                        marginBottom: 12,
+                      }}
+                    >
+                      Account Credentials
+                    </Text>
+
+                    {/* Send Email with Credentials */}
+                    <View style={{ marginBottom: 16 }}>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
+                        <View style={{ flex: 1, paddingRight: 8 }}>
+                          <Text style={{ color: Colors.secondary, fontWeight: "500" }}>
+                            Send Email with Credentials
+                          </Text>
+                          <Text style={{ color: Colors.gray, fontSize: 13, marginTop: 2 }}>
+                            If enabled, the partner will receive an email with their login
+                            credentials.
+                          </Text>
+                        </View>
+                        <TouchableOpacity
+                          style={{
+                            width: 46,
+                            height: 28,
+                            backgroundColor: isEmailEnabled ? Colors.secondary : "#ccc",
+                            borderRadius: 14,
+                            justifyContent: "center",
+                            paddingHorizontal: 3,
+                          }}
+                          onPress={() => setIsEmailEnabled(!isEmailEnabled)}
+                        >
+                          <View
+                            style={{
+                              width: 22,
+                              height: 22,
+                              borderRadius: 11,
+                              backgroundColor: Colors.white,
+                              alignSelf: isEmailEnabled ? "flex-end" : "flex-start",
+                            }}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+
+                    {/* Auto-Generate Password */}
+                    <View style={{ marginBottom: 16 }}>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
+                        <View style={{ flex: 1, paddingRight: 8 }}>
+                          <Text style={{ color: Colors.secondary, fontWeight: "500" }}>
+                            Auto-Generate Password
+                          </Text>
+                          <Text style={{ color: Colors.gray, fontSize: 13, marginTop: 2 }}>
+                            If enabled, a secure random password will be generated. If disabled,
+                            you can set a custom password below.
+                          </Text>
+                        </View>
+                        <TouchableOpacity
+                          style={{
+                            width: 46,
+                            height: 28,
+                            backgroundColor: isAutoPassword ? Colors.secondary : "#ccc",
+                            borderRadius: 14,
+                            justifyContent: "center",
+                            paddingHorizontal: 3,
+                          }}
+                          onPress={() => setIsAutoPassword(!isAutoPassword)}
+                        >
+                          <View
+                            style={{
+                              width: 22,
+                              height: 22,
+                              borderRadius: 11,
+                              backgroundColor: Colors.white,
+                              alignSelf: isAutoPassword ? "flex-end" : "flex-start",
+                            }}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+
+                    {/* Custom Password Input */}
+                    {!isAutoPassword && (
+                      <View style={{ marginBottom: 8 }}>
+                        <Input
+                          label="Custom Password"
+                          placeholder="Enter password (min 8 characters)"
+                          secureTextEntry
+                          value={customPassword}
+                          onChangeText={setCustomPassword}
+                        />
+                      </View>
+                    )}
+
+                    <Text
+                      style={{
+                        color: Colors.warning || "#D97706",
+                        fontSize: 12,
+                        marginTop: 4,
+                      }}
+                    >
+                      ⚠️ Make sure to securely share this password with the partner if email is
+                      not being sent.
+                    </Text>
+                  </View>)}
+                  {/* --- End Account Credentials Section --- */}
+
+
                   <Button
                     title={editingPartner ? "Update" : "Add"}
                     onPress={handleSubmit(onSubmit)}

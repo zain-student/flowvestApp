@@ -206,13 +206,9 @@ const styles = StyleSheet.create({
   },
   balanceActionsRow: {
     flexDirection: "row",
-    // justifyContent: "space-between",
-
-    // marginTop: 18,
-    
   },
   balanceActionBtnDark: {
-    flex: 1,
+    // flex: 1,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -221,7 +217,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 8,
     marginHorizontal: 5,
-    width: '45%',
+    width: '48%',
 },
   balanceActionTextDark: {
     color: Colors.white,

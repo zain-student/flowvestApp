@@ -11,7 +11,7 @@ import { ChangePasswordScreen } from "../../modules/Common/profile/screens/Chang
 import ProfileScreen from "../../modules/Common/profile/screens/ProfileScreen";
 import { UpdateProfile } from "../../modules/Common/profile/screens/UpdateProfile";
 export type ProfileStackParamList = {
-  Profile: undefined;
+  ProfileMain: undefined;
   ChangePassword: undefined;
   UpdateProfile: undefined;
   NotificationButtons: undefined;
@@ -28,7 +28,7 @@ export const ProfileStack = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Profile"
+        name="ProfileMain"
         component={ProfileScreen}
         options={{ headerShown: false }}
       />

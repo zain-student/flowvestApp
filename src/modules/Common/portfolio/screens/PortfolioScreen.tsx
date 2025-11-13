@@ -1,6 +1,7 @@
 import { DashboardLayout } from "@/modules/Common/components/DashboardLayout";
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
+import { getCurrentUser } from "@/shared/store/slices/profile/profileSlice";
 import { exportReport } from "@/shared/store/slices/shared/portfolio/exportReportSlice";
 import { fetchPortfolio } from "@/shared/store/slices/shared/portfolio/portfolioSlice";
 import { Feather, Ionicons } from "@expo/vector-icons";
@@ -47,6 +48,7 @@ export const PortfolioScreen: React.FC = () => {
   const isAdmin = user?.roles?.includes("admin");
   useEffect(() => {
     dispatch(fetchPortfolio())
+    dispatch(getCurrentUser());
   }, [dispatch])
   const assets =
     data?.own_investments?.map((inv) => ({
@@ -189,15 +191,15 @@ export const PortfolioScreen: React.FC = () => {
           contentContainerStyle={styles.scrollContent}
         />
       </ScrollView>
-      {/* {isAdmin && */}
-        {/* ( */}
+      {!isAdmin ?null:
+         ( 
           <TouchableOpacity style={styles.fab} onPress={() => {
           setShowExportModal(true)
         }}>
           <Ionicons name="document-outline" size={24} color={"white"} />
           <Text style={styles.fabLabel}>Export Report</Text>
         </TouchableOpacity>
-        {/* )} */}
+        )} 
       <ExportReportModal
         visible={showExportModal}
         onClose={() => setShowExportModal(false)}
@@ -254,13 +256,13 @@ const styles = StyleSheet.create({
 
   cardSubtitle: { fontSize: 14, color: Colors.gray },
   balanceActionBtnDark: {
-    width: '40%',
+    width: '45%',
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: Colors.darkButton,
     borderRadius: 18,
-    paddingHorizontal: 18,
+    paddingHorizontal: 8,
     paddingVertical: 8,
     marginRight: 12,
   },
@@ -269,6 +271,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: "Inter_600SemiBold",
     marginLeft: 7,
+    flexWrap:'wrap'
   },
   balanceActionsRow: { flexDirection: "row", marginTop: 18 },
   chartContainer: { alignItems: "center", marginBottom: 18 },

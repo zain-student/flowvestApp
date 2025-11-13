@@ -106,8 +106,6 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
           <Text style={styles.value}>{payouts.participant_name}({payouts.participant_email})</Text>
           <Text style={styles.label}>Investment ROI</Text>
           <Text style={styles.value}>{Number(payouts.investment_roi).toFixed(1)}%</Text>
-          <Text style={styles.label}>Payout Method</Text>
-          <Text style={styles.value}>{payouts.payment_method}</Text>
           {payouts.status.toLowerCase() === "cancelled" && (
             <>
               <Text style={styles.label}>Notes</Text>
@@ -117,7 +115,7 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
           }
           {payouts.status.toLowerCase() === "paid" && (
             <>
-              <Text style={styles.label}>Method</Text>
+              <Text style={styles.label}>Payout Method</Text>
               <Text style={styles.value}>{payouts.payment_method ?? "Not Paid Yet"}</Text>
               <Text style={styles.label}>Reference No</Text>
               <Text style={styles.value}>{payouts.reference_number || "N/A"}</Text>
@@ -184,13 +182,13 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
           </View>)}
 
         </View>
-        <Text style={styles.sectionTitle}>Timeline</Text>
+        {/* <Text style={styles.sectionTitle}>Timeline</Text>
         {mockPayout.timeline.map((item) => (
           <View key={item.id} style={styles.timelineItem}>
             <Text style={styles.timelineLabel}>{item.label}</Text>
             <Text style={styles.timelineDate}>{item.date}</Text>
           </View>
-        ))}
+        ))} */}
       </ScrollView>
     </View>
   );

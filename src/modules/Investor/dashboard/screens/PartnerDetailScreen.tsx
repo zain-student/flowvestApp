@@ -62,7 +62,7 @@ export const PartnerDetailScreen = () => {
         <Text style={styles.detail}>Total Investments: {partner.total_invested}</Text>
         <Text style={styles.detail}>Active Investments: {partner.active_investments}</Text>
         <Text style={styles.detail}>Total Earned: {partner.total_earned}</Text>
-        <Text style={styles.detail}>ROI %: {partner.roi_percentage}</Text>
+        <Text style={styles.detail}>ROI %: {partner.roi_percentage?.toFixed(1)}</Text>
         <View style={{
           flexDirection: 'row',
           justifyContent: "space-between", marginBottom: 4

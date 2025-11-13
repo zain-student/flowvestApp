@@ -56,7 +56,7 @@ export const PartnerPayouts = ({ route }: any) => {
     <View style={styles.card}>
       {/* Amount + Status */}
       <View style={styles.cardHeader}>
-        <Text style={styles.amount}>${item.amount}</Text>
+        <Text style={styles.inveName}>{item.investment}</Text>
         <Text
           style={[
             styles.status,
@@ -69,8 +69,8 @@ export const PartnerPayouts = ({ route }: any) => {
 
       {/* Method + Date */}
       <View style={styles.cardFooter}>
-        <Text style={styles.method}>{item.method}</Text>
-        <Text style={styles.date}>{new Date(item.date).toDateString()}</Text>
+        <Text style={styles.amount}>${item.amount}</Text>
+        <Text style={styles.date}>{new Date(item.paid_date).toDateString()}</Text>
       </View>
     </View>
   );
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: 5,
   },
-  amount: {
+  inveName: {
     fontSize: 18,
     color: Colors.secondary,
     fontFamily: "Inter_700Bold",
@@ -249,13 +249,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  method: {
-    fontSize: 14,
+  amount: {
     color: Colors.secondary,
-    fontFamily: "Inter_500Medium",
+    fontSize: 16,
+    fontFamily: "Inter_700Bold",
   },
   date: {
-    fontSize: 12,
+    fontSize: 16,
     color: "gray",
   },
 });

@@ -43,7 +43,7 @@ export const PartnerInvestments = ({ route }: any) => {
 
       {/* ROI + Date */}
       <View style={styles.footerRow}>
-        <Text style={styles.roi}>ROI: {item.roi_percentage}%</Text>
+        <Text style={styles.roi}>ROI: {item.roi_percentage.toFixed(1)}%</Text>
         <Text style={styles.date}>
           {new Date(item.start_date).toDateString()}
         </Text>

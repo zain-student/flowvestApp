@@ -23,6 +23,7 @@ import { useAppDispatch, useAppSelector } from "@/shared/store";
 import {
   getCurrencies,
   getCurrentUser,
+  getPreferences,
   updatePreferences,
   uploadUserAvatar
 } from "@/shared/store/slices/profile/profileSlice";
@@ -116,6 +117,7 @@ export const ProfileScreen: React.FC = () => {
       .unwrap()
       .then(() => {
         ToastAndroid.show("Currency updated successfully!", ToastAndroid.SHORT);
+        dispatch(getPreferences());
       })
       .catch(() => {
         ToastAndroid.show("Failed to update currency preference.", ToastAndroid.SHORT);

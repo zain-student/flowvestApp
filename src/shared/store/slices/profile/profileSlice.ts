@@ -69,7 +69,7 @@ export interface ProfileState {
   avatar: AvatarUploadResponse | null; // ✅ optional field
   currencies: Currency[];
   isCurrenciesLoading: boolean;
-  updatePreferences?: Preferences;
+  preferences?: Preferences;
 }
 
 // Initial state
@@ -80,7 +80,7 @@ const initialState: ProfileState = {
   avatar: null, // ✅ properly initialized
   currencies: [],
   isCurrenciesLoading: false,
-  updatePreferences: undefined,
+  preferences: undefined,
 };
 
 // ✅ Thunk to fetch current user
@@ -144,6 +144,18 @@ export const updatePreferences = createAsyncThunk(
       return rejectWithValue(
         error.response.data || "Update preferences failed"
       );
+    }
+  }
+);
+// Get Preferences thunk
+export const getPreferences = createAsyncThunk(
+  "profile/getPreferences",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get(API_ENDPOINTS.PROFILE.PREFERENCES);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data || "Get preferences failed");
     }
   }
 );
@@ -272,9 +284,12 @@ const profileSlice = createSlice({
       })
       // update preferences extra reducers
       .addCase(updatePreferences.fulfilled, (state, action) => {
-        state.updatePreferences = action.payload.data;
+        state.preferences = action.payload.data;
       })
-
+// get preferences extra reducers
+      .addCase(getPreferences.fulfilled, (state, action) => {
+        state.preferences = action.payload.data;
+      })
       // change password extra reducers
       .addCase(changePassword.pending, (state) => {
         state.isLoading = true;

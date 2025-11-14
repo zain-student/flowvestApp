@@ -2,6 +2,7 @@ import { InvestorDashboardStackParamList } from "@/navigation/InvestorStacks/Inv
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { fetchAdminDashboard } from "@/shared/store/slices/investor/dashboard/adminDashboardSlice";
+import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import {
   Inter_400Regular,
   Inter_600SemiBold,
@@ -51,6 +52,7 @@ export const DashboardScreen: React.FC = () => {
   const { stats, recent_activities, isLoading } = useAppSelector(
     (state) => state.adminDashboard
   );
+  const { formatCurrency } = useCurrencyFormatter();
   useEffect(() => {
     dispatch(fetchAdminDashboard());
   }, [dispatch]);
@@ -133,7 +135,7 @@ export const DashboardScreen: React.FC = () => {
       <View style={styles.balanceCardDark}>
         <Text style={styles.balanceLabelDark}>Total Managed Portfolio</Text>
         <Text style={styles.balanceValueDark}>
-          ${stats?.total_managed_portfolio ?? "--"}
+          {stats?.total_managed_portfolio ? formatCurrency( stats.total_managed_portfolio) : "--"}
         </Text>
         <Text style={styles.balanceChangeDark}>
           {stats?.new_investments_this_month ?? "--"}{" "}

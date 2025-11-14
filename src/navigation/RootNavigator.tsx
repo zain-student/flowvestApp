@@ -8,6 +8,7 @@ import { NotificationDetailScreen } from '@/modules/Common/notifications/screens
 import { NotificationsScreen } from '@/modules/Common/notifications/screens/NotificationsScreen';
 import { InvestmentStack } from "@/navigation/InvestorStacks/InvestmentStack";
 import { PayoutStack } from "@/navigation/InvestorStacks/PayoutStack";
+import { getPreferences } from '@/shared/store/slices/profile/profileSlice';
 import { Ionicons } from "@expo/vector-icons";
 import {
   selectIsAuthenticated,
@@ -73,10 +74,14 @@ export const RootNavigator: React.FC = () => {
 
     initializeAuth();
   }, [dispatch]);
-
+  useEffect(() => {
+    if (isAuthenticated) {
+      dispatch(getPreferences());
+    }
+  }, [dispatch, isAuthenticated])
   // Show loading screen during initialization or auth operations
   // || isLoading
-  if (isInitializing ) {
+  if (isInitializing) {
     return (
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -173,7 +178,7 @@ export const RootNavigator: React.FC = () => {
                 ),
               })}
             />
-             <Stack.Screen
+            <Stack.Screen
               name="NotificationDetail"
               component={NotificationDetailScreen}
               options={({ navigation }) => ({

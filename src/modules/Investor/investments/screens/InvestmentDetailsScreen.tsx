@@ -4,6 +4,7 @@ import { Button, Input } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { deleteInvestment, duplicateInvestment, fetchInvestments, fetchInvestmentsById } from "@/shared/store/slices/investor/investments/investmentSlice";
 import { joinInvestment } from "@/shared/store/slices/shared/investments/partnerInvestmentSlice";
+import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Ionicons } from "@expo/vector-icons";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -26,6 +27,7 @@ type RouteProps = RouteProp<InvestmentStackParamList, "InvestmentDetails">;
 export const InvestmentDetailsScreen = ({ navigation }: Props) => {
   const route = useRoute<RouteProps>();
   const { showJoinForm } = route.params;
+  const { formatCurrency } = useCurrencyFormatter();
   const { id } =
     useRoute<RouteProp<InvestmentStackParamList, "InvestmentDetails">>().params;
   const dispatch = useAppDispatch();
@@ -107,7 +109,7 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
 
     setFormError('');
     try {
-      const resultAction=await dispatch(
+      const resultAction = await dispatch(
         joinInvestment({
           investmentId: currentInvestment!.id,
           amount: Number(amount),
@@ -115,9 +117,9 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
         })
       );
       // .unwrap();
-      if(joinInvestment.fulfilled.match(resultAction)){
-      dispatch(fetchInvestments({ page: 1 }));
-      navigation.goBack();
+      if (joinInvestment.fulfilled.match(resultAction)) {
+        dispatch(fetchInvestments({ page: 1 }));
+        navigation.goBack();
       }
     } catch (err) {
       // Error toast already handled inside thunk
@@ -170,10 +172,10 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
 
           <Text style={styles.label}>Amount Invested</Text>
           <Text style={styles.value}>
-            ${currentInvestment.type.toLowerCase() === "shared" ? currentInvestment.current_total_invested : currentInvestment.initial_amount}
+            {formatCurrency(Number(currentInvestment.type.toLowerCase() === "shared" ? currentInvestment.current_total_invested : currentInvestment.initial_amount))}
           </Text>
           {currentInvestment.type === "shared" && (<Text style={styles.value}>
-            Min: ${currentInvestment.min_investment_amount} - Max: ${currentInvestment.max_investment_amount}
+            Min: {formatCurrency(Number(currentInvestment.min_investment_amount))} - Max: {formatCurrency(Number(currentInvestment.max_investment_amount))}
           </Text>)}
           <Text style={styles.label}>Status</Text>
           <Text
@@ -239,7 +241,7 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
                 <Text style={styles.sectionTitle}>Transactions</Text>
                 <View style={styles.txCard}>
                   <Text style={styles.txType}>{tx.payout_type.charAt(0).toUpperCase() + tx.payout_type.slice(1)}</Text>
-                  <Text style={styles.txAmount}>${tx.amount.toLocaleString()}</Text>
+                  <Text style={styles.txAmount}>{formatCurrency(tx.amount.toLocaleString())}</Text>
                   <Text style={styles.txDate}>Due: {tx.due_date}</Text>
                 </View>
               </View>

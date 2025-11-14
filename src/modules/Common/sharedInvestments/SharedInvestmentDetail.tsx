@@ -3,9 +3,9 @@ import Colors from "@/shared/colors/Colors";
 import { Button, Input } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { joinInvestment } from "@/shared/store/slices/shared/investments/partnerInvestmentSlice";
+import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Ionicons } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-
 import React, { useMemo, useState } from "react";
 import {
   ActivityIndicator,
@@ -27,6 +27,7 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
   const { list, isLoading } = useAppSelector(
     (state) => state.userInvestments.sharedPrograms
   );
+  const { formatCurrency } = useCurrencyFormatter();
   const { isJoining, error: joinError } = useAppSelector(
     (state) => state.userInvestments.join
   );
@@ -90,8 +91,8 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
 
         <View style={styles.summaryCard}>
           <LabelValue label="Creator" value={currentInvestment.creator.name || "N/A"} />
-          <LabelValue label="Target Amount" value={`$${currentInvestment.total_target_amount ?? "0"}`} />
-          <LabelValue label="Currently Invested" value={`$${currentInvestment.current_total_invested ?? "0"}`} />
+          <LabelValue label="Target Amount" value={formatCurrency(Number(currentInvestment.total_target_amount ?? "0"))} />
+          <LabelValue label="Currently Invested" value={formatCurrency(Number(currentInvestment.current_total_invested ?? "0"))} />
           <LabelValue label="Remaining Capacity" value={
             `$${Number(currentInvestment.total_target_amount ?? 0) - Number(currentInvestment.current_total_invested ?? 0)}`
           } />
@@ -112,11 +113,11 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
             <Text style={styles.sectionTitle}>Performance</Text>
             <View style={styles.txCard}>
               <Text style={styles.txType}>Total Paid Out</Text>
-              <Text style={styles.txAmount}>${currentInvestment.performance?.total_paid_out ?? 0}</Text>
+              <Text style={styles.txAmount}>{formatCurrency(currentInvestment.performance?.total_paid_out ?? 0)}</Text>
             </View>
             <View style={styles.txCard}>
               <Text style={styles.txType}>Pending Payouts</Text>
-              <Text style={styles.txAmount}>${currentInvestment.performance?.pending_payouts ?? 0}</Text>
+              <Text style={styles.txAmount}>{formatCurrency(currentInvestment.performance?.pending_payouts ?? 0)}</Text>
             </View>
             {currentInvestment.performance.next_payout_date && (
               <View style={styles.txCard}>

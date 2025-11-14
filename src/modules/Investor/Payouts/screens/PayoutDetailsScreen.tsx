@@ -3,6 +3,7 @@ import Colors from "@/shared/colors/Colors";
 import { Button } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { cancelPayout, fetchPayoutsById, markPayoutAsPaid } from "@/shared/store/slices/investor/payouts/payoutSlice";
+import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Ionicons } from "@expo/vector-icons";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -34,6 +35,7 @@ type Props = NativeStackScreenProps<PayoutStackParamList, "PayoutDetails">;
 type RouteProps = RouteProp<PayoutStackParamList, "PayoutDetails">;
 export const PayoutDetailsScreen = ({ navigation }: Props) => {
   const route = useRoute<RouteProps>();
+  const { formatCurrency } = useCurrencyFormatter();
   const { id } =
     useRoute<RouteProp<PayoutStackParamList, "PayoutDetails">>().params;
   const dispatch = useAppDispatch();
@@ -89,7 +91,7 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
         <View style={styles.summaryCard}>
           <Text style={styles.label}>Amount</Text>
           <Text style={styles.value}>
-            ${payouts.amount}
+            {formatCurrency(payouts.amount)}
           </Text>
           <Text style={styles.label}>Status</Text>
           <Text

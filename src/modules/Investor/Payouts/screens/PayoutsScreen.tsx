@@ -2,6 +2,7 @@ import { PayoutStackParamList } from "@/navigation/InvestorStacks/PayoutStack";
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { bulkUpdatePayouts, fetchPayouts } from "@/shared/store/slices/investor/payouts/payoutSlice";
+import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -27,7 +28,7 @@ export const PayoutsScreen: React.FC = () => {
   const [filter, setFilter] = useState("All");
   const navigation =
     useNavigation<NativeStackNavigationProp<PayoutStackParamList>>();
-
+const { formatCurrency } = useCurrencyFormatter();
   // ✅ Selection state
   const [selectedPayouts, setSelectedPayouts] = useState<number[]>([]);
   const [selectionMode, setSelectionMode] = useState(false);
@@ -133,7 +134,7 @@ export const PayoutsScreen: React.FC = () => {
         delayLongPress={300}
       >
         <View style={{ flex: 1 }}>
-          <Text style={styles.payoutAmount}>${item.amount.toLocaleString()}</Text>
+          <Text style={styles.payoutAmount}>{formatCurrency(item.amount.toLocaleString())}</Text>
           <Text style={styles.payoutAmount}>{item.title}</Text>
           <Text style={styles.payoutDate}>Participant: {item.email}</Text>
           <Text style={styles.payoutDate}>Scheduled: {item.due_date}</Text>
@@ -168,7 +169,7 @@ export const PayoutsScreen: React.FC = () => {
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Total Payouts</Text>
           <Text style={styles.cardValue}>
-            ${totalPayoutAmount.toFixed(1) ?? "--"}
+            {formatCurrency(Number(totalPayoutAmount.toFixed(1) ?? "--"))}
           </Text>
           <Text style={styles.cardSubtitle}>
             <Text style={{ color: Colors.gray, fontWeight: "400" }}>

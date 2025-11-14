@@ -3,6 +3,7 @@ import Colors from "@/shared/colors/Colors";
 import { Button } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { fetchPartnerDetail } from "@/shared/store/slices/investor/dashboard/addPartnerSlice";
+import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Ionicons } from "@expo/vector-icons";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -17,6 +18,7 @@ export const PartnerDetailScreen = () => {
   const navigation = useNavigation<Props>();
   const { id } = route.params;
   const dispatch = useAppDispatch();
+  const { formatCurrency } = useCurrencyFormatter();
   const { selectedPartner, isLoading, error } = useAppSelector((state) => state.partner);
   useEffect(() => {
     dispatch(fetchPartnerDetail(id));
@@ -59,9 +61,9 @@ export const PartnerDetailScreen = () => {
       {/* Financials */}
       <View style={styles.card}>
         <Text style={styles.sectionTitle}>Financial Overview</Text>
-        <Text style={styles.detail}>Total Investments: {partner.total_invested}</Text>
+        <Text style={styles.detail}>Total Investments: {formatCurrency(partner.total_invested ?? 0)}</Text>
         <Text style={styles.detail}>Active Investments: {partner.active_investments}</Text>
-        <Text style={styles.detail}>Total Earned: {partner.total_earned}</Text>
+        <Text style={styles.detail}>Total Earned: {formatCurrency(partner.total_earned ?? 0)}</Text>
         <Text style={styles.detail}>ROI %: {partner.roi_percentage?.toFixed(1)}</Text>
         <View style={{
           flexDirection: 'row',

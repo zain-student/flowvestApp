@@ -2,6 +2,7 @@
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { fetchPartnerPerformance } from "@/shared/store/slices/investor/dashboard/addPartnerSlice";
+import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import React, { useEffect } from "react";
 import {
     ActivityIndicator,
@@ -21,6 +22,7 @@ export const PartnerPerformanceScreen = ({ route }: any) => {
     const { isLoading, performance, error } = useAppSelector(
         (state) => state.partner
     );
+    const { formatCurrency } = useCurrencyFormatter();
     const breakdown = (performance?.investment_breakdown ?? []).map((item, index) => ({
         name: item.investment_type,
         amount: item.amount,
@@ -58,17 +60,17 @@ export const PartnerPerformanceScreen = ({ route }: any) => {
                 <View style={styles.summaryRow}>
                     <View style={styles.summaryItem}>
                         <Text style={styles.label}>Total Invested</Text>
-                        <Text style={styles.value}>${performance?.overview.total_invested}</Text>
+                        <Text style={styles.value}>{formatCurrency(Number(performance?.overview.total_invested ?? 0))}</Text>
                     </View>
                     <View style={styles.summaryItem}>
                         <Text style={styles.label}>Current Value</Text>
-                        <Text style={styles.value}>${performance?.overview.current_portfolio_value}</Text>
+                        <Text style={styles.value}>{formatCurrency(performance?.overview.current_portfolio_value ?? 0)}</Text>
                     </View>
                 </View>
                 <View style={styles.summaryRow}>
                     <View style={styles.summaryItem}>
                         <Text style={styles.label}>Total Earned</Text>
-                        <Text style={styles.value}>${performance?.overview.total_earned}</Text>
+                        <Text style={styles.value}>{formatCurrency(performance?.overview.total_earned ?? 0)}</Text>
                     </View>
                     <View style={styles.summaryItem}>
                         <Text style={styles.label}>ROI</Text>
@@ -128,7 +130,7 @@ export const PartnerPerformanceScreen = ({ route }: any) => {
                                 {/* Row: Investment Type + Amount */}
                                 <View style={styles.row}>
                                     <Text style={styles.investType}>{item.investment_type}</Text>
-                                    <Text style={styles.investAmount}>${item.amount.toLocaleString()}</Text>
+                                    <Text style={styles.investAmount}>{formatCurrency(item.amount)}</Text>
                                 </View>
 
                                 {/* Progress Bar */}

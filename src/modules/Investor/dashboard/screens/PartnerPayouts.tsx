@@ -2,55 +2,17 @@
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { fetchPartnerPayouts } from "@/shared/store/slices/investor/dashboard/addPartnerSlice";
+import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import React, { useEffect } from "react";
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from "react-native";
 export const PartnerPayouts = ({ route }: any) => {
   const { id } = route.params;
   const dispatch = useAppDispatch();
   const { isLoading, error, payouts, payoutSummary } = useAppSelector((state) => state.partner);
-
+const {formatCurrency}=useCurrencyFormatter();
   useEffect(() => {
     dispatch(fetchPartnerPayouts(id));
   }, [id])
-  // Dummy Summary Data
-  const dummySummary = {
-    total_paid: 15000,
-    pending_amount: 5000,
-    total_payouts: 4,
-  };
-
-  // Dummy Payout List
-  const dummyPayouts = [
-    {
-      id: 1,
-      date: "2025-08-15",
-      amount: 4000,
-      status: "paid",
-      method: "Bank Transfer",
-    },
-    {
-      id: 2,
-      date: "2025-07-10",
-      amount: 3500,
-      status: "paid",
-      method: "Cheque",
-    },
-    {
-      id: 3,
-      date: "2025-06-05",
-      amount: 4000,
-      status: "pending",
-      method: "Bank Transfer",
-    },
-    {
-      id: 4,
-      date: "2025-05-02",
-      amount: 2500,
-      status: "paid",
-      method: "Cash",
-    },
-  ];
-
   const renderPayout = ({ item }: any) => (
 
     <View style={styles.card}>
@@ -69,7 +31,7 @@ export const PartnerPayouts = ({ route }: any) => {
 
       {/* Method + Date */}
       <View style={styles.cardFooter}>
-        <Text style={styles.amount}>${item.amount}</Text>
+        <Text style={styles.amount}>{formatCurrency(item.amount)}</Text>
         <Text style={styles.date}>{new Date(item.paid_date).toDateString()}</Text>
       </View>
     </View>
@@ -82,14 +44,6 @@ export const PartnerPayouts = ({ route }: any) => {
     );
   }
 
-  // if (error) {
-  //   return (
-  //     <View style={styles.center}>
-  //       <Text style={{ color: "red" }}>{error}</Text>
-  //     </View>
-  //   );
-  // }
-
   return (
     <View style={styles.container}>
       {/* Summary Card */}
@@ -98,11 +52,11 @@ export const PartnerPayouts = ({ route }: any) => {
         <View style={styles.summaryRow}>
           <View style={styles.summaryItem}>
             <Text style={styles.summaryLabel}>Total Paid</Text>
-            <Text style={styles.summaryValue}>${payoutSummary?.total_paid}</Text>
+            <Text style={styles.summaryValue}>{formatCurrency(payoutSummary?.total_paid ?? 0)}</Text>
           </View>
           <View style={styles.summaryItem}>
             <Text style={styles.summaryLabel}>Pending</Text>
-            <Text style={styles.summaryValue}>${payoutSummary?.pending_amount}</Text>
+            <Text style={styles.summaryValue}>{formatCurrency(payoutSummary?.pending_amount ?? 0)}</Text>
           </View>
           <View style={styles.summaryItem}>
             <Text style={styles.summaryLabel}>Payouts</Text>
@@ -111,23 +65,7 @@ export const PartnerPayouts = ({ route }: any) => {
         </View>
       </View>
 
-      {/* Payouts List */}
-      {/* {payouts && payouts.length > 0 ? (
-      <FlatList
-        data={payouts}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderPayout}
-        contentContainerStyle={{ paddingBottom: 20 }}
-        ListHeaderComponent={
-          <Text style={styles.sectionTitle}>Recent Payouts</Text>
-        }
-      />
-      ):(
-        <View style={styles.center}>
-          <Text style={styles.noDataText}> Payouts not availible</Text>
-          </View>
-      )
-    } */}
+     
       {payouts && payouts.length > 0 ? (
         <FlatList
           data={payouts}

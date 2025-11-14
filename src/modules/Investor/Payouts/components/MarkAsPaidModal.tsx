@@ -1,8 +1,8 @@
 import Colors from "@/shared/colors/Colors";
+import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import React, { useEffect, useState } from "react";
 import { Alert, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
-
 interface MarkAsPaidModalProps {
   visible: boolean;
   onClose: () => void;
@@ -27,6 +27,7 @@ export const MarkAsPaidModal: React.FC<MarkAsPaidModalProps> = ({
   const [referenceNumber, setReferenceNumber] = useState("");
   const [notes, setNotes] = useState("");
   const [isFocus, setIsFocus] = useState(false);
+  const { formatCurrency } = useCurrencyFormatter();
 // 👇 Reset form fields when modal opens/closes
 useEffect(() => {
   if (!visible) {
@@ -78,7 +79,7 @@ useEffect(() => {
             </View>
             <View style={styles.summaryRow}>
               <Text style={styles.label}>Amount:</Text>
-              <Text style={styles.value}>${payoutSummary.amount}</Text>
+              <Text style={styles.value}>{formatCurrency(payoutSummary.amount)}</Text>
             </View>
             <View style={styles.summaryRow}>
               <Text style={styles.label}>Scheduled Date:</Text>

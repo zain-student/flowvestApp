@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { getCurrentUser } from "@/shared/store/slices/profile/profileSlice";
 import { exportReport } from "@/shared/store/slices/shared/portfolio/exportReportSlice";
 import { fetchPortfolio } from "@/shared/store/slices/shared/portfolio/portfolioSlice";
+import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
@@ -20,22 +21,9 @@ import {
 import { LineChart } from "react-native-chart-kit";
 import ExportReportModal from "../components/ExportReportModal";
 
-const screenWidth = Dimensions.get("window").width;
-const renderAssets = ({ item }: any) => (
-  <View style={styles.assetCard}>
-    <View style={{ flex: 1 }}>
-      <Text style={styles.assetName}>{item.name}</Text>
-      <Text style={styles.assetValue}>
-        ${item.value.toLocaleString()}
-      </Text>
-      <Text style={styles.assetValue}>
-        Start: {item.start}
-      </Text>
-    </View>
-    <Text style={styles.assetGrowth}>{item.expected_return_rate}</Text>
-  </View>
-)
 export const PortfolioScreen: React.FC = () => {
+  const screenWidth = Dimensions.get("window").width;
+
   const dispatch = useAppDispatch()
   const { isLoading, error, data } = useAppSelector((state) => state.portfolio);
   const [activeChart, setActiveChart] = useState<"roi" | "earned">("roi");
@@ -46,6 +34,7 @@ export const PortfolioScreen: React.FC = () => {
   };
   const { user } = useAppSelector((state) => state.profile);
   const isAdmin = user?.roles?.includes("admin");
+  const { formatCurrency } = useCurrencyFormatter();
   useEffect(() => {
     dispatch(fetchPortfolio())
     dispatch(getCurrentUser());
@@ -59,6 +48,20 @@ export const PortfolioScreen: React.FC = () => {
       expected_return_rate: `${Number(inv.expected_return_rate ?? 0).toFixed(2)}%`,
       start: inv.start_date,
     })) ?? [];
+  const renderAssets = ({ item }: any) => (
+    <View style={styles.assetCard}>
+      <View style={{ flex: 1 }}>
+        <Text style={styles.assetName}>{item.name}</Text>
+        <Text style={styles.assetValue}>
+          {formatCurrency(item.value)}
+        </Text>
+        <Text style={styles.assetValue}>
+          Start: {item.start}
+        </Text>
+      </View>
+      <Text style={styles.assetGrowth}>{item.expected_return_rate}</Text>
+    </View>
+  )
   // Prepare data for the chart
   const performance = data?.performance;
 
@@ -91,7 +94,7 @@ export const PortfolioScreen: React.FC = () => {
 
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Net Worth</Text>
-        <Text style={styles.cardValue}>${data?.summary.total_earned}</Text>
+        <Text style={styles.cardValue}>{formatCurrency(Number(data?.summary.total_earned))}</Text>
         <Text style={styles.cardSubtitle}>Asset Allocation</Text>
         <View style={styles.balanceActionsRow}>
           <TouchableOpacity style={styles.balanceActionBtnDark}>
@@ -165,7 +168,7 @@ export const PortfolioScreen: React.FC = () => {
               height={220}
               fromZero
               bezier
-              yAxisSuffix="$"
+              yAxisLabel="$"
               chartConfig={chartConfig}
               style={styles.chart}
             />
@@ -191,15 +194,15 @@ export const PortfolioScreen: React.FC = () => {
           contentContainerStyle={styles.scrollContent}
         />
       </ScrollView>
-      {!isAdmin ?null:
-         ( 
+      {!isAdmin ? null :
+        (
           <TouchableOpacity style={styles.fab} onPress={() => {
-          setShowExportModal(true)
-        }}>
-          <Ionicons name="document-outline" size={24} color={"white"} />
-          <Text style={styles.fabLabel}>Export Report</Text>
-        </TouchableOpacity>
-        )} 
+            setShowExportModal(true)
+          }}>
+            <Ionicons name="document-outline" size={24} color={"white"} />
+            <Text style={styles.fabLabel}>Export Report</Text>
+          </TouchableOpacity>
+        )}
       <ExportReportModal
         visible={showExportModal}
         onClose={() => setShowExportModal(false)}
@@ -271,7 +274,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: "Inter_600SemiBold",
     marginLeft: 7,
-    flexWrap:'wrap'
+    flexWrap: 'wrap'
   },
   balanceActionsRow: { flexDirection: "row", marginTop: 18 },
   chartContainer: { alignItems: "center", marginBottom: 18 },

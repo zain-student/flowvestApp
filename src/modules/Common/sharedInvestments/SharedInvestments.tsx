@@ -4,6 +4,7 @@ import type { PartnerInvestment } from "@/shared/store/slices/shared/investments
 import {
   fetchAvailableSharedPrograms,
 } from "@/shared/store/slices/shared/investments/partnerInvestmentSlice";
+import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import React, { useCallback, useEffect, useState } from "react";
 import {
@@ -16,13 +17,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-
 export const SharedInvestments: React.FC = ({ navigation }: any) => {
   const dispatch = useAppDispatch();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
-
+  const { formatCurrency } = useCurrencyFormatter();
   const {
     list,
     isLoading,
@@ -57,7 +57,7 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
     if (
       !isLoading &&
       pagination?.has_more_pages &&
-      pagination.current_page < pagination.last_page 
+      pagination.current_page < pagination.last_page
     ) {
       const nextPage = pagination.current_page + 1;
       setPage(nextPage);
@@ -76,7 +76,7 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
     <View style={styles.summaryRow}>
       <SummaryCard
         label="Total Invested"
-        value={`$${summary.total_invested.toLocaleString()}`}
+        value={formatCurrency(summary.total_invested)}
         style={{ backgroundColor: "#E0F2FE" }}
       />
       <SummaryCard
@@ -139,10 +139,10 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
 
           <View style={styles.row}>
             <Text style={styles.amount}>
-              Amount: ${item.current_total_invested ?? "N/A"}
+              Amount: {formatCurrency(Number(item.current_total_invested))}
             </Text>
             <Text style={styles.amount}>
-              Min: ${item.min_investment_amount ?? "N/A"} - Max: ${item.max_investment_amount ?? "N/A"}
+              Min: {formatCurrency(Number(item.min_investment_amount ?? 0))} - Max: {formatCurrency(Number(item.max_investment_amount ?? 0))}
             </Text>
           </View>
 
@@ -160,7 +160,7 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
               />
             </View>
             <Text style={styles.meta}>
-              ${item.current_total_invested} / ${item.total_target_amount}
+              {formatCurrency(Number(item.current_total_invested))} / {formatCurrency(Number(item.total_target_amount))}
             </Text>
           </View>
 

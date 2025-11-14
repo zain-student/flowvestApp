@@ -1,12 +1,12 @@
 import { InvestmentStackParamList } from "@/navigation/InvestorStacks/InvestmentStack";
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
+import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { fetchPartnerParticipatingInvestments, leaveInvestment } from "@shared/store/slices/shared/investments/partnerInvestmentSlice";
 import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, Alert, FlatList, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-
 type Props = NativeStackScreenProps<
     InvestmentStackParamList,
     "MyInvestments"
@@ -16,6 +16,7 @@ export const MyInvestments = ({ navigation }: Props) => {
     const dispatch = useAppDispatch();
     const { investments, summary, isLoading, error, meta, isLoadingMore } = useAppSelector((state) => state.userInvestments);
     const [search, setSearch] = useState("");
+    const { formatCurrency } = useCurrencyFormatter();
     useEffect(() => {
         if (search === "") {
             dispatch(fetchPartnerParticipatingInvestments({ page: 1 }));
@@ -41,7 +42,7 @@ export const MyInvestments = ({ navigation }: Props) => {
             <View style={{ flex: 1 }}>
                 <Text style={styles.investmentName}>{item.name}</Text>
                 <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                    <Text style={styles.investmentAmount}>Amount Invested: ${item.my_investment}</Text>
+                    <Text style={styles.investmentAmount}>Amount Invested: {formatCurrency(item.my_investment ?? 0)}</Text>
                     <Text
                         style={[
                             styles.investmentStatus,
@@ -51,7 +52,7 @@ export const MyInvestments = ({ navigation }: Props) => {
                         {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
                     </Text>
                 </View>
-                <Text style={styles.investmentAmount}>Target Amount:  ${item.total_target_amount}</Text>
+                <Text style={styles.investmentAmount}>Target Amount:  {formatCurrency(item.total_target_amount?? 0)}</Text>
                 <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                     <Text style={styles.investmentDate}>Joined: {item.joined_at}</Text>
                     <Text style={styles.investmentParticipants}>Participants: {item.total_participants}</Text>
@@ -125,7 +126,7 @@ export const MyInvestments = ({ navigation }: Props) => {
                         <Text style={styles.label}>Active Investments: <Text style={styles.value}>{summary.active_investments}</Text></Text>
                         <Text style={styles.label}>Average ROI: <Text style={styles.value}>{summary.average_roi}%</Text></Text>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text style={styles.label}>Invested: <Text style={styles.value}>${summary.total_invested}</Text></Text>
+                            <Text style={styles.label}>Invested: <Text style={styles.value}>{formatCurrency(summary.total_invested)}</Text></Text>
                             {/* <Text style={styles.label}>Duration: <Text style={styles.value}>12 Months</Text></Text> */}
                             <TouchableOpacity style={styles.balanceActionBtnDark}
                                 onPress={() => { navigation.navigate("SharedInvestments") }}

@@ -2,6 +2,7 @@ import { InvestmentStackParamList } from "@/navigation/InvestorStacks/Investment
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { fetchPartners, invitePartnerToInvestment } from "@/shared/store/slices/investor/dashboard/addPartnerSlice";
+import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import React, { useEffect, useMemo, useState } from "react";
 import {
@@ -30,7 +31,7 @@ export default function AddInvestmentPartner() {
 
   const { partners, isLoading } = useAppSelector((state) => state.partner);
   const { investments } = useAppSelector((state) => state.investments);
-
+const { formatCurrency } = useCurrencyFormatter();
   const [selectedPartner, setSelectedPartner] = useState<Partner | null>(null);
   const [investedAmount, setInvestedAmount] = useState("");
   const [investmentNotes, setInvestmentNotes] = useState("");
@@ -114,7 +115,7 @@ export default function AddInvestmentPartner() {
           <View style={styles.card}>
             <Text style={styles.cardTitle}>Investment Details</Text>
             <Text style={styles.detail}>Name: {investment.name}</Text>
-            <Text style={styles.detail}>Total: ${investment.type === "solo" ? investment.initial_amount : investment.current_total_invested}</Text>
+            <Text style={styles.detail}>Total: {formatCurrency(Number(investment.type === "solo" ? investment.initial_amount : investment.current_total_invested))}</Text>
             <Text style={styles.detail}>Status: {investment.status}</Text>
             <Text style={styles.detail}>
               Expected Return: {parseFloat(investment.expected_return_rate).toFixed(1)}%

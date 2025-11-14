@@ -2,11 +2,12 @@
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { fetchPartnerInvestments } from "@/shared/store/slices/investor/dashboard/addPartnerSlice";
+import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import React, { useEffect } from "react";
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from "react-native";
-
 export const PartnerInvestments = ({ route }: any) => {
   const { id } = route.params;
+  const { formatCurrency } = useCurrencyFormatter();
   const dispatch = useAppDispatch();
   const { isLoading, investments, investmentSummary, error } = useAppSelector(
     (state) => state.partner
@@ -34,11 +35,11 @@ export const PartnerInvestments = ({ route }: any) => {
       {/* Amounts */}
       <View style={styles.amountRow}>
         <Text style={styles.amountLabel}>Invested</Text>
-        <Text style={styles.amountValue}>${item.amount_invested}</Text>
+        <Text style={styles.amountValue}>{formatCurrency(item.amount_invested)}</Text>
       </View>
       <View style={styles.amountRow}>
         <Text style={styles.amountLabel}>Current Value</Text>
-        <Text style={styles.amountValue}>${item.current_value}</Text>
+        <Text style={styles.amountValue}>{formatCurrency(item.current_value)}</Text>
       </View>
 
       {/* ROI + Date */}
@@ -68,13 +69,13 @@ export const PartnerInvestments = ({ route }: any) => {
           <View style={styles.summaryItem}>
             <Text style={styles.summaryLabel}>Total Invested</Text>
             <Text style={styles.summaryValue}>
-              ${investmentSummary?.total_invested}
+              {formatCurrency(investmentSummary?.total_invested ?? 0)}
             </Text>
           </View>
           <View style={styles.summaryItem}>
             <Text style={styles.summaryLabel}>Current Value</Text>
             <Text style={styles.summaryValue}>
-              ${investmentSummary?.total_current_value}
+              {formatCurrency(investmentSummary?.total_current_value ?? 0)}
             </Text>
           </View>
           <View style={styles.summaryItem}>

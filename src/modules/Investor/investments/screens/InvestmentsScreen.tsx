@@ -2,6 +2,7 @@ import { InvestmentStackParamList } from "@/navigation/InvestorStacks/Investment
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { fetchInvestments } from "@/shared/store/slices/investor/investments/investmentSlice";
+import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -33,6 +34,7 @@ export const InvestmentsScreen: React.FC = () => {
   const [showPartnersModal, setShowPartnersModal] = useState(false);
   const [selectedInvestmentId, setSelectedInvestmentId] = useState<number | null>(null);
   const [search, setSearch] = useState("");
+  const { formatCurrency } = useCurrencyFormatter();
   const handleOpenPartners = (id: number) => {
     setSelectedInvestmentId(id);
     setShowPartnersModal(true);
@@ -125,7 +127,7 @@ export const InvestmentsScreen: React.FC = () => {
           }
         </View>
         <Text style={styles.investmentName}>{item.name}(<Text style={styles.investmentAmount}>{item.type.charAt(0).toUpperCase() + item.type.slice(1)}</Text>)</Text>
-        <Text style={styles.investmentAmount}>Amount: ${item.type === "shared" ? item.shared_amount : item.amount}</Text>
+        <Text style={styles.investmentAmount}>Amount: {formatCurrency(item.type === "shared" ? item.shared_amount : item.amount)}</Text>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <Text style={styles.investmentDate}>Started: {item.date}</Text>
           <Text
@@ -172,7 +174,7 @@ export const InvestmentsScreen: React.FC = () => {
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Total Invested Amount</Text>
           <Text style={styles.cardValue}>
-            ${stats.total_invested}
+            {formatCurrency(stats.total_invested)}
           </Text>
           <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
             <Text style={styles.cardSubtitle}>

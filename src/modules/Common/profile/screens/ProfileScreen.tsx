@@ -1,4 +1,3 @@
-import { getCurrencies } from "@/shared/store/slices/profile/profileSlice";
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -13,6 +12,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  ToastAndroid,
   TouchableOpacity,
   View
 } from "react-native";
@@ -21,8 +21,10 @@ import { ProfileStackParamList } from "@/navigation/ProfileStacks/ProfileStack";
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import {
+  getCurrencies,
   getCurrentUser,
-  uploadUserAvatar,
+  updatePreferences,
+  uploadUserAvatar
 } from "@/shared/store/slices/profile/profileSlice";
 import { DashboardLayout } from "../../components/DashboardLayout";
 
@@ -102,6 +104,23 @@ export const ProfileScreen: React.FC = () => {
 
   //  Conditional states
   const showLoader = isLoading || (!user && !imageLoading);
+  const handleCurrencySelect = (currency: any) => {
+    setSelectedCurrency(currency);
+    setCurrencyDropdownOpen(false);
+
+    dispatch(
+      updatePreferences({
+        display: { currency: currency.code }
+      })
+    )
+      .unwrap()
+      .then(() => {
+        ToastAndroid.show("Currency updated successfully!", ToastAndroid.SHORT);
+      })
+      .catch(() => {
+        ToastAndroid.show("Failed to update currency preference.", ToastAndroid.SHORT);
+      });
+  };
 
   return (
     <DashboardLayout>
@@ -209,10 +228,7 @@ export const ProfileScreen: React.FC = () => {
                   <TouchableOpacity
                     key={c.id}
                     style={styles.dropdownItem}
-                    onPress={() => {
-                      setSelectedCurrency(c);
-                      setCurrencyDropdownOpen(false);
-                    }}
+                    onPress={() => handleCurrencySelect(c)}
                   >
                     <Text style={styles.dropdownItemText}>
                       {c.icon} {c.name} ({c.code})

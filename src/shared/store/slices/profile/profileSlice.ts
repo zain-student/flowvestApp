@@ -32,6 +32,20 @@ export interface Currency {
   locale: string;
   decimal_places: number;
 }
+// Preferences model
+export interface Preferences {
+  notifications: {
+    email: boolean;
+    push: boolean;
+    payout_reminders: boolean;
+    investment_updates: boolean;
+  };
+  display: {
+    currency: string;
+    timezone: string;
+    language: string;
+  };
+}
 // Avatar upload response model
 export interface AvatarUploadResponse {
   success: boolean;
@@ -55,6 +69,7 @@ export interface ProfileState {
   avatar: AvatarUploadResponse | null; // ✅ optional field
   currencies: Currency[];
   isCurrenciesLoading: boolean;
+  updatePreferences?: Preferences;
 }
 
 // Initial state
@@ -65,6 +80,7 @@ const initialState: ProfileState = {
   avatar: null, // ✅ properly initialized
   currencies: [],
   isCurrenciesLoading: false,
+  updatePreferences: undefined,
 };
 
 // ✅ Thunk to fetch current user
@@ -114,7 +130,23 @@ export const getCurrencies = createAsyncThunk<
     return rejectWithValue(msg);
   }
 });
-
+// Update Preferences thunk
+export const updatePreferences = createAsyncThunk(
+  "profile/updatePreferences",
+  async (payload: any, { rejectWithValue }) => {
+    try {
+      const response = await api.put(
+        API_ENDPOINTS.PROFILE.PREFERENCES,
+        payload
+      );
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response.data || "Update preferences failed"
+      );
+    }
+  }
+);
 // Change password slice
 export const changePassword = createAsyncThunk<
   { success: boolean; message: string },
@@ -237,6 +269,10 @@ const profileSlice = createSlice({
       .addCase(getCurrencies.rejected, (state, action) => {
         state.isCurrenciesLoading = false;
         state.error = action.payload || "Failed to fetch currencies";
+      })
+      // update preferences extra reducers
+      .addCase(updatePreferences.fulfilled, (state, action) => {
+        state.updatePreferences = action.payload.data;
       })
 
       // change password extra reducers

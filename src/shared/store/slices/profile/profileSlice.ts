@@ -22,7 +22,16 @@ export interface User {
   };
   avatar?: string | null; // ✅ Include avatar in user data
 }
-
+// Currency model
+export interface Currency {
+  id: number;
+  code: string;
+  name: string;
+  symbol: string;
+  icon: string;
+  locale: string;
+  decimal_places: number;
+}
 // Avatar upload response model
 export interface AvatarUploadResponse {
   success: boolean;
@@ -44,6 +53,8 @@ export interface ProfileState {
   isLoading: boolean;
   error: string | null;
   avatar: AvatarUploadResponse | null; // ✅ optional field
+  currencies: Currency[];
+  isCurrenciesLoading: boolean;
 }
 
 // Initial state
@@ -52,6 +63,8 @@ const initialState: ProfileState = {
   isLoading: false,
   error: null,
   avatar: null, // ✅ properly initialized
+  currencies: [],
+  isCurrenciesLoading: false,
 };
 
 // ✅ Thunk to fetch current user
@@ -64,7 +77,7 @@ export const getCurrentUser = createAsyncThunk<
     const response = await api.get(API_ENDPOINTS.PROFILE.GET);
     const user = response?.data?.data;
     console.log("✅ Get current user response:", JSON.stringify(response.data));
-    await storage.setItem(StorageKeys.USER_DATA,JSON.stringify(user));
+    await storage.setItem(StorageKeys.USER_DATA, JSON.stringify(user));
     return user;
   } catch (error: any) {
     const errMsg =
@@ -80,6 +93,28 @@ export const getCurrentUser = createAsyncThunk<
     return rejectWithValue({ code, message: errMsg, status });
   }
 });
+
+// Fetch currencies thunk
+export const getCurrencies = createAsyncThunk<
+  Currency[],
+  void,
+  { rejectValue: string }
+>("profile/getCurrencies", async (_, { rejectWithValue }) => {
+  try {
+    const response = await api.get(API_ENDPOINTS.PROFILE.CURRENCIES); // define in your env
+    const currencies = response?.data?.data?.currencies;
+    if (!currencies) throw new Error("No currencies found");
+    console.log("✅ Fetched currencies:", currencies);
+    return currencies;
+  } catch (err: any) {
+    const msg =
+      err?.response?.data?.message ||
+      err?.message ||
+      "Failed to fetch currencies";
+    return rejectWithValue(msg);
+  }
+});
+
 // Change password slice
 export const changePassword = createAsyncThunk<
   { success: boolean; message: string },
@@ -186,9 +221,25 @@ const profileSlice = createSlice({
           state.isLoading = false;
           state.error = action.payload?.message || "Failed to fetch profile";
         }
-      );
-    // change password extra reducers
-    builder
+      )
+      // get currencies extra reducers
+      .addCase(getCurrencies.pending, (state) => {
+        state.isCurrenciesLoading = true;
+        state.error = null;
+      })
+      .addCase(
+        getCurrencies.fulfilled,
+        (state, action: PayloadAction<Currency[]>) => {
+          state.currencies = action.payload;
+          state.isCurrenciesLoading = false;
+        }
+      )
+      .addCase(getCurrencies.rejected, (state, action) => {
+        state.isCurrenciesLoading = false;
+        state.error = action.payload || "Failed to fetch currencies";
+      })
+
+      // change password extra reducers
       .addCase(changePassword.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -233,7 +284,6 @@ const profileSlice = createSlice({
       .addCase(uploadUserAvatar.rejected, (state, action) => {
         state.isLoading = false;
       });
-
   },
 });
 
@@ -252,3 +302,5 @@ export const selectProfileError = (state: RootState) =>
 
 // ✅ Reducer
 export default profileSlice.reducer;
+// export const selectCurrencies = (state: RootState) => state.profile.currencies;
+// export const selectCurrenciesLoading = (state: RootState) => state.profile.isCurrenciesLoading;

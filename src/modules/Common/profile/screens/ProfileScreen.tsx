@@ -1,9 +1,9 @@
+import { getCurrencies } from "@/shared/store/slices/profile/profileSlice";
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import * as ImagePicker from "expo-image-picker";
 import React, { useCallback, useEffect, useState } from "react";
-
 import {
   ActivityIndicator,
   Alert,
@@ -45,6 +45,10 @@ export const ProfileScreen: React.FC = () => {
   const [isImageModalVisible, setImageModalVisible] = useState(false);
   const [imageLoading, setImageLoading] = useState(false);
   const [initialLoadDone, setInitialLoadDone] = useState(false);
+  const [currencyDropdownOpen, setCurrencyDropdownOpen] = useState(false);
+  const [selectedCurrency, setSelectedCurrency] = useState<any>(null);
+
+  const { currencies, isCurrenciesLoading } = useAppSelector((state) => state.profile);
   const pullToRefresh = () => {
     dispatch(getCurrentUser());
   }
@@ -62,6 +66,7 @@ export const ProfileScreen: React.FC = () => {
   );
   useEffect(() => {
     dispatch(getCurrentUser());
+    dispatch(getCurrencies());
   }, [dispatch])
   //  Image picker handler
   const handlePickImage = useCallback(async () => {
@@ -176,8 +181,48 @@ export const ProfileScreen: React.FC = () => {
           <Text style={styles.sectionTitle}>Account Info</Text>
           <InfoRow label="Email" value={user?.email ?? "--"} />
           <InfoRow label="Company" value={user?.company?.name ?? "--"} />
-        </View>
 
+          {/* Currency Preference */}
+          <View style={{ marginTop: 12 }}>
+            <Text style={styles.infoLabel}>Preferred Currency</Text>
+
+            {/* {isCurrenciesLoading ? (
+              <ActivityIndicator size="small" color={Colors.green} />
+            ) : ( */}
+            <TouchableOpacity
+              style={styles.dropdownContainer}
+              onPress={() => setCurrencyDropdownOpen(!currencyDropdownOpen)}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.dropdownText}>
+                {selectedCurrency
+                  ? `${selectedCurrency.icon} ${selectedCurrency.name} (${selectedCurrency.code})`
+                  : "Select Currency"}
+              </Text>
+              <Ionicons name="chevron-down" size={18} color={Colors.gray} />
+            </TouchableOpacity>
+            {/* )} */}
+
+            {currencyDropdownOpen && (
+              <View style={styles.dropdownList}>
+                {currencies.map((c) => (
+                  <TouchableOpacity
+                    key={c.id}
+                    style={styles.dropdownItem}
+                    onPress={() => {
+                      setSelectedCurrency(c);
+                      setCurrencyDropdownOpen(false);
+                    }}
+                  >
+                    <Text style={styles.dropdownItemText}>
+                      {c.icon} {c.name} ({c.code})
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
+          </View>
+        </View>
         {/*  Settings */}
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>Settings</Text>
@@ -343,6 +388,43 @@ const styles = StyleSheet.create({
     color: Colors.gray,
     marginTop: 2,
   },
+  dropdownContainer: {
+    backgroundColor: Colors.white,
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    borderRadius: 8,
+    marginTop: 6,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+
+  dropdownText: {
+    fontSize: 15,
+    color: Colors.secondary,
+  },
+
+  dropdownList: {
+    backgroundColor: Colors.white,
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+    borderRadius: 8,
+    marginTop: 4,
+    paddingVertical: 6,
+  },
+
+  dropdownItem: {
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+  },
+
+  dropdownItemText: {
+    fontSize: 15,
+    color: Colors.secondary,
+  },
+
   buttonItem: {
     flexDirection: "row",
     backgroundColor: Colors.secondary,

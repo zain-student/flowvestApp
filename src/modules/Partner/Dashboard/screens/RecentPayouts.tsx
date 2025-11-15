@@ -1,6 +1,7 @@
 import { PartnerDashboardStackParamList } from "@/navigation/PartnerStacks/PartnerDashboardStack";
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
+import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { fetchPartnerDashboard } from "@store/slices/partner/dashboard/partnerDashboardSlice";
@@ -20,6 +21,7 @@ type Props = NativeStackScreenProps<
 export const RecentPayouts = ({ navigation }: Props) => {
   const dispatch = useAppDispatch();
   const { recent_payouts, loading } = useAppSelector((state) => state.partnerDashboard);
+  const {formatCurrency} = useCurrencyFormatter();
   const pullToRefresh = () => {
       dispatch(fetchPartnerDashboard())
     }
@@ -69,7 +71,7 @@ export const RecentPayouts = ({ navigation }: Props) => {
         <View style={styles.amountRow}>
           <Text style={styles.amountLabel}>Amount</Text>
           <Text style={styles.amountValue}>
-            ${item.amount.toFixed(2)}
+            {formatCurrency(item.amount)}
           </Text>
         </View>
       </View>

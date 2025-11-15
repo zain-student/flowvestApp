@@ -3,6 +3,7 @@ import { PartnerDashboardStackParamList } from "@/navigation/PartnerStacks/Partn
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { fetchPartnerDashboard } from "@/shared/store/slices/partner/dashboard/partnerDashboardSlice";
+import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -27,7 +28,7 @@ export const PartnersDashboard = () => {
   const navigation = useNavigation<Props>();
   const dispatch = useAppDispatch();
   const { stats, loading, error } = useAppSelector((state) => state.partnerDashboard);
-
+  const {formatCurrency} = useCurrencyFormatter();
 
   useEffect(() => {
     dispatch(fetchPartnerDashboard());
@@ -81,10 +82,10 @@ export const PartnersDashboard = () => {
         <View style={styles.balanceCardDark}>
           <Text style={styles.balanceLabelDark}>Portfolio Value</Text>
           <Text style={styles.balanceValueDark}>
-            ${stats?.portfolio_value?.toLocaleString?.() ?? "--"}
+            {formatCurrency(Number(stats?.portfolio_value ?? "--"))}
           </Text>
           <Text style={styles.balanceChangeDark}>
-            ${stats?.total_earned}{" "}
+            {formatCurrency(stats?.total_earned ?? 0)}{" "}
             <Text style={styles.changeSubLabel}>Total Earned</Text>
           </Text>
 

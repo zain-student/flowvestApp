@@ -2,6 +2,7 @@ import { PartnerPayoutStackParamList } from "@/navigation/PartnerStacks/Partners
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { fetchPayouts, fetchPayoutStatistics } from "@/shared/store/slices/partner/payout/PartnerPayoutSlice";
+import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -19,7 +20,7 @@ const FILTERS = ["All", "Cancelled", "Scheduled", "Paid"];
 type props = NativeStackNavigationProp<PartnerPayoutStackParamList, "PartnerPayouts">;
 export const PartnerPayoutScreen: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { payouts, totalPayoutAmount, isLoading, isLoadingMore, pagination,payoutStatistics,isStatsLoading } = useAppSelector((state) => state.userPayouts);
+  const { payouts, totalPayoutAmount, isLoading, isLoadingMore, pagination, payoutStatistics, isStatsLoading } = useAppSelector((state) => state.userPayouts);
   const [filter, setFilter] = useState("All");
   const navigation = useNavigation<NativeStackNavigationProp<PartnerPayoutStackParamList>>();
 
@@ -36,7 +37,7 @@ export const PartnerPayoutScreen: React.FC = () => {
     filter === "All"
       ? formattedPayouts
       : formattedPayouts.filter((p) => p.status === filter);
-
+  const { formatCurrency } = useCurrencyFormatter();
   useEffect(() => {
     dispatch(fetchPayouts(1));
     dispatch(fetchPayoutStatistics());
@@ -63,7 +64,7 @@ export const PartnerPayoutScreen: React.FC = () => {
     >
 
       <View style={{ flex: 1 }}>
-        <Text style={styles.payoutAmount}>${item.amount.toLocaleString()}</Text>
+        <Text style={styles.payoutAmount}>{formatCurrency(item.amount)}</Text>
         <Text style={styles.payoutAmount}>{item.title}</Text>
         <Text style={styles.payoutDate}>Scheduled: {item.due_date}</Text>
       </View>
@@ -84,20 +85,20 @@ export const PartnerPayoutScreen: React.FC = () => {
       <View style={styles.container}>
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Total Payouts Amount</Text>
-          <Text style={styles.cardValue}>${payoutStatistics?.total_amount.toFixed(2) ?? "--"}</Text>
-         <View style={{ flexDirection: "row",justifyContent:'space-between'}}>
-          <Text style={styles.cardSubtitle}>
-            <Text style={{ color: Colors.gray, fontWeight: "400", fontFamily: "Inter_400Regular" }}>
-              Paid Amount:{" "}
+          <Text style={styles.cardValue}>{formatCurrency(Number(payoutStatistics?.total_amount.toFixed(2) ?? "--"))}</Text>
+          <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+            <Text style={styles.cardSubtitle}>
+              <Text style={{ color: Colors.gray, fontWeight: "400", fontFamily: "Inter_400Regular" }}>
+                Paid Amount:{" "}
+              </Text>
+              {formatCurrency(Number(payoutStatistics?.paid_amount.toFixed(2) ?? "--"))}
             </Text>
-            ${payoutStatistics?.paid_amount.toFixed(2) ?? "--"}
-          </Text>
-          <Text style={styles.cardSubtitle}>
-            <Text style={{ color: Colors.gray, fontWeight: "400", fontFamily: "Inter_400Regular" }}>
-              Total Payouts:{" "}
+            <Text style={styles.cardSubtitle}>
+              <Text style={{ color: Colors.gray, fontWeight: "400", fontFamily: "Inter_400Regular" }}>
+                Total Payouts:{" "}
+              </Text>
+              {payoutStatistics?.total_payouts ?? "--"}
             </Text>
-            {payoutStatistics?.total_payouts ?? "--"}
-          </Text>
           </View>
           <View style={styles.balanceActionsRow}>
             <TouchableOpacity style={styles.balanceActionBtnDark}>

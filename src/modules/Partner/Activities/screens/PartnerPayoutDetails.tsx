@@ -3,6 +3,7 @@ import Colors from "@/shared/colors/Colors";
 // import { Button } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { fetchPayoutsById } from "@/shared/store/slices/partner/payout/PartnerPayoutSlice";
+import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Ionicons } from "@expo/vector-icons";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -31,16 +32,15 @@ type Props = NativeStackScreenProps<PartnerPayoutStackParamList, "PartnerPayoutD
 type RouteProps = RouteProp<PartnerPayoutStackParamList, "PartnerPayoutDetails">;
 export const PartnerPayoutDetails = ({ navigation }: Props) => {
     const route = useRoute<RouteProps>();
-    const { id } =
-        useRoute<RouteProp<PartnerPayoutStackParamList, "PartnerPayoutDetails">>().params;
+    const { formatCurrency } = useCurrencyFormatter();
+    const { id } = useRoute<RouteProp<PartnerPayoutStackParamList, "PartnerPayoutDetails">>().params;
     const dispatch = useAppDispatch();
     const payouts = useAppSelector(
         (state) => state.userPayouts.payouts.find((p) => p.id === id)
     );
     useEffect(() => {
         dispatch(fetchPayoutsById(id));
-
-    }, [dispatch, id]);
+    }, [dispatch]);
     if (!payouts) {
         return (
             <View>
@@ -48,14 +48,6 @@ export const PartnerPayoutDetails = ({ navigation }: Props) => {
             </View>
         );
     }
-    // const delPayout = async () => {
-    //   try {
-    //     await dispatch(cancelPayout(payouts.id)).unwrap();
-    //   } catch (err) {
-    //     console.error("❌ Cancel payout failed:", err);
-    //     ToastAndroid.show("Failed to cancel payout", ToastAndroid.SHORT);
-    //   }
-    // };
 
     return (
         <View style={styles.container}>
@@ -63,7 +55,6 @@ export const PartnerPayoutDetails = ({ navigation }: Props) => {
                 style={styles.closeBtn}
                 onPress={() => navigation.goBack()}
             >
-                {/* <Text style={styles.closeText}>✕</Text> */}
                 <Ionicons name="close" size={27} />
             </TouchableOpacity>
             <ScrollView
@@ -74,7 +65,7 @@ export const PartnerPayoutDetails = ({ navigation }: Props) => {
                 <View style={styles.summaryCard}>
                     <Text style={styles.label}>Amount</Text>
                     <Text style={styles.value}>
-                        ${payouts.amount}
+                        {formatCurrency(payouts.amount)}
                     </Text>
                     <Text style={styles.label}>Status</Text>
                     <Text
@@ -87,36 +78,26 @@ export const PartnerPayoutDetails = ({ navigation }: Props) => {
                     >
                         {payouts.status.charAt(0).toUpperCase() + payouts.status.slice(1)}
                     </Text>
-                    <Text style={styles.label}>Recipient</Text>
-                    <Text style={styles.value}>{mockPayout.recipient}</Text>
+                    <Text style={styles.label}>ROI%</Text>
+                    <Text style={styles.value}>
+                        {Number(payouts.investment_roi).toFixed(1)}%
+                    </Text>
+                    <Text style={styles.label}>Type</Text>
+                    <Text style={styles.value}>{payouts.payout_type.charAt(0).toUpperCase() + payouts.payout_type.slice(1)}</Text>
                     <Text style={styles.label}>Method</Text>
                     <Text style={styles.value}>{payouts.notes ?? "Not Paid Yet"}</Text>
-                    <Text style={styles.label}>Date</Text>
+                    <Text style={styles.label}>Scheduled Date</Text>
                     <Text style={styles.value}>{payouts.scheduled_date}</Text>
-
-                    {/* {payouts.status.toLowerCase() !== "cancelled" && (<View style={styles.footer}>
-            <Button
-              title="Cancel Payout"
-              icon={<Ionicons name="trash" size={20} color={Colors.white} />}
-              onPress={() => {
-                console.log("Editing investment:"); // full object
-                console.log("Editing investment ID:")
-                delPayout()
-              }
-              }
-              style={styles.cancelButton}
-              textStyle={styles.footerButtonText}
-              variant="primary"
-            />
-          </View>)} */}
+                    <Text style={styles.label}>Paid Date</Text>
+                    <Text style={styles.value}>{payouts.paid_date ?? "Not Paid Yet"}</Text>
                 </View>
-                <Text style={styles.sectionTitle}>Timeline</Text>
+                {/* <Text style={styles.sectionTitle}>Timeline</Text>
                 {mockPayout.timeline.map((item) => (
                     <View key={item.id} style={styles.timelineItem}>
                         <Text style={styles.timelineLabel}>{item.label}</Text>
                         <Text style={styles.timelineDate}>{item.date}</Text>
                     </View>
-                ))}
+                ))} */}
             </ScrollView>
         </View>
     );

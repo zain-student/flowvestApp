@@ -1,15 +1,15 @@
 import { DashboardLayout } from "@/modules/Common/components/DashboardLayout";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { fetchPartnerParticipatingInvestments, leaveInvestment } from "@/shared/store/slices/shared/investments/partnerInvestmentSlice";
+import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather } from "@expo/vector-icons";
 import Colors from "@shared/colors/Colors";
 import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-
 export const InvestmentDetails = ({ navigation }: any) => {
   const dispatch = useAppDispatch();
   const { investments, summary, isLoading, error, meta, isLoadingMore } = useAppSelector((state) => state.userInvestments);
-
+const { formatCurrency } = useCurrencyFormatter();
   const FILTERS = ["All", "Active", "Paused", "Completed"];
   const [filter, setFilter] = useState("All");
   const [search, setSearch] = useState("");
@@ -54,7 +54,7 @@ export const InvestmentDetails = ({ navigation }: any) => {
       <View style={{ flex: 1 }}>
         <Text style={styles.investmentName}>{item.name}</Text>
         <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-          <Text style={styles.investmentAmount}>Amount Invested: ${item.amount}</Text>
+          <Text style={styles.investmentAmount}>Amount Invested: {formatCurrency(item.amount)}</Text>
           <Text
             style={[
               styles.investmentStatus,
@@ -64,7 +64,7 @@ export const InvestmentDetails = ({ navigation }: any) => {
             {item.status}
           </Text>
         </View>
-        <Text style={styles.investmentAmount}>Target Amount:  ${item.targetAmount}</Text>
+        <Text style={styles.investmentAmount}>Target Amount:  {formatCurrency(item.targetAmount)}</Text>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <Text style={styles.investmentDate}>Started: {item.date}</Text>
           <Text style={styles.investmentParticipants}>Participants: {item.participants}</Text>
@@ -99,7 +99,7 @@ export const InvestmentDetails = ({ navigation }: any) => {
         <View style={styles.balanceCardDark}>
           <Text style={styles.balanceLabelDark}>Total Investment</Text>
           <Text style={styles.balanceValueDark}>
-            ${summary?.total_invested?.toLocaleString() ?? 0}
+            {formatCurrency(Number(summary?.total_invested?.toLocaleString() ?? 0))}
           </Text>
           <Text style={styles.balanceChangeDark}>
             ROI Avg: {summary?.average_roi ?? 0}%
@@ -153,7 +153,7 @@ export const InvestmentDetails = ({ navigation }: any) => {
               <Text style={styles.label}>Total Investments: <Text style={styles.value}>{summary.total_investments}</Text></Text>
               <Text style={styles.label}>Active Investments: <Text style={styles.value}>{summary.active_investments}</Text></Text>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text style={styles.label}>Current Value: <Text style={styles.value}>${summary.current_value}</Text></Text>
+                <Text style={styles.label}>Current Value: <Text style={styles.value}>{formatCurrency(summary.current_value)}</Text></Text>
                 {/* <Text style={styles.label}>Duration: <Text style={styles.value}>12 Months</Text></Text> */}
                 <TouchableOpacity style={styles.balanceActionBtnDark} onPress={() => { navigation.navigate('PartnerInvestmentStack', { screen: 'SharedInvestments' }) }}>
                   <Text style={styles.balanceActionTextDark}>

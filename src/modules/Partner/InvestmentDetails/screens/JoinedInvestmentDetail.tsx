@@ -1,6 +1,7 @@
 import type { PartnersInvestmentDetailStackParamList } from "@/navigation/PartnerStacks/PartnersInvestmentDetailStack";
 import Colors from "@/shared/colors/Colors";
 import { useAppSelector } from "@/shared/store";
+import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Ionicons } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useMemo } from "react";
@@ -20,7 +21,7 @@ type Props = NativeStackScreenProps<
 
 export const JoinedInvestmentDetail: React.FC<Props> = ({ route, navigation }) => {
     const { id } = route.params;
-
+    const { formatCurrency } = useCurrencyFormatter();
     // Select investments & loading state from Redux
     const { investments, isLoading } = useAppSelector(
         (state) => state.userInvestments
@@ -63,7 +64,7 @@ export const JoinedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
 
                 {/* Summary Card  */}
                 <View style={styles.summaryCard}>
-                    <LabelValue label="Amount Invested" value={`$${formatNum(currentInvestment.current_total_invested)}`} />
+                    <LabelValue label="Amount Invested" value={formatCurrency(Number(currentInvestment.current_total_invested))} />
                     <LabelValue label="Status" value={capitalize(currentInvestment.status)}
                         valueStyle={
                             currentInvestment.status === "active"
@@ -86,11 +87,11 @@ export const JoinedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
                 <Text style={styles.sectionTitle}>Performance</Text>
                 <View style={styles.txCard}>
                     <Text style={styles.txType}>Total Paid Out</Text>
-                    <Text style={styles.txAmount}>${currentInvestment.performance?.total_paid_out ?? 0}</Text>
+                    <Text style={styles.txAmount}>{formatCurrency(currentInvestment.performance?.total_paid_out ?? 0)}</Text>
                 </View>
                 <View style={styles.txCard}>
                     <Text style={styles.txType}>Pending Payouts</Text>
-                    <Text style={styles.txAmount}>${currentInvestment.performance?.pending_payouts ?? 0}</Text>
+                    <Text style={styles.txAmount}>{formatCurrency(currentInvestment.performance?.pending_payouts ?? 0)}</Text>
                 </View>
                 {currentInvestment.performance.next_payout_date && (
                     <View style={styles.txCard}>
@@ -126,7 +127,7 @@ const formatNum = (n?: string | number | null) =>
 
 /* -- Styles -- */
 const styles = StyleSheet.create({
-    container: { flex: 1,marginBottom:70, backgroundColor: Colors.background },
+    container: { flex: 1, marginBottom: 70, backgroundColor: Colors.background },
     centered: { flex: 1, justifyContent: "center", alignItems: "center" },
     notFound: { fontSize: 16, color: Colors.secondary },
     closeBtn: {

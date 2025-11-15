@@ -94,7 +94,7 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
           <LabelValue label="Target Amount" value={formatCurrency(Number(currentInvestment.total_target_amount ?? "0"))} />
           <LabelValue label="Currently Invested" value={formatCurrency(Number(currentInvestment.current_total_invested ?? "0"))} />
           <LabelValue label="Remaining Capacity" value={
-            `$${Number(currentInvestment.total_target_amount ?? 0) - Number(currentInvestment.current_total_invested ?? 0)}`
+            `${formatCurrency((Number(currentInvestment.total_target_amount ?? 0)) - Number(currentInvestment.current_total_invested ?? 0))}`
           } />
 
           <LabelValue

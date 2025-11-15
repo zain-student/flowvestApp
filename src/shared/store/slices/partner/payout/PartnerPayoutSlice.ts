@@ -158,9 +158,15 @@ export const fetchPayouts = createAsyncThunk<
 export const fetchPayoutsById = createAsyncThunk(
   "v1/payouts/managed/:id",
   async (id: number) => {
-    const response = await api.get(API_ENDPOINTS.PAYOUTS.DETAIL(id));
-    console.log("Payout details is :", response.data);
-    return response.data.data;
+    try {
+      const response = await api.get(API_ENDPOINTS.PAYOUTS.DETAIL(id));
+      console.log("Payout details is :", response.data);
+      return response.data.data;
+    } catch (error: any) {
+      throw new Error(
+        error.response?.data?.message || "Failed to fetch payout details"
+      );
+    }   
   }
 );
 // Payout Statistics

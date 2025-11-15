@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { fetchPartnerDashboard } from "@/shared/store/slices/partner/dashboard/partnerDashboardSlice";
+import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather } from "@expo/vector-icons";
 import React from "react";
 import { FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
@@ -7,6 +8,7 @@ import Colors from "../../../../shared/colors/Colors";
 export const UpcomingPayouts = () => {
     const dispatch = useAppDispatch()
     const { upcoming_payouts,loading } = useAppSelector((state) => state.partnerDashboard);
+    const {formatCurrency} = useCurrencyFormatter();
     const pullToRefresh = () => {
         dispatch(fetchPartnerDashboard());
     }
@@ -41,7 +43,7 @@ export const UpcomingPayouts = () => {
                                 day: "numeric",
                             })}
                         </Text>
-                        <Text style={styles.amount}>${item.amount.toFixed(2)}</Text>
+                        <Text style={styles.amount}>{formatCurrency(item.amount)}</Text>
                     </View>
                     <Text style={styles.daysRemaining}>
                         {item.days_until_due.toFixed()} days remaining

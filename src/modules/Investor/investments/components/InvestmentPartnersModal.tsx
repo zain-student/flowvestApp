@@ -1,6 +1,7 @@
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { approveInvestmentPartner, fetchInvestmentPartners, resetPartner } from "@/shared/store/slices/investor/investments/investmentSlice";
+import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
@@ -23,7 +24,7 @@ interface PartnersModalProps {
 const InvestmentPartnersModal: React.FC<PartnersModalProps> = ({ visible, onClose, investmentId }) => {
   const dispatch = useAppDispatch();
   const { data: partners, isLoading, error } = useAppSelector((state) => state.investments.partners);
-
+  const { formatCurrency } = useCurrencyFormatter();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState<string | undefined>();
   const [invitationStatus, setInvitationStatus] = useState<string | undefined>();
@@ -106,7 +107,7 @@ const InvestmentPartnersModal: React.FC<PartnersModalProps> = ({ visible, onClos
               <View style={styles.card}>
                 <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                   <Text style={styles.name}>{item.user?.name || "Unknown"}</Text>
-                  <Text style={styles.amount}>${item.invested_amount}</Text>
+                  <Text style={styles.amount}>{formatCurrency(Number(item.invested_amount))}</Text>
                 </View>
                 <Text style={styles.email}>{item.user?.email}</Text>
                 <View style={styles.cardRow}>
@@ -118,7 +119,7 @@ const InvestmentPartnersModal: React.FC<PartnersModalProps> = ({ visible, onClos
                     style={[styles.joinBtn, isLoading && { opacity: 0.6 }]}
                     disabled={isLoading}
                     onPress={() => {
-                      console.log("Investment id:",item.investment_id,"Partner id:",item.user.id)
+                      console.log("Investment id:", item.investment_id, "Partner id:", item.user.id)
                       dispatch(
                         approveInvestmentPartner({
                           investmentId: item.investment_id,
@@ -127,10 +128,10 @@ const InvestmentPartnersModal: React.FC<PartnersModalProps> = ({ visible, onClos
                       );
                     }}
                   >
-                        <Ionicons name="person-add-outline" size={18} color={Colors.white} />
-                        <Text style={styles.joinBtnText}>Approve</Text>
+                    <Ionicons name="person-add-outline" size={18} color={Colors.white} />
+                    <Text style={styles.joinBtnText}>Approve</Text>
                   </TouchableOpacity>)}
-                <RemovePartnerButton item={item} investmentId={investmentId}/>
+                <RemovePartnerButton item={item} investmentId={investmentId} />
 
 
               </View>

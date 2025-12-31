@@ -13,11 +13,27 @@ const { formatCurrency } = useCurrencyFormatter();
   const FILTERS = ["All", "Active", "Paused", "Completed"];
   const [filter, setFilter] = useState("All");
   const [search, setSearch] = useState("");
-  useEffect(() => {
-    if (search === '') {
-      dispatch(fetchPartnerParticipatingInvestments({ page: 1 }));
-    }
-  }, [search, dispatch]);
+  // useEffect(() => {
+  //   if (search === '') {
+  //     dispatch(fetchPartnerParticipatingInvestments({ page: 1 }));
+  //   }
+  // }, [search, dispatch]);
+
+    useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+            if (search.trim() === "") {
+                // When User cleared the search bar — reload all investment
+                dispatch(fetchPartnerParticipatingInvestments({ page: 1, search: "" }));
+            } else {
+                // Normal search 
+                dispatch(fetchPartnerParticipatingInvestments({ page: 1, search }));
+            }
+        }, 1300); // 1.3 seconds debounce
+
+        return () => clearTimeout(delayDebounce);
+    }, [search]);
+
+
   const handleLoadMore = useCallback(() => {
     if (!isLoadingMore && meta?.pagination?.has_more_pages) {
       dispatch(fetchPartnerParticipatingInvestments({ page: meta.pagination.current_page + 1 }));

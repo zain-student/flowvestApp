@@ -32,11 +32,26 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
   } = useAppSelector((state) => state.userInvestments.sharedPrograms);
 
   // Initial load
-  useEffect(() => {
-    if (search === "") {
-      dispatch(fetchAvailableSharedPrograms({ page: 1, search }));
-    }
-  }, [search, dispatch]);
+  // useEffect(() => {
+  //   if (search === "") {
+  //     dispatch(fetchAvailableSharedPrograms({ page: 1, search }));
+  //   }
+  // }, [search, dispatch]);
+
+    useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+            if (search.trim() === "") {
+                // When User cleared the search bar — reload all investment
+                dispatch(fetchAvailableSharedPrograms({ page: 1, search: "" }));
+            } else {
+                // Normal search 
+                dispatch(fetchAvailableSharedPrograms({ page: 1, search }));
+            }
+        }, 1300); // 1.3 seconds debounce
+
+        return () => clearTimeout(delayDebounce);
+    }, [search]);
+
 
   // Search handler
   const handleSearch = useCallback(() => {

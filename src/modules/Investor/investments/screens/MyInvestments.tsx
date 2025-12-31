@@ -17,11 +17,24 @@ export const MyInvestments = ({ navigation }: Props) => {
     const { investments, summary, isLoading, error, meta, isLoadingMore } = useAppSelector((state) => state.userInvestments);
     const [search, setSearch] = useState("");
     const { formatCurrency } = useCurrencyFormatter();
+    // useEffect(() => {
+    //     if (search === "") {
+    //         dispatch(fetchPartnerParticipatingInvestments({ page: 1 }));
+    //     }
+    // }, [search, dispatch]);
     useEffect(() => {
-        if (search === "") {
-            dispatch(fetchPartnerParticipatingInvestments({ page: 1 }));
-        }
-    }, [search, dispatch]);
+        const delayDebounce = setTimeout(() => {
+            if (search.trim() === "") {
+                // When User cleared the search bar — reload all investment
+                dispatch(fetchPartnerParticipatingInvestments({ page: 1, search: "" }));
+            } else {
+                // Normal search 
+                dispatch(fetchPartnerParticipatingInvestments({ page: 1, search }));
+            }
+        }, 1300); // 1.3 seconds debounce
+
+        return () => clearTimeout(delayDebounce);
+    }, [search]);
     const handleLoadMore = useCallback(() => {
         if (!isLoadingMore && meta?.pagination?.has_more_pages) {
             dispatch(fetchPartnerParticipatingInvestments({ page: meta.pagination.current_page + 1 }));
@@ -52,7 +65,7 @@ export const MyInvestments = ({ navigation }: Props) => {
                         {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
                     </Text>
                 </View>
-                <Text style={styles.investmentAmount}>Target Amount:  {formatCurrency(item.total_target_amount?? 0)}</Text>
+                <Text style={styles.investmentAmount}>Target Amount:  {formatCurrency(item.total_target_amount ?? 0)}</Text>
                 <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                     <Text style={styles.investmentDate}>Joined: {item.joined_at}</Text>
                     <Text style={styles.investmentParticipants}>Participants: {item.total_participants}</Text>

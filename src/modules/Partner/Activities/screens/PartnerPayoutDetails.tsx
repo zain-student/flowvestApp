@@ -84,8 +84,8 @@ export const PartnerPayoutDetails = ({ navigation }: Props) => {
                     </Text>
                     <Text style={styles.label}>Type</Text>
                     <Text style={styles.value}>{payouts.payout_type.charAt(0).toUpperCase() + payouts.payout_type.slice(1)}</Text>
-                    <Text style={styles.label}>Method</Text>
-                    <Text style={styles.value}>{payouts.notes ?? "Not Paid Yet"}</Text>
+                    <Text style={styles.label}>Notes</Text>
+                    <Text style={styles.value}>{payouts.notes ?? "N/A"}</Text>
                     <Text style={styles.label}>Scheduled Date</Text>
                     <Text style={styles.value}>{payouts.scheduled_date}</Text>
                     <Text style={styles.label}>Paid Date</Text>

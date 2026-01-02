@@ -49,8 +49,8 @@ const { formatCurrency } = useCurrencyFormatter();
   const formattedInvestments = investments.map((inv: any) => ({
     id: inv.id,
     name: inv.name,
-    amount: inv.current_total_invested,
-    targetAmount: inv.total_target_amount,
+    amount: inv.current_total_invested ?? "0",
+    targetAmount: inv.total_target_amount ?? "0",
     status: inv.status.charAt(0).toUpperCase() + inv.status.slice(1),
     returns: inv.expected_return_rate,
     date: inv.start_date,
@@ -83,7 +83,7 @@ const { formatCurrency } = useCurrencyFormatter();
         <Text style={styles.investmentAmount}>Target Amount:  {formatCurrency(item.targetAmount)}</Text>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <Text style={styles.investmentDate}>Started: {item.date}</Text>
-          <Text style={styles.investmentParticipants}>Participants: {item.participants}</Text>
+          <Text style={styles.investmentParticipants}>Participants: {item.participants ?? "0"}</Text>
         </View>
       </View>
       {/* Leave Button */}

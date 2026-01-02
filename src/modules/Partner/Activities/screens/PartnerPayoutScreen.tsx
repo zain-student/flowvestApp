@@ -53,6 +53,13 @@ export const PartnerPayoutScreen: React.FC = () => {
   const handleRefresh = () => {
     dispatch(fetchPayouts(1));
   };
+  if (!payouts) {
+    return (
+      <View style={styles.centered}>
+        <Text style={styles.notFound}>Payouts not found.</Text>
+      </View>
+    );
+  }
   const renderPayout = ({ item }: any) => (
     <TouchableOpacity
       key={item.id}
@@ -137,6 +144,11 @@ export const PartnerPayoutScreen: React.FC = () => {
             isLoadingMore ? <ActivityIndicator size="small" color={Colors.green} /> : null
           }
           contentContainerStyle={styles.scrollContent}
+          ListEmptyComponent={
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyText}>No Payouts available.</Text>
+            </View>
+          }
         />
       </View>
     </DashboardLayout>
@@ -214,6 +226,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginHorizontal: 12,
   },
+  centered: { flex: 1, justifyContent: "center", alignItems: "center" },
+  notFound: { fontSize: 16, color: Colors.secondary },
   payoutCard: {
     backgroundColor: Colors.secondary,
     borderRadius: 10,
@@ -233,7 +247,9 @@ const styles = StyleSheet.create({
   payoutStatus: { fontSize: 13, fontWeight: "500", marginLeft: 12 },
   statusCancelled: { color: Colors.gray },
   statusScheduled: { color: Colors.green },
-  emptyState: { alignItems: "center", justifyContent: 'center', marginTop: 32 },
-  emptyText: { color: "#6B7280", fontSize: 15 },
+  // emptyState: { alignItems: "center", justifyContent: 'center', marginTop: 32 },
+  // emptyText: { color: "#6B7280", fontSize: 15 },
+  emptyState: { justifyContent: "center", alignItems: "center", padding: 20 },
+  emptyText: { fontSize: 16, color: "#6B7280" },
 });
 export default PartnerPayoutScreen;

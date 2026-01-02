@@ -101,7 +101,7 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
       />
       <SummaryCard
         label="Avg ROI"
-        value={`${summary.avg_roi.toFixed(1)}%`}
+        value={`${summary.avg_roi.toFixed(1)}`}
         style={{ backgroundColor: "#ECFDF5" }}
       />
       <SummaryCard
@@ -152,17 +152,17 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
             </Text>
           </View>
 
-          <View style={styles.row}>
+          {/* <View style={styles.row}> */}
             <Text style={styles.amount}>
               Amount: {formatCurrency(Number(item.current_total_invested))}
             </Text>
             <Text style={styles.amount}>
               Min: {formatCurrency(Number(item.min_investment_amount ?? 0))} - Max: {formatCurrency(Number(item.max_investment_amount ?? 0))}
             </Text>
-          </View>
+          {/* </View> */}
 
           {/* Investment Progress */}
-          <View style={{ marginTop: 10 }}>
+          <View style={{ marginTop: 8 }}>
             <Text style={styles.meta}>
               Investment Progress ({cappedProgress}% funded)
             </Text>
@@ -181,12 +181,11 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
 
           <View style={styles.row}>
             <Text style={styles.meta}>
-              ROI:{" "}
+              Expected Return Rate:{" "}
               {item.expected_return_rate !== undefined &&
                 item.expected_return_rate !== null
                 ? Number(item.expected_return_rate).toFixed(1)
                 : "N/A"}
-              %
             </Text>
             <Text style={styles.meta}>
               Participants: {item.total_participants ?? "N/A"}
@@ -344,7 +343,7 @@ const styles = StyleSheet.create({
   },
   title: { fontSize: 16, fontWeight: "600", color: Colors.white, width: "80%" },
   row: { flexDirection: "row", justifyContent: "space-between", marginTop: 8 },
-  amount: { fontSize: 14, color: Colors.white, fontWeight: "500" },
+  amount: { fontSize: 14, color: Colors.white, fontWeight: "500",marginTop: 4 },
   meta: { fontSize: 13, color: Colors.gray },
   status: {
     fontSize: 12,

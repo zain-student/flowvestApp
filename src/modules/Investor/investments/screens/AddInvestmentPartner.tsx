@@ -166,7 +166,7 @@ const { formatCurrency } = useCurrencyFormatter();
           />
           <TextInput
             style={styles.input}
-            placeholder="Min s Experience(Optional)"
+            placeholder="Min Experience(Optional)"
             value={minExperience}
             onChangeText={setMinExperience}
           />

@@ -1,5 +1,5 @@
 import Colors from "@/shared/colors/Colors";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 
@@ -16,7 +16,12 @@ const ExportReportModal: React.FC<ExportReportModalProps> = ({
 }) => {
     const [reportType, setReportType] = useState<string | null>(null);
     const [fileType, setFileType] = useState<"pdf" | "csv" | null>(null);
-
+    useEffect(() => {
+        if (visible) {
+            setReportType(null);
+            setFileType(null);
+        }
+    }, [visible]);
     const reportTypes = [
         { label: "Dashboard Summary", value: "dashboard_summary" },
         { label: "Investment Summary", value: "investment_summary" },

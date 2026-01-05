@@ -43,7 +43,8 @@ export const PortfolioScreen: React.FC = () => {
     data?.own_investments?.map((inv) => ({
       id: inv.id,
       name: inv.name,
-      value: parseFloat(inv.initial_amount || "0"),
+      value: parseFloat(inv.current_total_invested || inv.initial_amount),
+      type: inv.type,
       // growth: `${inv.performance?.completion_percentage ?? 0}%`,
       expected_return_rate: `${Number(inv.expected_return_rate ?? 0).toFixed(2)}%`,
       start: inv.start_date,
@@ -59,7 +60,10 @@ export const PortfolioScreen: React.FC = () => {
           Start: {item.start}
         </Text>
       </View>
+      <View style={{ flexDirection:"column",justifyContent:'space-between' }}>
+       <Text style={styles.assetGrowth}> {item.type.charAt(0).toUpperCase() + item.type.slice(1)}</Text>
       <Text style={styles.assetGrowth}>{item.expected_return_rate}</Text>
+      </View>
     </View>
   )
   // Prepare data for the chart
@@ -93,9 +97,12 @@ export const PortfolioScreen: React.FC = () => {
     <DashboardLayout>
 
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>Net Worth</Text>
+        <Text style={styles.cardTitle}>Total Earned</Text>
         <Text style={styles.cardValue}>{formatCurrency(Number(data?.summary.total_earned))}</Text>
-        <Text style={styles.cardSubtitle}>Asset Allocation</Text>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <Text style={styles.cardSubtitle}>Total Investments:{data?.summary.total_investments}</Text>
+        <Text style={styles.cardSubtitle}>Active Investments:{data?.summary.active_investments}</Text>
+        </View>
         <View style={styles.balanceActionsRow}>
           <TouchableOpacity style={styles.balanceActionBtnDark}>
             <Feather name="plus" size={18} color="#fff" />
@@ -309,7 +316,7 @@ const styles = StyleSheet.create({
   },
   assetName: { fontSize: 16, fontWeight: "600", color: Colors.white },
   assetValue: { fontSize: 15, color: Colors.gray, marginTop: 2 },
-  assetGrowth: { fontSize: 15, color: Colors.green, fontWeight: "600" },
+  assetGrowth: { fontSize: 15, color: Colors.green, fontWeight: "600",marginTop: 6 },
   fab: {
     position: "absolute",
     right: 24,

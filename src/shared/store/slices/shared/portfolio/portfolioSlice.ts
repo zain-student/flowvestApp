@@ -44,6 +44,7 @@ export interface Investment {
   end_date: string;
   expected_return_rate: string;
   initial_amount: string;
+  current_total_invested: string;
   is_creator: boolean;
   is_participant: boolean;
   can_join_as_admin: boolean;

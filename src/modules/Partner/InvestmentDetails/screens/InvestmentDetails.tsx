@@ -252,8 +252,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: Colors.darkButton,
     borderRadius: 18,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
+    padding:8,
   },
   balanceActionTextDark: {
     color: Colors.white,

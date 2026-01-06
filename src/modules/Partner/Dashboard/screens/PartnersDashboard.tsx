@@ -28,13 +28,13 @@ export const PartnersDashboard = () => {
   const navigation = useNavigation<Props>();
   const dispatch = useAppDispatch();
   const { stats, loading, error } = useAppSelector((state) => state.partnerDashboard);
-  const {formatCurrency} = useCurrencyFormatter();
+  const { formatCurrency } = useCurrencyFormatter();
 
   useEffect(() => {
     dispatch(fetchPartnerDashboard());
   }, [dispatch]);
 
-   if (loading) {
+  if (loading) {
     return (
       <DashboardLayout>
         <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -59,7 +59,7 @@ export const PartnersDashboard = () => {
     {
       icon: "dollar-sign",
       label: "Total Invested",
-      value: stats?.total_invested?? "--",
+      value: stats?.total_invested ?? "--",
       bg: "#FDE68A",  // pastel yellow
     },
     {
@@ -72,7 +72,7 @@ export const PartnersDashboard = () => {
       bg: "#FCE7F3", // pastel pink
     },
   ];
- const pullToRefresh = () => {
+  const pullToRefresh = () => {
     dispatch(fetchPartnerDashboard())
   }
   return (
@@ -119,12 +119,12 @@ export const PartnersDashboard = () => {
           style={styles.scrollContent}
           showsVerticalScrollIndicator={false}
           refreshControl={
-          <RefreshControl
-          refreshing={loading}
-          onRefresh={pullToRefresh}
-          tintColor={Colors.primary}
-          />
-        }
+            <RefreshControl
+              refreshing={loading}
+              onRefresh={pullToRefresh}
+              tintColor={Colors.primary}
+            />
+          }
         >
           {/* 🔹 Stats Grid */}
           <View style={styles.statsGrid}>
@@ -215,16 +215,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: Colors.green,
     borderRadius: 18,
-    paddingVertical: 10,
-    paddingHorizontal: 8,
+    padding: 8,
     marginHorizontal: 5,
     width: '48%',
-},
+  },
   balanceActionTextDark: {
     color: Colors.white,
     fontSize: 15,
     fontFamily: "Inter_600SemiBold",
-    flexWrap:'wrap'
+    flexWrap: 'wrap'
     // marginLeft: 7,
   },
   scrollContent: {

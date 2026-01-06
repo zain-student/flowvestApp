@@ -36,7 +36,7 @@ export const NotificationButtons: React.FC = () => {
                     label="Notifications Settings"
                     description="Customize reminders, alerts, and sound preferences"
                     onPress={() => navigation.navigate("NotificationSettings")}
-                    gradient={["#717478ff", "#05060fff"]}
+                    gradient={['#4f46e5', '#1e2667']}
                 />
 
                 <SettingsButton
@@ -44,15 +44,8 @@ export const NotificationButtons: React.FC = () => {
                     label="Notification Templates"
                     description="Create and manage message templates"
                     onPress={() => navigation.navigate("NotificationsTemplates")}
-                    gradient={["#677171ff", "#0a1314ff"]}
+                    gradient={['#4f46e5', '#1e2667']}
                 />
-                {/* <SettingsButton
-                    icon="notifications-outline"
-                    label="Send Notifications"
-                    description="Create and send notifications to users"
-                    onPress={() => console.log("Sending Notifications")}
-                    gradient={["#6b1c1cff", "#252556ff"]}
-                /> */}
             </View>
         </ScrollView>
     );

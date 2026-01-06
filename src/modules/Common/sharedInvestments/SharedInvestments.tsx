@@ -222,7 +222,7 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
           onSubmitEditing={handleSearch}
         />
         <TouchableOpacity style={styles.searchBtn} onPress={handleSearch}>
-          <Feather name="search" size={20} color="#fff" />
+          <Feather name="search" size={20} color={Colors.primary} />
         </TouchableOpacity>
       </View>
 
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
   searchBtn: {
     height: 40,
     width: 40,
-    backgroundColor: Colors.secondary,
+    // backgroundColor: Colors.secondary,
     padding: 10,
     borderRadius: 14,
     marginLeft: 6,

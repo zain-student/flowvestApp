@@ -132,107 +132,107 @@ export const DashboardScreen: React.FC = () => {
     <DashboardLayout headerStyle="dark">
       {/* Main Balance Card (dark, rounded) */}
       <View style={styles.container}>
-      <View style={styles.balanceCardDark}>
-        <Text style={styles.balanceLabelDark}>Total Managed Portfolio</Text>
-        <Text style={styles.balanceValueDark}>
-          {stats?.total_managed_portfolio ? formatCurrency( stats.total_managed_portfolio) : "--"}
-        </Text>
-        <Text style={styles.balanceChangeDark}>
-          {stats?.new_investments_this_month ?? "--"}{" "}
-          <Text
-            style={{
-              color: Colors.gray,
-              fontWeight: "400",
-              fontFamily: "Inter_400Regular",
-            }}
-          >
-            {/* than last month */}
-            investments this month
+        <View style={styles.balanceCardDark}>
+          <Text style={styles.balanceLabelDark}>Total Managed Portfolio</Text>
+          <Text style={styles.balanceValueDark}>
+            {stats?.total_managed_portfolio ? formatCurrency(stats.total_managed_portfolio) : "--"}
           </Text>
-        </Text>
-        <View style={styles.balanceActionsRow}>
-          <TouchableOpacity style={styles.balanceActionBtnDark}>
-            <Feather name="plus" size={18} color="#fff" />
-            <Text style={styles.balanceActionTextDark}>Top Up</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.balanceActionBtnDark}>
-            <Feather name="arrow-up-right" size={18} color="#fff" />
-            <Text style={styles.balanceActionTextDark}>Send Money</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl
-          refreshing={isLoading}
-          onRefresh={pullToRefresh}
-          tintColor={Colors.primary}
-          />
-        }
-      >
-        {/* Stat Cards - 2x2 Grid */}
-        <View style={styles.statCardGrid}>
-          {statCards.map((card, idx) => (
-            <View
-              key={card.label}
-              style={[
-                styles.statCardLarge,
-                {
-                  backgroundColor: card.bg,
-                  marginRight: idx % 2 === 0 ? 8 : 0,
-                  marginLeft: idx % 2 === 1 ? 8 : 0,
-                },
-              ]}
+          <Text style={styles.balanceChangeDark}>
+            {stats?.new_investments_this_month ?? "--"}{" "}
+            <Text
+              style={{
+                color: Colors.gray,
+                fontWeight: "400",
+                fontFamily: "Inter_400Regular",
+              }}
             >
-              <View style={{ flex: 1 }}>
-                <Text style={styles.statLabelLarge}>{card.label}</Text>
-                <Text style={styles.statValueLarge}>{card.value}</Text>
-              </View>
-              <Feather
-                name={card.icon as any}
-                size={38}
-                color="#888"
-                style={{ alignSelf: "flex-end" }}
-              />
-            </View>
-          ))}
+              {/* than last month */}
+              investments this month
+            </Text>
+          </Text>
+          <View style={styles.balanceActionsRow}>
+            <TouchableOpacity style={styles.balanceActionBtnDark}>
+              <Feather name="plus" size={18} color="#fff" />
+              <Text style={styles.balanceActionTextDark}>Top Up</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.balanceActionBtnDark}>
+              <Feather name="arrow-up-right" size={18} color="#fff" />
+              <Text style={styles.balanceActionTextDark}>Send Money</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={styles.activityList}>
-          <Text style={styles.sectionTitle}>Recent Activities</Text>
-          {isLoading ? (
-            <Text style={styles.emptyText}>Loading...</Text>
-          ) : recent_activities?.length === 0 ? (
-            <Text style={styles.emptyText}>No recent activities.</Text>
-          ) : (
-            <FlatList
-              data={recent_activities}
-              keyExtractor={(item) => item.id.toString()}
-              contentContainerStyle={styles.list}
-              renderItem={renderActivityItem}
-              showsVerticalScrollIndicator={false}
-              scrollEnabled={false}
-              ListEmptyComponent={
-                !isLoading && (
-                  <Text style={styles.emptyText}>No recent activities found</Text>
-                )
-              }
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={isLoading}
+              onRefresh={pullToRefresh}
+              tintColor={Colors.primary}
             />
+          }
+        >
+          {/* Stat Cards - 2x2 Grid */}
+          <View style={styles.statCardGrid}>
+            {statCards.map((card, idx) => (
+              <View
+                key={card.label}
+                style={[
+                  styles.statCardLarge,
+                  {
+                    backgroundColor: card.bg,
+                    marginRight: idx % 2 === 0 ? 8 : 0,
+                    marginLeft: idx % 2 === 1 ? 8 : 0,
+                  },
+                ]}
+              >
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.statLabelLarge}>{card.label}</Text>
+                  <Text style={styles.statValueLarge}>{card.value}</Text>
+                </View>
+                <Feather
+                  name={card.icon as any}
+                  size={38}
+                  color="#888"
+                  style={{ alignSelf: "flex-end" }}
+                />
+              </View>
+            ))}
+          </View>
+          <View style={styles.activityList}>
+            <Text style={styles.sectionTitle}>Recent Activities</Text>
+            {isLoading ? (
+              <Text style={styles.emptyText}>Loading...</Text>
+            ) : recent_activities?.length === 0 ? (
+              <Text style={styles.emptyText}>No recent activities.</Text>
+            ) : (
+              <FlatList
+                data={recent_activities}
+                keyExtractor={(item) => item.id.toString()}
+                contentContainerStyle={styles.list}
+                renderItem={renderActivityItem}
+                showsVerticalScrollIndicator={false}
+                scrollEnabled={false}
+                ListEmptyComponent={
+                  !isLoading && (
+                    <Text style={styles.emptyText}>No recent activities found</Text>
+                  )
+                }
+              />
 
-          )}
-        </View>
-      </ScrollView>
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={
-          () => navigation.navigate("AddPartner", {}) // Adjust navigation to your stack
-        }
-      >
-        {/* <Text style={styles.fabIcon}>＋</Text> */}
-        <Ionicons name="add" size={24} color={"white"} />
-        <Text style={styles.fabLabel}>Add Partner</Text>
-      </TouchableOpacity>
+            )}
+          </View>
+        </ScrollView>
+        <TouchableOpacity
+          style={styles.fab}
+          onPress={
+            () => navigation.navigate("AddPartner", {}) // Adjust navigation to your stack
+          }
+        >
+          {/* <Text style={styles.fabIcon}>＋</Text> */}
+          <Ionicons name="add" size={24} color={"white"} />
+          <Text style={styles.fabLabel}>Add Partner</Text>
+        </TouchableOpacity>
       </View>
     </DashboardLayout>
   );
@@ -343,7 +343,7 @@ const styles = StyleSheet.create({
     marginBottom: 40
   },
   statLabelLarge: {
-    color: "colors.secondary",
+    color: Colors.secondary,
     fontSize: 16,
     fontFamily: "Inter_400Regular",
     marginBottom: 2,

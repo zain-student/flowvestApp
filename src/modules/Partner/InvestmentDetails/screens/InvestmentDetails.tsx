@@ -9,7 +9,7 @@ import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, TextInput, Toucha
 export const InvestmentDetails = ({ navigation }: any) => {
   const dispatch = useAppDispatch();
   const { investments, summary, isLoading, error, meta, isLoadingMore } = useAppSelector((state) => state.userInvestments);
-const { formatCurrency } = useCurrencyFormatter();
+  const { formatCurrency } = useCurrencyFormatter();
   const FILTERS = ["All", "Active", "Paused", "Completed"];
   const [filter, setFilter] = useState("All");
   const [search, setSearch] = useState("");
@@ -19,19 +19,19 @@ const { formatCurrency } = useCurrencyFormatter();
   //   }
   // }, [search, dispatch]);
 
-    useEffect(() => {
-        const delayDebounce = setTimeout(() => {
-            if (search.trim() === "") {
-                // When User cleared the search bar — reload all investment
-                dispatch(fetchPartnerParticipatingInvestments({ page: 1, search: "" }));
-            } else {
-                // Normal search 
-                dispatch(fetchPartnerParticipatingInvestments({ page: 1, search }));
-            }
-        }, 1300); // 1.3 seconds debounce
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      if (search.trim() === "") {
+        // When User cleared the search bar — reload all investment
+        dispatch(fetchPartnerParticipatingInvestments({ page: 1, search: "" }));
+      } else {
+        // Normal search 
+        dispatch(fetchPartnerParticipatingInvestments({ page: 1, search }));
+      }
+    }, 1300); // 1.3 seconds debounce
 
-        return () => clearTimeout(delayDebounce);
-    }, [search]);
+    return () => clearTimeout(delayDebounce);
+  }, [search]);
 
 
   const handleLoadMore = useCallback(() => {
@@ -49,9 +49,10 @@ const { formatCurrency } = useCurrencyFormatter();
   const formattedInvestments = investments.map((inv: any) => ({
     id: inv.id,
     name: inv.name,
-    amount: inv.current_total_invested ?? "0",
+    amount: inv.current_total_invested ?? inv.initial_amount ?? "0",
     targetAmount: inv.total_target_amount ?? "0",
     status: inv.status.charAt(0).toUpperCase() + inv.status.slice(1),
+    type: inv.type.charAt(0).toUpperCase() + inv.type.slice(1),
     returns: inv.expected_return_rate,
     date: inv.start_date,
     participants: inv.total_participants,
@@ -68,7 +69,9 @@ const { formatCurrency } = useCurrencyFormatter();
       console.log('navigating to JoinedInvestmentDetail with id:', item.id);
     }}>
       <View style={{ flex: 1 }}>
-        <Text style={styles.investmentName}>{item.name}</Text>
+         <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+        <Text style={styles.investmentName}>{item.name}({item.type})</Text>
+        </View>
         <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
           <Text style={styles.investmentAmount}>Amount Invested: {formatCurrency(item.amount)}</Text>
           <Text
@@ -80,7 +83,7 @@ const { formatCurrency } = useCurrencyFormatter();
             {item.status}
           </Text>
         </View>
-        <Text style={styles.investmentAmount}>Target Amount:  {formatCurrency(item.targetAmount)}</Text>
+        {item.type === "Shared" && <Text style={styles.investmentAmount}>Target Amount:  {formatCurrency(item.targetAmount)}</Text>}
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <Text style={styles.investmentDate}>Started: {item.date}</Text>
           <Text style={styles.investmentParticipants}>Participants: {item.participants ?? "0"}</Text>
@@ -115,7 +118,7 @@ const { formatCurrency } = useCurrencyFormatter();
         <View style={styles.balanceCardDark}>
           <Text style={styles.balanceLabelDark}>Total Investment</Text>
           <Text style={styles.balanceValueDark}>
-            {formatCurrency(Number(summary?.total_invested?.toLocaleString() ?? 0))}
+            {formatCurrency(Number(summary?.total_invested ?? 0))}
           </Text>
           <Text style={styles.balanceChangeDark}>
             ROI Avg: {summary?.average_roi ?? 0}%

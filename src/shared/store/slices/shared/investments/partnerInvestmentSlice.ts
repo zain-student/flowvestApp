@@ -16,6 +16,7 @@ export interface PartnerInvestment {
   start_date: string;
   end_date: string;
   expected_return_rate: string;
+  initial_amount?: string;
   total_target_amount?: string;
   min_investment_amount?: string;
   max_investment_amount?: string;

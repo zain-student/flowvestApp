@@ -64,7 +64,14 @@ export const JoinedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
 
                 {/* Summary Card  */}
                 <View style={styles.summaryCard}>
-                    <LabelValue label="Amount Invested" value={formatCurrency(Number(currentInvestment.current_total_invested ??"0"))} />
+                    <LabelValue label="Amount Invested" value={formatCurrency(Number(currentInvestment.current_total_invested ?? currentInvestment.initial_amount))} />
+                    <LabelValue label="Type" value={capitalize(currentInvestment.type)}
+                        valueStyle={
+                            currentInvestment.type === "shared"
+                                ? styles.statusActive
+                                : styles.statusCompleted
+                        }
+                    />
                     <LabelValue label="Status" value={capitalize(currentInvestment.status)}
                         valueStyle={
                             currentInvestment.status === "active"

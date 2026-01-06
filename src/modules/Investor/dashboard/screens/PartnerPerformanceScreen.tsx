@@ -118,6 +118,9 @@ export const PartnerPerformanceScreen = ({ route }: any) => {
             )}
             {/* Investment Breakdown */}
             <Text style={styles.sectionTitle}>Investment Breakdown</Text>
+            <Text style={styles.sectionSubtitle}>
+                Distribution of your total invested amount
+            </Text>
             {(performance?.investment_breakdown ?? []).length > 0 ? (
                 <View style={styles.breakdownContainer}>
                     {performance?.investment_breakdown?.map((item, index) => {
@@ -168,6 +171,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: Colors.background,
         padding: 15,
+        marginBottom:20
     },
     center: {
         flex: 1,
@@ -213,9 +217,17 @@ const styles = StyleSheet.create({
     sectionTitle: {
         fontSize: 16,
         fontFamily: "Inter_600SemiBold",
-        marginBottom: 12,
+        // marginBottom: 6,
         marginTop: 10,
     },
+    sectionSubtitle: {
+        fontSize: 13,
+        color: "#6B7280", // soft gray (not too light, not too dark)
+        // marginTop: 4,
+        marginBottom: 12,
+        lineHeight: 18,
+    },
+
     chart: {
         borderRadius: 12,
         marginBottom: 20,

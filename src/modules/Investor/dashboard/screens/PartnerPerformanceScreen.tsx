@@ -122,7 +122,7 @@ export const PartnerPerformanceScreen = ({ route }: any) => {
                 <View style={styles.breakdownContainer}>
                     {performance?.investment_breakdown?.map((item, index) => {
                         // const total = performance?.total_investment ?? 1;
-                        const total = Number(performance?.overview?.total_invested ?? 1);
+                        const total = Number(performance?.overview?.total_invested || 1);
                         const percentage = ((item.amount / total) * 100).toFixed(1);
 
                         return (
@@ -139,7 +139,7 @@ export const PartnerPerformanceScreen = ({ route }: any) => {
                                         style={[
                                             styles.progressBarFill,
                                             {
-                                                width: Number(percentage),
+                                                width: `${percentage}%` as any,
                                                 backgroundColor: ["#4cafef", "#ff9800", "#8e44ad", "#2ecc71"][index % 4],
                                             },
                                         ]}

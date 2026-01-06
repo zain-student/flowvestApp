@@ -106,7 +106,11 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
           <LabelValue label="Type" value={currentInvestment.type.charAt(0).toUpperCase() + currentInvestment.type.slice(1)} />
           <LabelValue label="Expected Return Rate" value={`${parseFloat(currentInvestment.expected_return_rate).toFixed(1)}`} />
           <LabelValue label="Start Date" value={currentInvestment.start_date} />
-          <LabelValue label="End Date" value={currentInvestment.end_date} />
+          {/* show end date if avilible */}
+          {currentInvestment.end_date &&
+            <LabelValue label="End Date" value={currentInvestment.end_date} />
+          }
+
         </View>
         {showJoinForm ? null :
           <>
@@ -211,7 +215,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  scrollContent: { padding: 24, paddingTop: 60,paddingBottom: 70 },
+  scrollContent: { padding: 24, paddingTop: 60, paddingBottom: 70 },
   title: { fontSize: 24, fontWeight: "bold", color: Colors.secondary, marginBottom: 1 },
   summaryCard: { backgroundColor: Colors.secondary, borderRadius: 14, padding: 18, marginBottom: 24 },
   label: { fontSize: 13, color: Colors.gray, marginTop: 6 },

@@ -373,7 +373,7 @@ const styles = StyleSheet.create({
   // PROGRESS
   progressContainer: { marginVertical: 16 },
   progressBar: { height: 4, backgroundColor: Colors.lightGray, borderRadius: 2, marginBottom: 8 },
-  progressFill: { height: "100%", backgroundColor: Colors.secondary, borderRadius: 2 },
+  progressFill: { height: "100%", backgroundColor: Colors.primary, borderRadius: 2 },
   progressText: { fontSize: 12, color: Colors.gray, textAlign: "center" },
 
   stepContent: { flex: 1 },
@@ -382,13 +382,13 @@ const styles = StyleSheet.create({
 
   termsContainer: { flexDirection: "row", alignItems: "flex-start", marginBottom: 16 },
   checkbox: { width: 20, height: 20, borderWidth: 2, borderColor: Colors.secondary, borderRadius: 4, marginRight: 12, alignItems: "center", justifyContent: "center", marginTop: 2 },
-  checkboxChecked: { borderColor: Colors.secondary, backgroundColor: Colors.secondary },
+  checkboxChecked: { borderColor: Colors.primary, backgroundColor: Colors.primary },
   termsText: { fontSize: 14, color: Colors.secondary, flex: 1, lineHeight: 20 },
   fieldError: { fontSize: 12, color: "#EF4444", marginTop: -12, marginBottom: 16, marginLeft: 4 },
 
   submitButton: { marginBottom: 16 },
 
   footer: { flexDirection: "row", justifyContent: "center", alignItems: "center", paddingTop: 20, borderTopWidth: 1, borderTopColor: Colors.lightGray },
-  footerText: { fontSize: 14, color: Colors.gray },
-  footerLink: { fontSize: 14, color: Colors.secondary, fontWeight: "600" },
+  footerText: { fontSize: 14, color: Colors.secondary },
+  footerLink: { fontSize: 14, color: Colors.primary, fontWeight: "600" },
 });

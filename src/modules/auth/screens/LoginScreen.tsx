@@ -37,10 +37,10 @@ export const LoginScreen: React.FC = () => {
 
   // Form state
   const [formData, setFormData] = useState<LoginFormData>({
-    email:'',
+    email: '',
     // 'zainma4989@gmail.com',
     // 'abc123@gmail.com',
-    password:'',
+    password: '',
     // 'Zain,4321',
     // 'Zainmalik,4989',
     remember: false,
@@ -63,9 +63,9 @@ export const LoginScreen: React.FC = () => {
       dispatch(clearError());
     }
   };
-useEffect(()=>{
-  
-})
+  useEffect(() => {
+
+  })
   // Handle form submission
   const handleSubmit = async () => {
     // Validate form data
@@ -111,7 +111,6 @@ useEffect(()=>{
 
   return (
     <SafeAreaView style={styles.container}>
-
       <KeyboardAvoidingView
         style={styles.keyboardAvoid}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -154,26 +153,28 @@ useEffect(()=>{
               required
             />
 
-            {/* Remember Me - Simple implementation */}
-            <TouchableOpacity
-              style={styles.rememberContainer}
-              onPress={() => handleInputChange('remember', !formData.remember)}
-            >
-              <View style={[styles.checkbox, formData.remember && styles.checkboxChecked]}>
-                {formData.remember &&
-                  //  <Text style={styles.checkmark}>✓</Text>
-                  <Ionicons name='checkmark' size={16} color={"white"} />
-                }
-              </View>
-              <Text style={styles.rememberText}>Remember me</Text>
-            </TouchableOpacity>
-
-            {/* Show auth error */}
-            {/* {authError && (
-              <View style={styles.errorContainer}>
-                <Text style={styles.errorText}>{authError}</Text>
-              </View>
-            )} */}
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, marginTop: 8 }}>
+              {/* Remember Me - Simple implementation */}
+              <TouchableOpacity
+                style={styles.rememberContainer}
+                onPress={() => handleInputChange('remember', !formData.remember)}
+              >
+                <View style={[styles.checkbox, formData.remember && styles.checkboxChecked]}>
+                  {formData.remember &&
+                    //  <Text style={styles.checkmark}>✓</Text>
+                    <Ionicons name='checkmark' size={16} color={"white"} />
+                  }
+                </View>
+                <Text style={styles.rememberText}>Remember me</Text>
+              </TouchableOpacity>
+              {/* Forgot Password Link */}
+              <TouchableOpacity
+                style={styles.forgotPasswordContainer}
+                onPress={navigateToForgotPassword}
+              >
+                <Text style={styles.forgotPasswordText}>Forgot your password?</Text>
+              </TouchableOpacity>
+            </View>
 
             {/* Submit Button */}
             <Button
@@ -183,14 +184,6 @@ useEffect(()=>{
               fullWidth
               style={styles.submitButton}
             />
-
-            {/* Forgot Password Link */}
-            <TouchableOpacity
-              style={styles.forgotPasswordContainer}
-              onPress={navigateToForgotPassword}
-            >
-              <Text style={styles.forgotPasswordText}>Forgot your password?</Text>
-            </TouchableOpacity>
           </View>
 
           {/* Footer */}
@@ -218,12 +211,15 @@ const styles = StyleSheet.create({
 
   scrollView: {
     flex: 1,
+    // backgroundColor: Colors.green,
+    // paddingHorizontal: 24,
+    paddingTop: 50,
   },
 
   scrollContent: {
     flexGrow: 1,
     paddingHorizontal: 24,
-    paddingVertical: 20,
+    paddingVertical: 50,
   },
 
   header: {
@@ -246,13 +242,14 @@ const styles = StyleSheet.create({
   },
 
   form: {
-    flex: 1,
+    // flex: 1,
+    marginBottom: 82,
   },
 
   rememberContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 24,
+    // marginBottom: 24,
   },
 
   checkbox: {
@@ -267,8 +264,9 @@ const styles = StyleSheet.create({
   },
 
   checkboxChecked: {
-    borderColor: Colors.secondary,
-    backgroundColor: Colors.secondary,
+    // borderColor: Colors.secondary,
+    borderColor: Colors.primary,
+    backgroundColor: Colors.primary,
   },
 
   checkmark: {
@@ -298,12 +296,12 @@ const styles = StyleSheet.create({
   },
 
   submitButton: {
-    marginBottom: 16,
+    marginBottom: 60,
   },
 
   forgotPasswordContainer: {
     alignItems: 'center',
-    marginBottom: 32,
+    // marginBottom: 32,
   },
 
   forgotPasswordText: {
@@ -316,11 +314,11 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
+    // alignItems: 'center',
     paddingTop: 20,
     borderTopWidth: 1,
     borderTopColor: Colors.lightGray,
-
+    marginTop: 80,
   },
 
   footerText: {
@@ -330,7 +328,7 @@ const styles = StyleSheet.create({
 
   footerLink: {
     fontSize: 14,
-    color: Colors.secondary,
+    color: Colors.primary,
     fontWeight: '600',
   },
 }); 

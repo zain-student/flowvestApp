@@ -1,7 +1,7 @@
 // src/shared/colors/Colors.ts
 
 const Colors = {
-  primary: "#007bff",
+  primary: "#4f46e5",
   secondary: "#18181B", // Changed to a dark gray. Used for cards etc.
   gray: "#A1A1AA", // Lighter gray for labels
   white: "#fff", // White for values

@@ -3,6 +3,8 @@
  * Reusable button with different variants and states
  */
 
+import Colors from '@/shared/colors/Colors';
+import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import {
   ActivityIndicator,
@@ -13,7 +15,6 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-
 interface ButtonProps {
   title: string;
   onPress: () => void;
@@ -59,33 +60,57 @@ export const Button: React.FC<ButtonProps> = ({
     isDisabled && styles.disabledText,
     textStyle,
   ];
-
   return (
     <TouchableOpacity
-      style={buttonStyle}
       onPress={onPress}
       disabled={isDisabled}
-      activeOpacity={0.8}
+      activeOpacity={0.85}
+      style={[fullWidth && styles.fullWidth]}
     >
-      {loading ? (
-        <ActivityIndicator
-          size="small"
-          color={variant === 'primary' ? '#FFFFFF' : '#2563EB'}
-        />
-      ) : (
-        <View style={styles.content}>
-          {icon && iconPosition === 'left' && (
-            <View style={styles.iconWrapper}>{icon}</View>
+      {variant === 'primary' ? (
+        <LinearGradient
+          colors={['#4f46e5', '#1e2667']} // 🔥 two-color shade
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={buttonStyle}
+        >
+          {loading ? (
+            <ActivityIndicator size="small" color="#FFFFFF" />
+          ) : (
+            <View style={styles.content}>
+              {icon && iconPosition === 'left' && (
+                <View style={styles.iconWrapper}>{icon}</View>
+              )}
+              <Text style={textStyles}>{title}</Text>
+              {icon && iconPosition === 'right' && (
+                <View style={styles.iconWrapper}>{icon}</View>
+              )}
+            </View>
           )}
-          <Text style={textStyles}>{title}</Text>
-          {icon && iconPosition === 'right' && (
-            <View style={styles.iconWrapper}>{icon}</View>
+        </LinearGradient>
+      ) : (
+        <View style={buttonStyle}>
+          {loading ? (
+            <ActivityIndicator
+              size="small"
+              color={Colors.primary}
+            />
+          ) : (
+            <View style={styles.content}>
+              {icon && iconPosition === 'left' && (
+                <View style={styles.iconWrapper}>{icon}</View>
+              )}
+              <Text style={textStyles}>{title}</Text>
+              {icon && iconPosition === 'right' && (
+                <View style={styles.iconWrapper}>{icon}</View>
+              )}
+            </View>
           )}
         </View>
-        // <Text style={textStyles}>{title}</Text>
       )}
     </TouchableOpacity>
   );
+
 };
 
 const styles = StyleSheet.create({
@@ -100,16 +125,21 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     textAlign: 'center',
   },
-  
-  // Variants
   primary: {
-    backgroundColor: '#18181B',
-    borderColor: '#18181B',
+    borderRadius: 12,
+    overflow: 'hidden',
+    marginBottom: 24,
+    shadowColor: '#1e2667',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    elevation: 8,
+    borderWidth: 0, // 🔥 gradient doesn't need border
   },
   primaryText: {
     color: '#FFFFFF',
   },
-  
+
   secondary: {
     backgroundColor: '#F3F4F6',
     borderColor: '#F3F4F6',
@@ -117,7 +147,7 @@ const styles = StyleSheet.create({
   secondaryText: {
     color: '#374151',
   },
-  
+
   outline: {
     backgroundColor: 'transparent',
     borderColor: '#D1D5DB',
@@ -125,7 +155,7 @@ const styles = StyleSheet.create({
   outlineText: {
     color: '#374151',
   },
-  
+
   ghost: {
     backgroundColor: 'transparent',
     borderColor: 'transparent',
@@ -133,7 +163,7 @@ const styles = StyleSheet.create({
   ghostText: {
     color: '#2563EB',
   },
-  
+
   // Sizes
   smallButton: {
     paddingHorizontal: 12,
@@ -143,7 +173,7 @@ const styles = StyleSheet.create({
   smallText: {
     fontSize: 14,
   },
-  
+
   mediumButton: {
     paddingHorizontal: 16,
     paddingVertical: 12,
@@ -152,7 +182,7 @@ const styles = StyleSheet.create({
   mediumText: {
     fontSize: 16,
   },
-  
+
   largeButton: {
     paddingHorizontal: 20,
     paddingVertical: 16,
@@ -175,7 +205,7 @@ const styles = StyleSheet.create({
   disabledText: {
     opacity: 0.7,
   },
-  
+
   fullWidth: {
     width: '100%',
   },

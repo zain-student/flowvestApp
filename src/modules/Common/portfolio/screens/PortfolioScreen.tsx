@@ -49,23 +49,39 @@ export const PortfolioScreen: React.FC = () => {
       expected_return_rate: `${Number(inv.expected_return_rate ?? 0).toFixed(2)}%`,
       start: inv.start_date,
     })) ?? [];
-  const renderAssets = ({ item }: any) => (
-    <View style={styles.assetCard}>
-      <View style={{ flex: 1 }}>
-        <Text style={styles.assetName}>{item.name}</Text>
-        <Text style={styles.assetValue}>
-          {formatCurrency(item.value)}
-        </Text>
-        <Text style={styles.assetValue}>
-          Start: {item.start}
-        </Text>
+  const renderAssets = ({ item }: any) => {
+    return (
+      <View style={styles.assetCard}>
+        {/* Left */}
+        <View style={styles.assetLeft}>
+          <View style={styles.assetIconWrapper}>
+            <Feather name="briefcase" size={18} color={Colors.white} />
+          </View>
+
+          <View>
+            <Text style={styles.assetName}>{item.name}</Text>
+            <Text style={styles.assetValue}>
+              {formatCurrency(item.value)}
+            </Text>
+            <Text style={styles.assetMeta}>Start: {item.start}</Text>
+          </View>
+        </View>
+
+        {/* Right */}
+        <View style={styles.assetRight}>
+          <View style={styles.assetBadge}>
+            <Text style={styles.assetBadgeText}>
+              {item.type.charAt(0).toUpperCase() + item.type.slice(1)}
+            </Text>
+          </View>
+          <Text style={styles.assetGrowth}>
+            {item.expected_return_rate}
+          </Text>
+        </View>
       </View>
-      <View style={{ flexDirection:"column",justifyContent:'space-between' }}>
-       <Text style={styles.assetGrowth}> {item.type.charAt(0).toUpperCase() + item.type.slice(1)}</Text>
-      <Text style={styles.assetGrowth}>{item.expected_return_rate}</Text>
-      </View>
-    </View>
-  )
+    );
+  };
+
   // Prepare data for the chart
   const performance = data?.performance;
 
@@ -100,8 +116,8 @@ export const PortfolioScreen: React.FC = () => {
         <Text style={styles.cardTitle}>Total Earned</Text>
         <Text style={styles.cardValue}>{formatCurrency(Number(data?.summary.total_earned))}</Text>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <Text style={styles.cardSubtitle}>Total Investments:{data?.summary.total_investments}</Text>
-        <Text style={styles.cardSubtitle}>Active Investments:{data?.summary.active_investments}</Text>
+          <Text style={styles.cardSubtitle}>Total Investments:{data?.summary.total_investments}</Text>
+          <Text style={styles.cardSubtitle}>Active Investments:{data?.summary.active_investments}</Text>
         </View>
         <View style={styles.balanceActionsRow}>
           <TouchableOpacity style={styles.balanceActionBtnDark}>
@@ -272,7 +288,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: Colors.darkButton,
     borderRadius: 18,
-    padding:10,
+    padding: 10,
     marginRight: 12,
   },
   balanceActionTextDark: {
@@ -302,20 +318,78 @@ const styles = StyleSheet.create({
   },
   assetCard: {
     backgroundColor: Colors.secondary,
-    borderRadius: 10,
-    padding: 16,
-    marginBottom: 14,
+    borderRadius: 16,
+    padding: 14,
+    marginBottom: 12,
+    marginHorizontal: 12,
     flexDirection: "row",
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.02,
-    shadowRadius: 4,
-    elevation: 1,
-    marginHorizontal: 12
+    justifyContent: "space-between",
+    borderWidth: 1,
+    borderColor: Colors.lightGray,
   },
-  assetName: { fontSize: 16, fontWeight: "600", color: Colors.white },
-  assetValue: { fontSize: 15, color: Colors.gray, marginTop: 2 },
-  assetGrowth: { fontSize: 15, color: Colors.green, fontWeight: "600",marginTop: 6 },
+
+  assetLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+  },
+
+  assetIconWrapper: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: Colors.darkButton,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 12,
+  },
+
+  assetName: {
+    fontSize: 15,
+    fontFamily: "Inter_600SemiBold",
+    color: Colors.white,
+  },
+
+  assetValue: {
+    fontSize: 15,
+    fontFamily: "Inter_700Bold",
+    color: Colors.white,
+    marginTop: 2,
+  },
+
+  assetMeta: {
+    fontSize: 13,
+    fontFamily: "Inter_400Regular",
+    color: Colors.gray,
+    marginTop: 2,
+  },
+
+  assetRight: {
+    alignItems: "flex-end",
+    justifyContent: "space-between",
+    height: 48,
+  },
+
+  assetBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+    backgroundColor: "rgba(59,130,246,0.15)",
+  },
+
+  assetBadgeText: {
+    fontSize: 12,
+    fontFamily: "Inter_600SemiBold",
+    color: "#60A5FA",
+  },
+
+  assetGrowth: {
+    fontSize: 14,
+    fontFamily: "Inter_600SemiBold",
+    color: Colors.green,
+  },
+
   fab: {
     position: "absolute",
     right: 24,

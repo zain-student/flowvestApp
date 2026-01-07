@@ -60,33 +60,59 @@ export const PartnerPayoutScreen: React.FC = () => {
       </View>
     );
   }
-  const renderPayout = ({ item }: any) => (
-    <TouchableOpacity
-      key={item.id}
-      style={styles.payoutCard}
-      onPress={() => {
-        console.log("Navigating to details for payout ID:", item.id);
-        navigation.navigate("PartnerPayoutDetails", { id: item.id });
-      }}
-    >
+  const renderPayout = ({ item }: any) => {
+    const statusLower = item.status.toLowerCase();
+    const isScheduled = statusLower === "scheduled";
+    const isPaid = statusLower === "paid";
+    const isCancelled = statusLower === "cancelled";
 
-      <View style={{ flex: 1 }}>
-        <Text style={styles.payoutAmount}>{formatCurrency(item.amount)}</Text>
-        <Text style={styles.payoutAmount}>{item.title}</Text>
-        <Text style={styles.payoutDate}>Scheduled: {item.due_date}</Text>
-      </View>
-      <Text
-        style={[
-          styles.payoutStatus,
-          item.status === "Scheduled"
-            ? styles.statusScheduled
-            : styles.statusCancelled,
-        ]}
+    return (
+      <TouchableOpacity
+        style={styles.payoutCardContainer}
+        activeOpacity={0.85}
+        onPress={() => {
+          console.log("Navigating to details for payout ID:", item.id);
+          navigation.navigate("PartnerPayoutDetails", { id: item.id });
+        }}
       >
-        {item.status}
-      </Text>
-    </TouchableOpacity>
-  );
+        {/* Left: Amount + Participant */}
+        <View style={{ flex: 1 }}>
+          <Text style={styles.payoutAmount}>{formatCurrency(item.amount)}</Text>
+          <Text style={styles.payoutTitle}>{item.title}</Text>
+          <Text style={styles.payoutMeta}>{item.participant}</Text>
+          <Text style={styles.payoutMeta}>Scheduled: {item.due_date}</Text>
+        </View>
+
+        {/* Right: Status */}
+        <View
+          style={[
+            styles.statusBadge,
+            isScheduled
+              ? styles.statusScheduled
+              : isPaid
+                ? styles.statusPaid
+                : styles.statusCancelled,
+          ]}
+        >
+          <Text
+            style={[
+              styles.statusText,
+              {
+                color: isScheduled
+                  ? Colors.green
+                  : isPaid
+                    ? Colors.green
+                    : Colors.gray,
+              },
+            ]}
+          >
+            {item.status}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <DashboardLayout>
       <View style={styles.container}>
@@ -188,7 +214,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: Colors.darkButton,
     borderRadius: 18,
-    padding:10,
+    padding: 10,
     marginRight: 12,
   },
   balanceActionTextDark: {
@@ -227,27 +253,60 @@ const styles = StyleSheet.create({
   },
   centered: { flex: 1, justifyContent: "center", alignItems: "center" },
   notFound: { fontSize: 16, color: Colors.secondary },
-  payoutCard: {
+ 
+  payoutCardContainer: {
     backgroundColor: Colors.secondary,
-    borderRadius: 10,
+    borderRadius: 16,
     padding: 16,
     marginBottom: 14,
-
-    flexDirection: "row",
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.02,
-    shadowRadius: 4,
-    elevation: 1,
     marginHorizontal: 12,
+    shadowColor: "#000",
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 4,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
-  payoutAmount: { fontSize: 16, fontWeight: "600", color: Colors.white },
-  payoutDate: { fontSize: 15, color: Colors.gray, marginTop: 2 },
-  payoutStatus: { fontSize: 13, fontWeight: "500", marginLeft: 12 },
-  statusCancelled: { color: Colors.gray },
-  statusScheduled: { color: Colors.green },
-  // emptyState: { alignItems: "center", justifyContent: 'center', marginTop: 32 },
-  // emptyText: { color: "#6B7280", fontSize: 15 },
+
+  payoutSelected: {
+    borderWidth: 2,
+    borderColor: Colors.green,
+  },
+
+  payoutAmount: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: Colors.white,
+    marginBottom: 2,
+  },
+
+  payoutTitle: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: Colors.white,
+  },
+
+  payoutMeta: {
+    fontSize: 12,
+    color: Colors.gray,
+    marginTop: 2,
+  },
+
+  statusBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 20,
+  },
+
+  statusScheduled: { backgroundColor: "rgba(251,191,36,0.15)" }, // orange
+  statusPaid: { backgroundColor: "rgba(16,185,129,0.15)" }, // green
+  statusCancelled: { backgroundColor: "rgba(107,114,128,0.15)" }, // gray
+
+  statusText: {
+    fontSize: 12,
+    fontWeight: "600",
+  },
   emptyState: { justifyContent: "center", alignItems: "center", padding: 20 },
   emptyText: { fontSize: 16, color: "#6B7280" },
 });

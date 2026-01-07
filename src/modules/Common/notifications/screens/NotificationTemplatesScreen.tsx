@@ -6,14 +6,14 @@ import { fetchNotificationTemplates } from "@/shared/store/slices/profile/notifi
 import { Feather } from "@expo/vector-icons";
 import React, { useCallback, useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    FlatList,
-    RefreshControl,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 export const NotificationTemplatesScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
@@ -66,7 +66,7 @@ export const NotificationTemplatesScreen: React.FC<{ navigation: any }> = ({ nav
           onChangeText={setSearch}
           style={styles.searchInput}
         />
-        <Feather name="search" size={20} color="#fff" style={styles.searchIcon} />
+        <Feather name="search" size={20} color={Colors.primary} style={styles.searchIcon} />
       </View>
 
       {isLoading ? (
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   },
   searchInput: { flex: 1, paddingVertical: 8, fontSize: 16 },
   searchIcon: {
-    backgroundColor: Colors.secondary,
+    // backgroundColor: Colors.secondary,
     padding: 8,
     borderRadius: 8,
   },

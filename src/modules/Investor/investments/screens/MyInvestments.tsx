@@ -54,7 +54,7 @@ export const MyInvestments = ({ navigation }: Props) => {
             <View style={styles.cardHeader}>
                 <View>
                     <Text style={styles.investmentName}>{item.name}</Text>
-                    <Text style={styles.investmentType}>Shared Investment</Text>
+                    <Text style={styles.investmentType}>{item.type.charAt(0).toUpperCase()+item.type.slice(1)} Investment</Text>
                 </View>
 
                 <View

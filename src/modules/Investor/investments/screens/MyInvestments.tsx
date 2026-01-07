@@ -139,7 +139,7 @@ export const MyInvestments = ({ navigation }: Props) => {
                     onSubmitEditing={handleSearch} // ✅ allow Enter key search
                 />
                 <TouchableOpacity style={styles.searchBtn} onPress={handleSearch}>
-                    <Feather name="search" size={20} color="#fff" />
+                    <Feather name="search" size={20} color={Colors.primary} />
                 </TouchableOpacity>
             </View>
 
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     searchBtn: {
         height: 40,
         width: 40,
-        backgroundColor: Colors.secondary,
+        // backgroundColor: Colors.secondary,
         padding: 10,
         borderRadius: 14,
         marginLeft: 6,

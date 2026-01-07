@@ -92,41 +92,97 @@ export const DashboardScreen: React.FC = () => {
   const pullToRefresh = () => {
     dispatch(fetchAdminDashboard())
   }
-  const renderActivityItem = ({ item }: any) => (
-    <TouchableOpacity style={styles.activityItem}>
+  // const renderActivityItem = ({ item }: any) => (
+  //   <TouchableOpacity style={styles.activityItem}>
 
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 5 }}>
-        <View style={{ flexDirection: 'row' }}>
-          <Feather
-            name={
-              item.type === "payout"
-                ? "arrow-down-right"
-                : item.type === "investment"
-                  ? "arrow-up-right"
-                  : "users"
-            }
-            size={20}
-            color={Colors.white}
-            style={styles.activityIcon}
-          />
-          <Text style={styles.activityText}>{item.title}</Text>
+  //     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 5 }}>
+  //       <View style={{ flexDirection: 'row' }}>
+  //         <Feather
+  //           name={
+  //             item.type === "payout"
+  //               ? "arrow-down-right"
+  //               : item.type === "investment"
+  //                 ? "arrow-up-right"
+  //                 : "users"
+  //           }
+  //           size={20}
+  //           color={Colors.white}
+  //           style={styles.activityIcon}
+  //         />
+  //         <Text style={styles.activityText}>{item.title}</Text>
+  //       </View>
+
+  //       <Text
+  //         style={[
+  //           styles.activityStatus,
+  //           { color: item.status === "completed" ? Colors.green : Colors.gray },
+  //         ]}
+  //       >
+  //         {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+  //       </Text>
+  //     </View>
+  //     <View style={{ flexDirection: 'row', justifyContent: "space-between", marginVertical: 5 }}>
+  //       <Text style={styles.activityDate}>{item.time}</Text>
+  //       <Text style={styles.activityAmount}>{item.amount}</Text>
+  //     </View>
+  //   </TouchableOpacity>
+  // );
+
+  const renderActivityItem = ({ item }: any) => {
+    const isCompleted = item.status === "completed";
+
+    return (
+      <TouchableOpacity style={styles.activityCard}>
+        {/* Top Row */}
+        <View style={styles.activityTopRow}>
+          <View style={styles.activityLeft}>
+            <View style={styles.activityIconWrapper}>
+              <Feather
+                name={
+                  item.type === "payout"
+                    ? "arrow-down-right"
+                    : item.type === "investment"
+                      ? "arrow-up-right"
+                      : "users"
+                }
+                size={18}
+                color={Colors.white}
+              />
+            </View>
+
+            <View>
+              <Text style={styles.activityTitle}>{item.title}</Text>
+              <Text style={styles.activityDate}>{item.time}</Text>
+            </View>
+          </View>
+
+          <View
+            style={[
+              styles.statusBadge,
+              {
+                backgroundColor: isCompleted
+                  ? "rgba(34,197,94,0.15)"
+                  : "rgba(156,163,175,0.15)",
+              },
+            ]}
+          >
+            <Text
+              style={[
+                styles.statusText,
+                { color: isCompleted ? Colors.green : Colors.gray },
+              ]}
+            >
+              {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+            </Text>
+          </View>
         </View>
 
-        <Text
-          style={[
-            styles.activityStatus,
-            { color: item.status === "completed" ? Colors.green : Colors.gray },
-          ]}
-        >
-          {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-        </Text>
-      </View>
-      <View style={{ flexDirection: 'row', justifyContent: "space-between", marginVertical: 5 }}>
-        <Text style={styles.activityDate}>{item.time}</Text>
+        {/* Amount */}
         <Text style={styles.activityAmount}>{item.amount}</Text>
-      </View>
-    </TouchableOpacity>
-  );
+      </TouchableOpacity>
+    );
+  };
+
 
   return (
     <DashboardLayout headerStyle="dark">
@@ -368,33 +424,94 @@ const styles = StyleSheet.create({
     color: "colors.secondary",
   },
   activityList: { paddingHorizontal: 8 },
-  activityItem: {
+  // activityItem: {
+  //   backgroundColor: Colors.secondary,
+  //   marginVertical: 6,
+  //   paddingVertical: 12,
+  //   borderWidth: 1,
+  //   borderColor: Colors.lightGray,
+  //   borderRadius: 12,
+  //   paddingHorizontal: 12,
+  // },
+  // activityIcon: { marginRight: 12 },
+  // activityText: {
+  //   color: Colors.white,
+  //   fontSize: 15,
+  //   fontFamily: "Inter_700Bold",
+  //   fontWeight: "700",
+  // },
+  // activityDate: {
+  //   color: Colors.gray,
+  //   fontSize: 13,
+  //   fontFamily: "Inter_400Regular",
+  // },
+  // activityAmount: {
+  //   color: Colors.white,
+  //   fontSize: 15,
+  //   fontFamily: "Inter_700Bold",
+  //   fontWeight: "700",
+  // },
+  activityCard: {
     backgroundColor: Colors.secondary,
+    borderRadius: 16,
+    padding: 14,
     marginVertical: 6,
-    paddingVertical: 12,
     borderWidth: 1,
     borderColor: Colors.lightGray,
-    borderRadius: 12,
-    paddingHorizontal: 12,
   },
-  activityIcon: { marginRight: 12 },
-  activityText: {
+
+  activityTopRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+
+  activityLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  activityIconWrapper: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: Colors.darkButton,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 12,
+  },
+
+  activityTitle: {
     color: Colors.white,
     fontSize: 15,
-    fontFamily: "Inter_700Bold",
-    fontWeight: "700",
+    fontFamily: "Inter_600SemiBold",
   },
+
   activityDate: {
     color: Colors.gray,
     fontSize: 13,
+    marginTop: 2,
     fontFamily: "Inter_400Regular",
   },
+
   activityAmount: {
+    marginTop: 10,
+    fontSize: 16,
     color: Colors.white,
-    fontSize: 15,
     fontFamily: "Inter_700Bold",
-    fontWeight: "700",
   },
+
+  statusBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+
+  statusText: {
+    fontSize: 13,
+    fontFamily: "Inter_600SemiBold",
+  },
+
   activityStatus: {
     color: "colors.secondary",
     fontSize: 15,

@@ -92,42 +92,6 @@ export const DashboardScreen: React.FC = () => {
   const pullToRefresh = () => {
     dispatch(fetchAdminDashboard())
   }
-  // const renderActivityItem = ({ item }: any) => (
-  //   <TouchableOpacity style={styles.activityItem}>
-
-  //     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 5 }}>
-  //       <View style={{ flexDirection: 'row' }}>
-  //         <Feather
-  //           name={
-  //             item.type === "payout"
-  //               ? "arrow-down-right"
-  //               : item.type === "investment"
-  //                 ? "arrow-up-right"
-  //                 : "users"
-  //           }
-  //           size={20}
-  //           color={Colors.white}
-  //           style={styles.activityIcon}
-  //         />
-  //         <Text style={styles.activityText}>{item.title}</Text>
-  //       </View>
-
-  //       <Text
-  //         style={[
-  //           styles.activityStatus,
-  //           { color: item.status === "completed" ? Colors.green : Colors.gray },
-  //         ]}
-  //       >
-  //         {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-  //       </Text>
-  //     </View>
-  //     <View style={{ flexDirection: 'row', justifyContent: "space-between", marginVertical: 5 }}>
-  //       <Text style={styles.activityDate}>{item.time}</Text>
-  //       <Text style={styles.activityAmount}>{item.amount}</Text>
-  //     </View>
-  //   </TouchableOpacity>
-  // );
-
   const renderActivityItem = ({ item }: any) => {
     const isCompleted = item.status === "completed";
 
@@ -424,33 +388,6 @@ const styles = StyleSheet.create({
     color: "colors.secondary",
   },
   activityList: { paddingHorizontal: 8 },
-  // activityItem: {
-  //   backgroundColor: Colors.secondary,
-  //   marginVertical: 6,
-  //   paddingVertical: 12,
-  //   borderWidth: 1,
-  //   borderColor: Colors.lightGray,
-  //   borderRadius: 12,
-  //   paddingHorizontal: 12,
-  // },
-  // activityIcon: { marginRight: 12 },
-  // activityText: {
-  //   color: Colors.white,
-  //   fontSize: 15,
-  //   fontFamily: "Inter_700Bold",
-  //   fontWeight: "700",
-  // },
-  // activityDate: {
-  //   color: Colors.gray,
-  //   fontSize: 13,
-  //   fontFamily: "Inter_400Regular",
-  // },
-  // activityAmount: {
-  //   color: Colors.white,
-  //   fontSize: 15,
-  //   fontFamily: "Inter_700Bold",
-  //   fontWeight: "700",
-  // },
   activityCard: {
     backgroundColor: Colors.secondary,
     borderRadius: 16,

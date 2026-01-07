@@ -28,7 +28,7 @@ export const PayoutsScreen: React.FC = () => {
   const [filter, setFilter] = useState("All");
   const navigation =
     useNavigation<NativeStackNavigationProp<PayoutStackParamList>>();
-const { formatCurrency } = useCurrencyFormatter();
+  const { formatCurrency } = useCurrencyFormatter();
   // ✅ Selection state
   const [selectedPayouts, setSelectedPayouts] = useState<number[]>([]);
   const [selectionMode, setSelectionMode] = useState(false);
@@ -117,29 +117,37 @@ const { formatCurrency } = useCurrencyFormatter();
       ToastAndroid.show(error?.message || "Failed to mark payouts as paid.", ToastAndroid.SHORT);
     }
   };
-
-  // ✅ Render payout card
   const renderPayout = ({ item }: any) => {
     const isSelected = selectedPayouts.includes(item.id);
+    const isScheduled = item.status === "Scheduled";
 
     return (
       <TouchableOpacity
-        key={item.id}
         style={[
           styles.payoutCard,
-          isSelected && { borderColor: Colors.green, borderWidth: 2 },
+          isSelected && styles.payoutSelected,
         ]}
         onPress={() => handlePayoutPress(item)}
         onLongPress={() => handleLongPress(item.id)}
         delayLongPress={300}
       >
-        <View style={{ flex: 1 }}>
-          <Text style={styles.payoutAmount}>{formatCurrency(item.amount.toLocaleString())}</Text>
-          <Text style={styles.payoutAmount}>{item.title}</Text>
-          <Text style={styles.payoutDate}>Participant: {item.email}</Text>
-          <Text style={styles.payoutDate}>Scheduled: {item.due_date}</Text>
+        {/* Left */}
+        <View style={styles.payoutLeft}>
+          <View style={styles.payoutIconWrapper}>
+            <Feather name="dollar-sign" size={18} color={Colors.white} />
+          </View>
+
+          <View>
+            <Text style={styles.payoutAmount}>
+              {formatCurrency(item.amount)}
+            </Text>
+            <Text style={styles.payoutTitle}>{item.title}</Text>
+            <Text style={styles.payoutMeta}>{item.email}</Text>
+            <Text style={styles.payoutMeta}>Scheduled: {item.due_date}</Text>
+          </View>
         </View>
 
+        {/* Right */}
         {selectionMode ? (
           <Feather
             name={isSelected ? "check-circle" : "circle"}
@@ -147,16 +155,25 @@ const { formatCurrency } = useCurrencyFormatter();
             color={isSelected ? Colors.green : Colors.gray}
           />
         ) : (
-          <Text
+          <View
             style={[
-              styles.payoutStatus,
-              item.status === "Scheduled"
-                ? styles.statusScheduled
-                : styles.statusCancelled,
+              styles.statusBadge,
+              {
+                backgroundColor: isScheduled
+                  ? "rgba(34,197,94,0.15)"
+                  : "rgba(156,163,175,0.15)",
+              },
             ]}
           >
-            {item.status}
-          </Text>
+            <Text
+              style={[
+                styles.statusText,
+                { color: isScheduled ? Colors.green : Colors.gray },
+              ]}
+            >
+              {item.status}
+            </Text>
+          </View>
         )}
       </TouchableOpacity>
     );
@@ -247,7 +264,7 @@ const { formatCurrency } = useCurrencyFormatter();
           refreshing={isLoading}
           onRefresh={handleRefresh}
           ListHeaderComponent={
-           payouts.length === 0 ? null : <Text style={styles.sectionTitle}>Payouts</Text>
+            payouts.length === 0 ? null : <Text style={styles.sectionTitle}>Payouts</Text>
           }
           ListFooterComponent={
             isLoadingMore ? (
@@ -337,20 +354,69 @@ const styles = StyleSheet.create({
   },
   payoutCard: {
     backgroundColor: Colors.secondary,
-    borderRadius: 10,
-    padding: 16,
-    marginBottom: 14,
+    borderRadius: 16,
+    padding: 14,
+    marginBottom: 12,
+    marginHorizontal: 12,
     flexDirection: "row",
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.02,
-    shadowRadius: 4,
-    elevation: 1,
-    marginHorizontal: 12,
+    justifyContent: "space-between",
+    borderWidth: 1,
+    borderColor: Colors.lightGray,
   },
-  payoutAmount: { fontSize: 16, fontWeight: "600", color: Colors.white },
-  payoutDate: { fontSize: 15, color: Colors.gray, marginTop: 2 },
-  payoutStatus: { fontSize: 13, fontWeight: "500", marginLeft: 12 },
+
+  payoutSelected: {
+    borderColor: Colors.green,
+    borderWidth: 2,
+  },
+
+  payoutLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+  },
+
+  payoutIconWrapper: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: Colors.darkButton,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 12,
+  },
+
+  payoutAmount: {
+    fontSize: 16,
+    fontFamily: "Inter_700Bold",
+    color: Colors.white,
+  },
+
+  payoutTitle: {
+    fontSize: 14,
+    fontFamily: "Inter_600SemiBold",
+    color: Colors.white,
+    marginTop: 2,
+  },
+
+  payoutMeta: {
+    fontSize: 13,
+    fontFamily: "Inter_400Regular",
+    color: Colors.gray,
+    marginTop: 1,
+  },
+
+  statusBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+
+  statusText: {
+    fontSize: 13,
+    fontFamily: "Inter_600SemiBold",
+  },
+
   statusCancelled: { color: Colors.gray },
   statusScheduled: { color: Colors.green },
 

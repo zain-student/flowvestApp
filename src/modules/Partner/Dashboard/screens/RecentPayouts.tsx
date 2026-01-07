@@ -11,20 +11,26 @@ import {
   RefreshControl,
   StyleSheet,
   Text,
-  View
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 type Props = NativeStackScreenProps<
   PartnerDashboardStackParamList,
   "RecentPayouts"
 >;
+
 export const RecentPayouts = ({ navigation }: Props) => {
   const dispatch = useAppDispatch();
-  const { recent_payouts, loading } = useAppSelector((state) => state.partnerDashboard);
-  const {formatCurrency} = useCurrencyFormatter();
+  const { recent_payouts, loading } = useAppSelector(
+    (state) => state.partnerDashboard
+  );
+  const { formatCurrency } = useCurrencyFormatter();
+
   const pullToRefresh = () => {
-      dispatch(fetchPartnerDashboard())
-    }
+    dispatch(fetchPartnerDashboard());
+  };
+
   const renderPayoutItem = ({
     item,
   }: {
@@ -34,10 +40,17 @@ export const RecentPayouts = ({ navigation }: Props) => {
       item.status === "paid"
         ? Colors.green
         : item.status === "scheduled"
-          ? Colors.gray
-          : Colors.error;
+        ? Colors.gray
+        : Colors.error;
+
     return (
-      <View style={styles.card}>
+      <TouchableOpacity
+        style={styles.card}
+        activeOpacity={0.7}
+        // onPress={() =>
+          // navigation.navigate("PayoutDetails", { payoutId: item.id })
+        // } // Navigate to payout details
+      >
         {/* Top Row */}
         <View style={styles.headerRow}>
           <View style={styles.leftRow}>
@@ -50,9 +63,7 @@ export const RecentPayouts = ({ navigation }: Props) => {
             <Text style={styles.investmentName}>{item.investment_name}</Text>
           </View>
 
-          <Text
-            style={[styles.statusBadge, { backgroundColor: statusColor }]}
-          >
+          <Text style={[styles.statusBadge, { backgroundColor: statusColor }]}>
             {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
           </Text>
         </View>
@@ -62,19 +73,15 @@ export const RecentPayouts = ({ navigation }: Props) => {
           <Text style={styles.metaText}>
             Type: {item.payout_type.charAt(0).toUpperCase() + item.payout_type.slice(1)}
           </Text>
-          <Text style={styles.metaText}>
-            Paid : {item.paid_date}
-          </Text>
+          <Text style={styles.metaText}>Paid : {item.paid_date}</Text>
         </View>
 
         {/* Bottom Row */}
         <View style={styles.amountRow}>
           <Text style={styles.amountLabel}>Amount</Text>
-          <Text style={styles.amountValue}>
-            {formatCurrency(item.amount)}
-          </Text>
+          <Text style={styles.amountValue}>{formatCurrency(item.amount)}</Text>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -108,14 +115,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 16,
     paddingBottom: 80,
-  },
-  screenTitle: {
-    fontSize: 20,
-    fontWeight: "700",
-    fontFamily: "Inter_700Bold",
-    color: Colors.secondary,
-    marginBottom: 12,
-    alignSelf: "center",
   },
   listContainer: {
     paddingBottom: 24,

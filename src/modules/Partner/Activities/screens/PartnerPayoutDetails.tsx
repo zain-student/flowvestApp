@@ -91,13 +91,6 @@ export const PartnerPayoutDetails = ({ navigation }: Props) => {
                     <Text style={styles.label}>Paid Date</Text>
                     <Text style={styles.value}>{payouts.paid_date ?? "Not Paid Yet"}</Text>
                 </View>
-                {/* <Text style={styles.sectionTitle}>Timeline</Text>
-                {mockPayout.timeline.map((item) => (
-                    <View key={item.id} style={styles.timelineItem}>
-                        <Text style={styles.timelineLabel}>{item.label}</Text>
-                        <Text style={styles.timelineDate}>{item.date}</Text>
-                    </View>
-                ))} */}
             </ScrollView>
         </View>
     );
@@ -116,20 +109,28 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         alignItems: "center",
         justifyContent: "center",
+        shadowColor: "#000",
+        shadowOpacity: 0.08,
+        shadowRadius: 6,
+        elevation: 4,
     },
     closeText: { fontSize: 22, fontWeight: "bold", color: Colors.secondary },
     scrollContent: { padding: 24, paddingTop: 60, paddingBottom: 40 },
     title: {
         fontSize: 24,
-        fontWeight: "bold",
+        fontWeight: "700",
         color: Colors.secondary,
-        marginBottom: 18,
+        marginBottom: 16,
     },
     summaryCard: {
         backgroundColor: Colors.secondary,
-        borderRadius: 14,
-        padding: 18,
+        borderRadius: 16,
+        padding: 20,
         marginBottom: 24,
+        shadowColor: "#000",
+        shadowOpacity: 0.05,
+        shadowRadius: 6,
+        elevation: 3,
     },
     label: { fontSize: 13, color: Colors.gray, marginTop: 8 },
     value: { fontSize: 16, color: Colors.white, fontWeight: "600" },

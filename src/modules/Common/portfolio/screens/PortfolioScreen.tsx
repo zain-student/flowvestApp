@@ -299,7 +299,17 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap'
   },
   balanceActionsRow: { flexDirection: "row", marginTop: 18 },
-  chartContainer: { alignItems: "center", marginBottom: 18 },
+  chartContainer: {
+    alignItems: "center", marginBottom: 18,
+    backgroundColor: Colors.white,
+    margin: 12,
+    borderRadius: 25,
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 4,
+  },
   chartBar: {
     width: "90%",
     height: 80,

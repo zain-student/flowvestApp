@@ -17,11 +17,6 @@ export const MyInvestments = ({ navigation }: Props) => {
     const { investments, summary, isLoading, error, meta, isLoadingMore } = useAppSelector((state) => state.userInvestments);
     const [search, setSearch] = useState("");
     const { formatCurrency } = useCurrencyFormatter();
-    // useEffect(() => {
-    //     if (search === "") {
-    //         dispatch(fetchPartnerParticipatingInvestments({ page: 1 }));
-    //     }
-    // }, [search, dispatch]);
     useEffect(() => {
         const delayDebounce = setTimeout(() => {
             if (search.trim() === "") {
@@ -48,52 +43,85 @@ export const MyInvestments = ({ navigation }: Props) => {
         dispatch(fetchPartnerParticipatingInvestments({ page: 1, search }));
     };
     const renderItem = ({ item }: any) => (
-        <TouchableOpacity style={styles.investmentCard} onPress={() => {
-            navigation.navigate("JoinedInvestmentDetail", { id: item.id });
-            console.log('navigating to JoinedInvestmentDetail with id:', item.id);
-        }}>
-            <View style={{ flex: 1 }}>
-                <Text style={styles.investmentName}>{item.name}</Text>
-                <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                    <Text style={styles.investmentAmount}>Amount Invested: {formatCurrency(item.my_investment ?? 0)}</Text>
-                    <Text
-                        style={[
-                            styles.investmentStatus,
-                            item.status === "active" ? styles.statusActive : styles.statusClosed,
-                        ]}
-                    >
+        <TouchableOpacity
+            style={styles.cardContainer}
+            activeOpacity={0.85}
+            onPress={() =>
+                navigation.navigate("JoinedInvestmentDetail", { id: item.id })
+            }
+        >
+            {/* Header */}
+            <View style={styles.cardHeader}>
+                <View>
+                    <Text style={styles.investmentName}>{item.name}</Text>
+                    <Text style={styles.investmentType}>Shared Investment</Text>
+                </View>
+
+                <View
+                    style={[
+                        styles.statusBadge,
+                        item.status === "active" ? styles.statusActive : styles.statusClosed,
+                    ]}
+                >
+                    <Text style={styles.statusText}>
                         {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
                     </Text>
                 </View>
-                <Text style={styles.investmentAmount}>Target Amount:  {formatCurrency(item.total_target_amount ?? 0)}</Text>
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                    <Text style={styles.investmentDate}>Joined: {item.joined_at}</Text>
-                    <Text style={styles.investmentParticipants}>Participants: {item.total_participants}</Text>
+            </View>
+
+            {/* Divider */}
+            <View style={styles.divider} />
+
+            {/* Amounts */}
+            <View style={styles.amountRow}>
+                <View>
+                    <Text style={styles.amountLabel}>My Investment</Text>
+                    <Text style={styles.amountValue}>
+                        {formatCurrency(item.my_investment ?? 0)}
+                    </Text>
+                </View>
+
+                <View style={{ alignItems: "flex-end" }}>
+                    <Text style={styles.amountLabel}>Target</Text>
+                    <Text style={styles.amountValue}>
+                        {formatCurrency(item.total_target_amount ?? 0)}
+                    </Text>
                 </View>
             </View>
-            {/* Leave Button */}
-            <TouchableOpacity
-                style={styles.leaveBtn}
-                onPress={() =>
-                    Alert.alert(
-                        "Leave Investment",
-                        `Are you sure you want to leave "${item.name}"? You will no longer receive payouts from this investment.
-            `,
-                        [
-                            { text: "Cancel", style: "cancel" },
-                            {
-                                text: "Leave",
-                                style: "destructive",
-                                onPress: () => dispatch(leaveInvestment(item.id)),
-                            },
-                        ]
-                    )
-                }
-            >
-                <Text style={styles.leaveBtnText}>Leave Investment</Text>
-            </TouchableOpacity>
+
+            {/* Meta */}
+            <View style={styles.metaRow}>
+                <Text style={styles.metaText}>Joined: {item.joined_at}</Text>
+                <Text style={styles.metaText}>
+                    Participants: {item.total_participants}
+                </Text>
+            </View>
+
+            {/* Actions */}
+            <View style={styles.actionsRow}>
+                <TouchableOpacity
+                    style={styles.leaveButton}
+                    onPress={() =>
+                        Alert.alert(
+                            "Leave Investment",
+                            `Are you sure you want to leave "${item.name}"?`,
+                            [
+                                { text: "Cancel", style: "cancel" },
+                                {
+                                    text: "Leave",
+                                    style: "destructive",
+                                    onPress: () => dispatch(leaveInvestment(item.id)),
+                                },
+                            ]
+                        )
+                    }
+                >
+                    <Text style={styles.leaveText}>Leave Investment</Text>
+                </TouchableOpacity>
+            </View>
         </TouchableOpacity>
     );
+
     return (
 
         <View style={styles.container}>
@@ -228,42 +256,103 @@ const styles = StyleSheet.create({
         fontFamily: "Inter_600SemiBold",
         marginLeft: 7,
     },
-    investmentCard: {
-        backgroundColor: Colors.secondary,
-        borderRadius: 10,
-        padding: 16,
-        marginBottom: 14,
-        // marginHorizontal: 12,
-        // flexDirection: "row",
-        // alignItems: "center",
-        shadowColor: "#000",
-        shadowOpacity: 0.02,
-        shadowRadius: 4,
-        elevation: 1,
-    },
     investmentName: { fontSize: 16, fontWeight: "600", color: Colors.white },
-    investmentAmount: { fontSize: 15, color: Colors.gray, marginTop: 2 },
-    investmentStatus: { fontSize: 13, fontWeight: "500", marginBottom: 2 },
-    statusActive: { color: Colors.green },
-    statusClosed: { color: "#6B7280" },
-    investmentDate: { fontSize: 13, color: Colors.gray },
-    investmentParticipants: { fontSize: 13, color: Colors.gray },
     emptyState: { justifyContent: "center", alignItems: "center", padding: 20 },
     emptyText: { fontSize: 16, color: "#6B7280" },
-    leaveBtn: {
-        marginTop: 8,
-        backgroundColor: Colors.error,
-        paddingVertical: 8,
-        paddingHorizontal: 12,
-        borderRadius: 6,
-        alignItems: "center",
-        alignSelf: "flex-end",
+    cardContainer: {
+        backgroundColor: Colors.secondary,
+        borderRadius: 16,
+        padding: 16,
+        marginBottom: 14,
+        shadowColor: "#000",
+        shadowOpacity: 0.06,
+        shadowRadius: 8,
+        elevation: 4,
     },
-    leaveBtnText: {
+
+    cardHeader: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+    },
+
+    investmentType: {
+        fontSize: 13,
+        color: Colors.gray,
+        marginTop: 2,
+    },
+
+    statusBadge: {
+        paddingHorizontal: 10,
+        paddingVertical: 4,
+        borderRadius: 20,
+    },
+
+    statusActive: {
+        backgroundColor: "rgba(16,185,129,0.15)",
+    },
+
+    statusClosed: {
+        backgroundColor: "rgba(107,114,128,0.15)",
+    },
+
+    statusText: {
+        fontSize: 12,
+        fontWeight: "600",
+        color: Colors.green,
+    },
+
+    divider: {
+        height: 1,
+        backgroundColor: "rgba(255,255,255,0.06)",
+        marginVertical: 12,
+    },
+
+    amountRow: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+    },
+
+    amountLabel: {
+        fontSize: 13,
+        color: Colors.gray,
+    },
+
+    amountValue: {
+        fontSize: 18,
+        fontWeight: "600",
         color: Colors.white,
+        marginTop: 2,
+    },
+
+    metaRow: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        marginTop: 12,
+    },
+
+    metaText: {
+        fontSize: 12,
+        color: Colors.gray,
+    },
+
+    actionsRow: {
+        marginTop: 14,
+    },
+
+    leaveButton: {
+        backgroundColor: "rgba(239,68,68,0.15)",
+        borderRadius: 10,
+        paddingVertical: 10,
+        alignItems: "center",
+    },
+
+    leaveText: {
+        color: Colors.error,
         fontWeight: "600",
         fontSize: 14,
     },
+
 });
 
 // export default MyInvestments;

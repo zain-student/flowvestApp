@@ -97,75 +97,6 @@ export const InvestmentsScreen: React.FC = () => {
   const handleRefresh = () => {
     dispatch(fetchInvestments({ page: 1 }));
   };
-  // const renderInvestment = ({ item }: any) => (
-  //   <TouchableOpacity
-  //     style={styles.investmentCard}
-  //     onPress={() => navigation.navigate("InvestmentDetails", { id: item.id })}
-  //   >
-  //     <View style={{ flex: 1 }}>
-  //       <View
-  //         style={{
-  //           flexDirection: "row",
-  //           justifyContent: "flex-end",
-  //         }}
-  //       >
-  //         {item.type === "shared" && item.status === "Active" && item.can_join === true && (
-  //           <TouchableOpacity
-  //             style={styles.joinBtn}
-  //             activeOpacity={0.7}
-  //             onPress={() => {
-  //               navigation.navigate("InvestmentDetails", {
-  //                 id: item.id,
-  //                 showJoinForm: "true",
-  //               });
-  //               console.log("Join investment tapped:", item.id);
-  //             }}
-  //           >
-  //             <Ionicons name="add-circle-outline" size={18} color={Colors.white} />
-  //             <Text style={styles.joinBtnText}>Join Investment</Text>
-  //           </TouchableOpacity>)
-  //         }
-  //       </View>
-  //       <Text style={styles.investmentName}>{item.name}(<Text style={styles.investmentAmount}>{item.type.charAt(0).toUpperCase() + item.type.slice(1)}</Text>)</Text>
-  //       <Text style={styles.investmentAmount}>Amount: {formatCurrency(item.type === "shared" ? item.shared_amount : item.amount)}</Text>
-  //       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-  //         <Text style={styles.investmentDate}>Started: {item.date}</Text>
-  //         <Text
-  //           style={[
-  //             styles.investmentStatus,
-  //             item.status === "Active" ? styles.statusActive : styles.statusClosed,
-  //           ]}
-  //         >
-  //           {item.status}
-  //         </Text>
-  //       </View>
-  //       <View style={{ flexDirection: 'row', marginTop: 8, justifyContent: 'space-between' }}>
-  //         {/* View partners of investment */}
-  //         <TouchableOpacity
-  //           onPress={() => handleOpenPartners(item.id)}
-  //           style={styles.partnerButton}>
-  //           <Text style={{ color: Colors.gray, marginBottom: 4, fontSize: 18 }}>Partners</Text>
-  //           <Feather name="users" size={20} color={Colors.gray} />
-  //         </TouchableOpacity>
-  //         {/* Add partner to investment button */}
-  //         <TouchableOpacity
-  //           onPress={() => {
-  //             navigation.navigate("AddPartner", { id: item.id })
-  //             console.log("Investment id is :", item.id)
-  //           }
-  //           }
-  //           style={[styles.partnerButton, { marginTop: 8 }]}
-  //         >
-  //           <Text style={{ color: Colors.gray, marginBottom: 4, fontSize: 18 }}>Add Partner</Text>
-  //           <Feather name="user-plus" size={20} color={Colors.gray} />
-  //         </TouchableOpacity>
-  //       </View>
-  //     </View>
-
-  //     {/* <Ionicons name="chevron-forward" size={20} color={Colors.gray} /> */}
-  //   </TouchableOpacity>
-
-  // );
 
   const renderInvestment = ({ item }: any) => (
     <TouchableOpacity
@@ -432,25 +363,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginLeft: 6,
   },
-  // investmentCard: {
-  //   backgroundColor: Colors.secondary,
-  //   borderRadius: 10,
-  //   padding: 16,
-  //   marginBottom: 14,
-  //   marginHorizontal: 12,
-  //   flexDirection: "row",
-  //   alignItems: "center",
-  //   shadowColor: "#000",
-  //   shadowOpacity: 0.02,
-  //   shadowRadius: 4,
-  //   elevation: 1,
-  // },
-  // investmentName: { fontSize: 16, fontWeight: "600", color: Colors.white },
-  // investmentAmount: { fontSize: 15, color: Colors.gray, marginTop: 2 },
-  // investmentStatus: { fontSize: 13, fontWeight: "500", marginBottom: 2 },
-  // statusActive: { color: Colors.green },
-  // statusClosed: { color: "#6B7280" },
-  // investmentDate: { fontSize: 13, color: Colors.gray },
   filterRow: {
     flexDirection: "row",
     marginBottom: 16,

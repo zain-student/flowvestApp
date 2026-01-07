@@ -1,57 +1,54 @@
 import { useAppSelector } from "@/shared/store";
+import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather } from "@expo/vector-icons";
 import React from "react";
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import Colors from "../../../../shared/colors/Colors";
+
 export const RecentPaymentsLog = () => {
-  const { recent_activities } = useAppSelector((state) => state.partnerDashboard)
+  const { recent_activities } = useAppSelector((state) => state.partnerDashboard);
+  const { formatCurrency } = useCurrencyFormatter();
+
   const renderActivityItem = ({ item }: any) => (
-    <View style={styles.activityItem}>
-      {/* Row 1: Icon + Title + Status */}
-      <View style={styles.rowBetween}>
-        <View style={styles.row}>
-          <Feather
-            name={
-              item.type === "payout"
-                ? "arrow-down-right"
-                : item.type === "investment"
-                  ? "arrow-up-right"
-                  : "activity"
-            }
-            size={20}
-            color={Colors.white}
-            style={styles.activityIcon}
-          />
-          <Text style={styles.activityText}>{item.title}</Text>
-        </View>
+    <View style={styles.activityCard}>
+      {/* Left: Icon */}
+      <View style={styles.iconWrapper}>
+        <Feather
+          name={
+            item.type === "payout"
+              ? "arrow-down-right"
+              : item.type === "investment"
+                ? "arrow-up-right"
+                : "activity"
+          }
+          size={22}
+          color={Colors.white}
+        />
+      </View>
+
+      {/* Middle: Title & Dates */}
+      <View style={styles.infoWrapper}>
+        <Text style={styles.activityTitle}>{item.title}</Text>
+        <Text style={styles.activitySubText}>Created: {item.created_at}</Text>
+        <Text style={styles.activitySubText}>Time: {item.time}</Text>
+      </View>
+
+      {/* Right: Amount & Status */}
+      <View style={styles.rightWrapper}>
+        <Text style={styles.activityAmount}>{(item.amount ?? 0)}</Text>
         <Text
           style={[
             styles.activityStatus,
-            {
-              color:
-                item.status === "completed"
-                  ? Colors.green
-                  : item.status === "processing"
-                    ? Colors.yellow
-                    : Colors.gray,
-            },
+            item.status === "completed"
+              ? styles.statusCompleted
+              : item.status === "processing"
+                ? styles.statusProcessing
+                : styles.statusCancelled,
           ]}
         >
           {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
         </Text>
       </View>
-
-      {/* Row 2: Date + Amount */}
-      <View style={styles.rowBetween}>
-        <Text style={styles.activityDate}>{item.time}</Text>
-        <Text style={styles.activityAmount}>{item.amount}</Text>
-      </View>
-      <Text style={styles.activityDate}>Created: {item.created_at}</Text>
     </View>
   );
 
@@ -76,7 +73,6 @@ export const RecentPaymentsLog = () => {
 
 const styles = StyleSheet.create({
   container: {
-    // paddingHorizontal: 12,
     marginTop: 4,
     marginBottom: 80,
   },
@@ -88,51 +84,59 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_700Bold",
     fontWeight: "700",
     color: Colors.secondary,
-    marginBottom: 8,
+    marginBottom: 12,
   },
-  activityItem: {
+  activityCard: {
     backgroundColor: Colors.secondary,
+    borderRadius: 14,
+    padding: 16,
     marginVertical: 6,
-    paddingVertical: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 6,
+    elevation: 3,
+  },
+  iconWrapper: {
+    width: 40,
+    height: 40,
     borderRadius: 12,
-    paddingHorizontal: 14,
-    borderWidth: 1,
-    borderColor: Colors.lightGray,
-  },
-  rowBetween: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    backgroundColor: Colors.green + "33", // slightly transparent green background
+    justifyContent: "center",
     alignItems: "center",
-    marginVertical: 4,
-  },
-  row: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  activityIcon: {
     marginRight: 12,
   },
-  activityText: {
+  infoWrapper: {
+    flex: 1,
+  },
+  rightWrapper: {
+    alignItems: "flex-end",
+  },
+  activityTitle: {
     color: Colors.white,
     fontSize: 15,
     fontFamily: "Inter_700Bold",
-    fontWeight: "700",
+    marginBottom: 2,
   },
-  activityDate: {
+  activitySubText: {
     color: Colors.gray,
-    fontSize: 13,
+    fontSize: 12,
     fontFamily: "Inter_400Regular",
   },
   activityAmount: {
-    color: Colors.white,
+    color: Colors.green,
     fontSize: 15,
     fontFamily: "Inter_700Bold",
-    fontWeight: "700",
+    marginBottom: 2,
   },
   activityStatus: {
-    fontSize: 14,
+    fontSize: 13,
     fontFamily: "Inter_600SemiBold",
   },
+  statusCompleted: { color: Colors.green },
+  statusProcessing: { color: Colors.yellow },
+  statusCancelled: { color: Colors.gray },
   emptyText: {
     color: Colors.gray,
     fontSize: 15,

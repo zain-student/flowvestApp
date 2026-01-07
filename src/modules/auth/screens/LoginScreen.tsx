@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     borderTopWidth: 1,
     borderTopColor: Colors.lightGray,
-    marginTop: 80,
+    marginTop: 20,
   },
 
   footerText: {

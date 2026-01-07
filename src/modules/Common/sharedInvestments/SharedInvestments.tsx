@@ -38,19 +38,19 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
   //   }
   // }, [search, dispatch]);
 
-    useEffect(() => {
-        const delayDebounce = setTimeout(() => {
-            if (search.trim() === "") {
-                // When User cleared the search bar — reload all investment
-                dispatch(fetchAvailableSharedPrograms({ page: 1, search: "" }));
-            } else {
-                // Normal search 
-                dispatch(fetchAvailableSharedPrograms({ page: 1, search }));
-            }
-        }, 1300); // 1.3 seconds debounce
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      if (search.trim() === "") {
+        // When User cleared the search bar — reload all investment
+        dispatch(fetchAvailableSharedPrograms({ page: 1, search: "" }));
+      } else {
+        // Normal search 
+        dispatch(fetchAvailableSharedPrograms({ page: 1, search }));
+      }
+    }, 1300); // 1.3 seconds debounce
 
-        return () => clearTimeout(delayDebounce);
-    }, [search]);
+    return () => clearTimeout(delayDebounce);
+  }, [search]);
 
 
   // Search handler
@@ -111,101 +111,102 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
       />
     </View>
   );
-
   const renderItem = ({ item }: { item: PartnerInvestment }) => {
     const current = Number(item.current_total_invested) || 0;
     const target = Number(item.total_target_amount) || 0;
-
-    // safe progress calculation, avoid division by zero and NaN
-    const rawProgress = target > 0 ? (current / target) * 100 : 0;
-    // cap displayed percent and bar width to [0, 100]
-    const cappedProgress = Math.min(Math.max(Math.floor(rawProgress), 0), 100);
+    const progress =
+      target > 0 ? Math.min(Math.floor((current / target) * 100), 100) : 0;
 
     return (
       <TouchableOpacity
-        style={styles.card}
-        activeOpacity={0.8}
+        style={styles.cardContainer}
+        activeOpacity={0.85}
         onPress={() =>
           navigation.navigate("SharedInvestmentDetail", { id: item.id })
         }
       >
-        <View style={{ flex: 1 }}>
+        {/* Header */}
+        <View style={styles.cardHeader}>
+          <View>
+            <Text style={styles.investmentName}>{item.name}</Text>
+            <Text style={styles.investmentType}>Shared Investment</Text>
+          </View>
+
           <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
+            style={[
+              styles.statusBadge,
+              item.status?.toLowerCase() === "active"
+                ? styles.statusActive
+                : styles.statusClosed,
+            ]}
           >
-            <Text style={styles.title}>{item.name}</Text>
-            <Text
-              style={[
-                styles.status,
-                item.status?.toLowerCase() === "active"
-                  ? styles.statusActive
-                  : styles.statusClosed,
-              ]}
-            >
+            <Text style={styles.statusText}>
               {item.status
                 ? item.status.charAt(0).toUpperCase() + item.status.slice(1)
                 : "N/A"}
             </Text>
           </View>
-
-          {/* <View style={styles.row}> */}
-            <Text style={styles.amount}>
-              Amount: {formatCurrency(Number(item.current_total_invested))}
-            </Text>
-            <Text style={styles.amount}>
-              Min: {formatCurrency(Number(item.min_investment_amount ?? 0))} - Max: {formatCurrency(Number(item.max_investment_amount ?? 0))}
-            </Text>
-          {/* </View> */}
-
-          {/* Investment Progress */}
-          <View style={{ marginTop: 8 }}>
-            <Text style={styles.meta}>
-              Investment Progress ({cappedProgress}% funded)
-            </Text>
-            <View style={styles.progressContainer}>
-              <View
-                style={[
-                  styles.progressBar,
-                  { width: `${cappedProgress}%` },
-                ]}
-              />
-            </View>
-            <Text style={styles.meta}>
-              {formatCurrency(Number(item.current_total_invested))} / {formatCurrency(Number(item.total_target_amount))}
-            </Text>
-          </View>
-
-          <View style={styles.row}>
-            <Text style={styles.meta}>
-              Expected Return Rate:{" "}
-              {item.expected_return_rate !== undefined &&
-                item.expected_return_rate !== null
-                ? Number(item.expected_return_rate).toFixed(1)
-                : "N/A"}
-            </Text>
-            <Text style={styles.meta}>
-              Participants: {item.total_participants ?? "N/A"}
-            </Text>
-          </View>
-
-          <TouchableOpacity
-            style={styles.joinBtn}
-            activeOpacity={0.7}
-            onPress={() => {
-              navigation.navigate("SharedInvestmentDetail", {
-                id: item.id,
-                showJoinForm: "true",
-              });
-            }}
-          >
-            <Ionicons name="add-circle-outline" size={18} color={Colors.white} />
-            <Text style={styles.joinBtnText}>Join Investment</Text>
-          </TouchableOpacity>
         </View>
+
+        {/* Divider */}
+        <View style={styles.divider} />
+
+        {/* Amount */}
+        <View style={styles.amountRow}>
+          <View>
+            <Text style={styles.amountLabel}>Current Invested</Text>
+            <Text style={styles.amountValue}>
+              {formatCurrency(current)}
+            </Text>
+          </View>
+
+          <View style={{ alignItems: "flex-end" }}>
+            <Text style={styles.amountLabel}>Target</Text>
+            <Text style={styles.amountValue}>
+              {formatCurrency(target)}
+            </Text>
+          </View>
+        </View>
+
+        {/* Progress */}
+        <View style={styles.progressSection}>
+          <View style={styles.progressHeader}>
+            <Text style={styles.metaText}>Funding Progress</Text>
+            <Text style={styles.metaText}>{progress}%</Text>
+          </View>
+          <View style={styles.progressContainer}>
+            <View
+              style={[styles.progressBar, { width: `${progress}%` }]}
+            />
+          </View>
+        </View>
+
+        {/* Meta */}
+        <View style={styles.metaRow}>
+          <Text style={styles.metaText}>
+            ROI:{" "}
+            {item.expected_return_rate != null
+              ? `${Number(item.expected_return_rate).toFixed(1)}%`
+              : "N/A"}
+          </Text>
+          <Text style={styles.metaText}>
+            Participants: {item.total_participants ?? "N/A"}
+          </Text>
+        </View>
+
+        {/* Action */}
+        <TouchableOpacity
+          style={styles.joinButton}
+          onPress={() =>
+            navigation.navigate("SharedInvestmentDetail", {
+              id: item.id,
+              showJoinForm: "true",
+            })
+          }
+        >
+          <Ionicons name="add-circle-outline" size={18} color="#fff" />
+          <Text style={styles.joinText}>Join Investment</Text>
+        </TouchableOpacity>
       </TouchableOpacity>
     );
   };
@@ -329,58 +330,127 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   summaryLabel: { fontSize: 13, color: Colors.gray },
-  card: {
+  cardContainer: {
     backgroundColor: Colors.secondary,
-    borderRadius: 12,
+    borderRadius: 16,
     padding: 16,
     marginBottom: 14,
-    flexDirection: "row",
-    alignItems: "flex-start",
     shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 4,
   },
-  title: { fontSize: 16, fontWeight: "600", color: Colors.white, width: "80%" },
-  row: { flexDirection: "row", justifyContent: "space-between", marginTop: 8 },
-  amount: { fontSize: 14, color: Colors.white, fontWeight: "500",marginTop: 4 },
-  meta: { fontSize: 13, color: Colors.gray },
-  status: {
+
+  cardHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+
+  investmentName: {
+    fontSize: 17,
+    fontWeight: "600",
+    color: Colors.white,
+  },
+
+  investmentType: {
+    fontSize: 13,
+    color: Colors.gray,
+    marginTop: 2,
+  },
+
+  statusBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 20,
+  },
+
+  statusActive: {
+    backgroundColor: "rgba(16,185,129,0.15)",
+  },
+
+  statusClosed: {
+    backgroundColor: "rgba(107,114,128,0.15)",
+  },
+
+  statusText: {
     fontSize: 12,
     fontWeight: "600",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 8,
+    color: Colors.green,
   },
-  statusActive: { color: Colors.green },
-  statusClosed: { backgroundColor: Colors.inActiveStatusBg, color: Colors.gray },
+
+  divider: {
+    height: 1,
+    backgroundColor: "rgba(255,255,255,0.06)",
+    marginVertical: 12,
+  },
+
+  amountRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+
+  amountLabel: {
+    fontSize: 13,
+    color: Colors.gray,
+  },
+
+  amountValue: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: Colors.white,
+    marginTop: 2,
+  },
+
+  progressSection: {
+    marginTop: 12,
+  },
+
+  progressHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 4,
+  },
+
   progressContainer: {
     height: 8,
-    backgroundColor: "#E6E6E6",
+    backgroundColor: "rgba(255,255,255,0.15)",
     borderRadius: 10,
     overflow: "hidden",
-    marginVertical: 4,
   },
+
   progressBar: {
     height: "100%",
     backgroundColor: Colors.primary,
     borderRadius: 10,
   },
 
-  joinBtn: {
-    marginTop: 10,
+  metaRow: {
     flexDirection: "row",
-    alignItems: "center",
-    alignSelf: "flex-end",
-    backgroundColor: Colors.primary,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 8,
+    justifyContent: "space-between",
+    marginTop: 12,
   },
-  joinBtnText: {
-    color: Colors.white,
+
+  metaText: {
+    fontSize: 12,
+    color: Colors.gray,
+  },
+
+  joinButton: {
+    marginTop: 14,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: Colors.primary,
+    paddingVertical: 10,
+    borderRadius: 10,
+  },
+
+  joinText: {
+    color: "#fff",
     fontSize: 14,
     fontWeight: "600",
     marginLeft: 6,
   },
+
 });

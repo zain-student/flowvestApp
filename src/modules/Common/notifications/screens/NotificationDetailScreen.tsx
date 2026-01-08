@@ -2,122 +2,129 @@ import Colors from "@/shared/colors/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import React from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View, useColorScheme } from "react-native";
 
 type NotificationDetailRouteProp = RouteProp<
   { NotificationDetail: { notification: any } },
   "NotificationDetail"
 >;
 
+const STATUS_COLORS = {
+  scheduled: Colors.warning,
+  sent: Colors.primary,
+  read: Colors.green,
+} as const;
+
+const PRIORITY_COLORS = {
+  high: Colors.error,
+  medium: Colors.warning,
+  low: Colors.green,
+} as const;
+
 export const NotificationDetailScreen = () => {
-  const route = useRoute<NotificationDetailRouteProp>();
-  const { notification } = route.params;
+  const { notification } = useRoute<NotificationDetailRouteProp>().params;
+  const isDark = useColorScheme() === "dark";
 
-  const statusColors = {
-    scheduled: "yellow",
-    sent: Colors.primary,
-    read: Colors.green,
-  };
-  const priorityColors = {
-    high: Colors.error,
-    medium: "yellow",
-    low: Colors.green,
-  };
-
-  const renderInfoRow = (
-    label: string,
-    value: string | React.ReactNode,
-    icon?: JSX.Element
-  ) => (
+  const Row = ({ icon, label, value }: { icon: keyof typeof Ionicons.glyphMap; label: string; value: React.ReactNode }) => (
     <View style={styles.infoRow}>
-      <View style={styles.rowLeft}>
-        {icon && <View style={{ marginRight: 6 }}>{icon}</View>}
-        <Text style={styles.label}>{label}</Text>
+      <View style={styles.left}>
+        <Ionicons name={icon} size={18} color={Colors.primary} style={styles.icon} />
+        <Text style={[styles.label, isDark && styles.subTextDark]}>{label}</Text>
       </View>
-      <Text
-        style={[
-          styles.value,
-          { color: typeof value === "string" ? Colors.white : undefined },
-        ]}
-      >
-        {value}
-      </Text>
+      {typeof value === "string" ? (
+        <Text style={[styles.value, isDark && styles.textDark]}>{value}</Text>
+      ) : (
+        value
+      )}
     </View>
   );
 
-  return (
-    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 30 }}>
-      <View style={styles.card}>
-        <Text style={styles.title}>{notification.title}</Text>
-        <Text style={styles.message}>{notification.message}</Text>
+  const Pill = ({ text, color }: { text: string; color: string }) => (
+    <View style={[styles.pill, { backgroundColor: color + "20" }]}>
+      <Text style={[styles.pillText, { color }]}>{text}</Text>
+    </View>
+  );
 
-        {renderInfoRow("From:", notification.sender?.name || "System")}
-        {renderInfoRow("To:", notification.recipient?.name || "You")}
-        {renderInfoRow(
-          "Status:",
-          notification.status?.toUpperCase() || "SENT",
-          <Ionicons
-            name="time-outline"
-            size={16}
-            color={
-              statusColors[
-              ((notification.status || "").toLowerCase() as keyof typeof statusColors)
-              ] || Colors.primary
-            }
-          />
-        )}
-        {renderInfoRow(
-          "Priority:",
-          notification.priority?.toUpperCase() || "NORMAL",
-          <Ionicons
-            name="alert-circle-outline"
-            size={16}
-            color={
-              priorityColors[
-              ((notification.priority || "").toLowerCase() as keyof typeof priorityColors)
-              ] || Colors.green
-            }
-          />
-        )}
-        {/* {renderInfoRow(
-          "Scheduled At:",
-          new Date(notification.created_at).toLocaleString(),
-          <Ionicons name="calendar-outline" size={16} color={Colors.gray} />
-        )} */}
-        <Text style={styles.time}>
-          {new Date(notification.created_at).toLocaleString()}
-        </Text>
+  const getStatusColor = (status?: string) => STATUS_COLORS[(status || "sent").toLowerCase() as keyof typeof STATUS_COLORS] || Colors.primary;
+  const getPriorityColor = (priority?: string) => PRIORITY_COLORS[(priority || "normal").toLowerCase() as keyof typeof PRIORITY_COLORS] || Colors.green;
+
+  return (
+    <ScrollView
+      style={[styles.container, isDark && styles.containerDark]}
+      contentContainerStyle={{ paddingBottom: 30 }}
+      showsVerticalScrollIndicator={false}
+    >
+      {/* Header */}
+      <View style={[styles.headerCard, isDark && styles.cardDark]}>
+        <Ionicons name="notifications-outline" size={26} color={Colors.primary} style={styles.icon} />
+        <Text style={[styles.title, isDark && styles.textDark]}>{notification.title}</Text>
+        <Text style={[styles.message, isDark && styles.subTextDark]}>{notification.message}</Text>
       </View>
+
+      {/* Details */}
+      <View style={[styles.card, isDark && styles.cardDark]}>
+        <Row icon="person-outline" label="From" value={notification.sender?.name || "System"} />
+        <Row icon="person-circle-outline" label="To" value={notification.recipient?.name || "You"} />
+        <Row
+          icon="checkmark-done-outline"
+          label="Status"
+          value={<Pill text={(notification.status || "sent").toUpperCase()} color={getStatusColor(notification.status)} />}
+        />
+        <Row
+          icon="alert-circle-outline"
+          label="Priority"
+          value={<Pill text={(notification.priority || "normal").toUpperCase()} color={getPriorityColor(notification.priority)} />}
+        />
+      </View>
+
+      {/* Footer */}
+      <Text style={styles.time}>{new Date(notification.created_at).toLocaleString()}</Text>
     </ScrollView>
   );
 };
 
+/* ---------------- STYLES ---------------- */
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Colors.background, padding: 12 },
+  container: { flex: 1, backgroundColor: Colors.background, padding: 16 },
+  containerDark: { backgroundColor: "#020617" },
+
+  headerCard: {
+    backgroundColor: Colors.white,
+    borderRadius: 20,
+    padding: 20,
+    marginBottom: 16,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 4,
+    alignItems: "center",
+  },
+
   card: {
-    backgroundColor: Colors.secondary,
-    borderRadius: 12,
+    backgroundColor: Colors.white,
+    borderRadius: 16,
     padding: 18,
     shadowColor: "#000",
-    shadowOpacity: 0.03,
-    shadowRadius: 6,
-    elevation: 2,
+    shadowOpacity: 0.04,
+    shadowRadius: 8,
+    elevation: 3,
   },
-  title: { fontSize: 20, fontWeight: "700", color: Colors.white, marginBottom: 8 },
-  message: { fontSize: 16, color: Colors.gray, marginBottom: 18 },
-  infoRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 12,
-  },
-  rowLeft: { flexDirection: "row", alignItems: "center" },
-  label: { fontWeight: "600", color: Colors.gray, fontSize: 14 },
-  value: { fontWeight: "500", fontSize: 16, color: Colors.white },
-  time: {
-    fontSize: 12,
-    color: Colors.gray,
-    marginTop: 4,
-    alignSelf:'flex-end'
-  }
+  cardDark: { backgroundColor: "#1E293B" },
+
+  title: { fontSize: 20, fontWeight: "700", color: Colors.secondary, marginBottom: 8 },
+  message: { fontSize: 15, color: Colors.gray, lineHeight: 22, textAlign: "center" },
+
+  infoRow: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: "#F1F5F9" },
+  left: { flexDirection: "row", alignItems: "center" },
+  icon: { marginRight: 10 },
+  label: { fontSize: 14, fontWeight: "600", color: Colors.gray },
+  value: { fontSize: 14, fontWeight: "500", color: Colors.secondary },
+
+  pill: { paddingVertical: 6, paddingHorizontal: 12, borderRadius: 20 },
+  pillText: { fontSize: 12, fontWeight: "700" },
+
+  time: { fontSize: 12, color: Colors.gray, textAlign: "center", marginTop: 16 },
+
+  textDark: { color: "#F8FAFC" },
+  subTextDark: { color: "#94A3B8" },
 });

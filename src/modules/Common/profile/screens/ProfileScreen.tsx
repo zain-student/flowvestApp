@@ -7,14 +7,15 @@ import {
   ActivityIndicator,
   Alert,
   Dimensions,
-  Image, Modal,
+  Image,
+  Modal,
   RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
   ToastAndroid,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 
 import { ProfileStackParamList } from "@/navigation/ProfileStacks/ProfileStack";
@@ -25,7 +26,7 @@ import {
   getCurrentUser,
   getPreferences,
   updatePreferences,
-  uploadUserAvatar
+  uploadUserAvatar,
 } from "@/shared/store/slices/profile/profileSlice";
 import { DashboardLayout } from "../../components/DashboardLayout";
 
@@ -40,7 +41,6 @@ const IMAGE_PICKER_OPTIONS = {
 
 type ProfileNavProp = NativeStackNavigationProp<ProfileStackParamList>;
 
-
 export const ProfileScreen: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation<ProfileNavProp>();
@@ -51,10 +51,12 @@ export const ProfileScreen: React.FC = () => {
   const [currencyDropdownOpen, setCurrencyDropdownOpen] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState<any>(null);
 
-  const { currencies, isCurrenciesLoading } = useAppSelector((state) => state.profile);
+  const { currencies, isCurrenciesLoading } = useAppSelector(
+    (state) => state.profile
+  );
   const pullToRefresh = () => {
     dispatch(getCurrentUser());
-  }
+  };
   useFocusEffect(
     useCallback(() => {
       const loadUser = async () => {
@@ -70,11 +72,12 @@ export const ProfileScreen: React.FC = () => {
   useEffect(() => {
     dispatch(getCurrentUser());
     dispatch(getCurrencies());
-  }, [dispatch])
+  }, [dispatch]);
   //  Image picker handler
   const handlePickImage = useCallback(async () => {
     try {
-      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      const { status } =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== "granted") {
         return Alert.alert(
           "Permission required",
@@ -82,7 +85,8 @@ export const ProfileScreen: React.FC = () => {
         );
       }
 
-      const result = await ImagePicker.launchImageLibraryAsync(IMAGE_PICKER_OPTIONS);
+      const result =
+        await ImagePicker.launchImageLibraryAsync(IMAGE_PICKER_OPTIONS);
       if (result.canceled || !result.assets?.length) return;
 
       const imageUri = result.assets[0].uri;
@@ -101,7 +105,8 @@ export const ProfileScreen: React.FC = () => {
   }, [dispatch]);
 
   //  Helper: show initials if no avatar
-  const getInitials = (name?: string) => (name ? name.charAt(0).toUpperCase() : "U");
+  const getInitials = (name?: string) =>
+    name ? name.charAt(0).toUpperCase() : "U";
 
   //  Conditional states
   const showLoader = isLoading || (!user && !imageLoading);
@@ -111,7 +116,7 @@ export const ProfileScreen: React.FC = () => {
 
     dispatch(
       updatePreferences({
-        display: { currency: currency.code }
+        display: { currency: currency.code },
       })
     )
       .unwrap()
@@ -120,36 +125,37 @@ export const ProfileScreen: React.FC = () => {
         dispatch(getPreferences());
       })
       .catch(() => {
-        ToastAndroid.show("Failed to update currency preference.", ToastAndroid.SHORT);
+        ToastAndroid.show(
+          "Failed to update currency preference.",
+          ToastAndroid.SHORT
+        );
       });
   };
 
   return (
     <DashboardLayout>
-      {
-        isImageModalVisible && (
-          <Modal
-            visible={isImageModalVisible}
-            transparent={true}
-            animationType="fade"
-            onRequestClose={() => setImageModalVisible(false)}
-          >
-            <View style={styles.modalBackground}>
-              <TouchableOpacity
-                style={styles.modalCloseArea}
-                onPress={() => setImageModalVisible(false)}
-                activeOpacity={1}
-              >
-                <Image
-                  source={{ uri: `${user?.avatar}?t=${Date.now()}` }}
-                  style={styles.fullscreenImage}
-                  resizeMode="contain"
-                />
-              </TouchableOpacity>
-            </View>
-          </Modal>
-        )
-      }
+      {isImageModalVisible && (
+        <Modal
+          visible={isImageModalVisible}
+          transparent={true}
+          animationType="fade"
+          onRequestClose={() => setImageModalVisible(false)}
+        >
+          <View style={styles.modalBackground}>
+            <TouchableOpacity
+              style={styles.modalCloseArea}
+              onPress={() => setImageModalVisible(false)}
+              activeOpacity={1}
+            >
+              <Image
+                source={{ uri: `${user?.avatar}?t=${Date.now()}` }}
+                style={styles.fullscreenImage}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+          </View>
+        </Modal>
+      )}
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
@@ -161,40 +167,39 @@ export const ProfileScreen: React.FC = () => {
           />
         }
       >
-        {/* Avatar Section */}
-        <View style={styles.container}>
-          <TouchableOpacity
-            onPress={() => user?.avatar && setImageModalVisible(true)}
-            activeOpacity={user?.avatar ? 0.8 : 1}
-          >
-            {showLoader ? (
-              <View style={styles.avatarPlaceholder}>
-                <ActivityIndicator size="small" color={Colors.green} />
-              </View>
-            ) : user?.avatar ? (
-              <Image
-                source={{ uri: `${user.avatar}?t=${Date.now()}` }}
-                style={styles.avatarImage}
-                onLoadEnd={() => setImageLoading(false)}
-              />
-            ) : (
-              <View style={styles.avatarPlaceholder}>
-                <Text style={styles.avatarText}>{getInitials(user?.name)}</Text>
-              </View>
-            )}
-          </TouchableOpacity>
+        <View style={styles.profileHeader}>
+          <View style={styles.avatarWrapper}>
+            <TouchableOpacity
+              onPress={() => user?.avatar && setImageModalVisible(true)}
+              activeOpacity={user?.avatar ? 0.8 : 1}
+            >
+              {showLoader ? (
+                <View style={styles.avatarPlaceholder}>
+                  <ActivityIndicator size="small" color={Colors.green} />
+                </View>
+              ) : user?.avatar ? (
+                <Image
+                  source={{ uri: `${user.avatar}?t=${Date.now()}` }}
+                  style={styles.avatarImage}
+                  onLoadEnd={() => setImageLoading(false)}
+                />
+              ) : (
+                <View style={styles.avatarPlaceholder}>
+                  <Text style={styles.avatarText}>{getInitials(user?.name)}</Text>
+                </View>
+              )}
+            </TouchableOpacity>
 
-          {/*  Camera Badge */}
-          <TouchableOpacity
-            onPress={handlePickImage}
-            disabled={isLoading || imageLoading}
-            style={styles.cameraBadge}
-          >
-            <Ionicons name="camera" size={18} color={Colors.white} />
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.editAvatarBtn}
+              onPress={handlePickImage}
+            >
+              <Ionicons name="camera" size={16} color="#fff" />
+            </TouchableOpacity>
+          </View>
 
-          <Text style={styles.name}>{user?.name || "John Doe"}</Text>
-          <Text style={styles.role}>{user?.roles?.[0] || "Investment Manager"}</Text>
+          <Text style={styles.profileName}>{user?.name}</Text>
+          <Text style={styles.profileRole}>{user?.roles?.[0]}</Text>
         </View>
 
         {/*  Account Info */}
@@ -204,42 +209,45 @@ export const ProfileScreen: React.FC = () => {
           <InfoRow label="Company" value={user?.company?.name ?? "--"} />
 
           {/* Currency Preference */}
-          <View style={{ marginTop: 12 }}>
-            <Text style={styles.infoLabel}>Preferred Currency</Text>
+          <TouchableOpacity
+            style={styles.preferenceRow}
+            onPress={() => setCurrencyDropdownOpen(true)}
+          >
+            <Text style={styles.prefLabel}>Preferred Currency</Text>
+            <View style={styles.prefValue}>
+              <Text>{selectedCurrency?.code || "USD"}</Text>
+              <Ionicons name="chevron-forward" size={18} />
+            </View>
+          </TouchableOpacity>
+          <Modal
+            visible={currencyDropdownOpen}
+            animationType="slide"
+            transparent
+            onRequestClose={() => setCurrencyDropdownOpen(false)}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalSheet}>
+                <Text style={styles.modalTitle}>Select Currency</Text>
 
-            {/* {isCurrenciesLoading ? (
-              <ActivityIndicator size="small" color={Colors.green} />
-            ) : ( */}
-            <TouchableOpacity
-              style={styles.dropdownContainer}
-              onPress={() => setCurrencyDropdownOpen(!currencyDropdownOpen)}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.dropdownText}>
-                {selectedCurrency
-                  ? `${selectedCurrency.icon} ${selectedCurrency.name} (${selectedCurrency.code})`
-                  : "Select Currency"}
-              </Text>
-              <Ionicons name="chevron-down" size={18} color={Colors.gray} />
-            </TouchableOpacity>
-            {/* )} */}
-
-            {currencyDropdownOpen && (
-              <View style={styles.dropdownList}>
-                {currencies.map((c) => (
-                  <TouchableOpacity
-                    key={c.id}
-                    style={styles.dropdownItem}
-                    onPress={() => handleCurrencySelect(c)}
-                  >
-                    <Text style={styles.dropdownItemText}>
-                      {c.icon} {c.name} ({c.code})
-                    </Text>
-                  </TouchableOpacity>
-                ))}
+                <ScrollView showsVerticalScrollIndicator={false}>
+                  {currencies.map((c) => (
+                    <TouchableOpacity
+                      key={c.code}
+                      style={styles.currencyItem}
+                      onPress={() => handleCurrencySelect(c)}
+                    >
+                      <Text style={styles.currencyText}>
+                        {c.icon} {c.name}
+                      </Text>
+                      <Text style={styles.currencyCode}>{c.code}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
               </View>
-            )}
-          </View>
+            </View>
+          </Modal>
+
+
         </View>
         {/*  Settings */}
         <View style={styles.card}>
@@ -261,7 +269,10 @@ export const ProfileScreen: React.FC = () => {
               if (user?.roles?.includes("admin")) {
                 navigation.navigate("NotificationButtons");
               } else {
-                Alert.alert("Access Denied", "You do not have permission to access Notification Settings.");
+                Alert.alert(
+                  "Access Denied",
+                  "You do not have permission to access Notification Settings."
+                );
               }
             }}
           />
@@ -274,7 +285,9 @@ export const ProfileScreen: React.FC = () => {
           <SettingsButton
             icon="call-outline"
             label="Contact Support"
-            onPress={() => Alert.alert("Support", "Contact us at support@flowvest.com")}
+            onPress={() =>
+              Alert.alert("Support", "Contact us at support@flowvest.com")
+            }
           />
         </View>
       </ScrollView>
@@ -285,179 +298,52 @@ export const ProfileScreen: React.FC = () => {
 export default ProfileScreen;
 
 // Reusable Components
-const InfoRow = React.memo(({ label, value }: { label: string; value: string }) => (
-  <>
+const InfoRow = ({ label, value }: { label: string; value: string }) => (
+  <View style={styles.infoRow}>
     <Text style={styles.infoLabel}>{label}</Text>
     <Text style={styles.infoValue}>{value}</Text>
-  </>
-));
-
-const SettingsButton = React.memo(
-  ({
-    icon,
-    label,
-    onPress,
-  }: {
-    icon: keyof typeof Ionicons.glyphMap;
-    label: string;
-    onPress: () => void;
-  }) => (
-    <TouchableOpacity style={styles.buttonItem} onPress={onPress}>
-      <Ionicons name={icon} color={Colors.white} size={20} />
-      <Text style={styles.buttonText}>{label}</Text>
-    </TouchableOpacity>
-  )
+  </View>
 );
-
-
+const SettingsButton = ({ icon, label, onPress }: {
+  icon: keyof typeof Ionicons.glyphMap;
+  label: string;
+  onPress: () => void;
+}) => (
+  <TouchableOpacity style={styles.settingsRow} onPress={onPress}>
+    <Ionicons name={icon} size={20} color={Colors.primary} />
+    <Text style={styles.settingsLabel}>{label}</Text>
+    <Ionicons name="chevron-forward" size={18} color={Colors.gray} />
+  </TouchableOpacity>
+);
 // Styles
 const styles = StyleSheet.create({
-  scrollContent: {
-    padding: 20,
-    backgroundColor: Colors.background,
-    paddingBottom: 100,
-  },
-  container: {
-    alignItems: "center",
-    marginTop: 30,
-    marginBottom: 20,
-  },
-  avatarImage: {
-    width: AVATAR_SIZE,
-    height: AVATAR_SIZE,
-    borderRadius: AVATAR_SIZE / 2,
-    borderWidth: 1,
-    borderColor: "#E5E7EB",
-  },
-  avatarPlaceholder: {
-    width: AVATAR_SIZE,
-    height: AVATAR_SIZE,
-    borderRadius: AVATAR_SIZE / 2,
-    backgroundColor: "#ccc",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  avatarText: {
-    fontSize: 40,
-    color: "#fff",
-  },
-  modalBackground: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.9)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalCloseArea: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
-  },
-  fullscreenImage: {
-    width: "95%",
-    height: "95%",
-    borderRadius: 10,
-  },
-
-  cameraBadge: {
-    position: "absolute",
-    bottom: 70,
-    right: Dimensions.get("window").width * 0.33 - 30,
-    backgroundColor: Colors.primary,
-    borderRadius: 16,
-    padding: 6,
-  },
-  name: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: Colors.secondary,
-    marginTop: 10,
-  },
-  role: {
-    fontSize: 15,
-    color: Colors.gray,
-    marginBottom: 8,
-  },
-  card: {
-    backgroundColor: Colors.white,
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 20,
-    borderWidth: 1,
-    borderColor: "#E5E7EB",
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: Colors.secondary,
-    marginBottom: 10,
-  },
-  infoLabel: {
-    fontSize: 13,
-    color: Colors.secondary,
-    marginTop: 8,
-  },
-  infoValue: {
-    fontSize: 15,
-    color: Colors.gray,
-    marginTop: 2,
-  },
-  dropdownContainer: {
-    backgroundColor: Colors.white,
-    borderWidth: 1,
-    borderColor: "#E5E7EB",
-    paddingVertical: 12,
-    paddingHorizontal: 14,
-    borderRadius: 8,
-    marginTop: 6,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-
-  dropdownText: {
-    fontSize: 15,
-    color: Colors.secondary,
-  },
-
-  dropdownList: {
-    backgroundColor: Colors.white,
-    borderWidth: 1,
-    borderColor: "#E5E7EB",
-    borderRadius: 8,
-    marginTop: 4,
-    paddingVertical: 6,
-  },
-
-  dropdownItem: {
-    paddingVertical: 10,
-    paddingHorizontal: 14,
-  },
-
-  dropdownItemText: {
-    fontSize: 15,
-    color: Colors.secondary,
-  },
-
-  buttonItem: {
-    flexDirection: "row",
-    backgroundColor: Colors.secondary,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#E5E7EB",
-    alignItems: "center",
-    marginTop: 10,
-  },
-  buttonText: {
-    fontSize: 15,
-    color: Colors.white,
-    fontWeight: "500",
-    marginLeft: 8,
-  },
+  scrollContent: { padding: 20, backgroundColor: Colors.background, paddingBottom: 100 },
+  avatarImage: { width: AVATAR_SIZE, height: AVATAR_SIZE, borderRadius: AVATAR_SIZE / 2, borderWidth: 1, borderColor: "#E5E7EB", alignItems: "center", justifyContent: "center", shadowColor: "#000000ff", shadowOpacity: 0.08, shadowRadius: 6, elevation: 4, },
+  avatarPlaceholder: { width: AVATAR_SIZE, height: AVATAR_SIZE, borderRadius: AVATAR_SIZE / 2, backgroundColor: "#ccc", alignItems: "center", justifyContent: "center", },
+  avatarText: { fontSize: 40, color: "#fff", },
+  modalBackground: { flex: 1, backgroundColor: "rgba(0,0,0,0.9)", justifyContent: "center", alignItems: "center", },
+  modalCloseArea: { flex: 1, justifyContent: "center", alignItems: "center", width: "100%", },
+  fullscreenImage: { width: "95%", height: "95%", borderRadius: 10, },
+  profileHeader: { alignItems: "center", paddingVertical: 30, },
+  avatarWrapper: { width: AVATAR_SIZE, height: AVATAR_SIZE, borderRadius: AVATAR_SIZE / 2, backgroundColor: Colors.white, alignItems: "center", justifyContent: "center", },
+  editAvatarBtn: { position: "absolute", bottom: 8, right: 8, backgroundColor: Colors.primary, width: 32, height: 32, borderRadius: 16, alignItems: "center", justifyContent: "center", },
+  profileName: { fontSize: 20, fontWeight: "700", marginTop: 14, color: Colors.secondary, },
+  profileRole: { fontSize: 13, color: Colors.gray, marginTop: 4, },
+  card: { backgroundColor: Colors.white, borderRadius: 16, padding: 18, marginBottom: 20, shadowColor: "#000", shadowOpacity: 0.05, shadowRadius: 10, elevation: 3, },
+  sectionTitle: { fontSize: 16, fontWeight: "600", color: Colors.secondary, marginBottom: 10, },
+  infoRow: { marginBottom: 12, },
+  infoLabel: { fontSize: 12, color: Colors.gray, },
+  infoValue: { fontSize: 15, fontWeight: "500", color: Colors.secondary, marginTop: 4, },
+  modalOverlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.35)", justifyContent: "flex-end", },
+  modalSheet: { backgroundColor: Colors.white, borderTopLeftRadius: 24, borderTopRightRadius: 24, paddingTop: 16, paddingHorizontal: 20, paddingBottom: 30, maxHeight: "70%", },
+  modalTitle: { fontSize: 17, fontWeight: "700", color: Colors.secondary, marginBottom: 16, textAlign: "center", },
+  currencyItem: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: "#F1F5F9", },
+  currencyText: { fontSize: 15, color: Colors.secondary, },
+  currencyCode: { fontSize: 13, color: Colors.gray, },
+  preferenceRow: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: 14, paddingHorizontal: 4, marginTop: 12, borderBottomWidth: 1, borderBottomColor: "#E5E7EB", },
+  prefLabel: { fontSize: 14, color: Colors.gray, },
+  prefValue: { flexDirection: "row", alignItems: "center", },
+  prefValueText: { fontSize: 15, fontWeight: "600", color: Colors.secondary, marginRight: 6, },
+  settingsRow: { flexDirection: "row", alignItems: "center", paddingVertical: 14 },
+  settingsLabel: { flex: 1, marginLeft: 12, fontSize: 15, color: Colors.secondary, },
 });

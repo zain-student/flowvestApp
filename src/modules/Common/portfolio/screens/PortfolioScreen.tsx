@@ -236,186 +236,34 @@ export const PortfolioScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  scrollContent: {
-    // flex:1,
-    paddingBottom: 60, backgroundColor: Colors.background
-  },
+  scrollContent: { paddingBottom: 60, backgroundColor: Colors.background },
   emptyState: { justifyContent: "center", alignItems: "center", padding: 20 },
   emptyText: { fontSize: 16, color: "#6B7280" },
-  card: {
-    backgroundColor: Colors.secondary,
-    borderBottomLeftRadius: 32, borderBottomRightRadius: 32,
-    padding: 24,
-    paddingTop: 36,
-    // marginBottom: 18,
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 6,
-  },
+  card: { backgroundColor: Colors.secondary, borderBottomLeftRadius: 32, borderBottomRightRadius: 32, padding: 24, paddingTop: 36, shadowColor: "#000", shadowOpacity: 0.08, shadowRadius: 12, elevation: 6, },
   cardTitle: { fontSize: 15, color: Colors.gray, marginBottom: 6 },
-  cardValue: {
-    fontSize: 36,
-    fontWeight: "bold",
-    color: Colors.white,
-    marginBottom: 4,
-  },
-  toggleBtn: {
-    paddingVertical: 6,
-    paddingHorizontal: 16,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: Colors.green,
-    marginHorizontal: 6,
-  },
-  toggleBtnActive: {
-    backgroundColor: Colors.green,
-  },
-  toggleBtnText: {
-    color: Colors.green,
-    fontWeight: "600",
-  },
-  toggleBtnTextActive: {
-    color: "#fff",
-  },
+  cardValue: { fontSize: 36, fontWeight: "bold", color: Colors.white, marginBottom: 4, },
+  toggleBtn: { paddingVertical: 6, paddingHorizontal: 16, borderRadius: 20, borderWidth: 1, borderColor: Colors.green, marginHorizontal: 6, },
+  toggleBtnActive: { backgroundColor: Colors.green, },
+  toggleBtnText: { color: Colors.green, fontWeight: "600", },
+  toggleBtnTextActive: { color: "#fff", },
   chart: { borderRadius: 12, marginVertical: 8 },
-
   cardSubtitle: { fontSize: 14, color: Colors.gray },
-  balanceActionBtnDark: {
-    width: '45%',
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: Colors.darkButton,
-    borderRadius: 18,
-    padding: 10,
-    marginRight: 12,
-  },
-  balanceActionTextDark: {
-    color: Colors.white,
-    fontSize: 15,
-    fontFamily: "Inter_600SemiBold",
-    marginLeft: 7,
-    flexWrap: 'wrap'
-  },
+  balanceActionBtnDark: { width: '45%', flexDirection: "row", alignItems: "center", justifyContent: "center", backgroundColor: Colors.darkButton, borderRadius: 18, padding: 10, marginRight: 12, },
+  balanceActionTextDark: { color: Colors.white, fontSize: 15, fontFamily: "Inter_600SemiBold", marginLeft: 7, flexWrap: 'wrap' },
   balanceActionsRow: { flexDirection: "row", marginTop: 18 },
-  chartContainer: {
-    alignItems: "center", marginBottom: 18,
-    backgroundColor: Colors.white,
-    margin: 12,
-    borderRadius: 25,
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    elevation: 4,
-  },
-  chartBar: {
-    width: "90%",
-    height: 80,
-    backgroundColor: "#FDE68A",
-    borderRadius: 16,
-    marginBottom: 8,
-    marginTop: 10,
-  },
-  chartLabel: { color: Colors.green, fontWeight: "600", fontSize: 13 },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: Colors.secondary,
-    marginBottom: 10,
-    marginHorizontal: 12
-  },
-  assetCard: {
-    backgroundColor: Colors.secondary,
-    borderRadius: 16,
-    padding: 14,
-    marginBottom: 12,
-    marginHorizontal: 12,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    borderWidth: 1,
-    borderColor: Colors.lightGray,
-  },
-
-  assetLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-  },
-
-  assetIconWrapper: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: Colors.darkButton,
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 12,
-  },
-
-  assetName: {
-    fontSize: 15,
-    fontFamily: "Inter_600SemiBold",
-    color: Colors.white,
-  },
-
-  assetValue: {
-    fontSize: 15,
-    fontFamily: "Inter_700Bold",
-    color: Colors.white,
-    marginTop: 2,
-  },
-
-  assetMeta: {
-    fontSize: 13,
-    fontFamily: "Inter_400Regular",
-    color: Colors.gray,
-    marginTop: 2,
-  },
-
-  assetRight: {
-    alignItems: "flex-end",
-    justifyContent: "space-between",
-    height: 48,
-  },
-
-  assetBadge: {
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
-    backgroundColor: "rgba(59,130,246,0.15)",
-  },
-
-  assetBadgeText: {
-    fontSize: 12,
-    fontFamily: "Inter_600SemiBold",
-    color: "#60A5FA",
-  },
-
-  assetGrowth: {
-    fontSize: 14,
-    fontFamily: "Inter_600SemiBold",
-    color: Colors.green,
-  },
-
-  fab: {
-    position: "absolute",
-    right: 24,
-    bottom: 80,
-    backgroundColor: Colors.green,
-    borderRadius: 24,
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 18,
-    paddingVertical: 12,
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  fabIcon: { fontSize: 22, color: Colors.white, marginRight: 6 },
+  chartContainer: { alignItems: "center", marginBottom: 18, backgroundColor: Colors.white, margin: 12, borderRadius: 25, justifyContent: "center", shadowColor: "#000", shadowOpacity: 0.08, shadowRadius: 6, elevation: 4, },
+  sectionTitle: { fontSize: 16, fontWeight: "600", color: Colors.secondary, marginBottom: 10, marginHorizontal: 12 },
+  assetCard: { backgroundColor: Colors.secondary, borderRadius: 16, padding: 14, marginBottom: 12, marginHorizontal: 12, flexDirection: "row", alignItems: "center", justifyContent: "space-between", borderWidth: 1, borderColor: Colors.lightGray, },
+  assetLeft: { flexDirection: "row", alignItems: "center", flex: 1, },
+  assetIconWrapper: { width: 40, height: 40, borderRadius: 20, backgroundColor: Colors.darkButton, alignItems: "center", justifyContent: "center", marginRight: 12, },
+  assetName: { fontSize: 15, fontFamily: "Inter_600SemiBold", color: Colors.white, },
+  assetValue: { fontSize: 15, fontFamily: "Inter_700Bold", color: Colors.white, marginTop: 2, },
+  assetMeta: { fontSize: 13, fontFamily: "Inter_400Regular", color: Colors.gray, marginTop: 2, },
+  assetRight: { alignItems: "flex-end", justifyContent: "space-between", height: 48, },
+  assetBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12, backgroundColor: "rgba(59,130,246,0.15)", },
+  assetBadgeText: { fontSize: 12, fontFamily: "Inter_600SemiBold", color: "#60A5FA", },
+  assetGrowth: { fontSize: 14, fontFamily: "Inter_600SemiBold", color: Colors.green, },
+  fab: { position: "absolute", right: 24, bottom: 80, backgroundColor: Colors.green, borderRadius: 24, flexDirection: "row", alignItems: "center", paddingHorizontal: 18, paddingVertical: 12, shadowColor: "#000", shadowOpacity: 0.08, shadowRadius: 8, elevation: 4, },
   fabLabel: { color: Colors.white, fontWeight: "bold", fontSize: 15 },
 });
 export default PortfolioScreen;

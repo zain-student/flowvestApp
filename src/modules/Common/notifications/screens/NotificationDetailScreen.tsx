@@ -2,7 +2,7 @@ import Colors from "@/shared/colors/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import React from "react";
-import { ScrollView, StyleSheet, Text, View, useColorScheme } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 type NotificationDetailRouteProp = RouteProp<
   { NotificationDetail: { notification: any } },
@@ -23,16 +23,15 @@ const PRIORITY_COLORS = {
 
 export const NotificationDetailScreen = () => {
   const { notification } = useRoute<NotificationDetailRouteProp>().params;
-  const isDark = useColorScheme() === "dark";
 
   const Row = ({ icon, label, value }: { icon: keyof typeof Ionicons.glyphMap; label: string; value: React.ReactNode }) => (
     <View style={styles.infoRow}>
       <View style={styles.left}>
         <Ionicons name={icon} size={18} color={Colors.primary} style={styles.icon} />
-        <Text style={[styles.label, isDark && styles.subTextDark]}>{label}</Text>
+        <Text style={styles.label}>{label}</Text>
       </View>
       {typeof value === "string" ? (
-        <Text style={[styles.value, isDark && styles.textDark]}>{value}</Text>
+        <Text style={styles.value}>{value}</Text>
       ) : (
         value
       )}
@@ -50,19 +49,19 @@ export const NotificationDetailScreen = () => {
 
   return (
     <ScrollView
-      style={[styles.container, isDark && styles.containerDark]}
+      style={styles.container}
       contentContainerStyle={{ paddingBottom: 30 }}
       showsVerticalScrollIndicator={false}
     >
       {/* Header */}
-      <View style={[styles.headerCard, isDark && styles.cardDark]}>
+      <View style={styles.headerCard}>
         <Ionicons name="notifications-outline" size={26} color={Colors.primary} style={styles.icon} />
-        <Text style={[styles.title, isDark && styles.textDark]}>{notification.title}</Text>
-        <Text style={[styles.message, isDark && styles.subTextDark]}>{notification.message}</Text>
+        <Text style={styles.title}>{notification.title}</Text>
+        <Text style={styles.message}>{notification.message}</Text>
       </View>
 
       {/* Details */}
-      <View style={[styles.card, isDark && styles.cardDark]}>
+      <View style={styles.card}>
         <Row icon="person-outline" label="From" value={notification.sender?.name || "System"} />
         <Row icon="person-circle-outline" label="To" value={notification.recipient?.name || "You"} />
         <Row

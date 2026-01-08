@@ -11,8 +11,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
-  useColorScheme,
+  View
 } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
 import Animated, { FadeInUp } from "react-native-reanimated";
@@ -20,8 +19,6 @@ import Animated, { FadeInUp } from "react-native-reanimated";
 export const NotificationsScreen = () => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation();
-  const theme = useColorScheme();
-  const isDark = theme === "dark";
 
   const {
     notifications,
@@ -99,7 +96,6 @@ export const NotificationsScreen = () => {
             activeOpacity={0.85}
             style={[
               styles.card,
-              isDark && styles.cardDark,
               isUnread && styles.unread,
             ]}
             onPress={() =>
@@ -128,7 +124,6 @@ export const NotificationsScreen = () => {
               <Text
                 style={[
                   styles.title,
-                  isDark && styles.textDark,
                   isUnread && styles.unreadTitle,
                 ]}
                 numberOfLines={1}
@@ -137,7 +132,8 @@ export const NotificationsScreen = () => {
               </Text>
 
               <Text
-                style={[styles.message, isDark && styles.subTextDark]}
+                style={[styles.message, 
+                ]}
                 numberOfLines={2}
               >
                 {item.message}
@@ -165,10 +161,9 @@ export const NotificationsScreen = () => {
         {[...Array(5)].map((_, i) => (
           <View
             key={i}
-            style={[
-              styles.skeleton,
-              isDark && styles.skeletonDark,
-            ]}
+            style={
+              styles.skeleton
+            }
           />
         ))}
       </View>

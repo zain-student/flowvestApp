@@ -4,7 +4,7 @@ import { Button, Input } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { joinInvestment } from "@/shared/store/slices/shared/investments/partnerInvestmentSlice";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
-import { Ionicons } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useMemo, useState } from "react";
 import {
@@ -114,7 +114,7 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
         </View>
         {showJoinForm ? null :
           <>
-            <Text style={styles.sectionTitle}>Performance</Text>
+            {/* <Text style={styles.sectionTitle}>Performance</Text>
             <View style={styles.txCard}>
               <Text style={styles.txType}>Total Paid Out</Text>
               <Text style={styles.txAmount}>{formatCurrency(currentInvestment.performance?.total_paid_out ?? 0)}</Text>
@@ -128,7 +128,31 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
                 <Text style={styles.txType}>Next Payout</Text>
                 <Text style={styles.txDate}>{currentInvestment.performance?.next_payout_date ?? 0}</Text>
               </View>
-            )}
+            )} */}
+
+            <Text style={styles.sectionTitle}>Performance</Text>
+            <View style={styles.performanceContainer}>
+              <PerformanceCard
+                icon="dollar-sign"
+                label="Total Paid Out"
+                value={formatCurrency(currentInvestment.performance?.total_paid_out ?? 0)}
+              />
+              <PerformanceCard
+                icon="clock"
+                label="Pending Payouts"
+                value={formatCurrency(currentInvestment.performance?.pending_payouts ?? 0)}
+              />
+              {currentInvestment.performance.next_payout_date && (
+                <PerformanceCard
+                  icon="calendar"
+                  label="Next Payout"
+                  value={currentInvestment.performance.next_payout_date}
+                />
+              )}
+            </View>
+
+
+
           </>}
         {showJoinForm &&
           <View style={{
@@ -189,6 +213,24 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
   );
 };
 
+const PerformanceCard = ({
+  icon,
+  label,
+  value,
+}: {
+  icon: string;
+  label: string;
+  value: string;
+}) => (
+  <View style={styles.txCard}>
+    <View style={styles.txLeft}>
+      <Feather name={icon as any} size={20} color={Colors.white} style={{ marginRight: 8 }} />
+      <Text style={styles.txType}>{label}</Text>
+    </View>
+    <Text style={styles.txAmount}>{value}</Text>
+  </View>
+);
+
 /* ---------- helpers (unchanged) ---------- */
 const LabelValue = ({ label, value, valueStyle }: { label: string; value: string; valueStyle?: any }) => (
   <>
@@ -197,7 +239,6 @@ const LabelValue = ({ label, value, valueStyle }: { label: string; value: string
   </>
 );
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-
 /* ---------- styles (same as your file) ---------- */
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background, paddingBottom: 0 },
@@ -241,6 +282,7 @@ const styles = StyleSheet.create({
   statusActive: { color: Colors.green },
   statusCompleted: { color: Colors.gray },
   sectionTitle: { fontSize: 16, fontWeight: "600", color: Colors.secondary, marginBottom: 5 },
+  performanceContainer: { marginBottom: 20 },
   txCard: {
     backgroundColor: Colors.secondary,
     borderRadius: 10,
@@ -250,6 +292,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
+  txLeft: { flexDirection: "row", alignItems: "center" },
   txType: { fontSize: 15, color: Colors.white, fontWeight: "600" },
   txAmount: { fontSize: 15, color: Colors.white, fontWeight: "500" },
   txDate: { fontSize: 13, color: Colors.gray },

@@ -92,60 +92,6 @@ export const DashboardScreen: React.FC = () => {
   const pullToRefresh = () => {
     dispatch(fetchAdminDashboard())
   }
-  // const renderActivityItem = ({ item }: any) => {
-  //   const isCompleted = item.status === "completed";
-
-  //   return (
-  //     <TouchableOpacity style={styles.activityCard}>
-  //       {/* Top Row */}
-  //       <View style={styles.activityTopRow}>
-  //         <View style={styles.activityLeft}>
-  //           <View style={styles.activityIconWrapper}>
-  //             <Feather
-  //               name={
-  //                 item.type === "payout"
-  //                   ? "arrow-down-right"
-  //                   : item.type === "investment"
-  //                     ? "arrow-up-right"
-  //                     : "users"
-  //               }
-  //               size={18}
-  //               color={Colors.white}
-  //             />
-  //           </View>
-
-  //           <View>
-  //             <Text style={styles.activityTitle}>{item.title}</Text>
-  //             <Text style={styles.activityDate}>{item.time}</Text>
-  //           </View>
-  //         </View>
-
-  //         <View
-  //           style={[
-  //             styles.statusBadge,
-  //             {
-  //               backgroundColor: isCompleted
-  //                 ? "rgba(34,197,94,0.15)"
-  //                 : "rgba(156,163,175,0.15)",
-  //             },
-  //           ]}
-  //         >
-  //           <Text
-  //             style={[
-  //               styles.statusText,
-  //               { color: isCompleted ? Colors.green : Colors.gray },
-  //             ]}
-  //           >
-  //             {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-  //           </Text>
-  //         </View>
-  //       </View>
-
-  //       {/* Amount */}
-  //       <Text style={styles.activityAmount}>{item.amount}</Text>
-  //     </TouchableOpacity>
-  //   );
-  // };
   const renderActivityItem = ({ item }: any) => {
     const statusLower = item.status.toLowerCase();
 
@@ -169,7 +115,7 @@ export const DashboardScreen: React.FC = () => {
         {/* Middle: Title & Dates */}
         <View style={styles.infoWrapper}>
           <Text style={styles.activityTitle}>{item.title}</Text>
-          <Text style={styles.activitySubText}>Created: {item.created_at ?? "N/A"}</Text>
+          <Text style={styles.activitySubText}>Created: {formatDate(item.created_at ?? "N/A")}</Text>
           <Text style={styles.activitySubText}>Time: {item.time}</Text>
         </View>
 
@@ -305,7 +251,11 @@ export const DashboardScreen: React.FC = () => {
     </DashboardLayout>
   );
 };
-
+const formatDate = (d?: string | null) => {
+  if (!d) return "N/A";
+  const date = new Date(d);
+  return date.toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" });
+};
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background },
   header: {

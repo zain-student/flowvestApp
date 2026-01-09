@@ -11,7 +11,6 @@ type Props = NativeStackScreenProps<
     InvestmentStackParamList,
     "MyInvestments"
 >;
-
 export const MyInvestments = ({ navigation }: Props) => {
     const dispatch = useAppDispatch();
     const { investments, summary, isLoading, error, meta, isLoadingMore } = useAppSelector((state) => state.userInvestments);
@@ -166,7 +165,7 @@ export const MyInvestments = ({ navigation }: Props) => {
                         <Text style={styles.label}>Total Investments: <Text style={styles.value}>{summary.total_investments}</Text></Text>
                         <Text style={styles.label}>Active Investments: <Text style={styles.value}>{summary.active_investments}</Text></Text>
                         <Text style={styles.label}>Average ROI: <Text style={styles.value}>{summary.average_roi}%</Text></Text>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}> */}
                             <Text style={styles.label}>Invested: <Text style={styles.value}>{formatCurrency(summary.total_invested)}</Text></Text>
                             {/* <Text style={styles.label}>Duration: <Text style={styles.value}>12 Months</Text></Text> */}
                             <TouchableOpacity style={styles.balanceActionBtnDark}
@@ -176,7 +175,7 @@ export const MyInvestments = ({ navigation }: Props) => {
                                     Browse Investments
                                 </Text>
                             </TouchableOpacity>
-                        </View>
+                        {/* </View> */}
                     </View>
                 }
                 ListEmptyComponent={
@@ -245,10 +244,12 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
+        alignSelf: "flex-end",
         backgroundColor: Colors.darkButton,
         borderRadius: 18,
         paddingHorizontal: 10,
         paddingVertical: 10,
+        marginTop: 8,
     },
     balanceActionTextDark: {
         color: Colors.white,
@@ -269,90 +270,74 @@ const styles = StyleSheet.create({
         shadowRadius: 8,
         elevation: 4,
     },
-
     cardHeader: {
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
     },
-
     investmentType: {
         fontSize: 13,
         color: Colors.gray,
         marginTop: 2,
     },
-
     statusBadge: {
         paddingHorizontal: 10,
         paddingVertical: 4,
         borderRadius: 20,
     },
-
     statusActive: {
         backgroundColor: "rgba(16,185,129,0.15)",
     },
-
     statusClosed: {
         backgroundColor: "rgba(107,114,128,0.15)",
     },
-
     statusText: {
         fontSize: 12,
         fontWeight: "600",
         color: Colors.green,
     },
-
     divider: {
         height: 1,
         backgroundColor: "rgba(255,255,255,0.06)",
         marginVertical: 12,
     },
-
     amountRow: {
         flexDirection: "row",
         justifyContent: "space-between",
     },
-
     amountLabel: {
         fontSize: 13,
         color: Colors.gray,
     },
-
     amountValue: {
         fontSize: 18,
         fontWeight: "600",
         color: Colors.white,
         marginTop: 2,
     },
-
     metaRow: {
         flexDirection: "row",
         justifyContent: "space-between",
         marginTop: 12,
     },
-
     metaText: {
         fontSize: 12,
         color: Colors.gray,
     },
-
     actionsRow: {
         marginTop: 14,
     },
-
     leaveButton: {
         backgroundColor: "rgba(239,68,68,0.15)",
         borderRadius: 10,
         paddingVertical: 10,
         alignItems: "center",
     },
-
     leaveText: {
         color: Colors.error,
         fontWeight: "600",
         fontSize: 14,
     },
-
 });
 
 // export default MyInvestments;

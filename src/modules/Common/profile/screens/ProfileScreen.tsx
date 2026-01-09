@@ -215,7 +215,7 @@ export const ProfileScreen: React.FC = () => {
           >
             <Text style={styles.prefLabel}>Preferred Currency</Text>
             <View style={styles.prefValue}>
-              <Text>{selectedCurrency?.code || "USD"}</Text>
+              <Text>{selectedCurrency?.code}</Text>
               <Ionicons name="chevron-forward" size={18} />
             </View>
           </TouchableOpacity>
@@ -225,8 +225,17 @@ export const ProfileScreen: React.FC = () => {
             transparent
             onRequestClose={() => setCurrencyDropdownOpen(false)}
           >
-            <View style={styles.modalOverlay}>
-              <View style={styles.modalSheet}>
+            <TouchableOpacity
+              activeOpacity={1}
+              style={styles.modalOverlay}
+              onPress={() => setCurrencyDropdownOpen(false)}
+            >
+              {/* Stop propagation for modal content */}
+              <TouchableOpacity
+                activeOpacity={1}
+                style={styles.modalSheet}
+                onPress={() => { }}
+              >
                 <Text style={styles.modalTitle}>Select Currency</Text>
 
                 <ScrollView showsVerticalScrollIndicator={false}>
@@ -243,8 +252,8 @@ export const ProfileScreen: React.FC = () => {
                     </TouchableOpacity>
                   ))}
                 </ScrollView>
-              </View>
-            </View>
+              </TouchableOpacity>
+            </TouchableOpacity>
           </Modal>
 
 
@@ -319,7 +328,7 @@ const SettingsButton = ({ icon, label, onPress }: {
 const styles = StyleSheet.create({
   scrollContent: { padding: 20, backgroundColor: Colors.background, paddingBottom: 100 },
   avatarImage: { width: AVATAR_SIZE, height: AVATAR_SIZE, borderRadius: AVATAR_SIZE / 2, borderWidth: 1, borderColor: "#E5E7EB", alignItems: "center", justifyContent: "center", shadowColor: "#000000ff", shadowOpacity: 0.08, shadowRadius: 6, elevation: 4, },
-  avatarPlaceholder: { width: AVATAR_SIZE, height: AVATAR_SIZE, borderRadius: AVATAR_SIZE / 2, backgroundColor: "#ccc", alignItems: "center", justifyContent: "center", },
+  avatarPlaceholder: { width: AVATAR_SIZE, height: AVATAR_SIZE, borderRadius: AVATAR_SIZE / 2, backgroundColor: Colors.white, alignItems: "center", justifyContent: "center", },
   avatarText: { fontSize: 40, color: "#fff", },
   modalBackground: { flex: 1, backgroundColor: "rgba(0,0,0,0.9)", justifyContent: "center", alignItems: "center", },
   modalCloseArea: { flex: 1, justifyContent: "center", alignItems: "center", width: "100%", },

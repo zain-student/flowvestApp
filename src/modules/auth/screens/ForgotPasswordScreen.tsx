@@ -118,6 +118,15 @@ export const ForgotPasswordScreen: React.FC = () => {
   if (emailSent) {
     return (
       <SafeAreaView style={styles.container}>
+        <View style={styles.headerContainer}>
+          <TouchableOpacity
+            style={styles.headerBackButton}
+            onPress={navigateToLogin}
+          >
+            <Ionicons name="arrow-back" size={24} color={Colors.secondary} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Reset Password</Text>
+        </View>
         <View style={styles.successContainer}>
           <View style={styles.successIcon}>
             <Text style={styles.successIconText}>✉️</Text>
@@ -154,15 +163,24 @@ export const ForgotPasswordScreen: React.FC = () => {
         style={styles.keyboardAvoid}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
+        <View style={styles.headerContainer}>
+          <TouchableOpacity
+            style={styles.headerBackButton}
+            onPress={navigateToLogin}
+          >
+            <Ionicons name="arrow-back" size={24} color={Colors.secondary} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Join FlowVest</Text>
+        </View>
         <ScrollView
           style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
           <StatusBar
-                            barStyle="dark-content" // or "dark-content"
-                            // backgroundColor="#000" // set to match your theme
-                          />
+            barStyle="dark-content" // or "dark-content"
+          // backgroundColor="#000" // set to match your theme
+          />
           {/* Header */}
           <View style={styles.header}>
             <Text style={styles.title}>Forgot Password?</Text>
@@ -194,14 +212,7 @@ export const ForgotPasswordScreen: React.FC = () => {
               style={styles.submitButton}
             />
 
-            {/* Back to Login */}
-            <TouchableOpacity
-              style={styles.backContainer}
-              onPress={navigateToLogin}
-            >
-              <Ionicons name="arrow-back" size={20} color={Colors.secondary} />
-              <Text style={styles.backText}>Back to Login</Text>
-            </TouchableOpacity>
+          
           </View>
 
           {/* Footer */}
@@ -222,6 +233,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
   },
+  headerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    // justifyContent: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: Colors.background,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.lightGray,
+  },
+  headerBackButton: { marginRight: 16 },
+  headerTitle: { fontSize: 20, fontWeight: "bold", color: Colors.secondary, flex: 1, textAlign: "center" },
 
   keyboardAvoid: {
     flex: 1,
@@ -265,19 +288,6 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
 
-  backContainer: {
-    alignItems: "center",
-    marginBottom: 32,
-    flexDirection: "row",
-    // justifyContent: 'center',
-  },
-
-  backText: {
-    fontSize: 14,
-    color: Colors.secondary,
-    fontWeight: "500",
-  },
-
   footer: {
     flexDirection: "row",
     justifyContent: "center",
@@ -300,7 +310,7 @@ const styles = StyleSheet.create({
 
   // Success screen styles
   successContainer: {
-    flex: 1,
+    flex: 0.8,
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 24,

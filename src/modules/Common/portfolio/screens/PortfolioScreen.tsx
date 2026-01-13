@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
   toggleBtnTextActive: { color: "#fff", },
   chart: { borderRadius: 12, marginVertical: 8 },
   cardSubtitle: { fontSize: 14, color: Colors.gray },
-  balanceActionBtnDark: { width: '45%', flexDirection: "row", alignItems: "center", justifyContent: "center", backgroundColor: Colors.darkButton, borderRadius: 18, padding: 10, marginRight: 12, },
+  balanceActionBtnDark: { width: '48%', flexDirection: "row", alignItems: "center", justifyContent: "center", backgroundColor: Colors.darkButton, borderRadius: 18, padding: 10, marginRight: 12, },
   balanceActionTextDark: { color: Colors.white, fontSize: 15, fontFamily: "Inter_600SemiBold", marginLeft: 7, flexWrap: 'wrap' },
   balanceActionsRow: { flexDirection: "row", marginTop: 18 },
   chartContainer: { alignItems: "center", marginBottom: 18, backgroundColor: Colors.white, margin: 12, borderRadius: 25, justifyContent: "center", shadowColor: "#000", shadowOpacity: 0.08, shadowRadius: 6, elevation: 4, },

@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
   balanceValueDark: { color: Colors.white, fontSize: 36, fontFamily: "Inter_700Bold", fontWeight: "700", marginVertical: 2, },
   balanceChangeDark: { color: Colors.green, fontSize: 14, fontFamily: "Inter_600SemiBold", },
   balanceActionsRow: { flexDirection: "row", marginTop: 18 },
-  balanceActionBtnDark: { width: '40%', flexDirection: "row", alignItems: "center", justifyContent: "center", backgroundColor: Colors.darkButton, borderRadius: 18, paddingHorizontal: 18, paddingVertical: 8, marginRight: 12, },
+  balanceActionBtnDark: { width: '48%', flexDirection: "row", alignItems: "center", justifyContent: "center", backgroundColor: Colors.darkButton, borderRadius: 18, padding: 10, marginRight: 12, },
   balanceActionTextDark: { color: Colors.white, fontSize: 15, fontFamily: "Inter_600SemiBold", marginLeft: 7, },
   statCardGrid: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", marginHorizontal: 12, marginTop: 8, marginBottom: 24, },
   statCardLarge: {

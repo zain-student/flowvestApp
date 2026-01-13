@@ -310,8 +310,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: Colors.success,
     borderRadius: 18,
-    paddingHorizontal: 18,
-    paddingVertical: 8,
+    padding:10,
     marginRight: 12,
   },
   balanceActionTextDark: {

@@ -14,9 +14,7 @@ import {
 
 export const EditCompanyScreen = ({ navigation }: any) => {
     const dispatch = useAppDispatch();
-    const { companyInfo, isCompanyLoading } = useAppSelector(
-        state => state.profile
-    );
+    const { companyInfo, isCompanyLoading } = useAppSelector((state) => state.profile);
 
     const [form, setForm] = useState({
         name: companyInfo?.name || "",
@@ -24,15 +22,15 @@ export const EditCompanyScreen = ({ navigation }: any) => {
         email: companyInfo?.email || "",
         phone: companyInfo?.phone || "",
         website: companyInfo?.website || "",
-        street: companyInfo?.address.street || "",
-        city: companyInfo?.address.city || "",
-        state: companyInfo?.address.state || "",
-        zip: companyInfo?.address.zip || "",
-        country: companyInfo?.address.country || "",
+        street: companyInfo?.address?.street || "",
+        city: companyInfo?.address?.city || "",
+        state: companyInfo?.address?.state || "",
+        zip: companyInfo?.address?.zip || "",
+        country: companyInfo?.address?.country || "",
     });
 
     const handleChange = (key: keyof typeof form, value: string) => {
-        setForm(prev => ({ ...prev, [key]: value }));
+        setForm((prev) => ({ ...prev, [key]: value }));
     };
 
     const onSave = async () => {
@@ -58,149 +56,187 @@ export const EditCompanyScreen = ({ navigation }: any) => {
     };
 
     return (
-        <ScrollView
-            contentContainerStyle={styles.scrollContent}
-            showsVerticalScrollIndicator={false}
-        >
+        <>
             <StatusBar barStyle="dark-content" />
 
-            {/* Header */}
-            <View style={styles.header}>
-                <Text style={styles.title}>Edit Company</Text>
-                <Text style={styles.subtitle}>
-                    Update your company information
-                </Text>
-            </View>
+            <ScrollView
+                contentContainerStyle={styles.scrollContent}
+                keyboardShouldPersistTaps="handled"
+                showsVerticalScrollIndicator={false}
+            >
+                {/* Header */}
+                <View style={styles.header}>
+                    <Text style={styles.title}>Edit Company Profile</Text>
+                    <Text style={styles.subtitle}>Keep your business information up to date</Text>
+                </View>
 
-            {/* Company Info */}
-            <View style={styles.form}>
-                <Text style={styles.sectionTitle}>Company Details</Text>
+                {/* Form */}
+                <View style={styles.formContainer}>
+                    <Text style={styles.sectionTitle}>Company Information</Text>
 
-                <Input
-                    label="Company Name"
-                    placeholder="Enter company name"
-                    value={form.name}
-                    onChangeText={v => handleChange("name", v)}
-                    required
-                />
+                    <Input
+                        label="Company Name"
+                        placeholder="Your company name"
+                        value={form.name}
+                        onChangeText={(v) => handleChange("name", v)}
+                        required
+                    />
 
-                <Input
-                    label="Description"
-                    placeholder="Enter company description"
-                    value={form.description}
-                    onChangeText={v => handleChange("description", v)}
-                />
+                    <Input
+                        label="Description"
+                        placeholder="Short description about your company"
+                        value={form.description}
+                        onChangeText={(v) => handleChange("description", v)}
+                        multiline
+                        numberOfLines={3}
+                    />
 
-                <Input
-                    label="Email"
-                    placeholder="Enter company email"
-                    keyboardType="email-address"
-                    value={form.email}
-                    onChangeText={v => handleChange("email", v)}
-                />
+                    <Input
+                        label="Email"
+                        placeholder="company@example.com"
+                        keyboardType="email-address"
+                        value={form.email}
+                        onChangeText={(v) => handleChange("email", v)}
+                        autoCapitalize="none"
+                    />
 
-                <Input
-                    label="Phone"
-                    placeholder="Enter phone number"
-                    keyboardType="phone-pad"
-                    value={form.phone}
-                    onChangeText={v => handleChange("phone", v)}
-                />
+                    <Input
+                        label="Phone Number"
+                        placeholder="+92 300 1234567"
+                        keyboardType="phone-pad"
+                        value={form.phone}
+                        onChangeText={(v) => handleChange("phone", v)}
+                    />
 
-                <Input
-                    label="Website"
-                    placeholder="https://example.com"
-                    value={form.website}
-                    onChangeText={v => handleChange("website", v)}
-                />
+                    <Input
+                        label="Website"
+                        placeholder="https://www.example.com"
+                        value={form.website}
+                        onChangeText={(v) => handleChange("website", v)}
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                    />
 
-                {/* Address */}
-                <Text style={styles.sectionTitle}>Address</Text>
+                    <Text style={[styles.sectionTitle, { marginTop: 32 }]}>Business Address</Text>
 
-                <Input
-                    label="Street"
-                    placeholder="Street address"
-                    value={form.street}
-                    onChangeText={v => handleChange("street", v)}
-                />
+                    <Input
+                        label="Street Address"
+                        placeholder="123 Business Road"
+                        value={form.street}
+                        onChangeText={(v) => handleChange("street", v)}
+                    />
 
-                <Input
-                    label="City"
-                    placeholder="City"
-                    value={form.city}
-                    onChangeText={v => handleChange("city", v)}
-                />
+                    <View style={styles.row}>
+                        <View style={{ flex: 1, marginRight: 12 }}>
+                            <Input
+                                label="City"
+                                placeholder="Islamabad"
+                                value={form.city}
+                                onChangeText={(v) => handleChange("city", v)}
+                            />
+                        </View>
+                        <View style={{ flex: 1 }}>
+                            <Input
+                                label="State / Province"
+                                placeholder="Islamabad Capital Territory"
+                                value={form.state}
+                                onChangeText={(v) => handleChange("state", v)}
+                            />
+                        </View>
+                    </View>
 
-                <Input
-                    label="State"
-                    placeholder="State"
-                    value={form.state}
-                    onChangeText={v => handleChange("state", v)}
-                />
+                    <View style={styles.row}>
+                        <View style={{ flex: 1, marginRight: 12 }}>
+                            <Input
+                                label="ZIP / Postal Code"
+                                placeholder="44000"
+                                value={form.zip}
+                                onChangeText={(v) => handleChange("zip", v)}
+                            />
+                        </View>
+                        <View style={{ flex: 1 }}>
+                            <Input
+                                label="Country"
+                                placeholder="Pakistan"
+                                value={form.country}
+                                onChangeText={(v) => handleChange("country", v)}
+                            />
+                        </View>
+                    </View>
 
-                <Input
-                    label="ZIP Code"
-                    placeholder="ZIP code"
-                    value={form.zip}
-                    onChangeText={v => handleChange("zip", v)}
-                />
+                    <Button
+                        title={isCompanyLoading ? "Saving..." : "Save Changes"}
+                        onPress={onSave}
+                        disabled={isCompanyLoading}
+                        loading={isCompanyLoading}
+                        fullWidth
+                        style={styles.submitButton}
+                    />
+                </View>
 
-                <Input
-                    label="Country"
-                    placeholder="Country"
-                    value={form.country}
-                    onChangeText={v => handleChange("country", v)}
-                />
-
-                <Button
-                    title={isCompanyLoading ? "Saving..." : "Save Changes"}
-                    onPress={onSave}
-                    fullWidth
-                    disabled={isCompanyLoading}
-                    style={styles.submitButton}
-                />
-            </View>
-        </ScrollView>
+                {/* Bottom safe area padding */}
+                <View style={{ height: 40 }} />
+            </ScrollView>
+        </>
     );
 };
 
-export default EditCompanyScreen;
 const styles = StyleSheet.create({
     scrollContent: {
         flexGrow: 1,
         paddingHorizontal: 24,
-        paddingVertical: 20,
-        paddingBottom: 80,
-        backgroundColor: Colors.background,
+        paddingTop: 16,
+        paddingBottom: 40,
+        backgroundColor: Colors.background || "#f9fafb",
     },
+
     header: {
         alignItems: "center",
-        marginTop: 40,
-        marginBottom: 40,
+        marginTop: 8,
+        marginBottom: 36,
     },
     title: {
-        fontSize: 24,
-        fontWeight: "bold",
+        fontSize: 26,
+        fontWeight: "700",
         color: "#111827",
-        marginBottom: 8,
+        letterSpacing: -0.3,
     },
     subtitle: {
         fontSize: 14,
-        color: Colors.gray,
-        textAlign: "center",
+        color: "#6b7280",
+        marginTop: 6,
     },
-    form: {
-        flex: 1,
+
+    formContainer: {
+        backgroundColor: "#ffffff",
+        borderRadius: 16,
+        padding: 20,
+        borderWidth: 1,
+        borderColor: "#f1f1f1",
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.05,
+        shadowRadius: 6,
+        elevation: 2,
     },
+
     sectionTitle: {
-        fontSize: 14,
+        fontSize: 15,
         fontWeight: "600",
-        color: Colors.secondary,
-        marginBottom: 12,
-        marginTop: 8,
-        alignSelf: "center",
+        color: "#4b5563",
+        marginBottom: 16,
+        marginTop: 4,
     },
+
+    row: {
+        flexDirection: "row",
+        marginBottom: 4,
+    },
+
     submitButton: {
-        marginTop: 24,
+        marginTop: 32,
+        borderRadius: 12,
     },
 });
+
+export default EditCompanyScreen;

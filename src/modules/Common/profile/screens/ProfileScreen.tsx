@@ -206,9 +206,10 @@ export const ProfileScreen: React.FC = () => {
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>Account Info</Text>
           <InfoRow label="Email" value={user?.email ?? "--"} />
-          <TouchableOpacity onPress={()=>navigation.navigate("CompanyInfo")}>
+          {user?.roles?.includes("admin") ? (<TouchableOpacity onPress={() => navigation.navigate("CompanyInfo")}>
             <InfoRow label="Company" value={user?.company?.name ?? "--"} />
-          </TouchableOpacity>
+          </TouchableOpacity>) :
+            (<InfoRow label="Company" value={user?.company?.name ?? "--"} />)}
           {/* Currency Preference */}
           <TouchableOpacity
             style={styles.preferenceRow}

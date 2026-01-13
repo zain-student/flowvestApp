@@ -90,11 +90,13 @@ export const RootNavigator: React.FC = () => {
       </NavigationContainer>
     );
   } else if (isAuthenticated && !userRole) {
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="AuthStack" component={AuthStack} />
-      </Stack.Navigator>
-    </NavigationContainer>;
+    return (
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="AuthStack" component={AuthStack} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    )
   }
 
   return (

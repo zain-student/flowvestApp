@@ -32,6 +32,27 @@ export interface Currency {
   locale: string;
   decimal_places: number;
 }
+// Company Detail model
+export interface CompanyDetail {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
+  email: string;
+  phone: string;
+  website: string;
+  status: string;
+  address: {
+    zip: string;
+    city: string;
+    state: string;
+    street: string;
+    country: string;
+  };
+  created_at: string;
+  updated_at: string;
+}
+
 // Preferences model
 export interface Preferences {
   notifications: {
@@ -70,6 +91,9 @@ export interface ProfileState {
   currencies: Currency[];
   isCurrenciesLoading: boolean;
   preferences?: Preferences;
+  // Company info
+  companyInfo?: CompanyDetail;
+  isCompanyLoading?: boolean;
 }
 
 // Initial state
@@ -81,6 +105,8 @@ const initialState: ProfileState = {
   currencies: [],
   isCurrenciesLoading: false,
   preferences: undefined,
+  companyInfo: undefined,
+  isCompanyLoading: false,
 };
 
 // ✅ Thunk to fetch current user
@@ -234,6 +260,27 @@ export const uploadUserAvatar = createAsyncThunk(
     }
   }
 );
+// ✅ Get Company Info Thunk
+export const getCompanyInfo = createAsyncThunk<
+  CompanyDetail,
+  void,
+  { rejectValue: string }
+>("profile/getCompanyInfo", async (_, { rejectWithValue }) => {
+  try {
+    const response = await api.get(API_ENDPOINTS.PROFILE.COMPANY_INFO);
+    console.log("✅ Company info response:", response.data);
+    return response.data.data;
+  } catch (error: any) {
+    const msg =
+      error?.response?.data?.message ||
+      error?.message ||
+      "Failed to fetch company info";
+
+    ToastAndroid.show(msg, ToastAndroid.SHORT);
+    return rejectWithValue(msg);
+  }
+});
+
 // ✅ Slice
 const profileSlice = createSlice({
   name: "profile",
@@ -286,7 +333,7 @@ const profileSlice = createSlice({
       .addCase(updatePreferences.fulfilled, (state, action) => {
         state.preferences = action.payload.data;
       })
-// get preferences extra reducers
+      // get preferences extra reducers
       .addCase(getPreferences.fulfilled, (state, action) => {
         state.preferences = action.payload.data;
       })
@@ -334,6 +381,19 @@ const profileSlice = createSlice({
       })
       .addCase(uploadUserAvatar.rejected, (state, action) => {
         state.isLoading = false;
+      })
+      // Get Company Info extra reducers
+      .addCase(getCompanyInfo.pending, (state) => {
+        state.isCompanyLoading = true;
+        state.error = null;
+      })
+      .addCase(getCompanyInfo.fulfilled, (state, action) => {
+        state.isCompanyLoading = false;
+        state.companyInfo = action.payload;
+      })
+      .addCase(getCompanyInfo.rejected, (state, action) => {
+        state.isCompanyLoading = false;
+        state.error = action.payload || "Failed to fetch company info";
       });
   },
 });
@@ -350,6 +410,11 @@ export const selectProfileLoading = (state: RootState) =>
   state.profile?.isLoading || false;
 export const selectProfileError = (state: RootState) =>
   state.profile?.error || null;
+export const selectCompanyInfo = (state: RootState) =>
+  state.profile.companyInfo;
+
+export const selectCompanyLoading = (state: RootState) =>
+  state.profile.isCompanyLoading || false;
 
 // ✅ Reducer
 export default profileSlice.reducer;

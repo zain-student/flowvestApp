@@ -8,6 +8,7 @@ import { NotificationSettingsScreen } from "../../modules/Common/notifications/s
 import { NotificationTemplatesScreen } from "../../modules/Common/notifications/screens/NotificationTemplatesScreen";
 import { TemplateDetailScreen } from '../../modules/Common/notifications/screens/TemplateDetailScreen';
 import { ChangePasswordScreen } from "../../modules/Common/profile/screens/ChangePasswordScreen";
+import { CompanyInfoScreen } from "../../modules/Common/profile/screens/CompanyInfoScreen";
 import ProfileScreen from "../../modules/Common/profile/screens/ProfileScreen";
 import { UpdateProfile } from "../../modules/Common/profile/screens/UpdateProfile";
 export type ProfileStackParamList = {
@@ -20,6 +21,7 @@ export type ProfileStackParamList = {
   TemplateDetail: { template: NotificationTemplate };
   NotificationsScreen: undefined;
   NotificationDetail: { notification: any };
+  CompanyInfo: undefined;
 };
 
 const Stack = createNativeStackNavigator<ProfileStackParamList>();
@@ -67,6 +69,34 @@ export const ProfileStack = () => {
         options={({ navigation }) => ({
           // gestureEnabled: false,
           title: 'Update Profile',
+          headerTitleAlign: 'center',
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={{
+                marginRight: 16,
+                marginLeft: 10,
+                marginTop: 5,
+                marginBottom: 5,
+                backgroundColor: "#F3F4F6",
+                width: 40,
+                height: 40,
+                borderRadius: 25,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Ionicons name="chevron-back" color={"black"} size={30} />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="CompanyInfo"
+        component={CompanyInfoScreen}
+        options={({ navigation }) => ({
+          // gestureEnabled: false,
+          title: 'Company Info',
           headerTitleAlign: 'center',
           headerLeft: () => (
             <TouchableOpacity

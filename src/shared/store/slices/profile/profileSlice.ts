@@ -52,6 +52,21 @@ export interface CompanyDetail {
   created_at: string;
   updated_at: string;
 }
+export interface UpdateCompanyPayload {
+  name: string;
+  description: string;
+  email: string;
+  phone: string;
+  website: string;
+  status: string;
+  address: {
+    street: string;
+    city: string;
+    state?: string;
+    zip: string;
+    country: string;
+  };
+}
 
 // Preferences model
 export interface Preferences {
@@ -280,6 +295,31 @@ export const getCompanyInfo = createAsyncThunk<
     return rejectWithValue(msg);
   }
 });
+// Edit Company Info Thunk
+export const updateCompanyInfo = createAsyncThunk<
+  CompanyDetail,
+  UpdateCompanyPayload,
+  { rejectValue: string }
+>("profile/updateCompanyInfo", async (payload, { rejectWithValue }) => {
+  try {
+    const response = await api.put(API_ENDPOINTS.PROFILE.UPDATE_COMPANY, payload);
+
+    ToastAndroid.show(
+      response.data.message || "Company updated",
+      ToastAndroid.SHORT
+    );
+
+    return response.data.data;
+  } catch (error: any) {
+    const msg =
+      error?.response?.data?.message ||
+      error?.message ||
+      "Failed to update company";
+
+    ToastAndroid.show(msg, ToastAndroid.SHORT);
+    return rejectWithValue(msg);
+  }
+});
 
 // ✅ Slice
 const profileSlice = createSlice({
@@ -394,6 +434,26 @@ const profileSlice = createSlice({
       .addCase(getCompanyInfo.rejected, (state, action) => {
         state.isCompanyLoading = false;
         state.error = action.payload || "Failed to fetch company info";
+      })
+      // Update Company Info extra reducers
+      .addCase(updateCompanyInfo.pending, (state) => {
+        state.isCompanyLoading = true;
+        state.error = null;
+      })
+      .addCase(updateCompanyInfo.fulfilled, (state, action) => {
+        state.isCompanyLoading = false;
+
+        // Update company info
+        state.companyInfo = action.payload;
+
+        // 🔥 Sync company name in user profile
+        if (state.user?.company) {
+          state.user.company.name = action.payload.name;
+        }
+      })
+      .addCase(updateCompanyInfo.rejected, (state, action) => {
+        state.isCompanyLoading = false;
+        state.error = action.payload || "Failed to update company";
       });
   },
 });

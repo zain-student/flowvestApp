@@ -1,7 +1,10 @@
+import { ProfileStackParamList } from "@/navigation/ProfileStacks/ProfileStack";
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { getCompanyInfo } from "@/shared/store/slices/profile/profileSlice";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useEffect } from "react";
 import {
     ActivityIndicator,
@@ -25,9 +28,10 @@ const Section = ({ title, children }: any) => (
         <View style={styles.card}>{children}</View>
     </View>
 );
-
+type ProfileNavProp = NativeStackNavigationProp<ProfileStackParamList>;
 export const CompanyInfoScreen = () => {
     const dispatch = useAppDispatch();
+    const navigation = useNavigation<ProfileNavProp>();
     const { companyInfo, isCompanyLoading } = useAppSelector(
         state => state.profile
     );
@@ -56,7 +60,7 @@ export const CompanyInfoScreen = () => {
                 </View>
 
                 {/* Edit button (Admin only – logic later) */}
-                <TouchableOpacity style={styles.editBtn}>
+                <TouchableOpacity style={styles.editBtn} onPress={()=>navigation.navigate("EditCompany")}>
                     <Ionicons name="create-outline" size={18} color={Colors.primary} />
                     <Text style={styles.editText}>Edit</Text>
                 </TouchableOpacity>

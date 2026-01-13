@@ -116,6 +116,7 @@ export const API_ENDPOINTS = {
     GET: '/v1/profile',
     UPDATE: '/v1/profile',
     COMPANY_INFO:'/v1/profile/company',
+    UPDATE_COMPANY:'/v1/profile/company',
     PREFERENCES: '/v1/profile/preferences',
     SETTINGS: '/v1/profile/settings',
     UPLOAD_AVATAR:"/v1/profile/avatar",

@@ -29,7 +29,7 @@ export const RecentPaymentsLog = () => {
       {/* Middle: Title & Dates */}
       <View style={styles.infoWrapper}>
         <Text style={styles.activityTitle}>{item.title}</Text>
-        <Text style={styles.activitySubText}>Created: {item.created_at}</Text>
+        <Text style={styles.activitySubText}>Created: {formatDate(item.created_at)}</Text>
         <Text style={styles.activitySubText}>Time: {item.time}</Text>
       </View>
 
@@ -51,7 +51,11 @@ export const RecentPaymentsLog = () => {
       </View>
     </View>
   );
-
+  const formatDate = (d?: string | null) => {
+    if (!d) return "N/A";
+    const date = new Date(d);
+    return date.toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" });
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.sectionTitle}>Recent Activities</Text>

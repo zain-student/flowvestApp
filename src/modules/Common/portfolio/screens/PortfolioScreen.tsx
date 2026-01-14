@@ -114,7 +114,7 @@ export const PortfolioScreen: React.FC = () => {
 
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Total Earned</Text>
-        <Text style={styles.cardValue}>{formatCurrency(Number(data?.summary.total_earned)) ?? '--'}</Text>
+        <Text style={styles.cardValue}>{formatCurrency(Number(data?.summary.total_earned)) ?? 0}</Text>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <Text style={styles.cardSubtitle}>Total Investments:
             <Text style={styles.balanceChangeDark}>

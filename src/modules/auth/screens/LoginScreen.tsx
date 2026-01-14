@@ -173,13 +173,7 @@ export const LoginScreen: React.FC = () => {
                   </View>
                   <Text style={styles.rememberText}>Remember me</Text>
                 </TouchableOpacity>
-                {/* Forgot Password Link */}
-                <TouchableOpacity
-                  style={styles.forgotPasswordContainer}
-                  onPress={navigateToForgotPassword}
-                >
-                  <Text style={styles.forgotPasswordText}>Forgot your password?</Text>
-                </TouchableOpacity>
+                
               </View>
 
               {/* Submit Button */}
@@ -190,6 +184,13 @@ export const LoginScreen: React.FC = () => {
                 fullWidth
                 style={styles.submitButton}
               />
+              {/* Forgot Password Link */}
+                <TouchableOpacity
+                  style={styles.forgotPasswordContainer}
+                  onPress={navigateToForgotPassword}
+                >
+                  <Text style={styles.forgotPasswordText}>Forgot your password?</Text>
+                </TouchableOpacity>
             </View>
           </View>
           {/* Footer */}
@@ -341,11 +342,11 @@ const styles = StyleSheet.create({
   },
 
   submitButton: {
-    marginBottom: 60,
+    marginBottom: 20,
   },
 
   forgotPasswordContainer: {
-    alignItems: 'center',
+    alignItems: 'flex-end',
     // marginBottom: 32,
   },
 

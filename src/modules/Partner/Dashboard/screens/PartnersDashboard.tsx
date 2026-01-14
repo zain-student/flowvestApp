@@ -216,13 +216,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: Colors.green,
     borderRadius: 18,
-    padding: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 2,
     marginHorizontal: 5,
     width: '48%',
   },
   balanceActionTextDark: {
     color: Colors.white,
-    fontSize: 15,
+    fontSize: 14,
     fontFamily: "Inter_600SemiBold",
     flexWrap: 'wrap'
     // marginLeft: 7,

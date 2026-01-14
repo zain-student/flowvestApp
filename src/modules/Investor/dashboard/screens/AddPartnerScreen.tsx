@@ -414,7 +414,7 @@ export const AddPartnerScreen = () => {
                           style={{
                             width: 46,
                             height: 28,
-                            backgroundColor: isEmailEnabled ? Colors.secondary : "#ccc",
+                            backgroundColor: isEmailEnabled ? Colors.primary : "#ccc",
                             borderRadius: 14,
                             justifyContent: "center",
                             paddingHorizontal: 3,
@@ -433,7 +433,6 @@ export const AddPartnerScreen = () => {
                         </TouchableOpacity>
                       </View>
                     </View>
-
                     {/* Auto-Generate Password */}
                     <View style={{ marginBottom: 16 }}>
                       <View
@@ -456,7 +455,7 @@ export const AddPartnerScreen = () => {
                           style={{
                             width: 46,
                             height: 28,
-                            backgroundColor: isAutoPassword ? Colors.secondary : "#ccc",
+                            backgroundColor: isAutoPassword ? Colors.primary : "#ccc",
                             borderRadius: 14,
                             justifyContent: "center",
                             paddingHorizontal: 3,

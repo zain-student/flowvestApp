@@ -181,75 +181,52 @@ export const RegisterScreen: React.FC = () => {
       <View style={styles.stepContent}>
         <Text style={styles.stepTitle}>Create Your Account</Text>
         <Text style={styles.stepDescription}>Fill in your details to get started</Text>
-
-        <Input
-          label="First Name"
-          placeholder="Enter your first name"
-          value={formData.first_name}
-          onChangeText={(v) => handleInputChange("first_name", v)}
-          error={errors.first_name}
-          required
-        />
-        <Input
-          label="Last Name"
-          placeholder="Enter your last name"
-          value={formData.last_name}
-          onChangeText={(v) => handleInputChange("last_name", v)}
-          error={errors.last_name}
-          required
-        />
-        <Input
-          label="Email Address"
-          type="email"
-          placeholder="Enter your email"
-          value={formData.email}
-          onChangeText={(v) => handleInputChange("email", v)}
-          error={errors.email}
-          required
-        />
-        <Input
-          label="Password"
-          type="password"
-          placeholder="Create a strong password"
-          value={formData.password}
-          onChangeText={(v) => handleInputChange("password", v)}
-          error={errors.password}
-          required
-        />
-        <Input
-          label="Confirm Password"
-          type="password"
-          placeholder="Confirm your password"
-          value={formData.password_confirmation}
-          onChangeText={(v) => handleInputChange("password_confirmation", v)}
-          error={errors.password_confirmation}
-          required
-        />
-
-        {isAdmin && (
+        <View style={styles.form}>
           <Input
-            label="Company Name"
-            placeholder="Enter your company name"
-            value={formData.company_name}
-            onChangeText={(v) => handleInputChange("company_name", v)}
-            error={errors.company_name}
+            label="First Name"
+            placeholder="Enter your first name"
+            value={formData.first_name}
+            onChangeText={(v) => handleInputChange("first_name", v)}
+            error={errors.first_name}
             required
           />
-        )}
-
-        {isInvitedUser && (
           <Input
-            label="Invitation Token"
-            placeholder="Enter your invitation token"
-            value={formData.invitation_token}
-            onChangeText={(v) => handleInputChange("invitation_token", v)}
-            error={errors.invitation_token}
+            label="Last Name"
+            placeholder="Enter your last name"
+            value={formData.last_name}
+            onChangeText={(v) => handleInputChange("last_name", v)}
+            error={errors.last_name}
             required
           />
-        )}
+          <Input
+            label="Email Address"
+            type="email"
+            placeholder="Enter your email"
+            value={formData.email}
+            onChangeText={(v) => handleInputChange("email", v)}
+            error={errors.email}
+            required
+          />
+          <Input
+            label="Password"
+            type="password"
+            placeholder="Create a strong password"
+            value={formData.password}
+            onChangeText={(v) => handleInputChange("password", v)}
+            error={errors.password}
+            required
+          />
+          <Input
+            label="Confirm Password"
+            type="password"
+            placeholder="Confirm your password"
+            value={formData.password_confirmation}
+            onChangeText={(v) => handleInputChange("password_confirmation", v)}
+            error={errors.password_confirmation}
+            required
+          />
 
-        {isIndependentUser && (
-          <>
+          {isAdmin && (
             <Input
               label="Company Name"
               placeholder="Enter your company name"
@@ -258,36 +235,60 @@ export const RegisterScreen: React.FC = () => {
               error={errors.company_name}
               required
             />
-            <Select
-              label="Company Type"
-              placeholder="Select company type..."
-              value={formData.company_type}
-              onSelect={handleCompanyTypeSelect}
-              error={errors.company_type}
+          )}
+
+          {isInvitedUser && (
+            <Input
+              label="Invitation Token"
+              placeholder="Enter your invitation token"
+              value={formData.invitation_token}
+              onChangeText={(v) => handleInputChange("invitation_token", v)}
+              error={errors.invitation_token}
               required
-              options={companyTypeOptions}
             />
-          </>
-        )}
+          )}
 
-        {/* Terms */}
-        <TouchableOpacity
-          style={styles.termsContainer}
-          onPress={() => handleInputChange("terms_accepted", !formData.terms_accepted)}
-        >
-          <View style={[styles.checkbox, formData.terms_accepted && styles.checkboxChecked]}>
-            {formData.terms_accepted && <Ionicons name="checkmark" size={16} color="white" />}
-          </View>
-          <Text style={styles.termsText}>I agree to the Terms of Service and Privacy Policy</Text>
-        </TouchableOpacity>
-        {errors.terms_accepted && <Text style={styles.fieldError}>{errors.terms_accepted}</Text>}
+          {isIndependentUser && (
+            <>
+              <Input
+                label="Company Name"
+                placeholder="Enter your company name"
+                value={formData.company_name}
+                onChangeText={(v) => handleInputChange("company_name", v)}
+                error={errors.company_name}
+                required
+              />
+              <Select
+                label="Company Type"
+                placeholder="Select company type..."
+                value={formData.company_type}
+                onSelect={handleCompanyTypeSelect}
+                error={errors.company_type}
+                required
+                options={companyTypeOptions}
+              />
+            </>
+          )}
 
-        {/* Submit */}
-        {isLoading ? (
-          <ActivityIndicator size="small" color="black" />
-        ) : (
-          <Button title="Create Account" onPress={handleSubmit} fullWidth style={styles.submitButton} />
-        )}
+          {/* Terms */}
+          <TouchableOpacity
+            style={styles.termsContainer}
+            onPress={() => handleInputChange("terms_accepted", !formData.terms_accepted)}
+          >
+            <View style={[styles.checkbox, formData.terms_accepted && styles.checkboxChecked]}>
+              {formData.terms_accepted && <Ionicons name="checkmark" size={16} color="white" />}
+            </View>
+            <Text style={styles.termsText}>I agree to the Terms of Service and Privacy Policy</Text>
+          </TouchableOpacity>
+          {errors.terms_accepted && <Text style={styles.fieldError}>{errors.terms_accepted}</Text>}
+
+          {/* Submit */}
+          {isLoading ? (
+            <ActivityIndicator size="small" color="black" />
+          ) : (
+            <Button title="Create Account" onPress={handleSubmit} fullWidth style={styles.submitButton} />
+          )}
+        </View>
       </View>
     );
   };
@@ -368,26 +369,33 @@ const styles = StyleSheet.create({
     borderBottomColor: Colors.lightGray,
   },
   headerBackButton: { marginRight: 16 },
-  headerTitle: { fontSize: 20, fontWeight: "bold", color: Colors.secondary,flex:1,textAlign:"center" },
+  headerTitle: { fontSize: 20, fontWeight: "bold", color: Colors.secondary, flex: 1, textAlign: "center" },
 
   // PROGRESS
   progressContainer: { marginVertical: 16 },
   progressBar: { height: 4, backgroundColor: Colors.lightGray, borderRadius: 2, marginBottom: 8 },
   progressFill: { height: "100%", backgroundColor: Colors.primary, borderRadius: 2 },
   progressText: { fontSize: 12, color: Colors.gray, textAlign: "center" },
-
   stepContent: { flex: 1 },
+  form: {
+    backgroundColor: '#ffffff',
+    borderRadius: 20,
+    padding: 28,
+    marginBottom: 32,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+    elevation: 4,
+  },
   stepTitle: { fontSize: 20, fontWeight: "bold", color: Colors.secondary, marginBottom: 8, textAlign: "center" },
   stepDescription: { fontSize: 14, color: Colors.gray, textAlign: "center", marginBottom: 24 },
-
   termsContainer: { flexDirection: "row", alignItems: "flex-start", marginBottom: 16 },
-  checkbox: { width: 20, height: 20, borderWidth: 2, borderColor: Colors.secondary, borderRadius: 4, marginRight: 12, alignItems: "center", justifyContent: "center", marginTop: 2 },
+  checkbox: { width: 22, height: 22, borderRadius: 6, borderWidth: 2, borderColor: '#cbd5e1', marginRight: 10, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', },
   checkboxChecked: { borderColor: Colors.primary, backgroundColor: Colors.primary },
   termsText: { fontSize: 14, color: Colors.secondary, flex: 1, lineHeight: 20 },
   fieldError: { fontSize: 12, color: "#EF4444", marginTop: -12, marginBottom: 16, marginLeft: 4 },
-
   submitButton: { marginBottom: 16 },
-
   footer: { flexDirection: "row", justifyContent: "center", alignItems: "center", paddingTop: 20, borderTopWidth: 1, borderTopColor: Colors.lightGray },
   footerText: { fontSize: 14, color: Colors.secondary },
   footerLink: { fontSize: 14, color: Colors.primary, fontWeight: "600" },

@@ -124,75 +124,84 @@ export const LoginScreen: React.FC = () => {
             barStyle="dark-content" // or "dark-content"
           // backgroundColor="#000" // set to match your theme
           />
-          {/* Header */}
-          <View style={styles.header}>
-            <Text style={styles.title}>Welcome Back</Text>
-            <Text style={styles.subtitle}>Sign in to your FlowVest account</Text>
-          </View>
-
-          {/* Form */}
-          <View style={styles.form}>
-            <Input
-              label="Email Address"
-              type="email"
-              placeholder="Enter your email"
-              value={formData.email}
-              onChangeText={(value) => handleInputChange('email', value)}
-              error={errors.email}
-              required
-              autoFocus
-            />
-
-            <Input
-              label="Password"
-              type="password"
-              placeholder="Enter your password"
-              value={formData.password}
-              onChangeText={(value) => handleInputChange('password', value)}
-              error={errors.password}
-              required
-            />
-
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, marginTop: 8 }}>
-              {/* Remember Me - Simple implementation */}
-              <TouchableOpacity
-                style={styles.rememberContainer}
-                onPress={() => handleInputChange('remember', !formData.remember)}
-              >
-                <View style={[styles.checkbox, formData.remember && styles.checkboxChecked]}>
-                  {formData.remember &&
-                    //  <Text style={styles.checkmark}>✓</Text>
-                    <Ionicons name='checkmark' size={16} color={"white"} />
-                  }
-                </View>
-                <Text style={styles.rememberText}>Remember me</Text>
-              </TouchableOpacity>
-              {/* Forgot Password Link */}
-              <TouchableOpacity
-                style={styles.forgotPasswordContainer}
-                onPress={navigateToForgotPassword}
-              >
-                <Text style={styles.forgotPasswordText}>Forgot your password?</Text>
-              </TouchableOpacity>
+          <View>
+            {/* Header */}
+            <View style={styles.header}>
+              <Text style={styles.title}>Welcome Back</Text>
+              <Text style={styles.subtitle}>Sign in to your FlowVest account</Text>
             </View>
 
-            {/* Submit Button */}
-            <Button
-              title="Sign In"
-              onPress={handleSubmit}
-              loading={isLoading}
-              fullWidth
-              style={styles.submitButton}
-            />
+            {/* Form */}
+            <View style={styles.form}>
+              {authError && (
+                <View style={styles.errorBanner}>
+                  <Text style={styles.errorBannerText}>{authError}</Text>
+                </View>
+              )}
+              <Input
+                label="Email Address"
+                type="email"
+                placeholder="john123@gmail.com"
+                value={formData.email}
+                onChangeText={(value) => handleInputChange('email', value)}
+                error={errors.email}
+                required
+                // autoFocus
+              />
+
+              <Input
+                label="Password"
+                type="password"
+                placeholder="********"
+                value={formData.password}
+                onChangeText={(value) => handleInputChange('password', value)}
+                error={errors.password}
+                required
+              />
+
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, marginTop: 8 }}>
+                {/* Remember Me - Simple implementation */}
+                <TouchableOpacity
+                  style={styles.rememberContainer}
+                  onPress={() => handleInputChange('remember', !formData.remember)}
+                >
+                  <View style={[styles.checkbox, formData.remember && styles.checkboxActive]}>
+                    {formData.remember &&
+                      //  <Text style={styles.checkmark}>✓</Text>
+                      <Ionicons name='checkmark' size={16} color="#fff" />
+                    }
+                  </View>
+                  <Text style={styles.rememberText}>Remember me</Text>
+                </TouchableOpacity>
+                {/* Forgot Password Link */}
+                <TouchableOpacity
+                  style={styles.forgotPasswordContainer}
+                  onPress={navigateToForgotPassword}
+                >
+                  <Text style={styles.forgotPasswordText}>Forgot your password?</Text>
+                </TouchableOpacity>
+              </View>
+
+              {/* Submit Button */}
+              <Button
+                title="Sign In"
+                onPress={handleSubmit}
+                loading={isLoading}
+                fullWidth
+                style={styles.submitButton}
+              />
+            </View>
+          </View>
+          {/* Footer */}
+          <View>
+            <View style={styles.footer}>
+              <Text style={styles.footerText}>Don't have an account? </Text>
+              <TouchableOpacity onPress={navigateToRegister}>
+                <Text style={styles.footerLink}>Sign Up</Text>
+              </TouchableOpacity>
+            </View>
           </View>
 
-          {/* Footer */}
-          <View style={styles.footer}>
-            <Text style={styles.footerText}>Don't have an account? </Text>
-            <TouchableOpacity onPress={navigateToRegister}>
-              <Text style={styles.footerLink}>Sign Up</Text>
-            </TouchableOpacity>
-          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -213,13 +222,14 @@ const styles = StyleSheet.create({
     flex: 1,
     // backgroundColor: Colors.green,
     // paddingHorizontal: 24,
-    paddingTop: 50,
+    // paddingVertical: 50,
   },
 
   scrollContent: {
     flexGrow: 1,
     paddingHorizontal: 24,
-    paddingVertical: 50,
+    paddingVertical: 60,
+    justifyContent: 'space-between',
   },
 
   header: {
@@ -243,7 +253,16 @@ const styles = StyleSheet.create({
 
   form: {
     // flex: 1,
-    marginBottom: 82,
+    // marginBottom: 82,
+    backgroundColor: '#ffffff',
+    borderRadius: 20,
+    padding: 28,
+    marginBottom: 32,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+    elevation: 4,
   },
 
   rememberContainer: {
@@ -251,17 +270,43 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // marginBottom: 24,
   },
-
   checkbox: {
-    width: 20,
-    height: 20,
+    width: 22,
+    height: 22,
+    borderRadius: 6,
     borderWidth: 2,
-    borderColor: Colors.secondary,
-    borderRadius: 4,
-    marginRight: 12,
+    borderColor: '#cbd5e1',
+    marginRight: 10,
+    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  checkboxActive: {
+    backgroundColor: Colors.primary,
+    borderColor: Colors.primary,
+  },
+  errorBanner: {
+    backgroundColor: '#fef2f2',
+    borderRadius: 10,
+    padding: 14,
+    marginBottom: 24,
+    alignItems: 'center',
+  },
+  errorBannerText: {
+    color: '#dc2626',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  // checkbox: {
+  //   width: 20,
+  //   height: 20,
+  //   borderWidth: 2,
+  //   borderColor: Colors.secondary,
+  //   borderRadius: 4,
+  //   marginRight: 12,
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  // },
 
   checkboxChecked: {
     // borderColor: Colors.secondary,

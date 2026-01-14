@@ -125,7 +125,7 @@ export const ForgotPasswordScreen: React.FC = () => {
           >
             <Ionicons name="arrow-back" size={24} color={Colors.secondary} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Reset Password</Text>
+          {/* <Text style={styles.headerTitle}>Reset Password</Text> */}
         </View>
         <View style={styles.successContainer}>
           <View style={styles.successIcon}>
@@ -149,7 +149,10 @@ export const ForgotPasswordScreen: React.FC = () => {
             onPress={() => setEmailSent(false)}
           >
             <Text style={styles.resendText}>
-              Didn't receive the email? Try again
+              Didn't receive the email?
+              <Text style={{ fontWeight: "600", color: Colors.primary }}>
+                Try again
+              </Text>
             </Text>
           </TouchableOpacity>
         </View>
@@ -170,7 +173,7 @@ export const ForgotPasswordScreen: React.FC = () => {
           >
             <Ionicons name="arrow-back" size={24} color={Colors.secondary} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Join FlowVest</Text>
+          {/* <Text style={styles.headerTitle}></Text> */}
         </View>
         <ScrollView
           style={styles.scrollView}
@@ -181,46 +184,47 @@ export const ForgotPasswordScreen: React.FC = () => {
             barStyle="dark-content" // or "dark-content"
           // backgroundColor="#000" // set to match your theme
           />
-          {/* Header */}
-          <View style={styles.header}>
-            <Text style={styles.title}>Forgot Password?</Text>
-            <Text style={styles.subtitle}>
-              Enter your email address and we'll send you a link to reset your
-              password
-            </Text>
+          <View>
+            {/* Header */}
+            <View style={styles.header}>
+              <Text style={styles.title}>Forgot Password?</Text>
+              <Text style={styles.subtitle}>
+                Enter your email address and we'll send you a link to reset your
+                password
+              </Text>
+            </View>
+
+            {/* Form */}
+            <View style={styles.form}>
+              <Input
+                label="Email Address"
+                type="email"
+                placeholder="john123@gmail.com"
+                value={formData.email}
+                onChangeText={(value) => handleInputChange("email", value)}
+                error={errors.email}
+                required
+                // autoFocus
+              />
+
+              {/* Submit Button */}
+              <Button
+                title="Send Reset Link"
+                onPress={handleSubmit}
+                loading={isLoading}
+                fullWidth
+                style={styles.submitButton}
+              />
+            </View>
           </View>
-
-          {/* Form */}
-          <View style={styles.form}>
-            <Input
-              label="Email Address"
-              type="email"
-              placeholder="Enter your email"
-              value={formData.email}
-              onChangeText={(value) => handleInputChange("email", value)}
-              error={errors.email}
-              required
-              autoFocus
-            />
-
-            {/* Submit Button */}
-            <Button
-              title="Send Reset Link"
-              onPress={handleSubmit}
-              loading={isLoading}
-              fullWidth
-              style={styles.submitButton}
-            />
-
-          
-          </View>
-
-          {/* Footer */}
-          <View style={styles.footer}>
-            <Text style={styles.footerText}>Don't have an account? </Text>
-            <TouchableOpacity onPress={navigateToRegister}>
-              <Text style={styles.footerLink}>Sign Up</Text>
-            </TouchableOpacity>
+          <View>
+            {/* Footer */}
+            <View style={styles.footer}>
+              <Text style={styles.footerText}>Don't have an account? </Text>
+              <TouchableOpacity onPress={navigateToRegister}>
+                <Text style={styles.footerLink}>Sign Up</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -258,6 +262,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingHorizontal: 24,
     paddingVertical: 20,
+    justifyContent: "space-between",
   },
 
   header: {
@@ -281,7 +286,16 @@ const styles = StyleSheet.create({
   },
 
   form: {
-    flex: 1,
+    // flex: 1,
+    backgroundColor: '#ffffff',
+    borderRadius: 20,
+    padding: 28,
+    marginBottom: 32,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+    elevation: 4,
   },
 
   submitButton: {
@@ -304,7 +318,7 @@ const styles = StyleSheet.create({
 
   footerLink: {
     fontSize: 14,
-    color: Colors.secondary,
+    color: Colors.primary,
     fontWeight: "600",
   },
 

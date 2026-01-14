@@ -114,10 +114,18 @@ export const PortfolioScreen: React.FC = () => {
 
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Total Earned</Text>
-        <Text style={styles.cardValue}>{formatCurrency(Number(data?.summary.total_earned))}</Text>
+        <Text style={styles.cardValue}>{formatCurrency(Number(data?.summary.total_earned)) ?? '--'}</Text>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text style={styles.cardSubtitle}>Total Investments:{data?.summary.total_investments}</Text>
-          <Text style={styles.cardSubtitle}>Active Investments:{data?.summary.active_investments}</Text>
+          <Text style={styles.cardSubtitle}>Total Investments:
+            <Text style={styles.balanceChangeDark}>
+              {data?.summary.total_investments}
+            </Text>
+          </Text>
+          <Text style={styles.cardSubtitle}>Active Investments:
+            <Text style={styles.balanceChangeDark}>
+              {data?.summary.active_investments}
+            </Text>
+          </Text>
         </View>
         <View style={styles.balanceActionsRow}>
           <TouchableOpacity style={styles.balanceActionBtnDark}>
@@ -248,6 +256,7 @@ const styles = StyleSheet.create({
   toggleBtnTextActive: { color: "#fff", },
   chart: { borderRadius: 12, marginVertical: 8 },
   cardSubtitle: { fontSize: 14, color: Colors.gray },
+  balanceChangeDark: { color: Colors.green, fontSize: 14, fontFamily: "Inter_600SemiBold", },
   balanceActionBtnDark: { width: '48%', flexDirection: "row", alignItems: "center", justifyContent: "center", backgroundColor: Colors.darkButton, borderRadius: 18, padding: 10, marginRight: 12, },
   balanceActionTextDark: { color: Colors.white, fontSize: 15, fontFamily: "Inter_600SemiBold", marginLeft: 7, flexWrap: 'wrap' },
   balanceActionsRow: { flexDirection: "row", marginTop: 18 },

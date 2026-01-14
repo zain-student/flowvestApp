@@ -188,11 +188,11 @@ export const PayoutsScreen: React.FC = () => {
           <Text style={styles.cardValue}>
             {formatCurrency(Number(totalPayoutAmount.toFixed(1) ?? "--"))}
           </Text>
-          <Text style={styles.cardSubtitle}>
-            <Text style={{ color: Colors.gray, fontWeight: "400" }}>
-              Next payout:{" "}
+          <Text style={{ color: Colors.gray, }}>
+            Next payout:{" "}
+            <Text style={styles.cardSubtitle}>
+              July 15, 2024
             </Text>
-            July 15, 2024
           </Text>
           <View style={styles.balanceActionsRow}>
             <TouchableOpacity style={styles.balanceActionBtnDark}>
@@ -304,7 +304,7 @@ const styles = StyleSheet.create({
     color: Colors.white,
     marginBottom: 4,
   },
-  cardSubtitle: { fontSize: 14, color: Colors.green },
+  cardSubtitle: { fontSize: 14, color: Colors.green,fontFamily: "Inter_600SemiBold", },
   balanceActionBtnDark: {
     width: "48%",
     flexDirection: "row",
@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: Colors.darkButton,
     borderRadius: 18,
-    padding:10,
+    padding: 10,
     marginRight: 12,
   },
   balanceActionTextDark: {

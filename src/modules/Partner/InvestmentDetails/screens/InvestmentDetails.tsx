@@ -153,8 +153,11 @@ export const InvestmentDetails = ({ navigation }: any) => {
           <Text style={styles.balanceValueDark}>
             {formatCurrency(Number(summary?.total_invested ?? 0))}
           </Text>
-          <Text style={styles.balanceChangeDark}>
-            ROI Avg: {summary?.average_roi ?? 0}%
+          <Text style={styles.balanceChange}>
+            ROI Avg:
+            <Text style={styles.balanceChangeDark}>
+              {summary?.average_roi ?? 0}%
+            </Text>
           </Text>
           <View style={styles.balanceActionsRow}>
             <TouchableOpacity style={styles.balanceActionBtnDark}>
@@ -178,10 +181,6 @@ export const InvestmentDetails = ({ navigation }: any) => {
             <Feather name="search" size={20} color={Colors.primary} />
           </TouchableOpacity>
         </View>
-
-
-
-
         {/* Investment List */}
         <FlatList
           data={filtered}
@@ -256,6 +255,10 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_700Bold",
     fontWeight: "700",
     marginVertical: 2,
+  },
+  balanceChange: {
+    color: Colors.gray,
+    fontSize: 14,
   },
   balanceChangeDark: {
     color: Colors.green,

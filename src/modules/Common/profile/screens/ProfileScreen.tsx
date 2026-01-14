@@ -104,7 +104,6 @@ export const ProfileScreen: React.FC = () => {
     }
   }, [dispatch]);
 
-  //  Helper: show initials if no avatar
   const getInitials = (name?: string) =>
     name ? name.charAt(0).toUpperCase() : "U";
 
@@ -330,7 +329,7 @@ const SettingsButton = ({ icon, label, onPress }: {
 const styles = StyleSheet.create({
   scrollContent: { padding: 20, backgroundColor: Colors.background, paddingBottom: 100 },
   avatarImage: { width: AVATAR_SIZE, height: AVATAR_SIZE, borderRadius: AVATAR_SIZE / 2, borderWidth: 1, borderColor: "#E5E7EB", alignItems: "center", justifyContent: "center", shadowColor: "#000000ff", shadowOpacity: 0.08, shadowRadius: 6, elevation: 4, },
-  avatarPlaceholder: { width: AVATAR_SIZE, height: AVATAR_SIZE, borderRadius: AVATAR_SIZE / 2, backgroundColor: Colors.white, alignItems: "center", justifyContent: "center", },
+  avatarPlaceholder: { width: AVATAR_SIZE, height: AVATAR_SIZE, borderRadius: AVATAR_SIZE / 2, backgroundColor: Colors.gray, alignItems: "center", justifyContent: "center", },
   avatarText: { fontSize: 40, color: "#fff", },
   modalBackground: { flex: 1, backgroundColor: "rgba(0,0,0,0.9)", justifyContent: "center", alignItems: "center", },
   modalCloseArea: { flex: 1, justifyContent: "center", alignItems: "center", width: "100%", },

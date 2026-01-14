@@ -84,10 +84,11 @@ export const PartnersDashboard = () => {
           <Text style={styles.balanceValueDark}>
             {formatCurrency(Number(stats?.portfolio_value ?? "--"))}
           </Text>
-          <Text style={styles.balanceChangeDark}>
-            {formatCurrency(stats?.total_earned ?? 0)}{" "}
-            <Text style={styles.changeSubLabel}>Total Earned</Text>
-          </Text>
+          <Text style={styles.changeSubLabel}>
+            <Text style={styles.balanceChangeDark}>
+              {formatCurrency(stats?.total_earned ?? 0)}{" "}
+            </Text>
+            Total Earned</Text>
 
           <View style={styles.balanceActionsRow}>
             <TouchableOpacity
@@ -203,7 +204,7 @@ const styles = StyleSheet.create({
   changeSubLabel: {
     color: Colors.gray,
     fontWeight: "400",
-    fontFamily: "Inter_400Regular",
+    fontSize: 14,
   },
   balanceActionsRow: {
     flexDirection: "row",

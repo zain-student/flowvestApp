@@ -118,13 +118,13 @@ export const PartnerPayoutScreen: React.FC = () => {
       <View style={styles.container}>
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Total Payouts Amount</Text>
-          <Text style={styles.cardValue}>{formatCurrency(Number(payoutStatistics?.total_amount.toFixed(2) ?? "--"))}</Text>
+          <Text style={styles.cardValue}>{formatCurrency(Number(payoutStatistics?.total_amount.toFixed(2)) ?? "--")}</Text>
           <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
             <Text style={styles.cardSubtitle}>
               <Text style={{ color: Colors.gray, fontWeight: "400", fontFamily: "Inter_400Regular" }}>
                 Paid Amount:{" "}
               </Text>
-              {formatCurrency(Number(payoutStatistics?.paid_amount.toFixed(2) ?? "--"))}
+              {formatCurrency(Number(payoutStatistics?.paid_amount.toFixed(2)) ?? "--")}
             </Text>
             <Text style={styles.cardSubtitle}>
               <Text style={{ color: Colors.gray, fontWeight: "400", fontFamily: "Inter_400Regular" }}>
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
   },
   centered: { flex: 1, justifyContent: "center", alignItems: "center" },
   notFound: { fontSize: 16, color: Colors.secondary },
- 
+
   payoutCardContainer: {
     backgroundColor: Colors.secondary,
     borderRadius: 16,

@@ -132,7 +132,7 @@ export const NotificationsScreen = () => {
               </Text>
 
               <Text
-                style={[styles.message, 
+                style={[styles.message,
                 ]}
                 numberOfLines={2}
               >

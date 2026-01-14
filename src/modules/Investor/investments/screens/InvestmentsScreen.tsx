@@ -191,10 +191,11 @@ export const InvestmentsScreen: React.FC = () => {
             {formatCurrency(stats.total_invested)}
           </Text>
           <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-            <Text style={styles.cardSubtitle}>
-              +8.2%{" "}
-              <Text style={{ color: Colors.gray, fontWeight: "400" }}>this year</Text>
-            </Text>
+            <Text style={{ color: Colors.gray, fontWeight: "400", }}>
+              <Text style={styles.cardSubtitle}>
+                +8.2%{" "}
+              </Text>
+              this year</Text>
             <Text style={{ color: Colors.gray, fontWeight: "400" }}>Total Investments:
               <Text style={styles.cardSubtitle}>
                 {stats.total_investments}{" "}
@@ -301,7 +302,7 @@ const styles = StyleSheet.create({
     color: Colors.white,
     marginBottom: 4,
   },
-  cardSubtitle: { fontSize: 14, color: Colors.green },
+  cardSubtitle: { fontSize: 14, color: Colors.green, fontFamily: "Inter_600SemiBold", },
   balanceActionsRow: { flexDirection: "row", marginTop: 18 },
   balanceActionBtnDark: {
     width: '60%',
@@ -310,7 +311,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: Colors.success,
     borderRadius: 18,
-    padding:10,
+    padding: 10,
     marginRight: 12,
   },
   balanceActionTextDark: {

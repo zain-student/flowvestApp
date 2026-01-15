@@ -184,14 +184,15 @@ export const PayoutsScreen: React.FC = () => {
       <View style={styles.container}>
         {/* Card Header */}
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Total Payouts</Text>
+          <Text style={styles.cardTitle}>Total Payouts amount</Text>
           <Text style={styles.cardValue}>
             {formatCurrency(Number(totalPayoutAmount.toFixed(1) ?? "--"))}
           </Text>
           <Text style={{ color: Colors.gray, }}>
-            Next payout:{" "}
+            Total payouts:{" "}
             <Text style={styles.cardSubtitle}>
-              July 15, 2024
+              {/* July 15, 2024 */}
+              {pagination.total} 
             </Text>
           </Text>
           <View style={styles.balanceActionsRow}>

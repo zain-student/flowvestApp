@@ -203,7 +203,6 @@ const styles = StyleSheet.create({
   },
   changeSubLabel: {
     color: Colors.gray,
-    fontWeight: "400",
     fontSize: 14,
   },
   balanceActionsRow: {

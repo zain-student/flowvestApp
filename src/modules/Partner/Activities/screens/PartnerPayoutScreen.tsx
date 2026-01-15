@@ -120,17 +120,17 @@ export const PartnerPayoutScreen: React.FC = () => {
           <Text style={styles.cardTitle}>Total Payouts Amount</Text>
           <Text style={styles.cardValue}>{formatCurrency(Number(payoutStatistics?.total_amount.toFixed(2) ?? 0))}</Text>
           <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
-            <Text style={styles.cardSubtitle}>
-              <Text style={{ color: Colors.gray, fontWeight: "400", fontFamily: "Inter_400Regular" }}>
-                Paid Amount:{" "}
+            <Text style={{ color: Colors.gray, fontSize: 14 }}>
+              Paid Amount:{" "}
+              <Text style={styles.cardSubtitle}>
+                {formatCurrency(Number(payoutStatistics?.paid_amount.toFixed(2) ?? 0))}
               </Text>
-              {formatCurrency(Number(payoutStatistics?.paid_amount.toFixed(2) ?? 0))}
             </Text>
-            <Text style={styles.cardSubtitle}>
-              <Text style={{ color: Colors.gray, fontWeight: "400", fontFamily: "Inter_400Regular" }}>
-                Total Payouts:{" "}
+            <Text style={{ color: Colors.gray, fontSize: 14 }}>
+              Total Payouts:{" "}
+              <Text style={styles.cardSubtitle}>
+                {payoutStatistics?.total_payouts ?? 0}
               </Text>
-              {payoutStatistics?.total_payouts ?? 0}
             </Text>
           </View>
           <View style={styles.balanceActionsRow}>
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
     color: Colors.white,
     marginBottom: 4,
   },
-  cardSubtitle: { fontSize: 14, color: Colors.green },
+  cardSubtitle: { fontSize: 14, color: Colors.green, fontFamily: "Inter_600SemiBold", },
   balanceActionBtnDark: {
     width: '48%',
     flexDirection: "row",

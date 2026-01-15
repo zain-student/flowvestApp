@@ -57,6 +57,7 @@ interface RejectError {
 
 export interface AuthState {
   isAuthenticated: boolean;
+  authInitialized: boolean;
   isLoading: boolean;
   user: User | null;
   token: AuthToken | null;
@@ -70,6 +71,7 @@ export interface AuthState {
 // Initial state
 const initialState: AuthState = {
   isAuthenticated: false,
+  authInitialized: true,
   isLoading: false,
   user: null,
   token: null,
@@ -334,7 +336,7 @@ const authSlice = createSlice({
         state.error = action.error.message || "Login failed";
       })
 
-    // Register
+      // Register
       .addCase(registerUser.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -363,7 +365,7 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.error = action.error.message || "Registration failed";
       })
-    // Logout
+      // Logout
       .addCase(logoutUser.pending, (state) => {
         state.isLoading = true;
       })
@@ -374,8 +376,8 @@ const authSlice = createSlice({
         // Even if logout fails on server, clear local state
         return { ...initialState };
       })
-   
-    // Refresh token
+
+      // Refresh token
       .addCase(refreshToken.fulfilled, (state, action) => {
         state.token = action.payload.token;
         state.session = action.payload.session;
@@ -384,7 +386,7 @@ const authSlice = createSlice({
         // If refresh fails, logout user
         return { ...initialState };
       })
-    // Get current user
+      // Get current user
       .addCase(getCurrentUser.fulfilled, (state, action) => {
         state.user = action.payload;
         state.isLoading = false;
@@ -428,6 +430,8 @@ export const selectAuth = (state: RootState) => state.auth;
 export const selectUser = (state: RootState) => state.auth?.user || null;
 export const selectIsAuthenticated = (state: RootState) =>
   state.auth?.isAuthenticated || false;
+export const selectAuthInitialized = (state: RootState) =>
+  state.auth?.authInitialized || false;
 export const selectIsLoading = (state: RootState) =>
   state.auth?.isLoading || false;
 export const selectAuthError = (state: RootState) => state.auth?.error || null;

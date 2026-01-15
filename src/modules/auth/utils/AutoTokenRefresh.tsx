@@ -1,4 +1,4 @@
-import { selectIsAuthenticated } from '@modules/auth/store/authSlice';
+import { selectAuthInitialized, selectIsAuthenticated } from '@modules/auth/store/authSlice';
 import { useAppDispatch, useAppSelector } from '@store/index';
 import { useEffect } from 'react';
 import { setupAutoTokenRefresh } from '../components/setupAutoTokenRefresh';
@@ -6,12 +6,12 @@ import { setupAutoTokenRefresh } from '../components/setupAutoTokenRefresh';
 export const AutoTokenRefresh = () => {
   const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
-
+  const authInitialized = useAppSelector(selectAuthInitialized);
   useEffect(() => {
-    if (isAuthenticated) {
+    if (authInitialized && isAuthenticated) {
       setupAutoTokenRefresh(dispatch);
     }
-  }, [dispatch, isAuthenticated]);
+  }, [dispatch, isAuthenticated, authInitialized]);
 
   return null;
 };

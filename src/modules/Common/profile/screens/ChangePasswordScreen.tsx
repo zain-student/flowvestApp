@@ -37,31 +37,6 @@ export const ChangePasswordScreen: React.FC = () => {
             setErrors((prev) => ({ ...prev, [field]: '' }));
         }
     };
-
-    // const handleSubmit = () => {
-    //     const result = validateFormData(changePasswordSchema, formData);
-
-    //     if (!result.success) {
-    //         setErrors(result.errors || {});
-    //         return;
-    //     }
-
-    //     setErrors({});
-    //     console.log("Password form submitted ✅", result.data);
-    //     try {
-    //         dispatch(changePassword({
-    //             current_password: formData.current_password,
-    //             new_password: formData.password,
-    //             new_password_confirmation: formData.password_confirmation,
-    //         })
-    //         ).unwrap();
-
-    //         // ✅ Navigate back or reset form on success
-    //         navigation.goBack();
-    //     } catch (err) {
-    //         console.error("❌ Change password error:", err);
-    //     }
-    // };
     const handleSubmit = async () => {
         const result = validateFormData(changePasswordSchema, formData);
 
@@ -179,7 +154,16 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     form: {
-        flex: 1,
+        // flex: 1,
+        backgroundColor: '#ffffff',
+        borderRadius: 20,
+        padding: 28,
+        marginBottom: 32,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.08,
+        shadowRadius: 10,
+        elevation: 4,
     },
     submitButton: {
         marginTop: 24,

@@ -90,7 +90,7 @@ export const ChangePasswordScreen: React.FC = () => {
                 <Input
                     label="Current Password"
                     type="password"
-                    placeholder="Enter your current password"
+                    placeholder="********"
                     value={formData.current_password}
                     onChangeText={(value) => handleInputChange('current_password', value)}
                     error={errors.current_password}
@@ -100,7 +100,7 @@ export const ChangePasswordScreen: React.FC = () => {
                 <Input
                     label="New Password"
                     type="password"
-                    placeholder="Enter your new password"
+                    placeholder="********"
                     value={formData.password}
                     onChangeText={(value) => handleInputChange('password', value)}
                     error={errors.password}
@@ -110,7 +110,7 @@ export const ChangePasswordScreen: React.FC = () => {
                 <Input
                     label="Confirm New Password"
                     type="password"
-                    placeholder="Re-enter your new password"
+                    placeholder="********"
                     value={formData.password_confirmation}
                     onChangeText={(value) => handleInputChange('password_confirmation', value)}
                     error={errors.password_confirmation}

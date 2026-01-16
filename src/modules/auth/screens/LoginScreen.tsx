@@ -298,17 +298,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
   },
-  // checkbox: {
-  //   width: 20,
-  //   height: 20,
-  //   borderWidth: 2,
-  //   borderColor: Colors.secondary,
-  //   borderRadius: 4,
-  //   marginRight: 12,
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  // },
-
   checkboxChecked: {
     // borderColor: Colors.secondary,
     borderColor: Colors.primary,

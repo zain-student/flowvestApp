@@ -13,7 +13,7 @@ import {
     View
 } from 'react-native';
 
-export const UpdateProfile = ({navigation}:any) => {
+export const UpdateProfile = ({ navigation }: any) => {
     const dispatch = useAppDispatch();
     const { isLoading } = useAppSelector((state) => state.auth);
     const [formData, setFormData] = useState({
@@ -147,7 +147,16 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     form: {
-        flex: 1,
+        // flex: 1,
+        backgroundColor: '#ffffff',
+        borderRadius: 20,
+        padding: 28,
+        marginBottom: 32,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.08,
+        shadowRadius: 10,
+        elevation: 4,
     },
     submitButton: {
         marginTop: 24,

@@ -104,7 +104,7 @@ export const UpdateProfile = ({ navigation }: any) => {
 
                 <Input
                     label="Company Name"
-                    placeholder="e.g. Acme Corp"
+                    placeholder="e.g. Scala Corp"
                     value={formData.company_name}
                     onChangeText={(value) => handleInputChange('company_name', value)}
                     error={errors.company_name}

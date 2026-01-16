@@ -79,9 +79,10 @@ export const ChangePasswordScreen: React.FC = () => {
 
             {/* Header */}
             <View style={styles.header}>
+                <Text style={styles.lock}>🔒</Text>
                 <Text style={styles.title}>Change Password</Text>
                 <Text style={styles.subtitle}>
-                    Please enter your current and new password
+                   Please enter your current and new password
                 </Text>
             </View>
 
@@ -141,6 +142,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 40,
         marginBottom: 40,
+    },
+    lock:{
+        fontSize: 48,
+        marginBottom: 8,
     },
     title: {
         fontSize: 24,

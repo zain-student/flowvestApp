@@ -1,36 +1,41 @@
 import { RootStackParamList } from "@/navigation/RootNavigator";
 import Colors from "@/shared/colors/Colors";
+import { selectHasUnreadNotifications } from "@/shared/store/slices/profile/notificationSlice";
 import { Feather } from "@expo/vector-icons";
 import { logoutUser } from "@modules/auth/store/authSlice";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useAppDispatch } from "@store/index";
+import { useAppDispatch, useAppSelector } from "@store/index";
 import React from "react";
-import { Alert, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
 interface DashboardLayoutProps {
   children: React.ReactNode;
   headerStyle?: "dark" | "light";
 }
 
-const Avatar = () => (
+const Avatar = ({ showDot }: { showDot: boolean }) => (
   <View style={styles.avatar}>
     <Feather name="bell" size={20} color="#fff" />
+    {showDot && <View style={styles.notificationDot} />}
   </View>
 );
 
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   children,
 }) => {
-  // const navigation =
-  //   useNavigation<BottomTabNavigationProp<AppTabParamList, "Dashboard">>();
   const navigation =
-  useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const hasUnread = useAppSelector(selectHasUnreadNotifications);
   const dispatch = useAppDispatch();
-// const navigation =
-//     useNavigation<NativeStackNavigationProp<ProfileStackParamList, "Profile">>();
-  // Sign out handler
   const handleSignOut = async () => {
     Alert.alert("Sign Out", "Are you sure you want to sign out?", [
       {
@@ -44,29 +49,30 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       },
     ]);
     const signOut = async () => {
-    try {
-      await dispatch(logoutUser());
-      // await storage.clear(); 
-      // navigation.navigate("Profile"); // Or use navigation.reset if you have a root stack
-    } catch (error) {
-      Alert.alert("Error", "Failed to sign out. Please try again.");
-    }
-    }
+      try {
+        await dispatch(logoutUser());
+        // await storage.clear();
+        // navigation.navigate("Profile"); // Or use navigation.reset if you have a root stack
+      } catch (error) {
+        Alert.alert("Error", "Failed to sign out. Please try again.");
+      }
+    };
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar
-              barStyle="light-content" // or "dark-content"
-              backgroundColor={Colors.secondary} // set to match your theme
-              translucent={true}
-            />
+        barStyle="light-content" // or "dark-content"
+        backgroundColor={Colors.secondary} // set to match your theme
+        translucent={true}
+      />
       <View style={styles.header}>
         <Text style={styles.logo}>FlowVest</Text>
         <View style={styles.headerRight}>
-          <TouchableOpacity onPress={() => 
-            navigation.navigate("Notifications")}>
-            <Avatar />
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Notifications")}
+          >
+            <Avatar showDot={hasUnread} />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={handleSignOut}
@@ -91,7 +97,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 10,
     paddingBottom: 8,
-    backgroundColor: Colors.secondary, 
+    backgroundColor: Colors.secondary,
     borderBottomWidth: 1,
     borderBottomColor: Colors.secondary,
   },
@@ -109,4 +115,13 @@ const styles = StyleSheet.create({
   avatarText: { color: Colors.white, fontWeight: "bold", fontSize: 16 },
   signOutBtn: { padding: 6 },
   signOutText: { fontSize: 22, color: "#EF4444" },
+  notificationDot: {
+    position: "absolute",
+    top: 5,
+    right: 5,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: "#fb2e2e",
+  },
 });

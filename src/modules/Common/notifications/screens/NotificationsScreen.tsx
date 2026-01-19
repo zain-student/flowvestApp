@@ -11,7 +11,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
 import Animated, { FadeInUp } from "react-native-reanimated";
@@ -20,13 +20,8 @@ export const NotificationsScreen = () => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation();
 
-  const {
-    notifications,
-    isLoading,
-    isPaginating,
-    pagination,
-    error,
-  } = useAppSelector((state) => state.notificationSettings);
+  const { notifications, isLoading, isPaginating, pagination, error } =
+    useAppSelector((state) => state.notificationSettings);
 
   const { user } = useAppSelector((state) => state.auth);
   const [refreshing, setRefreshing] = useState(false);
@@ -36,7 +31,7 @@ export const NotificationsScreen = () => {
       if (!user?.id) return;
       dispatch(fetchNotifications({ recipientId: user.id, page }));
     },
-    [dispatch, user?.id]
+    [dispatch, user?.id],
   );
 
   useEffect(() => {
@@ -94,10 +89,7 @@ export const NotificationsScreen = () => {
         <Animated.View entering={FadeInUp.duration(300)}>
           <TouchableOpacity
             activeOpacity={0.85}
-            style={[
-              styles.card,
-              isUnread && styles.unread,
-            ]}
+            style={[styles.card, isUnread && styles.unread]}
             onPress={() =>
               (navigation as any).navigate("NotificationDetail", {
                 notification: item,
@@ -122,27 +114,18 @@ export const NotificationsScreen = () => {
 
             <View style={styles.content}>
               <Text
-                style={[
-                  styles.title,
-                  isUnread && styles.unreadTitle,
-                ]}
+                style={[styles.title, isUnread && styles.unreadTitle]}
                 numberOfLines={1}
               >
                 {item.title}
               </Text>
 
-              <Text
-                style={[styles.message,
-                ]}
-                numberOfLines={2}
-              >
+              <Text style={[styles.message]} numberOfLines={2}>
                 {item.message}
               </Text>
 
               <View style={styles.meta}>
-                <Text style={styles.metaText}>
-                  From {item.sender.name}
-                </Text>
+                <Text style={styles.metaText}>From {item.sender.name}</Text>
                 <Text style={styles.metaText}>
                   {new Date(item.created_at).toLocaleTimeString()}
                 </Text>
@@ -159,12 +142,7 @@ export const NotificationsScreen = () => {
     return (
       <View style={{ padding: 16 }}>
         {[...Array(5)].map((_, i) => (
-          <View
-            key={i}
-            style={
-              styles.skeleton
-            }
-          />
+          <View key={i} style={styles.skeleton} />
         ))}
       </View>
     );
@@ -221,23 +199,59 @@ export const NotificationsScreen = () => {
 };
 /* ---------------- STYLES ---------------- */
 const styles = StyleSheet.create({
-  section: { fontSize: 14, fontWeight: "700", marginHorizontal: 16, marginVertical: 10, color: Colors.gray, },
-  card: { flexDirection: "row", backgroundColor: "#fff", marginHorizontal: 16, marginBottom: 12, borderRadius: 16, padding: 14, shadowColor: "#000", shadowOpacity: 0.06, shadowRadius: 8, elevation: 3, },
-  cardDark: { backgroundColor: "#1E293B", },
+  section: {
+    fontSize: 14,
+    fontWeight: "700",
+    marginHorizontal: 16,
+    marginVertical: 10,
+    color: Colors.gray,
+  },
+  card: {
+    flexDirection: "row",
+    backgroundColor: "#fff",
+    marginHorizontal: 16,
+    marginBottom: 12,
+    borderRadius: 16,
+    padding: 14,
+    shadowColor: "#000",
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  cardDark: { backgroundColor: "#1E293B" },
   unread: { borderLeftWidth: 3, borderLeftColor: Colors.primary },
-  icon: { width: 42, height: 42, borderRadius: 21, backgroundColor: "#ECFDF5", alignItems: "center", justifyContent: "center", },
-  content: { flex: 1, marginLeft: 12, },
-  title: { fontSize: 15, fontWeight: "600", color: Colors.secondary, },
-  unreadTitle: { fontWeight: "700", },
-  message: { fontSize: 14, color: Colors.gray, marginTop: 4, lineHeight: 20, },
-  meta: { flexDirection: "row", justifyContent: "space-between", marginTop: 8, },
-  metaText: { fontSize: 12, color: Colors.gray, },
-  swipeAction: { backgroundColor: Colors.primary, justifyContent: "center", alignItems: "center", width: 80, borderRadius: 16, marginVertical: 4, },
-  swipeText: { color: "#fff", fontSize: 12, marginTop: 2, },
-  skeleton: { height: 80, backgroundColor: "#E5E7EB", borderRadius: 16, marginBottom: 12, },
-  skeletonDark: { backgroundColor: "#334155", },
-  textDark: { color: "#F8FAFC", },
-  subTextDark: { color: "#94A3B8", },
-  center: { flex: 1, alignItems: "center", justifyContent: "center", },
-  emptyText: { marginTop: 8, color: Colors.gray, },
+  icon: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: "#ECFDF5",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  content: { flex: 1, marginLeft: 12 },
+  title: { fontSize: 15, fontWeight: "600", color: Colors.secondary },
+  unreadTitle: { fontWeight: "700" },
+  message: { fontSize: 14, color: Colors.gray, marginTop: 4, lineHeight: 20 },
+  meta: { flexDirection: "row", justifyContent: "space-between", marginTop: 8 },
+  metaText: { fontSize: 12, color: Colors.gray },
+  swipeAction: {
+    backgroundColor: Colors.primary,
+    justifyContent: "center",
+    alignItems: "center",
+    width: 80,
+    borderRadius: 16,
+    marginVertical: 4,
+  },
+  swipeText: { color: "#fff", fontSize: 12, marginTop: 2 },
+  skeleton: {
+    height: 80,
+    backgroundColor: "#E5E7EB",
+    borderRadius: 16,
+    marginBottom: 12,
+  },
+  skeletonDark: { backgroundColor: "#334155" },
+  textDark: { color: "#F8FAFC" },
+  subTextDark: { color: "#94A3B8" },
+  center: { flex: 1, alignItems: "center", justifyContent: "center" },
+  emptyText: { marginTop: 8, color: Colors.gray },
 });

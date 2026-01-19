@@ -40,7 +40,8 @@ const InvestmentPartnersModal: React.FC<PartnersModalProps> = ({ visible, onClos
   const StatusFilters = [
     { label: "Active", value: "active" },
     { label: "Withdrawn", value: "withdrawn" },
-    { label: "Suspended", value: "suspended" },
+    // { label: "Suspended", value: "suspended" },
+    { label: "Pending", value: "pending" }
   ];
   const InvitationFilters = [
     { label: "Pending", value: "pending" },

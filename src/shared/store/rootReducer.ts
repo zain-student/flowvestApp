@@ -3,22 +3,22 @@
  * Combines all module reducers into a single root reducer
  */
 
-import { combineReducers } from '@reduxjs/toolkit';
+import { combineReducers } from "@reduxjs/toolkit";
 
 // Import module reducers (will be created gradually)
 import adminDashboardSlice from "@/shared/store/slices/investor/dashboard/adminDashboardSlice";
-import investmentSlice from '@/shared/store/slices/investor/investments/investmentSlice';
-import authSlice from '../../modules/auth/store/authSlice';
-import addPartnerSlice from './slices/investor/dashboard/addPartnerSlice';
-import payoutSlice from './slices/investor/payouts/payoutSlice';
-import partnerDashboardSlice from './slices/partner/dashboard/partnerDashboardSlice';
-import PartnerPayoutSlice from './slices/partner/payout/PartnerPayoutSlice';
-import notificationTemplateSlice from './slices/profile/notifications/notificationTemplateSlice';
-import notificationSlice from './slices/profile/notificationSlice';
-import profileSlice from './slices/profile/profileSlice';
-import partnerInvestmentSlice from './slices/shared/investments/partnerInvestmentSlice';
-import exportReportSlice from './slices/shared/portfolio/exportReportSlice';
-import portfolioSlice from './slices/shared/portfolio/portfolioSlice';
+import investmentSlice from "@/shared/store/slices/investor/investments/investmentSlice";
+import authSlice from "../../modules/auth/store/authSlice";
+import addPartnerSlice from "./slices/investor/dashboard/addPartnerSlice";
+import payoutSlice from "./slices/investor/payouts/payoutSlice";
+import partnerDashboardSlice from "./slices/partner/dashboard/partnerDashboardSlice";
+import PartnerPayoutSlice from "./slices/partner/payout/PartnerPayoutSlice";
+import notificationTemplateSlice from "./slices/profile/notifications/notificationTemplateSlice";
+import notificationSlice from "./slices/profile/notificationSlice";
+import profileSlice from "./slices/profile/profileSlice";
+import partnerInvestmentSlice from "./slices/shared/investments/partnerInvestmentSlice";
+import exportReportSlice from "./slices/shared/portfolio/exportReportSlice";
+import portfolioSlice from "./slices/shared/portfolio/portfolioSlice";
 // Import shared reducers
 // import themeSlice from './slices/themeSlice';
 // import loadingSlice from './slices/loadingSlice';
@@ -32,10 +32,10 @@ export const rootReducer = combineReducers({
   investments: investmentSlice,
   // Module reducers (will be uncommented as we create them)
   adminDashboard: adminDashboardSlice,
-  partnerDashboard:partnerDashboardSlice,
+  partnerDashboard: partnerDashboardSlice,
   payout: payoutSlice,
   portfolio: portfolioSlice,
-  exportReport:exportReportSlice,
+  exportReport: exportReportSlice,
   profile: profileSlice,
   notificationSettings: notificationSlice,
   userInvestments: partnerInvestmentSlice,
@@ -48,4 +48,4 @@ export const rootReducer = combineReducers({
   // network: networkSlice,
 });
 
-export type RootState = ReturnType<typeof rootReducer>; 
+export type RootState = ReturnType<typeof rootReducer>;

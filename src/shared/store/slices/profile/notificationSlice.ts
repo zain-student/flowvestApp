@@ -1,8 +1,8 @@
 import { API_ENDPOINTS } from "@/config/env";
 import { api } from "@/shared/services/api";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { RootState } from "@store/index";
 import { ToastAndroid } from "react-native";
-
 interface NotificationItem {
   id: number;
   type: string;
@@ -84,17 +84,17 @@ export const fetchNotificationSettings = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await api.get(
-        API_ENDPOINTS.ADMIN.NOTIFICATIONS.SETTINGS
+        API_ENDPOINTS.ADMIN.NOTIFICATIONS.SETTINGS,
       );
       console.log("Fetched notification settings:", response.data);
       ToastAndroid.show("Notification settings loaded", ToastAndroid.SHORT);
       return response.data.data;
     } catch (err: any) {
       return rejectWithValue(
-        err.response?.data?.message || "Failed to load settings"
+        err.response?.data?.message || "Failed to load settings",
       );
     }
-  }
+  },
 );
 // Thunk for UPDATE notification settings
 export const updateNotificationSettings = createAsyncThunk(
@@ -103,39 +103,37 @@ export const updateNotificationSettings = createAsyncThunk(
     try {
       const response = await api.put(
         API_ENDPOINTS.ADMIN.NOTIFICATIONS.UPDATE_SETTINGS,
-        payload
+        payload,
       );
       console.log("Updated notification settings:", response.data);
       ToastAndroid.show("Notification settings updated", ToastAndroid.SHORT);
       return response.data.data;
     } catch (err: any) {
       return rejectWithValue(
-        err.response?.data?.message || "Failed to update settings"
+        err.response?.data?.message || "Failed to update settings",
       );
     }
-  }
+  },
 );
 // Thunk for fetch all notifications
 export const fetchNotifications = createAsyncThunk(
   "notifications/fetchAll",
   async (
     { recipientId, page = 1 }: { recipientId: number; page?: number },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const response = await api.get(
-        `${API_ENDPOINTS.ADMIN.NOTIFICATIONS.LIST}?recipient_id=${recipientId}&page=${page}`
+        `${API_ENDPOINTS.ADMIN.NOTIFICATIONS.LIST}?recipient_id=${recipientId}&page=${page}`,
       );
 
       const { notifications, pagination } = response.data.data;
       console.log("Fetched Notifications:", response.data);
       return { notifications, pagination, page };
     } catch (err: any) {
-      return rejectWithValue(
-        err.response?.data?.message 
-      );
+      return rejectWithValue(err.response?.data?.message);
     }
-  }
+  },
 );
 
 const notificationSlice = createSlice({
@@ -190,7 +188,7 @@ const notificationSlice = createSlice({
           // Append for next pages
           const newOnes = notifications.filter(
             (n: any) =>
-              !state.notifications.some((existing) => existing.id === n.id)
+              !state.notifications.some((existing) => existing.id === n.id),
           );
           state.notifications = [...state.notifications, ...newOnes];
         }
@@ -203,4 +201,10 @@ const notificationSlice = createSlice({
   },
 });
 
+export const selectHasUnreadNotifications = (state: RootState) =>
+  state.notificationSettings.notifications.some((n) => n.read_at === null);
+
+export const selectUnreadCount = (state: RootState) =>
+  state.notificationSettings.notifications.filter((n) => n.read_at === null)
+    .length;
 export default notificationSlice.reducer;

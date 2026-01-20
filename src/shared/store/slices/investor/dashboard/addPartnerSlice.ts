@@ -15,7 +15,7 @@ export interface CreatePartnerPayload {
   company_type: "private" | "individual" | "silent" | "holding";
   address?: string;
   description?: string;
-  initial_investment?: string;
+  // initial_investment?: string;
   notes?: string;
   send_email?: boolean;
   generate_password?: boolean;
@@ -137,7 +137,7 @@ export const addPartners = createAsyncThunk(
     try {
       const response = await api.post(
         API_ENDPOINTS.ADMIN.PARTNERS.CREATE,
-        newPartner
+        newPartner,
       );
       console.log("Add Partner response:", response.data);
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
@@ -146,7 +146,7 @@ export const addPartners = createAsyncThunk(
       console.log("error", error.message);
       return rejectWithValue(error || "Failed to Add partner");
     }
-  }
+  },
 );
 // fetch partners thunk
 export const fetchPartners = createAsyncThunk(
@@ -160,7 +160,7 @@ export const fetchPartners = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.message || "Failed to fetch Partners");
     }
-  }
+  },
 );
 // get detail partner thunk
 export const fetchPartnerDetail = createAsyncThunk(
@@ -174,7 +174,7 @@ export const fetchPartnerDetail = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.message || "Failed to fetch partner detail");
     }
-  }
+  },
 );
 
 // Update Partner thunk
@@ -182,7 +182,7 @@ export const updatePartner = createAsyncThunk(
   "v1/partners/update",
   async (
     { id, updatedData }: { id: number; updatedData: Partial<Partner> },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       console.log("Update Partner called");
@@ -190,7 +190,7 @@ export const updatePartner = createAsyncThunk(
       // 🔹 API call
       const response = await api.put(
         API_ENDPOINTS.ADMIN.PARTNERS.UPDATE(id),
-        updatedData
+        updatedData,
       );
 
       console.log("📦 Partner Updated:", response.data);
@@ -201,7 +201,7 @@ export const updatePartner = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error?.message || "Update failed");
     }
-  }
+  },
 );
 // Partners investments thunk
 export const fetchPartnerInvestments = createAsyncThunk(
@@ -209,17 +209,17 @@ export const fetchPartnerInvestments = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     try {
       const response = await api.get(
-        API_ENDPOINTS.ADMIN.PARTNERS.INVESTMENTS(id)
+        API_ENDPOINTS.ADMIN.PARTNERS.INVESTMENTS(id),
       );
       console.log("Partner investments response:", response.data.data);
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       return response.data.data; // ✅ directly the partner object
     } catch (error: any) {
       return rejectWithValue(
-        error.message || "Failed to fetch partner investments"
+        error.message || "Failed to fetch partner investments",
       );
     }
-  }
+  },
 );
 // Partners Payouts thunk
 export const fetchPartnerPayouts = createAsyncThunk(
@@ -232,10 +232,10 @@ export const fetchPartnerPayouts = createAsyncThunk(
       return response.data.data; // ✅ directly the partner object
     } catch (error: any) {
       return rejectWithValue(
-        error.message || "Failed to fetch partner payouts"
+        error.message || "Failed to fetch partner payouts",
       );
     }
-  }
+  },
 );
 // Partner Performance thunk
 export const fetchPartnerPerformance = createAsyncThunk(
@@ -243,17 +243,17 @@ export const fetchPartnerPerformance = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     try {
       const response = await api.get(
-        API_ENDPOINTS.ADMIN.PARTNERS.PERFORMANCE(id)
+        API_ENDPOINTS.ADMIN.PARTNERS.PERFORMANCE(id),
       );
       console.log("Partner performance response:", response.data.data);
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       return response.data.data; // ✅ directly performance data
     } catch (error: any) {
       return rejectWithValue(
-        error.message || "Failed to fetch partner performance"
+        error.message || "Failed to fetch partner performance",
       );
     }
-  }
+  },
 );
 // Invite Partner to Investment Thunk
 export const invitePartnerToInvestment = createAsyncThunk(
@@ -274,7 +274,7 @@ export const invitePartnerToInvestment = createAsyncThunk(
       invitationMessage: string;
       minExperience: string;
     },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const response = await api.post(
@@ -287,7 +287,7 @@ export const invitePartnerToInvestment = createAsyncThunk(
           requirements: {
             min_experience: minExperience,
           },
-        }
+        },
       );
 
       console.log("✅ Invite Partner Response:", response.data);
@@ -297,7 +297,7 @@ export const invitePartnerToInvestment = createAsyncThunk(
       console.log("❌ Invite Partner Error:", error);
       return rejectWithValue(error.message || "Failed to invite partner");
     }
-  }
+  },
 );
 
 const partnerSlice = createSlice({
@@ -354,7 +354,7 @@ const partnerSlice = createSlice({
         state.isLoading = false;
         // update the partner in the list
         state.partners = state.partners.map((p) =>
-          p.id === action.payload.id ? { ...p, ...action.payload } : p
+          p.id === action.payload.id ? { ...p, ...action.payload } : p,
         );
 
         // also update if it's the currently selected partner
@@ -424,7 +424,7 @@ const partnerSlice = createSlice({
         state.error = action.payload as string;
         ToastAndroid.show(
           state.error || "Failed to invite partner",
-          ToastAndroid.SHORT
+          ToastAndroid.SHORT,
         );
       });
   },

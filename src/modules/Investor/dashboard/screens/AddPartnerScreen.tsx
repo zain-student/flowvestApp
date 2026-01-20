@@ -3,7 +3,12 @@ import { addPartnerSchema } from "@/modules/auth/utils/authValidation";
 import { InvestorDashboardStackParamList } from "@/navigation/InvestorStacks/InvestorDashboardStack";
 import { Button, Input } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { addPartners, fetchPartners, Partner, updatePartner } from "@/shared/store/slices/investor/dashboard/addPartnerSlice";
+import {
+  addPartners,
+  fetchPartners,
+  Partner,
+  updatePartner,
+} from "@/shared/store/slices/investor/dashboard/addPartnerSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -17,18 +22,26 @@ import {
   Text,
   ToastAndroid,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import Colors from "../../../../shared/colors/Colors";
 import { PartnerDropdown } from "../components/PartnerDropdown";
-type AddPartnerRouteProp = RouteProp<InvestorDashboardStackParamList, "AddPartner">;
-type Props = NativeStackNavigationProp<InvestorDashboardStackParamList, "AddPartner">;
+type AddPartnerRouteProp = RouteProp<
+  InvestorDashboardStackParamList,
+  "AddPartner"
+>;
+type Props = NativeStackNavigationProp<
+  InvestorDashboardStackParamList,
+  "AddPartner"
+>;
 export const AddPartnerScreen = () => {
   const dispatch = useAppDispatch();
   const route = useRoute<AddPartnerRouteProp>();
   const editingPartner = route.params?.partner;
-  const { partners, isLoading, error } = useAppSelector((state) => state.partner);
+  const { partners, isLoading, error } = useAppSelector(
+    (state) => state.partner,
+  );
   const [selectedPartner, setSelectedPartner] = useState<Partner | undefined>();
   const [modalVisible, setModalVisible] = useState(!!editingPartner);
   const navigation = useNavigation<Props>();
@@ -52,7 +65,7 @@ export const AddPartnerScreen = () => {
       company_type: editingPartner?.company_type || "private",
       address: editingPartner?.company?.address || "",
       description: editingPartner?.description || "",
-      initial_investment: editingPartner?.total_invested || "",
+      // initial_investment: editingPartner?.total_invested || "",
       notes: editingPartner?.notes || "",
     },
   });
@@ -67,15 +80,15 @@ export const AddPartnerScreen = () => {
         company_type: editingPartner.company_type,
         address: editingPartner.company?.address,
         description: editingPartner.description,
-        initial_investment: editingPartner.total_invested,
+        // initial_investment: editingPartner.total_invested,
         notes: editingPartner.notes,
       });
       setModalVisible(true); // ✅ open modal automatically
     }
   }, [editingPartner, reset]);
   useEffect(() => {
-    dispatch(fetchPartners())
-  }, [dispatch])
+    dispatch(fetchPartners());
+  }, [dispatch]);
 
   const onSubmit = (data: any) => {
     if (editingPartner) {
@@ -105,7 +118,10 @@ export const AddPartnerScreen = () => {
         })
         .catch((error: any) => {
           // ToastAndroid.show(`Error: ${error}`, ToastAndroid.LONG);
-          ToastAndroid.show("Failed: " + (error?.message || "Unknown error"), ToastAndroid.LONG);
+          ToastAndroid.show(
+            "Failed: " + (error?.message || "Unknown error"),
+            ToastAndroid.LONG,
+          );
         });
     }
   };
@@ -125,7 +141,7 @@ export const AddPartnerScreen = () => {
               id: partner.id,
             });
 
-            setSelectedPartner(partner)
+            setSelectedPartner(partner);
           }}
           placeholder="Choose a partner"
         />
@@ -138,13 +154,12 @@ export const AddPartnerScreen = () => {
             onRequestClose={() => setModalVisible(false)}
             statusBarTranslucent={true}
           >
-            <ScrollView contentContainerStyle={styles.modalOverlay}
+            <ScrollView
+              contentContainerStyle={styles.modalOverlay}
               showsVerticalScrollIndicator={false}
             >
               <View style={styles.modalContainer}>
-                <ScrollView
-                  showsVerticalScrollIndicator={false}
-                >
+                <ScrollView showsVerticalScrollIndicator={false}>
                   <Text
                     style={{
                       fontSize: 20,
@@ -159,9 +174,11 @@ export const AddPartnerScreen = () => {
                     style={styles.closeBtn}
                     onPress={() => {
                       if (editingPartner) {
-                        setModalVisible(false)
-                        navigation.goBack()
-                      } else { setModalVisible(false) }
+                        setModalVisible(false);
+                        navigation.goBack();
+                      } else {
+                        setModalVisible(false);
+                      }
                     }}
                   >
                     <Text style={styles.closeText}>✕</Text>
@@ -223,7 +240,13 @@ export const AddPartnerScreen = () => {
 
                       return (
                         <View style={{ marginBottom: 16, zIndex: 1000 }}>
-                          <Text style={{ marginBottom: 4, fontWeight: "500", color: Colors.secondary }}>
+                          <Text
+                            style={{
+                              marginBottom: 4,
+                              fontWeight: "500",
+                              color: Colors.secondary,
+                            }}
+                          >
                             Status *
                           </Text>
                           <DropDownPicker
@@ -231,7 +254,9 @@ export const AddPartnerScreen = () => {
                             value={field.value}
                             items={items}
                             setOpen={setOpen}
-                            setValue={(callback) => field.onChange(callback(field.value))}
+                            setValue={(callback) =>
+                              field.onChange(callback(field.value))
+                            }
                             setItems={setItems}
                             placeholder="Select Status"
                             listMode="SCROLLVIEW"
@@ -263,7 +288,9 @@ export const AddPartnerScreen = () => {
                         placeholder="Enter company name"
                         value={field.value}
                         onChangeText={field.onChange}
-                        error={errors.company_name?.message as string | undefined}
+                        error={
+                          errors.company_name?.message as string | undefined
+                        }
                         required
                       />
                     )}
@@ -283,7 +310,13 @@ export const AddPartnerScreen = () => {
 
                       return (
                         <View style={{ marginBottom: 16, zIndex: 2000 }}>
-                          <Text style={{ marginBottom: 4, fontWeight: "500", color: Colors.secondary }}>
+                          <Text
+                            style={{
+                              marginBottom: 4,
+                              fontWeight: "500",
+                              color: Colors.secondary,
+                            }}
+                          >
                             Company Type *
                           </Text>
                           <DropDownPicker
@@ -291,7 +324,9 @@ export const AddPartnerScreen = () => {
                             value={field.value}
                             items={items}
                             setOpen={setOpen}
-                            setValue={(callback) => field.onChange(callback(field.value))}
+                            setValue={(callback) =>
+                              field.onChange(callback(field.value))
+                            }
                             setItems={setItems}
                             placeholder="Select Company Type"
                             listMode="SCROLLVIEW"
@@ -337,12 +372,14 @@ export const AddPartnerScreen = () => {
                         placeholder="Enter description"
                         value={field.value}
                         onChangeText={field.onChange}
-                        error={errors.description?.message as string | undefined}
+                        error={
+                          errors.description?.message as string | undefined
+                        }
                         multiline
                       />
                     )}
                   />
-                  <Controller
+                  {/* <Controller
                     control={control}
                     name="initial_investment"
                     render={({ field }) => (
@@ -355,7 +392,7 @@ export const AddPartnerScreen = () => {
                         required
                       />
                     )}
-                  />
+                  /> */}
                   <Controller
                     control={control}
                     name="notes"
@@ -372,135 +409,167 @@ export const AddPartnerScreen = () => {
                   />
 
                   {/* --- Account Credentials Section --- */}
-                  {!editingPartner && (<View
-                    style={{
-                      marginTop: 10,
-                      marginBottom: 20,
-                      backgroundColor: Colors.lightGray,
-                      borderRadius: 12,
-                      padding: 16,
-                    }}
-                  >
-                    <Text
+                  {!editingPartner && (
+                    <View
                       style={{
-                        fontSize: 18,
-                        fontWeight: "600",
-                        color: Colors.secondary,
-                        marginBottom: 12,
+                        marginTop: 10,
+                        marginBottom: 20,
+                        backgroundColor: Colors.lightGray,
+                        borderRadius: 12,
+                        padding: 16,
                       }}
                     >
-                      Account Credentials
-                    </Text>
-
-                    {/* Send Email with Credentials */}
-                    <View style={{ marginBottom: 16 }}>
-                      <View
+                      <Text
                         style={{
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                          alignItems: "center",
+                          fontSize: 18,
+                          fontWeight: "600",
+                          color: Colors.secondary,
+                          marginBottom: 12,
                         }}
                       >
-                        <View style={{ flex: 1, paddingRight: 8 }}>
-                          <Text style={{ color: Colors.secondary, fontWeight: "500" }}>
-                            Send Email with Credentials
-                          </Text>
-                          <Text style={{ color: Colors.gray, fontSize: 13, marginTop: 2 }}>
-                            If enabled, the partner will receive an email with their login
-                            credentials.
-                          </Text>
-                        </View>
-                        <TouchableOpacity
+                        Account Credentials
+                      </Text>
+
+                      {/* Send Email with Credentials */}
+                      <View style={{ marginBottom: 16 }}>
+                        <View
                           style={{
-                            width: 46,
-                            height: 28,
-                            backgroundColor: isEmailEnabled ? Colors.primary : "#ccc",
-                            borderRadius: 14,
-                            justifyContent: "center",
-                            paddingHorizontal: 3,
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            alignItems: "center",
                           }}
-                          onPress={() => setIsEmailEnabled(!isEmailEnabled)}
                         >
-                          <View
+                          <View style={{ flex: 1, paddingRight: 8 }}>
+                            <Text
+                              style={{
+                                color: Colors.secondary,
+                                fontWeight: "500",
+                              }}
+                            >
+                              Send Email with Credentials
+                            </Text>
+                            <Text
+                              style={{
+                                color: Colors.gray,
+                                fontSize: 13,
+                                marginTop: 2,
+                              }}
+                            >
+                              If enabled, the partner will receive an email with
+                              their login credentials.
+                            </Text>
+                          </View>
+                          <TouchableOpacity
                             style={{
-                              width: 22,
-                              height: 22,
-                              borderRadius: 11,
-                              backgroundColor: Colors.white,
-                              alignSelf: isEmailEnabled ? "flex-end" : "flex-start",
+                              width: 46,
+                              height: 28,
+                              backgroundColor: isEmailEnabled
+                                ? Colors.primary
+                                : "#ccc",
+                              borderRadius: 14,
+                              justifyContent: "center",
+                              paddingHorizontal: 3,
                             }}
-                          />
-                        </TouchableOpacity>
+                            onPress={() => setIsEmailEnabled(!isEmailEnabled)}
+                          >
+                            <View
+                              style={{
+                                width: 22,
+                                height: 22,
+                                borderRadius: 11,
+                                backgroundColor: Colors.white,
+                                alignSelf: isEmailEnabled
+                                  ? "flex-end"
+                                  : "flex-start",
+                              }}
+                            />
+                          </TouchableOpacity>
+                        </View>
                       </View>
-                    </View>
-                    {/* Auto-Generate Password */}
-                    <View style={{ marginBottom: 16 }}>
-                      <View
+                      {/* Auto-Generate Password */}
+                      <View style={{ marginBottom: 16 }}>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
+                        >
+                          <View style={{ flex: 1, paddingRight: 8 }}>
+                            <Text
+                              style={{
+                                color: Colors.secondary,
+                                fontWeight: "500",
+                              }}
+                            >
+                              Auto-Generate Password
+                            </Text>
+                            <Text
+                              style={{
+                                color: Colors.gray,
+                                fontSize: 13,
+                                marginTop: 2,
+                              }}
+                            >
+                              If enabled, a secure random password will be
+                              generated. If disabled, you can set a custom
+                              password below.
+                            </Text>
+                          </View>
+                          <TouchableOpacity
+                            style={{
+                              width: 46,
+                              height: 28,
+                              backgroundColor: isAutoPassword
+                                ? Colors.primary
+                                : "#ccc",
+                              borderRadius: 14,
+                              justifyContent: "center",
+                              paddingHorizontal: 3,
+                            }}
+                            onPress={() => setIsAutoPassword(!isAutoPassword)}
+                          >
+                            <View
+                              style={{
+                                width: 22,
+                                height: 22,
+                                borderRadius: 11,
+                                backgroundColor: Colors.white,
+                                alignSelf: isAutoPassword
+                                  ? "flex-end"
+                                  : "flex-start",
+                              }}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+
+                      {/* Custom Password Input */}
+                      {!isAutoPassword && (
+                        <View style={{ marginBottom: 8 }}>
+                          <Input
+                            label="Custom Password"
+                            placeholder="Enter password (min 8 characters)"
+                            secureTextEntry
+                            value={customPassword}
+                            onChangeText={setCustomPassword}
+                          />
+                        </View>
+                      )}
+
+                      <Text
                         style={{
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                          alignItems: "center",
+                          color: Colors.warning || "#D97706",
+                          fontSize: 12,
+                          marginTop: 4,
                         }}
                       >
-                        <View style={{ flex: 1, paddingRight: 8 }}>
-                          <Text style={{ color: Colors.secondary, fontWeight: "500" }}>
-                            Auto-Generate Password
-                          </Text>
-                          <Text style={{ color: Colors.gray, fontSize: 13, marginTop: 2 }}>
-                            If enabled, a secure random password will be generated. If disabled,
-                            you can set a custom password below.
-                          </Text>
-                        </View>
-                        <TouchableOpacity
-                          style={{
-                            width: 46,
-                            height: 28,
-                            backgroundColor: isAutoPassword ? Colors.primary : "#ccc",
-                            borderRadius: 14,
-                            justifyContent: "center",
-                            paddingHorizontal: 3,
-                          }}
-                          onPress={() => setIsAutoPassword(!isAutoPassword)}
-                        >
-                          <View
-                            style={{
-                              width: 22,
-                              height: 22,
-                              borderRadius: 11,
-                              backgroundColor: Colors.white,
-                              alignSelf: isAutoPassword ? "flex-end" : "flex-start",
-                            }}
-                          />
-                        </TouchableOpacity>
-                      </View>
+                        ⚠️ Make sure to securely share this password with the
+                        partner if email is not being sent.
+                      </Text>
                     </View>
-
-                    {/* Custom Password Input */}
-                    {!isAutoPassword && (
-                      <View style={{ marginBottom: 8 }}>
-                        <Input
-                          label="Custom Password"
-                          placeholder="Enter password (min 8 characters)"
-                          secureTextEntry
-                          value={customPassword}
-                          onChangeText={setCustomPassword}
-                        />
-                      </View>
-                    )}
-
-                    <Text
-                      style={{
-                        color: Colors.warning || "#D97706",
-                        fontSize: 12,
-                        marginTop: 4,
-                      }}
-                    >
-                      ⚠️ Make sure to securely share this password with the partner if email is
-                      not being sent.
-                    </Text>
-                  </View>)}
+                  )}
                   {/* --- End Account Credentials Section --- */}
-
 
                   <Button
                     title={editingPartner ? "Update" : "Add"}

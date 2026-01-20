@@ -14,7 +14,7 @@ const passwordSchema = z
   .regex(/[0-9]/, "Password must contain at least one number")
   .regex(
     /[^a-zA-Z0-9]/,
-    "Password must contain at least one special character"
+    "Password must contain at least one special character",
   );
 
 // Email validation schema
@@ -106,7 +106,7 @@ export const independentUserRegistrationSchema = baseRegistrationSchema
 // Dynamic registration schema based on role and registration type
 export const createRegistrationSchema = (
   role: string,
-  registrationType?: string
+  registrationType?: string,
 ) => {
   if (role === "admin") {
     return adminRegistrationSchema;
@@ -172,12 +172,12 @@ export const soloInvestmentSchema = z.object({
 
   expected_return_rate: z.preprocess(
     (val) => (val !== "" && val !== undefined ? Number(val) : undefined),
-    z.number().positive()
+    z.number().positive(),
   ),
 
   initial_amount: z.preprocess(
     (val) => (val !== "" && val !== undefined ? Number(val) : undefined),
-    z.number().positive()
+    z.number().positive(),
   ),
 
   notes: z.string().optional(),
@@ -196,22 +196,22 @@ export const sharedInvestmentSchema = z.object({
 
   expected_return_rate: z.preprocess(
     (val) => (val !== "" && val !== undefined ? Number(val) : undefined),
-    z.number().positive()
+    z.number().positive(),
   ),
 
   total_target_amount: z.preprocess(
     (val) => (val !== "" && val !== undefined ? Number(val) : undefined),
-    z.number().positive()
+    z.number().positive(),
   ),
 
   min_investment_amount: z.preprocess(
     (val) => (val !== "" && val !== undefined ? Number(val) : undefined),
-    z.number().positive()
+    z.number().positive(),
   ),
 
   max_investment_amount: z.preprocess(
     (val) => (val !== "" && val !== undefined ? Number(val) : undefined),
-    z.number().positive()
+    z.number().positive(),
   ),
 });
 // Add partner schema
@@ -226,7 +226,7 @@ export const addPartnerSchema = z
     company_name: z.string().min(2, "Company name is required"),
     company_type: z.enum(["individual", "private", "silent", "holding"]),
     address: z.string().min(5, "Address is required"),
-    initial_investment: z.string().min(1, "Investment is required"),
+    // initial_investment: z.string().min(1, "Investment is required"),
     description: z.string().optional().or(z.literal("")),
     notes: z.string().optional().or(z.literal("")),
     send_email: z.boolean().optional(),
@@ -247,13 +247,13 @@ export const addPartnerSchema = z
     {
       message: "Password is required when auto-generate password is disabled",
       path: ["password"],
-    }
+    },
   );
 // Join Investment Schema
 export const joinInvestmentSchema = z.object({
   amount: z.preprocess(
     (val) => (val !== "" && val !== undefined ? Number(val) : undefined),
-    z.number().positive("Amount must be a positive number")
+    z.number().positive("Amount must be a positive number"),
   ),
   notes: z.string().optional(),
 });
@@ -285,7 +285,7 @@ export type RegistrationFormData =
 // Helper function to validate form data
 export const validateFormData = <T>(
   schema: z.ZodSchema<T>,
-  data: unknown
+  data: unknown,
 ): {
   success: boolean;
   data?: T;

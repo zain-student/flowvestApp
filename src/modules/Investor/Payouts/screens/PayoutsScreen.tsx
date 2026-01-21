@@ -1,7 +1,10 @@
 import { PayoutStackParamList } from "@/navigation/InvestorStacks/PayoutStack";
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { bulkUpdatePayouts, fetchPayouts } from "@/shared/store/slices/investor/payouts/payoutSlice";
+import {
+  bulkUpdatePayouts,
+  fetchPayouts,
+} from "@/shared/store/slices/investor/payouts/payoutSlice";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -67,7 +70,7 @@ export const PayoutsScreen: React.FC = () => {
   // ✅ Selection logic
   const toggleSelection = (id: number) => {
     setSelectedPayouts((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
     );
   };
 
@@ -108,13 +111,15 @@ export const PayoutsScreen: React.FC = () => {
       console.log("Bulk Mark as Paid payload:", payload);
       await dispatch(bulkUpdatePayouts(payload)).unwrap();
 
-
       setShowMarkAsPaidModal(false);
       setSelectionMode(false);
       setSelectedPayouts([]);
       dispatch(fetchPayouts(1)); // refresh list
     } catch (error: any) {
-      ToastAndroid.show(error?.message || "Failed to mark payouts as paid.", ToastAndroid.SHORT);
+      ToastAndroid.show(
+        error?.message || "Failed to mark payouts as paid.",
+        ToastAndroid.SHORT,
+      );
     }
   };
   const renderPayout = ({ item }: any) => {
@@ -123,10 +128,7 @@ export const PayoutsScreen: React.FC = () => {
 
     return (
       <TouchableOpacity
-        style={[
-          styles.payoutCard,
-          isSelected && styles.payoutSelected,
-        ]}
+        style={[styles.payoutCard, isSelected && styles.payoutSelected]}
         onPress={() => handlePayoutPress(item)}
         onLongPress={() => handleLongPress(item.id)}
         delayLongPress={300}
@@ -188,22 +190,22 @@ export const PayoutsScreen: React.FC = () => {
           <Text style={styles.cardValue}>
             {formatCurrency(Number(totalPayoutAmount.toFixed(1) ?? "--"))}
           </Text>
-          <Text style={{ color: Colors.gray, }}>
+          <Text style={{ color: Colors.gray }}>
             Total payouts:{" "}
             <Text style={styles.cardSubtitle}>
               {/* July 15, 2024 */}
-              {pagination.total} 
+              {pagination.total}
             </Text>
           </Text>
           <View style={styles.balanceActionsRow}>
-            <TouchableOpacity style={styles.balanceActionBtnDark}>
+            {/* <TouchableOpacity style={styles.balanceActionBtnDark}>
               <Feather name="plus" size={18} color="#fff" />
               <Text style={styles.balanceActionTextDark}>Top Up</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.balanceActionBtnDark}>
               <Feather name="arrow-up-right" size={18} color="#fff" />
               <Text style={styles.balanceActionTextDark}>Send Money</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
 
@@ -241,7 +243,10 @@ export const PayoutsScreen: React.FC = () => {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.bulkPaidBtn} onPress={handleOpenMarkAsPaid}>
+            <TouchableOpacity
+              style={styles.bulkPaidBtn}
+              onPress={handleOpenMarkAsPaid}
+            >
               <Feather name="check" size={18} color="#fff" />
               <Text style={styles.bulkPaidText}>Mark as Paid</Text>
             </TouchableOpacity>
@@ -265,7 +270,9 @@ export const PayoutsScreen: React.FC = () => {
           refreshing={isLoading}
           onRefresh={handleRefresh}
           ListHeaderComponent={
-            payouts.length === 0 ? null : <Text style={styles.sectionTitle}>Payouts</Text>
+            payouts.length === 0 ? null : (
+              <Text style={styles.sectionTitle}>Payouts</Text>
+            )
           }
           ListFooterComponent={
             isLoadingMore ? (
@@ -305,7 +312,11 @@ const styles = StyleSheet.create({
     color: Colors.white,
     marginBottom: 4,
   },
-  cardSubtitle: { fontSize: 14, color: Colors.green,fontFamily: "Inter_600SemiBold", },
+  cardSubtitle: {
+    fontSize: 14,
+    color: Colors.green,
+    fontFamily: "Inter_600SemiBold",
+  },
   balanceActionBtnDark: {
     width: "48%",
     flexDirection: "row",

@@ -52,7 +52,7 @@ export const ProfileScreen: React.FC = () => {
   const [selectedCurrency, setSelectedCurrency] = useState<any>(null);
 
   const { currencies, isCurrenciesLoading } = useAppSelector(
-    (state) => state.profile
+    (state) => state.profile,
   );
   const pullToRefresh = () => {
     dispatch(getCurrentUser());
@@ -67,7 +67,7 @@ export const ProfileScreen: React.FC = () => {
         setInitialLoadDone(true);
       };
       loadUser();
-    }, [dispatch, user])
+    }, [dispatch, user]),
   );
   useEffect(() => {
     dispatch(getCurrentUser());
@@ -81,7 +81,7 @@ export const ProfileScreen: React.FC = () => {
       if (status !== "granted") {
         return Alert.alert(
           "Permission required",
-          "Please allow access to your photo gallery."
+          "Please allow access to your photo gallery.",
         );
       }
 
@@ -95,10 +95,16 @@ export const ProfileScreen: React.FC = () => {
       await dispatch(uploadUserAvatar(imageUri)).unwrap();
       await dispatch(getCurrentUser()).unwrap();
 
-      Alert.alert("Success", "Your profile photo has been updated!");
+      ToastAndroid.show(
+        "Your profile photo has been updated!",
+        ToastAndroid.SHORT,
+      );
     } catch (err) {
       console.error("Avatar upload failed:", err);
-      Alert.alert("Error", "Failed to upload avatar. Please try again.");
+      ToastAndroid.show(
+        "Failed to upload avatar. Please try again.",
+        ToastAndroid.SHORT,
+      );
     } finally {
       setImageLoading(false);
     }
@@ -116,7 +122,7 @@ export const ProfileScreen: React.FC = () => {
     dispatch(
       updatePreferences({
         display: { currency: currency.code },
-      })
+      }),
     )
       .unwrap()
       .then(() => {
@@ -126,7 +132,7 @@ export const ProfileScreen: React.FC = () => {
       .catch(() => {
         ToastAndroid.show(
           "Failed to update currency preference.",
-          ToastAndroid.SHORT
+          ToastAndroid.SHORT,
         );
       });
   };
@@ -162,7 +168,7 @@ export const ProfileScreen: React.FC = () => {
           <RefreshControl
             refreshing={isLoading}
             onRefresh={pullToRefresh}
-          // tintColor={}
+            // tintColor={}
           />
         }
       >
@@ -184,7 +190,9 @@ export const ProfileScreen: React.FC = () => {
                 />
               ) : (
                 <View style={styles.avatarPlaceholder}>
-                  <Text style={styles.avatarText}>{getInitials(user?.name)}</Text>
+                  <Text style={styles.avatarText}>
+                    {getInitials(user?.name)}
+                  </Text>
                 </View>
               )}
             </TouchableOpacity>
@@ -205,10 +213,15 @@ export const ProfileScreen: React.FC = () => {
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>Account Info</Text>
           <InfoRow label="Email" value={user?.email ?? "--"} />
-          {user?.roles?.includes("admin") ? (<TouchableOpacity onPress={() => navigation.navigate("CompanyInfo")}>
+          {user?.roles?.includes("admin") ? (
+            <TouchableOpacity
+              onPress={() => navigation.navigate("CompanyInfo")}
+            >
+              <InfoRow label="Company" value={user?.company?.name ?? "--"} />
+            </TouchableOpacity>
+          ) : (
             <InfoRow label="Company" value={user?.company?.name ?? "--"} />
-          </TouchableOpacity>) :
-            (<InfoRow label="Company" value={user?.company?.name ?? "--"} />)}
+          )}
           {/* Currency Preference */}
           <TouchableOpacity
             style={styles.preferenceRow}
@@ -235,7 +248,7 @@ export const ProfileScreen: React.FC = () => {
               <TouchableOpacity
                 activeOpacity={1}
                 style={styles.modalSheet}
-                onPress={() => { }}
+                onPress={() => {}}
               >
                 <Text style={styles.modalTitle}>Select Currency</Text>
 
@@ -256,8 +269,6 @@ export const ProfileScreen: React.FC = () => {
               </TouchableOpacity>
             </TouchableOpacity>
           </Modal>
-
-
         </View>
         {/*  Settings */}
         <View style={styles.card}>
@@ -281,7 +292,7 @@ export const ProfileScreen: React.FC = () => {
               } else {
                 Alert.alert(
                   "Access Denied",
-                  "You do not have permission to access Notification Settings."
+                  "You do not have permission to access Notification Settings.",
                 );
               }
             }}
@@ -314,7 +325,11 @@ const InfoRow = ({ label, value }: { label: string; value: string }) => (
     <Text style={styles.infoValue}>{value}</Text>
   </View>
 );
-const SettingsButton = ({ icon, label, onPress }: {
+const SettingsButton = ({
+  icon,
+  label,
+  onPress,
+}: {
   icon: keyof typeof Ionicons.glyphMap;
   label: string;
   onPress: () => void;
@@ -327,33 +342,154 @@ const SettingsButton = ({ icon, label, onPress }: {
 );
 // Styles
 const styles = StyleSheet.create({
-  scrollContent: { padding: 20, backgroundColor: Colors.background, paddingBottom: 100 },
-  avatarImage: { width: AVATAR_SIZE, height: AVATAR_SIZE, borderRadius: AVATAR_SIZE / 2, borderWidth: 1, borderColor: "#E5E7EB", alignItems: "center", justifyContent: "center", shadowColor: "#000000ff", shadowOpacity: 0.08, shadowRadius: 6, elevation: 4, },
-  avatarPlaceholder: { width: AVATAR_SIZE, height: AVATAR_SIZE, borderRadius: AVATAR_SIZE / 2, backgroundColor: Colors.gray, alignItems: "center", justifyContent: "center", },
-  avatarText: { fontSize: 40, color: "#fff", },
-  modalBackground: { flex: 1, backgroundColor: "rgba(0,0,0,0.9)", justifyContent: "center", alignItems: "center", },
-  modalCloseArea: { flex: 1, justifyContent: "center", alignItems: "center", width: "100%", },
-  fullscreenImage: { width: "95%", height: "95%", borderRadius: 10, },
-  profileHeader: { alignItems: "center", paddingVertical: 30, },
-  avatarWrapper: { width: AVATAR_SIZE, height: AVATAR_SIZE, borderRadius: AVATAR_SIZE / 2, alignItems: "center", justifyContent: "center", },
-  editAvatarBtn: { position: "absolute", bottom: 5, right: 0, backgroundColor: Colors.primary, width: 32, height: 32, borderRadius: 16, alignItems: "center", justifyContent: "center", },
-  profileName: { fontSize: 20, fontWeight: "700", marginTop: 14, color: Colors.secondary, },
-  profileRole: { fontSize: 13, color: Colors.gray, marginTop: 4, },
-  card: { backgroundColor: Colors.white, borderRadius: 16, padding: 18, marginBottom: 20, shadowColor: "#000", shadowOpacity: 0.05, shadowRadius: 10, elevation: 3, },
-  sectionTitle: { fontSize: 16, fontWeight: "600", color: Colors.secondary, marginBottom: 10, },
-  infoRow: { marginBottom: 12, },
-  infoLabel: { fontSize: 12, color: Colors.gray, },
-  infoValue: { fontSize: 15, fontWeight: "500", color: Colors.secondary, marginTop: 4, },
-  modalOverlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.35)", justifyContent: "flex-end", },
-  modalSheet: { backgroundColor: Colors.white, borderTopLeftRadius: 24, borderTopRightRadius: 24, paddingTop: 16, paddingHorizontal: 20, paddingBottom: 30, maxHeight: "70%", },
-  modalTitle: { fontSize: 17, fontWeight: "700", color: Colors.secondary, marginBottom: 16, textAlign: "center", },
-  currencyItem: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: "#F1F5F9", },
-  currencyText: { fontSize: 15, color: Colors.secondary, },
-  currencyCode: { fontSize: 13, color: Colors.gray, },
-  preferenceRow: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: 14, paddingHorizontal: 4, marginTop: 12, borderBottomWidth: 1, borderBottomColor: "#E5E7EB", },
-  prefLabel: { fontSize: 14, color: Colors.gray, },
-  prefValue: { flexDirection: "row", alignItems: "center", },
-  prefValueText: { fontSize: 15, fontWeight: "600", color: Colors.secondary, marginRight: 6, },
-  settingsRow: { flexDirection: "row", alignItems: "center", paddingVertical: 14 },
-  settingsLabel: { flex: 1, marginLeft: 12, fontSize: 15, color: Colors.secondary, },
+  scrollContent: {
+    padding: 20,
+    backgroundColor: Colors.background,
+    paddingBottom: 100,
+  },
+  avatarImage: {
+    width: AVATAR_SIZE,
+    height: AVATAR_SIZE,
+    borderRadius: AVATAR_SIZE / 2,
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000000ff",
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 4,
+  },
+  avatarPlaceholder: {
+    width: AVATAR_SIZE,
+    height: AVATAR_SIZE,
+    borderRadius: AVATAR_SIZE / 2,
+    backgroundColor: Colors.gray,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  avatarText: { fontSize: 40, color: "#fff" },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.9)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalCloseArea: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+  },
+  fullscreenImage: { width: "95%", height: "95%", borderRadius: 10 },
+  profileHeader: { alignItems: "center", paddingVertical: 30 },
+  avatarWrapper: {
+    width: AVATAR_SIZE,
+    height: AVATAR_SIZE,
+    borderRadius: AVATAR_SIZE / 2,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  editAvatarBtn: {
+    position: "absolute",
+    bottom: 5,
+    right: 0,
+    backgroundColor: Colors.primary,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  profileName: {
+    fontSize: 20,
+    fontWeight: "700",
+    marginTop: 14,
+    color: Colors.secondary,
+  },
+  profileRole: { fontSize: 13, color: Colors.gray, marginTop: 4 },
+  card: {
+    backgroundColor: Colors.white,
+    borderRadius: 16,
+    padding: 18,
+    marginBottom: 20,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 3,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: Colors.secondary,
+    marginBottom: 10,
+  },
+  infoRow: { marginBottom: 12 },
+  infoLabel: { fontSize: 12, color: Colors.gray },
+  infoValue: {
+    fontSize: 15,
+    fontWeight: "500",
+    color: Colors.secondary,
+    marginTop: 4,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.35)",
+    justifyContent: "flex-end",
+  },
+  modalSheet: {
+    backgroundColor: Colors.white,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    paddingTop: 16,
+    paddingHorizontal: 20,
+    paddingBottom: 30,
+    maxHeight: "70%",
+  },
+  modalTitle: {
+    fontSize: 17,
+    fontWeight: "700",
+    color: Colors.secondary,
+    marginBottom: 16,
+    textAlign: "center",
+  },
+  currencyItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: "#F1F5F9",
+  },
+  currencyText: { fontSize: 15, color: Colors.secondary },
+  currencyCode: { fontSize: 13, color: Colors.gray },
+  preferenceRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 14,
+    paddingHorizontal: 4,
+    marginTop: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E5E7EB",
+  },
+  prefLabel: { fontSize: 14, color: Colors.gray },
+  prefValue: { flexDirection: "row", alignItems: "center" },
+  prefValueText: {
+    fontSize: 15,
+    fontWeight: "600",
+    color: Colors.secondary,
+    marginRight: 6,
+  },
+  settingsRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 14,
+  },
+  settingsLabel: {
+    flex: 1,
+    marginLeft: 12,
+    fontSize: 15,
+    color: Colors.secondary,
+  },
 });

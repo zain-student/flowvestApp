@@ -138,7 +138,7 @@ export const changePasswordSchema = z
     password_confirmation: z.string(),
   })
   .refine((data: any) => data.password === data.password_confirmation, {
-    message: "Passwords do not match",
+    message: "Confirm Passwords should match New Password",
     path: ["password_confirmation"],
   });
 

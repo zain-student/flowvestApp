@@ -16,7 +16,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import ExportReportModal from "../components/ExportReportModal";
@@ -24,7 +24,7 @@ import ExportReportModal from "../components/ExportReportModal";
 export const PortfolioScreen: React.FC = () => {
   const screenWidth = Dimensions.get("window").width;
 
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const { isLoading, error, data } = useAppSelector((state) => state.portfolio);
   const [activeChart, setActiveChart] = useState<"roi" | "earned">("roi");
   const { loading, dataExpo } = useAppSelector((state) => state.exportReport);
@@ -36,9 +36,9 @@ export const PortfolioScreen: React.FC = () => {
   const isAdmin = user?.roles?.includes("admin");
   const { formatCurrency } = useCurrencyFormatter();
   useEffect(() => {
-    dispatch(fetchPortfolio())
+    dispatch(fetchPortfolio());
     dispatch(getCurrentUser());
-  }, [dispatch])
+  }, [dispatch]);
   const assets =
     data?.own_investments?.map((inv) => ({
       id: inv.id,
@@ -60,9 +60,7 @@ export const PortfolioScreen: React.FC = () => {
 
           <View>
             <Text style={styles.assetName}>{item.name}</Text>
-            <Text style={styles.assetValue}>
-              {formatCurrency(item.value)}
-            </Text>
+            <Text style={styles.assetValue}>{formatCurrency(item.value)}</Text>
             <Text style={styles.assetMeta}>Start: {item.start}</Text>
           </View>
         </View>
@@ -74,9 +72,7 @@ export const PortfolioScreen: React.FC = () => {
               {item.type.charAt(0).toUpperCase() + item.type.slice(1)}
             </Text>
           </View>
-          <Text style={styles.assetGrowth}>
-            {item.expected_return_rate}
-          </Text>
+          <Text style={styles.assetGrowth}>{item.expected_return_rate}</Text>
         </View>
       </View>
     );
@@ -108,34 +104,37 @@ export const PortfolioScreen: React.FC = () => {
   };
   const pullToRefresh = () => {
     dispatch(fetchPortfolio());
-  }
+  };
   return (
     <DashboardLayout>
-
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Total Earned</Text>
-        <Text style={styles.cardValue}>{formatCurrency(Number(data?.summary.total_earned)) ?? 0}</Text>
+        <Text style={styles.cardValue}>
+          {formatCurrency(Number(data?.summary.total_earned)) ?? 0}
+        </Text>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text style={styles.cardSubtitle}>Total Investments:
+          <Text style={styles.cardSubtitle}>
+            Total Investments:
             <Text style={styles.balanceChangeDark}>
               {data?.summary.total_investments}
             </Text>
           </Text>
-          <Text style={styles.cardSubtitle}>Active Investments:
+          <Text style={styles.cardSubtitle}>
+            Active Investments:
             <Text style={styles.balanceChangeDark}>
               {data?.summary.active_investments}
             </Text>
           </Text>
         </View>
         <View style={styles.balanceActionsRow}>
-          <TouchableOpacity style={styles.balanceActionBtnDark}>
+          {/* <TouchableOpacity style={styles.balanceActionBtnDark}>
             <Feather name="plus" size={18} color="#fff" />
             <Text style={styles.balanceActionTextDark}>Top Up</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.balanceActionBtnDark}>
             <Feather name="arrow-up-right" size={18} color="#fff" />
             <Text style={styles.balanceActionTextDark}>Send Money</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
       <ScrollView
@@ -150,21 +149,43 @@ export const PortfolioScreen: React.FC = () => {
         }
       >
         <View style={styles.chartContainer}>
-          <View style={{ flexDirection: "row", justifyContent: "center", marginTop: 3 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              marginTop: 3,
+            }}
+          >
             <TouchableOpacity
-              style={[styles.toggleBtn, activeChart === "roi" && styles.toggleBtnActive]}
+              style={[
+                styles.toggleBtn,
+                activeChart === "roi" && styles.toggleBtnActive,
+              ]}
               onPress={() => setActiveChart("roi")}
             >
-              <Text style={[styles.toggleBtnText, activeChart === "roi" && styles.toggleBtnTextActive]}>
+              <Text
+                style={[
+                  styles.toggleBtnText,
+                  activeChart === "roi" && styles.toggleBtnTextActive,
+                ]}
+              >
                 ROI %
               </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.toggleBtn, activeChart === "earned" && styles.toggleBtnActive]}
+              style={[
+                styles.toggleBtn,
+                activeChart === "earned" && styles.toggleBtnActive,
+              ]}
               onPress={() => setActiveChart("earned")}
             >
-              <Text style={[styles.toggleBtnText, activeChart === "earned" && styles.toggleBtnTextActive]}>
+              <Text
+                style={[
+                  styles.toggleBtnText,
+                  activeChart === "earned" && styles.toggleBtnTextActive,
+                ]}
+              >
                 Earned
               </Text>
             </TouchableOpacity>
@@ -174,7 +195,11 @@ export const PortfolioScreen: React.FC = () => {
               data={{
                 labels,
                 datasets: [
-                  { data: roiValues, color: () => "rgba(34,197,94,1)", strokeWidth: 2 },
+                  {
+                    data: roiValues,
+                    color: () => "rgba(34,197,94,1)",
+                    strokeWidth: 2,
+                  },
                 ],
                 legend: ["ROI %"],
               }}
@@ -191,7 +216,11 @@ export const PortfolioScreen: React.FC = () => {
               data={{
                 labels,
                 datasets: [
-                  { data: earnedValues, color: () => "rgba(59,130,246,1)", strokeWidth: 2 },
+                  {
+                    data: earnedValues,
+                    color: () => "rgba(59,130,246,1)",
+                    strokeWidth: 2,
+                  },
                 ],
                 legend: ["Total Earned"],
               }}
@@ -204,7 +233,6 @@ export const PortfolioScreen: React.FC = () => {
               style={styles.chart}
             />
           )}
-
         </View>
 
         <Text style={styles.sectionTitle}>Investments Assets</Text>
@@ -215,7 +243,9 @@ export const PortfolioScreen: React.FC = () => {
           showsVerticalScrollIndicator={false}
           scrollEnabled={false}
           ListFooterComponent={
-            isLoading ? <ActivityIndicator size="small" color={Colors.green} /> : null
+            isLoading ? (
+              <ActivityIndicator size="small" color={Colors.green} />
+            ) : null
           }
           ListEmptyComponent={
             <View style={styles.emptyState}>
@@ -225,15 +255,17 @@ export const PortfolioScreen: React.FC = () => {
           contentContainerStyle={styles.scrollContent}
         />
       </ScrollView>
-      {!isAdmin ? null :
-        (
-          <TouchableOpacity style={styles.fab} onPress={() => {
-            setShowExportModal(true)
-          }}>
-            <Ionicons name="document-outline" size={24} color={"white"} />
-            <Text style={styles.fabLabel}>Export Report</Text>
-          </TouchableOpacity>
-        )}
+      {!isAdmin ? null : (
+        <TouchableOpacity
+          style={styles.fab}
+          onPress={() => {
+            setShowExportModal(true);
+          }}
+        >
+          <Ionicons name="document-outline" size={24} color={"white"} />
+          <Text style={styles.fabLabel}>Export Report</Text>
+        </TouchableOpacity>
+      )}
       <ExportReportModal
         visible={showExportModal}
         onClose={() => setShowExportModal(false)}
@@ -247,32 +279,154 @@ const styles = StyleSheet.create({
   scrollContent: { paddingBottom: 60, backgroundColor: Colors.background },
   emptyState: { justifyContent: "center", alignItems: "center", padding: 20 },
   emptyText: { fontSize: 16, color: "#6B7280" },
-  card: { backgroundColor: Colors.secondary, borderBottomLeftRadius: 32, borderBottomRightRadius: 32, padding: 24, paddingTop: 36, shadowColor: "#000", shadowOpacity: 0.08, shadowRadius: 12, elevation: 6, },
+  card: {
+    backgroundColor: Colors.secondary,
+    borderBottomLeftRadius: 32,
+    borderBottomRightRadius: 32,
+    padding: 24,
+    paddingTop: 36,
+    shadowColor: "#000",
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 6,
+  },
   cardTitle: { fontSize: 15, color: Colors.gray, marginBottom: 6 },
-  cardValue: { fontSize: 36, fontWeight: "bold", color: Colors.white, marginBottom: 4, },
-  toggleBtn: { paddingVertical: 6, paddingHorizontal: 16, borderRadius: 20, borderWidth: 1, borderColor: Colors.green, marginHorizontal: 6, },
-  toggleBtnActive: { backgroundColor: Colors.green, },
-  toggleBtnText: { color: Colors.green, fontWeight: "600", },
-  toggleBtnTextActive: { color: "#fff", },
+  cardValue: {
+    fontSize: 36,
+    fontWeight: "bold",
+    color: Colors.white,
+    marginBottom: 4,
+  },
+  toggleBtn: {
+    paddingVertical: 6,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: Colors.green,
+    marginHorizontal: 6,
+  },
+  toggleBtnActive: { backgroundColor: Colors.green },
+  toggleBtnText: { color: Colors.green, fontWeight: "600" },
+  toggleBtnTextActive: { color: "#fff" },
   chart: { borderRadius: 12, marginVertical: 8 },
   cardSubtitle: { fontSize: 14, color: Colors.gray },
-  balanceChangeDark: { color: Colors.green, fontSize: 14, fontFamily: "Inter_600SemiBold", },
-  balanceActionBtnDark: { width: '48%', flexDirection: "row", alignItems: "center", justifyContent: "center", backgroundColor: Colors.darkButton, borderRadius: 18, padding: 10, marginRight: 12, },
-  balanceActionTextDark: { color: Colors.white, fontSize: 15, fontFamily: "Inter_600SemiBold", marginLeft: 7, flexWrap: 'wrap' },
+  balanceChangeDark: {
+    color: Colors.green,
+    fontSize: 14,
+    fontFamily: "Inter_600SemiBold",
+  },
+  balanceActionBtnDark: {
+    width: "48%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Colors.darkButton,
+    borderRadius: 18,
+    padding: 10,
+    marginRight: 12,
+  },
+  balanceActionTextDark: {
+    color: Colors.white,
+    fontSize: 15,
+    fontFamily: "Inter_600SemiBold",
+    marginLeft: 7,
+    flexWrap: "wrap",
+  },
   balanceActionsRow: { flexDirection: "row", marginTop: 18 },
-  chartContainer: { alignItems: "center", marginBottom: 18, backgroundColor: Colors.white, margin: 12, borderRadius: 25, justifyContent: "center", shadowColor: "#000", shadowOpacity: 0.08, shadowRadius: 6, elevation: 4, },
-  sectionTitle: { fontSize: 16, fontWeight: "600", color: Colors.secondary, marginBottom: 10, marginHorizontal: 12 },
-  assetCard: { backgroundColor: Colors.secondary, borderRadius: 16, padding: 14, marginBottom: 12, marginHorizontal: 12, flexDirection: "row", alignItems: "center", justifyContent: "space-between", borderWidth: 1, borderColor: Colors.lightGray, },
-  assetLeft: { flexDirection: "row", alignItems: "center", flex: 1, },
-  assetIconWrapper: { width: 40, height: 40, borderRadius: 20, backgroundColor: Colors.darkButton, alignItems: "center", justifyContent: "center", marginRight: 12, },
-  assetName: { fontSize: 15, fontFamily: "Inter_600SemiBold", color: Colors.white, },
-  assetValue: { fontSize: 15, fontFamily: "Inter_700Bold", color: Colors.white, marginTop: 2, },
-  assetMeta: { fontSize: 13, fontFamily: "Inter_400Regular", color: Colors.gray, marginTop: 2, },
-  assetRight: { alignItems: "flex-end", justifyContent: "space-between", height: 48, },
-  assetBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12, backgroundColor: "rgba(59,130,246,0.15)", },
-  assetBadgeText: { fontSize: 12, fontFamily: "Inter_600SemiBold", color: "#60A5FA", },
-  assetGrowth: { fontSize: 14, fontFamily: "Inter_600SemiBold", color: Colors.green, },
-  fab: { position: "absolute", right: 24, bottom: 80, backgroundColor: Colors.green, borderRadius: 24, flexDirection: "row", alignItems: "center", paddingHorizontal: 18, paddingVertical: 12, shadowColor: "#000", shadowOpacity: 0.08, shadowRadius: 8, elevation: 4, },
+  chartContainer: {
+    alignItems: "center",
+    marginBottom: 18,
+    backgroundColor: Colors.white,
+    margin: 12,
+    borderRadius: 25,
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 4,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: Colors.secondary,
+    marginBottom: 10,
+    marginHorizontal: 12,
+  },
+  assetCard: {
+    backgroundColor: Colors.secondary,
+    borderRadius: 16,
+    padding: 14,
+    marginBottom: 12,
+    marginHorizontal: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderWidth: 1,
+    borderColor: Colors.lightGray,
+  },
+  assetLeft: { flexDirection: "row", alignItems: "center", flex: 1 },
+  assetIconWrapper: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: Colors.darkButton,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 12,
+  },
+  assetName: {
+    fontSize: 15,
+    fontFamily: "Inter_600SemiBold",
+    color: Colors.white,
+  },
+  assetValue: {
+    fontSize: 15,
+    fontFamily: "Inter_700Bold",
+    color: Colors.white,
+    marginTop: 2,
+  },
+  assetMeta: {
+    fontSize: 13,
+    fontFamily: "Inter_400Regular",
+    color: Colors.gray,
+    marginTop: 2,
+  },
+  assetRight: {
+    alignItems: "flex-end",
+    justifyContent: "space-between",
+    height: 48,
+  },
+  assetBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+    backgroundColor: "rgba(59,130,246,0.15)",
+  },
+  assetBadgeText: {
+    fontSize: 12,
+    fontFamily: "Inter_600SemiBold",
+    color: "#60A5FA",
+  },
+  assetGrowth: {
+    fontSize: 14,
+    fontFamily: "Inter_600SemiBold",
+    color: Colors.green,
+  },
+  fab: {
+    position: "absolute",
+    right: 24,
+    bottom: 80,
+    backgroundColor: Colors.green,
+    borderRadius: 24,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    shadowColor: "#000",
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 4,
+  },
   fabLabel: { color: Colors.white, fontWeight: "bold", fontSize: 15 },
 });
 export default PortfolioScreen;

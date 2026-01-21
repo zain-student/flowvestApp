@@ -14,25 +14,30 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { DashboardLayout } from "../../../Common/components/DashboardLayout";
 import InvestmentPartnersModal from "../components/InvestmentPartnersModal";
 
 const FILTERS = ["All", "Active", "Paused", "Completed"];
-type Props = NativeStackNavigationProp<InvestmentStackParamList, "InvestmentScreen">;
+type Props = NativeStackNavigationProp<
+  InvestmentStackParamList,
+  "InvestmentScreen"
+>;
 
 export const InvestmentsScreen: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation<Props>();
 
   const { investments, stats, isLoading, isLoadingMore, meta } = useAppSelector(
-    (state) => state.investments
+    (state) => state.investments,
   );
 
   const [filter, setFilter] = useState("All");
   const [showPartnersModal, setShowPartnersModal] = useState(false);
-  const [selectedInvestmentId, setSelectedInvestmentId] = useState<number | null>(null);
+  const [selectedInvestmentId, setSelectedInvestmentId] = useState<
+    number | null
+  >(null);
   const [search, setSearch] = useState("");
   const { formatCurrency } = useCurrencyFormatter();
   const handleOpenPartners = (id: number) => {
@@ -64,7 +69,7 @@ export const InvestmentsScreen: React.FC = () => {
   // First page load
   useEffect(() => {
     dispatch(fetchInvestments({ page: 1 }));
-    console.log("Investments loaded", stats.total_investments)
+    console.log("Investments loaded", stats.total_investments);
   }, [dispatch]);
   const handleSearch = () => {
     // always start at page 1
@@ -77,14 +82,13 @@ export const InvestmentsScreen: React.FC = () => {
         // When User cleared the search bar — reload all investment
         dispatch(fetchInvestments({ page: 1, search: "" }));
       } else {
-        // Normal search 
+        // Normal search
         dispatch(fetchInvestments({ page: 1, search }));
       }
     }, 1300); // 1.3 seconds debounce
 
     return () => clearTimeout(delayDebounce);
   }, [search]);
-
 
   // Load more when reaching end
   const handleLoadMore = useCallback(() => {
@@ -116,7 +120,9 @@ export const InvestmentsScreen: React.FC = () => {
         <View
           style={[
             styles.statusBadge,
-            item.status === "Active" ? styles.statusActive : styles.statusClosed,
+            item.status === "Active"
+              ? styles.statusActive
+              : styles.statusClosed,
           ]}
         >
           <Text style={styles.statusText}>{item.status}</Text>
@@ -131,7 +137,7 @@ export const InvestmentsScreen: React.FC = () => {
         <Text style={styles.amountLabel}>Invested Amount</Text>
         <Text style={styles.amountValue}>
           {formatCurrency(
-            item.type === "shared" ? item.shared_amount : item.amount
+            item.type === "shared" ? item.shared_amount : item.amount,
           )}
         </Text>
       </View>
@@ -179,8 +185,10 @@ export const InvestmentsScreen: React.FC = () => {
     </TouchableOpacity>
   );
 
-
-  console.log("Filtered investments IDs:", filtered.map((i) => i.id));
+  console.log(
+    "Filtered investments IDs:",
+    filtered.map((i) => i.id),
+  );
   return (
     <DashboardLayout>
       <View style={styles.container}>
@@ -190,20 +198,27 @@ export const InvestmentsScreen: React.FC = () => {
           <Text style={styles.cardValue}>
             {formatCurrency(stats.total_invested)}
           </Text>
-          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-            <Text style={{ color: Colors.gray, fontWeight: "400", }}>
-              <Text style={styles.cardSubtitle}>
-                +8.2%{" "}
-              </Text>
-              this year</Text>
-            <Text style={{ color: Colors.gray, fontWeight: "400" }}>Total Investments:
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ color: Colors.gray, fontWeight: "400" }}>
+              <Text style={styles.cardSubtitle}>+8.2% </Text>
+              this year
+            </Text>
+            <Text style={{ color: Colors.gray, fontWeight: "400" }}>
+              Total Investments:
               <Text style={styles.cardSubtitle}>
                 {stats.total_investments}{" "}
               </Text>
             </Text>
           </View>
           <View style={styles.balanceActionsRow}>
-            <TouchableOpacity style={styles.balanceActionBtnDark}
+            <TouchableOpacity
+              style={styles.balanceActionBtnDark}
               onPress={() => navigation.navigate("MyInvestments")}
             >
               <Feather name="arrow-up-right" size={18} color="#fff" />
@@ -221,7 +236,10 @@ export const InvestmentsScreen: React.FC = () => {
               onPress={() => setFilter(f)}
             >
               <Text
-                style={[styles.filterText, filter === f && styles.filterTextActive]}
+                style={[
+                  styles.filterText,
+                  filter === f && styles.filterTextActive,
+                ]}
               >
                 {f}
               </Text>
@@ -251,7 +269,9 @@ export const InvestmentsScreen: React.FC = () => {
           refreshing={isLoading}
           onRefresh={handleRefresh}
           ListFooterComponent={
-            isLoadingMore ? <ActivityIndicator size="small" color={Colors.green} /> : null
+            isLoadingMore ? (
+              <ActivityIndicator size="small" color={Colors.green} />
+            ) : null
           }
           ListEmptyComponent={
             <View style={styles.emptyState}>
@@ -302,10 +322,14 @@ const styles = StyleSheet.create({
     color: Colors.white,
     marginBottom: 4,
   },
-  cardSubtitle: { fontSize: 14, color: Colors.green, fontFamily: "Inter_600SemiBold", },
-  balanceActionsRow: { flexDirection: "row", marginTop: 18 },
+  cardSubtitle: {
+    fontSize: 14,
+    color: Colors.green,
+    fontFamily: "Inter_600SemiBold",
+  },
+  balanceActionsRow: { flexDirection: "row", marginTop: 10 },
   balanceActionBtnDark: {
-    width: '60%',
+    width: "60%",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -326,7 +350,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderRadius: 10,
     marginHorizontal: 12,
-    marginBottom: 12,
+    marginBottom: 10,
     paddingHorizontal: 8,
     elevation: 2,
   },
@@ -365,7 +389,7 @@ const styles = StyleSheet.create({
   },
   filterRow: {
     flexDirection: "row",
-    marginBottom: 16,
+    marginBottom: 10,
     marginTop: 10,
     gap: 10,
     marginHorizontal: 12,
@@ -527,7 +551,18 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   fabLabel: { color: Colors.white, fontWeight: "bold", fontSize: 15 },
-  partnerButton: { marginTop: 8, flexDirection: 'row', alignItems: 'center', gap: 6, borderWidth: 1, borderColor: Colors.gray, padding: 2, borderRadius: 6, width: "45%", justifyContent: 'center' },
+  partnerButton: {
+    marginTop: 8,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    borderWidth: 1,
+    borderColor: Colors.gray,
+    padding: 2,
+    borderRadius: 6,
+    width: "45%",
+    justifyContent: "center",
+  },
 });
 
 export default InvestmentsScreen;

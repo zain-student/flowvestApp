@@ -5,20 +5,20 @@ import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import {
-    fetchPartnerParticipatingInvestments,
-    leaveInvestment,
+  fetchPartnerParticipatingInvestments,
+  leaveInvestment,
 } from "@shared/store/slices/shared/investments/partnerInvestmentSlice";
 import React, { useCallback, useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    Alert,
-    FlatList,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Alert,
+  FlatList,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 type Props = NativeStackScreenProps<InvestmentStackParamList, "MyInvestments">;
 export const MyInvestments = ({ navigation }: Props) => {

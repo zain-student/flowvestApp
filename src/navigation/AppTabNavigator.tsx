@@ -36,8 +36,8 @@ export type AppTabParamList = {
   Portfolio: undefined;
   Profile: undefined | { screen?: keyof ProfileStackParamList; params?: any };
   PartnerDashboard: undefined;
-  PartnerPayouts:undefined;
-  InvestmentDetails :undefined;
+  PartnerPayouts: undefined;
+  InvestmentDetails: undefined;
 };
 
 const Tab = createBottomTabNavigator<AppTabParamList>();
@@ -48,8 +48,8 @@ const TAB_ICONS: Record<string, keyof typeof Feather.glyphMap> = {
   Payouts: "dollar-sign",
   Portfolio: "folder",
   Profile: "user",
-  PartnerPayouts:"dollar-sign",
-  InvestmentDetails:'trending-up'
+  PartnerPayouts: "dollar-sign",
+  InvestmentDetails: "trending-up",
 };
 
 const TAB_LABELS: Record<string, string> = {
@@ -58,8 +58,8 @@ const TAB_LABELS: Record<string, string> = {
   Payouts: "Payouts",
   Portfolio: "Portfolio",
   Profile: "Profile",
-  PartnerPayouts:"Payouts",
-  InvestmentDetails:"InvestmentDetails"
+  PartnerPayouts: "Payouts",
+  InvestmentDetails: "InvestmentDetails",
 };
 
 const CustomTabBar: React.FC<BottomTabBarProps> = ({
@@ -143,8 +143,8 @@ export const AppTabNavigator: React.FC = () => {
       {userRole === "user" && (
         <>
           <Tab.Screen name="Dashboard" component={PartnerDashboardStack} />
-          <Tab.Screen name="InvestmentDetails" component={InvestmentDetails}/>
-          <Tab.Screen name="PartnerPayouts" component={PartnersPayoutStack}/>
+          <Tab.Screen name="InvestmentDetails" component={InvestmentDetails} />
+          <Tab.Screen name="PartnerPayouts" component={PartnersPayoutStack} />
           <Tab.Screen name="Portfolio" component={PortfolioScreen} />
           <Tab.Screen name="Profile" component={ProfileStack} />
         </>

@@ -1,32 +1,34 @@
 import { SharedInvestmentDetail } from "@/modules/Common/sharedInvestments/SharedInvestmentDetail";
-import { SharedInvestments } from '@/modules/Common/sharedInvestments/SharedInvestments';
+import { SharedInvestments } from "@/modules/Common/sharedInvestments/SharedInvestments";
 import { JoinedInvestmentDetail } from "@/modules/Partner/InvestmentDetails/screens/JoinedInvestmentDetail";
 import { Ionicons } from "@expo/vector-icons";
 import { InvestmentDetails } from "@modules/Partner/InvestmentDetails/screens/InvestmentDetails";
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React from 'react';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React from "react";
 import { TouchableOpacity } from "react-native";
 
 export type PartnersInvestmentDetailStackParamList = {
   InvestmentDetails: undefined;
   SharedInvestments: undefined;
   JoinedInvestmentDetail: { id: number };
-  SharedInvestmentDetail: { id: number,
-     showJoinForm?: boolean,
-   };
+  SharedInvestmentDetail: { id: number; showJoinForm?: boolean };
 };
-export const Stack = createNativeStackNavigator<PartnersInvestmentDetailStackParamList>();
+export const Stack =
+  createNativeStackNavigator<PartnersInvestmentDetailStackParamList>();
 export const PartnersInvestmentDetailStack = () => {
   return (
-    <Stack.Navigator initialRouteName='InvestmentDetails'
+    <Stack.Navigator
+      initialRouteName="InvestmentDetails"
       screenOptions={{
-        animation: "slide_from_right"
+        animation: "slide_from_right",
       }}
     >
-      <Stack.Screen name='InvestmentDetails' component={InvestmentDetails}
+      <Stack.Screen
+        name="InvestmentDetails"
+        component={InvestmentDetails}
         options={{
           headerShown: false,
-          gestureEnabled: false
+          gestureEnabled: false,
         }}
       />
       <Stack.Screen
@@ -34,8 +36,8 @@ export const PartnersInvestmentDetailStack = () => {
         component={SharedInvestments}
         options={({ navigation }) => ({
           // gestureEnabled: false,
-          title: 'Shared Investments',
-          headerTitleAlign: 'center',
+          title: "Shared Investments",
+          headerTitleAlign: "center",
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => navigation.goBack()}
@@ -62,8 +64,8 @@ export const PartnersInvestmentDetailStack = () => {
         component={JoinedInvestmentDetail}
         options={({ navigation }) => ({
           // gestureEnabled: false,
-          title: 'Joined Investment Detail',
-          headerTitleAlign: 'center',
+          title: "Joined Investment Detail",
+          headerTitleAlign: "center",
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => navigation.goBack()}
@@ -90,8 +92,8 @@ export const PartnersInvestmentDetailStack = () => {
         component={SharedInvestmentDetail}
         options={({ navigation }) => ({
           // gestureEnabled: false,
-          title: 'Shared Investment Detail',
-          headerTitleAlign: 'center',
+          title: "Shared Investment Detail",
+          headerTitleAlign: "center",
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => navigation.goBack()}
@@ -114,7 +116,7 @@ export const PartnersInvestmentDetailStack = () => {
         })}
       />
     </Stack.Navigator>
-  )
-}
+  );
+};
 
-export default PartnersInvestmentDetailStack
+export default PartnersInvestmentDetailStack;

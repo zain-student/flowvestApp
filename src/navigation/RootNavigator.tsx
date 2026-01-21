@@ -3,12 +3,12 @@
  * Main navigation component that switches between Auth and App flows
  */
 
-import { LoadingScreen } from '@/app/LoadingScreen';
-import { NotificationDetailScreen } from '@/modules/Common/notifications/screens/NotificationDetailScreen';
-import { NotificationsScreen } from '@/modules/Common/notifications/screens/NotificationsScreen';
+import { LoadingScreen } from "@/app/LoadingScreen";
+import { NotificationDetailScreen } from "@/modules/Common/notifications/screens/NotificationDetailScreen";
+import { NotificationsScreen } from "@/modules/Common/notifications/screens/NotificationsScreen";
 import { InvestmentStack } from "@/navigation/InvestorStacks/InvestmentStack";
 import { PayoutStack } from "@/navigation/InvestorStacks/PayoutStack";
-import { getPreferences } from '@/shared/store/slices/profile/profileSlice';
+import { getPreferences } from "@/shared/store/slices/profile/profileSlice";
 import { Ionicons } from "@expo/vector-icons";
 import {
   selectIsAuthenticated,
@@ -78,7 +78,7 @@ export const RootNavigator: React.FC = () => {
     if (isAuthenticated) {
       dispatch(getPreferences());
     }
-  }, [dispatch, isAuthenticated])
+  }, [dispatch, isAuthenticated]);
   // Show loading screen during initialization or auth operations
   // || isLoading
   if (isInitializing) {
@@ -96,14 +96,12 @@ export const RootNavigator: React.FC = () => {
           <Stack.Screen name="AuthStack" component={AuthStack} />
         </Stack.Navigator>
       </NavigationContainer>
-    )
+    );
   }
 
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{ headerShown: false }}
-      >
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
         {isAuthenticated ? (
           <>
             {userRole === "admin" && (
@@ -156,8 +154,8 @@ export const RootNavigator: React.FC = () => {
               component={NotificationsScreen}
               options={({ navigation }) => ({
                 // gestureEnabled: false,
-                title: 'Notifications',
-                headerTitleAlign: 'center',
+                title: "Notifications",
+                headerTitleAlign: "center",
                 headerShown: true,
                 headerLeft: () => (
                   <TouchableOpacity
@@ -185,8 +183,8 @@ export const RootNavigator: React.FC = () => {
               component={NotificationDetailScreen}
               options={({ navigation }) => ({
                 // gestureEnabled: false,
-                title: 'Notification Detail',
-                headerTitleAlign: 'center',
+                title: "Notification Detail",
+                headerTitleAlign: "center",
                 headerShown: true,
                 headerLeft: () => (
                   <TouchableOpacity

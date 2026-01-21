@@ -2,7 +2,12 @@ import { InvestmentStackParamList } from "@/navigation/InvestorStacks/Investment
 import Colors from "@/shared/colors/Colors";
 import { Button, Input } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { deleteInvestment, duplicateInvestment, fetchInvestments, fetchInvestmentsById } from "@/shared/store/slices/investor/investments/investmentSlice";
+import {
+  deleteInvestment,
+  duplicateInvestment,
+  fetchInvestments,
+  fetchInvestmentsById,
+} from "@/shared/store/slices/investor/investments/investmentSlice";
 import { joinInvestment } from "@/shared/store/slices/shared/investments/partnerInvestmentSlice";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Ionicons } from "@expo/vector-icons";
@@ -17,7 +22,7 @@ import {
   Text,
   ToastAndroid,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 type Props = NativeStackScreenProps<
   InvestmentStackParamList,
@@ -32,15 +37,15 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
     useRoute<RouteProp<InvestmentStackParamList, "InvestmentDetails">>().params;
   const dispatch = useAppDispatch();
   const { currentInvestment, isLoading } = useAppSelector(
-    (state) => state.investments
+    (state) => state.investments,
   );
   const { isJoining, error: joinError } = useAppSelector(
-    (state) => state.userInvestments.join
+    (state) => state.userInvestments.join,
   );
   const [showMenu, setShowMenu] = useState(false);
-  const [amount, setAmount] = useState('');
-  const [notes, setNotes] = useState('');
-  const [formError, setFormError] = useState('');
+  const [amount, setAmount] = useState("");
+  const [notes, setNotes] = useState("");
+  const [formError, setFormError] = useState("");
   useEffect(() => {
     dispatch(fetchInvestmentsById(id));
   }, [id]);
@@ -68,7 +73,9 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
           text: "Delete",
           style: "destructive",
           onPress: () => {
-            dispatch(deleteInvestment({ investmentId: Number(currentInvestment.id) }))
+            dispatch(
+              deleteInvestment({ investmentId: Number(currentInvestment.id) }),
+            )
               .unwrap()
               .then(() => {
                 navigation.goBack();
@@ -76,45 +83,44 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
               .catch((error) => {
                 console.log("Failed to delete investment:", error.message);
                 ToastAndroid.show(
-                  "Delete failed! " +
-                  error.message,
-                  ToastAndroid.SHORT
+                  "Delete failed! " + error.message,
+                  ToastAndroid.SHORT,
                 );
               });
-          }
-        }
-      ]
-    )
-  }
+          },
+        },
+      ],
+    );
+  };
   const handleDuplicate = () => {
     // console.log("Duplicate investment:", currentInvestment);
     setShowMenu(false);
-    dispatch(duplicateInvestment({
-      investmentId: currentInvestment.id
-    }))
-      .catch((error) => {
-        console.log("Failed to duplicate investment:", error.message);
-        ToastAndroid.show(
-          "Duplication failed! " +
-          error.message,
-          ToastAndroid.SHORT
-        );
-      });
+    dispatch(
+      duplicateInvestment({
+        investmentId: currentInvestment.id,
+      }),
+    ).catch((error) => {
+      console.log("Failed to duplicate investment:", error.message);
+      ToastAndroid.show(
+        "Duplication failed! " + error.message,
+        ToastAndroid.SHORT,
+      );
+    });
   };
   // using same thunk from partner slice for joining shared investment
   const handleJoinInvestment = async () => {
-    if (!amount) return setFormError('Amount is required');
+    if (!amount) return setFormError("Amount is required");
     if (isNaN(Number(amount)) || Number(amount) <= 0)
-      return setFormError('Enter a valid positive amount');
+      return setFormError("Enter a valid positive amount");
 
-    setFormError('');
+    setFormError("");
     try {
       const resultAction = await dispatch(
         joinInvestment({
           investmentId: currentInvestment!.id,
           amount: Number(amount),
           notes: notes.trim(),
-        })
+        }),
       );
       // .unwrap();
       if (joinInvestment.fulfilled.match(resultAction)) {
@@ -123,10 +129,9 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
       }
     } catch (err) {
       // Error toast already handled inside thunk
-      console.log('Join failed', err);
+      console.log("Join failed", err);
     }
   };
-
 
   return (
     <View style={styles.container}>
@@ -141,19 +146,19 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-
         <Text style={styles.title}>{currentInvestment.name}</Text>
         {/* <Text style={styles.descriptionText}>{currentInvestment.description}</Text> */}
 
         <View style={styles.summaryCard}>
           {/* 3 Dots Button */}
-          {!showJoinForm && <TouchableOpacity
-            style={styles.menuBtn}
-            onPress={() => setShowMenu((prev) => !prev)}
-          >
-            <Ionicons name="ellipsis-vertical" size={24} color="white" />
-          </TouchableOpacity>
-          }
+          {!showJoinForm && (
+            <TouchableOpacity
+              style={styles.menuBtn}
+              onPress={() => setShowMenu((prev) => !prev)}
+            >
+              <Ionicons name="ellipsis-vertical" size={24} color="white" />
+            </TouchableOpacity>
+          )}
           {/* Simple Dropdown */}
           {showMenu && (
             <TouchableOpacity
@@ -162,7 +167,10 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
               onPress={() => setShowMenu(false)} // close menu when tapping outside
             >
               <View style={styles.dropdown}>
-                <TouchableOpacity onPress={handleDuplicate} style={styles.dropdownItem}>
+                <TouchableOpacity
+                  onPress={handleDuplicate}
+                  style={styles.dropdownItem}
+                >
                   <Ionicons name="copy-outline" size={18} color="black" />
                   <Text style={styles.dropdownText}>Duplicate Investment</Text>
                 </TouchableOpacity>
@@ -172,11 +180,22 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
 
           <Text style={styles.label}>Amount Invested</Text>
           <Text style={styles.value}>
-            {formatCurrency(Number(currentInvestment.type.toLowerCase() === "shared" ? currentInvestment.current_total_invested : currentInvestment.initial_amount))}
+            {formatCurrency(
+              Number(
+                currentInvestment.type.toLowerCase() === "shared"
+                  ? currentInvestment.current_total_invested
+                  : currentInvestment.initial_amount,
+              ),
+            )}
           </Text>
-          {currentInvestment.type === "shared" && (<Text style={styles.value}>
-            Min: {formatCurrency(Number(currentInvestment.min_investment_amount))} - Max: {formatCurrency(Number(currentInvestment.max_investment_amount))}
-          </Text>)}
+          {currentInvestment.type === "shared" && (
+            <Text style={styles.value}>
+              Min:{" "}
+              {formatCurrency(Number(currentInvestment.min_investment_amount))}{" "}
+              - Max:{" "}
+              {formatCurrency(Number(currentInvestment.max_investment_amount))}
+            </Text>
+          )}
           <Text style={styles.label}>Status</Text>
           <Text
             style={[
@@ -190,7 +209,10 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
               currentInvestment.status.slice(1)}
           </Text>
           <Text style={styles.label}>Type</Text>
-          <Text style={styles.returns}>{currentInvestment.type.charAt(0).toUpperCase() + currentInvestment.type.slice(1)}</Text>
+          <Text style={styles.returns}>
+            {currentInvestment.type.charAt(0).toUpperCase() +
+              currentInvestment.type.slice(1)}
+          </Text>
           <Text style={styles.label}>Returns</Text>
           <Text style={styles.returns}>
             {currentInvestment.expected_return_rate != null
@@ -199,69 +221,94 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
             %
           </Text>
           <Text style={styles.label}>Frequency</Text>
-          <Text style={styles.returns}>{currentInvestment.frequency.charAt(0).toUpperCase() + currentInvestment.frequency.slice(1)}</Text>
+          <Text style={styles.returns}>
+            {currentInvestment.frequency.charAt(0).toUpperCase() +
+              currentInvestment.frequency.slice(1)}
+          </Text>
           <Text style={styles.label}>Start Date</Text>
           <Text style={styles.value}>{currentInvestment.start_date}</Text>
           <Text style={styles.label}>End Date</Text>
           <Text style={styles.value}>{currentInvestment.end_date}</Text>
-          {!showJoinForm &&
+          {!showJoinForm && (
             <View style={styles.footer}>
               <Button
                 title="Update"
-                icon={<Ionicons name="create-outline" size={20} color={Colors.white} />}
+                icon={
+                  <Ionicons
+                    name="create-outline"
+                    size={20}
+                    color={Colors.white}
+                  />
+                }
                 onPress={() => {
                   console.log("Editing investment:", currentInvestment); // full object
                   console.log("Editing investment ID:", currentInvestment.id); // just ID
                   navigation.navigate("EditInvestments", {
                     id: currentInvestment.id,
-                    mode: "edit"
-                  })
-
-                }
-                }
+                    mode: "edit",
+                  });
+                }}
                 style={styles.updateButton}
                 textStyle={styles.footerButtonText}
                 variant="primary"
               />
               <Button
                 title="Delete"
-                icon={<Ionicons name="trash-outline" size={20} color={Colors.white} />}
+                icon={
+                  <Ionicons
+                    name="trash-outline"
+                    size={20}
+                    color={Colors.white}
+                  />
+                }
                 onPress={() => handleDelete()}
                 style={styles.deleteButton}
                 textStyle={styles.footerButtonText}
                 variant="primary"
               />
             </View>
-          }
+          )}
         </View>
-        {showJoinForm ? null :
+        {showJoinForm ? null : (
           <>
             {currentInvestment?.recent_payouts?.map((tx: any) => (
               <View key={tx.id}>
                 <Text style={styles.sectionTitle}>Transactions</Text>
                 <View style={styles.txCard}>
-                  <Text style={styles.txType}>{tx.payout_type.charAt(0).toUpperCase() + tx.payout_type.slice(1)}</Text>
-                  <Text style={styles.txAmount}>{formatCurrency(tx.amount.toLocaleString())}</Text>
+                  <Text style={styles.txType}>
+                    {tx.payout_type.charAt(0).toUpperCase() +
+                      tx.payout_type.slice(1)}
+                  </Text>
+                  <Text style={styles.txAmount}>
+                    {formatCurrency(tx.amount.toLocaleString())}
+                  </Text>
                   <Text style={styles.txDate}>Due: {tx.due_date}</Text>
                 </View>
               </View>
             ))}
           </>
-        }
-        {showJoinForm &&
-          <View style={{
-            marginBottom: 20, marginTop: 5, width: '100%', borderWidth: 1,
-            borderColor: Colors.lightGray, borderRadius: 8, padding: 10,
-            backgroundColor: Colors.white,
-            shadowColor: "#000",
-            shadowOffset: {
-              width: 0,
-              height: 2,
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            elevation: 5,
-          }} >
+        )}
+        {showJoinForm && (
+          <View
+            style={{
+              marginBottom: 20,
+              marginTop: 5,
+              width: "100%",
+              borderWidth: 1,
+              borderColor: Colors.lightGray,
+              borderRadius: 8,
+              padding: 10,
+              backgroundColor: Colors.white,
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+              elevation: 5,
+            }}
+          >
             <Text style={styles.sectionTitle}>Join This Investment</Text>
 
             <Input
@@ -271,11 +318,11 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
               value={amount}
               onChangeText={(v) => {
                 setAmount(v);
-                if (formError) setFormError('');
+                if (formError) setFormError("");
               }}
               // error={errors.email}
               required
-            // autoFocus
+              // autoFocus
             />
             {/* {errors.amount && <Text style={styles.error}>{errors.amount.message}</Text>} */}
 
@@ -285,9 +332,9 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
               placeholder="Any notes for your investment"
               value={notes}
               onChangeText={setNotes}
-            // error={errors.email}
-            // required
-            // autoFocus
+              // error={errors.email}
+              // required
+              // autoFocus
             />
             {formError ? <Text style={styles.error}>{formError}</Text> : null}
 
@@ -296,11 +343,15 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
               title="Join Investment"
               onPress={handleJoinInvestment}
               disabled={isJoining}
-              style={{ marginTop: 5, backgroundColor: Colors.primary, borderColor: Colors.lightGray }}
+              style={{
+                marginTop: 5,
+                backgroundColor: Colors.primary,
+                borderColor: Colors.lightGray,
+              }}
             />
             {/* {joinError && <Text style={{ color: "red", marginTop: 6 }}>{joinError}</Text>} */}
           </View>
-        }
+        )}
       </ScrollView>
     </View>
   );
@@ -310,7 +361,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
-    paddingBottom: 100,
+    marginBottom: 60,
+    // paddingBottom: 100,
   },
   closeBtn: {
     position: "absolute",

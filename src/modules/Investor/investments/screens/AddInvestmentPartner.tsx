@@ -1,7 +1,10 @@
 import { InvestmentStackParamList } from "@/navigation/InvestorStacks/InvestmentStack";
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { fetchPartners, invitePartnerToInvestment } from "@/shared/store/slices/investor/dashboard/addPartnerSlice";
+import {
+  fetchPartners,
+  invitePartnerToInvestment,
+} from "@/shared/store/slices/investor/dashboard/addPartnerSlice";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import React, { useEffect, useMemo, useState } from "react";
@@ -13,7 +16,7 @@ import {
   TextInput,
   ToastAndroid,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 
 type AddPartnerRouteProp = RouteProp<InvestmentStackParamList, "AddPartner">;
@@ -31,7 +34,7 @@ export default function AddInvestmentPartner() {
 
   const { partners, isLoading } = useAppSelector((state) => state.partner);
   const { investments } = useAppSelector((state) => state.investments);
-const { formatCurrency } = useCurrencyFormatter();
+  const { formatCurrency } = useCurrencyFormatter();
   const [selectedPartner, setSelectedPartner] = useState<Partner | null>(null);
   const [investedAmount, setInvestedAmount] = useState("");
   const [investmentNotes, setInvestmentNotes] = useState("");
@@ -41,7 +44,7 @@ const { formatCurrency } = useCurrencyFormatter();
   // Get investment details
   const investment = useMemo(
     () => investments.find((inv) => inv.id === id),
-    [investments, id]
+    [investments, id],
   );
 
   useEffect(() => {
@@ -51,7 +54,7 @@ const { formatCurrency } = useCurrencyFormatter();
   const handleAddPartner = async () => {
     if (
       !selectedPartner
-      // || !investedAmount 
+      // || !investedAmount
     ) {
       ToastAndroid.show("Please select a partner first!.", ToastAndroid.SHORT);
       return;
@@ -65,7 +68,7 @@ const { formatCurrency } = useCurrencyFormatter();
         investmentNotes,
         invitationMessage,
         minExperience,
-      })
+      }),
     );
 
     if (invitePartnerToInvestment.fulfilled.match(result)) {
@@ -73,8 +76,8 @@ const { formatCurrency } = useCurrencyFormatter();
       resetForm();
     } else {
       ToastAndroid.show(
-        result.payload as string || "Failed to invite partner",
-        ToastAndroid.SHORT
+        (result.payload as string) || "Failed to invite partner",
+        ToastAndroid.SHORT,
       );
     }
   };
@@ -115,10 +118,20 @@ const { formatCurrency } = useCurrencyFormatter();
           <View style={styles.card}>
             <Text style={styles.cardTitle}>Investment Details</Text>
             <Text style={styles.detail}>Name: {investment.name}</Text>
-            <Text style={styles.detail}>Total: {formatCurrency(Number(investment.type === "solo" ? investment.initial_amount : investment.current_total_invested))}</Text>
+            <Text style={styles.detail}>
+              Total:{" "}
+              {formatCurrency(
+                Number(
+                  investment.type === "solo"
+                    ? investment.initial_amount
+                    : investment.current_total_invested,
+                ),
+              )}
+            </Text>
             <Text style={styles.detail}>Status: {investment.status}</Text>
             <Text style={styles.detail}>
-              Expected Return: {parseFloat(investment.expected_return_rate).toFixed(1)}%
+              Expected Return:{" "}
+              {parseFloat(investment.expected_return_rate).toFixed(1)}%
             </Text>
           </View>
         }
@@ -189,7 +202,12 @@ const { formatCurrency } = useCurrencyFormatter();
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, paddingBottom: 80, backgroundColor: "#F9FAFB" },
+  container: {
+    flex: 1,
+    padding: 16,
+    paddingBottom: 80,
+    backgroundColor: "#F9FAFB",
+  },
   loaderContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
   card: {
     backgroundColor: "#fff",
@@ -202,7 +220,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
-  cardTitle: { fontSize: 18, fontWeight: "600", marginBottom: 8, color: "#111827" },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    marginBottom: 8,
+    color: "#111827",
+  },
   detail: { fontSize: 14, color: "#374151", marginBottom: 4 },
   partnerItem: {
     padding: 12,

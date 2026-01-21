@@ -1,8 +1,12 @@
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { approveInvestmentPartner, fetchInvestmentPartners, resetPartner } from "@/shared/store/slices/investor/investments/investmentSlice";
+import {
+  approveInvestmentPartner,
+  fetchInvestmentPartners,
+  resetPartner,
+} from "@/shared/store/slices/investor/investments/investmentSlice";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
-import { Ionicons } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
   FlatList,
@@ -11,7 +15,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { RemovePartnerButton } from "./RemovePartnerButton";
@@ -21,17 +25,34 @@ interface PartnersModalProps {
   investmentId: number;
 }
 
-const InvestmentPartnersModal: React.FC<PartnersModalProps> = ({ visible, onClose, investmentId }) => {
+const InvestmentPartnersModal: React.FC<PartnersModalProps> = ({
+  visible,
+  onClose,
+  investmentId,
+}) => {
   const dispatch = useAppDispatch();
-  const { data: partners, isLoading, error } = useAppSelector((state) => state.investments.partners);
+  const {
+    data: partners,
+    isLoading,
+    error,
+  } = useAppSelector((state) => state.investments.partners);
   const { formatCurrency } = useCurrencyFormatter();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState<string | undefined>();
-  const [invitationStatus, setInvitationStatus] = useState<string | undefined>();
+  const [invitationStatus, setInvitationStatus] = useState<
+    string | undefined
+  >();
 
   useEffect(() => {
     if (visible) {
-      dispatch(fetchInvestmentPartners({ investmentId, status, invitation_status: invitationStatus, search }));
+      dispatch(
+        fetchInvestmentPartners({
+          investmentId,
+          status,
+          invitation_status: invitationStatus,
+          search,
+        }),
+      );
     } else {
       dispatch(resetPartner());
     }
@@ -41,7 +62,7 @@ const InvestmentPartnersModal: React.FC<PartnersModalProps> = ({ visible, onClos
     { label: "Active", value: "active" },
     { label: "Withdrawn", value: "withdrawn" },
     // { label: "Suspended", value: "suspended" },
-    { label: "Pending", value: "pending" }
+    { label: "Pending", value: "pending" },
   ];
   const InvitationFilters = [
     { label: "Pending", value: "pending" },
@@ -50,7 +71,12 @@ const InvestmentPartnersModal: React.FC<PartnersModalProps> = ({ visible, onClos
   ];
 
   return (
-    <Modal visible={visible} animationType="slide" onRequestClose={onClose} transparent>
+    <Modal
+      visible={visible}
+      animationType="slide"
+      onRequestClose={onClose}
+      transparent
+    >
       <View style={styles.overlay}>
         <View style={styles.modalContent}>
           {/* Header */}
@@ -62,7 +88,12 @@ const InvestmentPartnersModal: React.FC<PartnersModalProps> = ({ visible, onClos
           </View>
           {/* Search Bar */}
           <View style={styles.searchContainer}>
-            <Ionicons name="search" size={18} color="#888" style={{ marginLeft: 8 }} />
+            <Ionicons
+              name="search"
+              size={18}
+              color="#888"
+              style={{ marginLeft: 8 }}
+            />
             <TextInput
               placeholder="Search by name or email"
               placeholderTextColor="#888"
@@ -83,7 +114,9 @@ const InvestmentPartnersModal: React.FC<PartnersModalProps> = ({ visible, onClos
               valueField="value"
               placeholder="Filter by Status"
               value={status}
-              onChange={(item: any) => setStatus(item.value === status ? undefined : item.value)}
+              onChange={(item: any) =>
+                setStatus(item.value === status ? undefined : item.value)
+              }
             />
             <Dropdown
               style={styles.dropdown}
@@ -95,7 +128,9 @@ const InvestmentPartnersModal: React.FC<PartnersModalProps> = ({ visible, onClos
               placeholder="Filter by Invitation"
               value={invitationStatus}
               onChange={(item: any) =>
-                setInvitationStatus(item.value === invitationStatus ? undefined : item.value)
+                setInvitationStatus(
+                  item.value === invitationStatus ? undefined : item.value,
+                )
               }
             />
           </View>
@@ -106,39 +141,69 @@ const InvestmentPartnersModal: React.FC<PartnersModalProps> = ({ visible, onClos
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
               <View style={styles.card}>
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                  <Text style={styles.name}>{item.user?.name || "Unknown"}</Text>
-                  <Text style={styles.amount}>{formatCurrency(Number(item.invested_amount))}</Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text style={styles.name}>
+                    {item.user?.name || "Unknown"}
+                  </Text>
+                  <Text style={styles.amount}>
+                    {formatCurrency(Number(item.invested_amount))}
+                  </Text>
                 </View>
                 <Text style={styles.email}>{item.user?.email}</Text>
                 <View style={styles.cardRow}>
                   <Text style={styles.badge}>Status: {item.status}</Text>
-                  <Text style={styles.badge}>Invitation: {item.invitation_status}</Text>
+                  <Text style={styles.badge}>
+                    Invitation: {item.invitation_status}
+                  </Text>
                 </View>
                 {item.invitation_status === "pending" && (
                   <TouchableOpacity
                     style={[styles.joinBtn, isLoading && { opacity: 0.6 }]}
                     disabled={isLoading}
                     onPress={() => {
-                      console.log("Investment id:", item.investment_id, "Partner id:", item.user.id)
+                      console.log(
+                        "Investment id:",
+                        item.investment_id,
+                        "Partner id:",
+                        item.user.id,
+                      );
                       dispatch(
                         approveInvestmentPartner({
                           investmentId: item.investment_id,
                           partnerId: item.user.id,
-                        })
+                        }),
                       );
                     }}
                   >
-                    <Ionicons name="person-add-outline" size={18} color={Colors.white} />
+                    <Ionicons
+                      name="person-add-outline"
+                      size={18}
+                      color={Colors.white}
+                    />
                     <Text style={styles.joinBtnText}>Approve</Text>
-                  </TouchableOpacity>)}
+                  </TouchableOpacity>
+                )}
                 <RemovePartnerButton item={item} investmentId={investmentId} />
-
-
               </View>
             )}
             ListEmptyComponent={
-              !isLoading ? <Text style={styles.empty}>No partners found</Text> : null
+              !isLoading ? (
+                <View
+                  style={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: 20,
+                  }}
+                >
+                  <Feather name="user" size={30} color={Colors.gray} />
+                  <Text style={styles.empty}>No partners found</Text>
+                </View>
+              ) : null
             }
             contentContainerStyle={{ paddingBottom: 40 }}
           />
@@ -248,7 +313,7 @@ const styles = StyleSheet.create({
     marginLeft: 6,
   },
   error: { color: "red", marginVertical: 8 },
-  empty: { color: "#888", textAlign: "center", marginTop: 30 },
+  empty: { color: Colors.gray, textAlign: "center", marginTop: 3 },
 });
 
 export default InvestmentPartnersModal;

@@ -230,8 +230,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
     paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 80,
+    // paddingTop: 16,
+    // paddingBottom: 80,
+    marginTop: 16,
+    marginBottom: 40,
   },
   searchContainer: {
     flexDirection: "row",

@@ -216,9 +216,12 @@ export const DashboardScreen: React.FC = () => {
                 scrollEnabled={false}
                 ListEmptyComponent={
                   !isLoading && (
-                    <Text style={styles.emptyText}>
-                      No recent activities found
-                    </Text>
+                    <View style={styles.emptyState}>
+                      <Feather name="inbox" size={48} color={Colors.gray} />
+                      <Text style={styles.emptyText}>
+                        No recent activities found
+                      </Text>
+                    </View>
                   )
                 }
               />
@@ -291,6 +294,7 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 6,
   },
+  emptyState: { justifyContent: "center", alignItems: "center", padding: 20 },
   balanceLabelDark: {
     color: Colors.gray,
     fontSize: 15,

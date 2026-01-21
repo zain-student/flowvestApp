@@ -187,14 +187,7 @@ export const InvestmentDetails = ({ navigation }: any) => {
               {summary?.average_roi ?? 0}%
             </Text>
           </Text>
-          <View style={styles.balanceActionsRow}>
-            {/* <TouchableOpacity style={styles.balanceActionBtnDark}>
-              <Feather name="arrow-up-right" size={18} color="#fff" />
-              <Text style={styles.balanceActionTextDark}>
-                Payouts History
-              </Text>
-            </TouchableOpacity> */}
-          </View>
+          <View style={styles.balanceActionsRow}></View>
         </View>
         <View style={styles.searchContainer}>
           <TextInput
@@ -267,6 +260,7 @@ export const InvestmentDetails = ({ navigation }: any) => {
           }
           ListEmptyComponent={
             <View style={styles.emptyState}>
+              <Feather name="briefcase" size={48} color={Colors.gray} />
               <Text style={styles.emptyText}>
                 No shared investments available.
               </Text>

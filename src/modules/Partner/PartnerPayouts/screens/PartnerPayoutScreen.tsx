@@ -6,6 +6,7 @@ import {
   fetchPayoutStatistics,
 } from "@/shared/store/slices/partner/payout/PartnerPayoutSlice";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
+import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
@@ -192,6 +193,7 @@ export const PartnerPayoutScreen: React.FC = () => {
           contentContainerStyle={styles.scrollContent}
           ListEmptyComponent={
             <View style={styles.emptyState}>
+              <Feather name="inbox" size={48} color={Colors.gray} />
               <Text style={styles.emptyText}>No Payouts available.</Text>
             </View>
           }

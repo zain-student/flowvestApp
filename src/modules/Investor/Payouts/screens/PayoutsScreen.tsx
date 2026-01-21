@@ -272,6 +272,7 @@ export const PayoutsScreen: React.FC = () => {
           }
           ListEmptyComponent={
             <View style={styles.emptyState}>
+              <Feather name="inbox" size={48} color={Colors.gray} />
               <Text style={styles.emptyText}>No payouts available.</Text>
             </View>
           }

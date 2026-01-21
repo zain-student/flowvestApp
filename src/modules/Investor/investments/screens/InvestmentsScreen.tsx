@@ -275,6 +275,7 @@ export const InvestmentsScreen: React.FC = () => {
           }
           ListEmptyComponent={
             <View style={styles.emptyState}>
+              <Feather name="briefcase" size={48} color={Colors.gray} />
               <Text style={styles.emptyText}>No investments available.</Text>
             </View>
           }

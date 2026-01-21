@@ -23,7 +23,7 @@ type Props = NativeStackScreenProps<
 export const RecentPayouts = ({ navigation }: Props) => {
   const dispatch = useAppDispatch();
   const { recent_payouts, loading } = useAppSelector(
-    (state) => state.partnerDashboard
+    (state) => state.partnerDashboard,
   );
   const { formatCurrency } = useCurrencyFormatter();
 
@@ -31,24 +31,20 @@ export const RecentPayouts = ({ navigation }: Props) => {
     dispatch(fetchPartnerDashboard());
   };
 
-  const renderPayoutItem = ({
-    item,
-  }: {
-    item: (typeof recent_payouts)[0];
-  }) => {
+  const renderPayoutItem = ({ item }: { item: (typeof recent_payouts)[0] }) => {
     const statusColor =
       item.status === "paid"
         ? Colors.green
         : item.status === "scheduled"
-        ? Colors.gray
-        : Colors.error;
+          ? Colors.gray
+          : Colors.error;
 
     return (
       <TouchableOpacity
         style={styles.card}
         activeOpacity={0.7}
         // onPress={() =>
-          // navigation.navigate("PayoutDetails", { payoutId: item.id })
+        // navigation.navigate("PayoutDetails", { payoutId: item.id })
         // } // Navigate to payout details
       >
         {/* Top Row */}
@@ -71,7 +67,9 @@ export const RecentPayouts = ({ navigation }: Props) => {
         {/* Middle Row */}
         <View style={styles.metaRow}>
           <Text style={styles.metaText}>
-            Type: {item.payout_type.charAt(0).toUpperCase() + item.payout_type.slice(1)}
+            Type:{" "}
+            {item.payout_type.charAt(0).toUpperCase() +
+              item.payout_type.slice(1)}
           </Text>
           <Text style={styles.metaText}>Paid : {item.paid_date}</Text>
         </View>
@@ -94,7 +92,10 @@ export const RecentPayouts = ({ navigation }: Props) => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContainer}
         ListEmptyComponent={
-          <Text style={styles.emptyText}>No recent payouts found.</Text>
+          <View style={styles.emptyState}>
+            <Feather name="inbox" size={48} color={Colors.gray} />
+            <Text style={styles.emptyText}>No recent payouts found.</Text>
+          </View>
         }
         refreshControl={
           <RefreshControl
@@ -116,6 +117,7 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     paddingBottom: 80,
   },
+  emptyState: { justifyContent: "center", alignItems: "center", padding: 20 },
   listContainer: {
     paddingBottom: 24,
   },

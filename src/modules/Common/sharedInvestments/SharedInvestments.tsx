@@ -1,9 +1,7 @@
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import type { PartnerInvestment } from "@/shared/store/slices/shared/investments/partnerInvestmentSlice";
-import {
-  fetchAvailableSharedPrograms,
-} from "@/shared/store/slices/shared/investments/partnerInvestmentSlice";
+import { fetchAvailableSharedPrograms } from "@/shared/store/slices/shared/investments/partnerInvestmentSlice";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import React, { useCallback, useEffect, useState } from "react";
@@ -44,14 +42,13 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
         // When User cleared the search bar — reload all investment
         dispatch(fetchAvailableSharedPrograms({ page: 1, search: "" }));
       } else {
-        // Normal search 
+        // Normal search
         dispatch(fetchAvailableSharedPrograms({ page: 1, search }));
       }
     }, 1300); // 1.3 seconds debounce
 
     return () => clearTimeout(delayDebounce);
   }, [search]);
-
 
   // Search handler
   const handleSearch = useCallback(() => {
@@ -155,16 +152,12 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
         <View style={styles.amountRow}>
           <View>
             <Text style={styles.amountLabel}>Current Invested</Text>
-            <Text style={styles.amountValue}>
-              {formatCurrency(current)}
-            </Text>
+            <Text style={styles.amountValue}>{formatCurrency(current)}</Text>
           </View>
 
           <View style={{ alignItems: "flex-end" }}>
             <Text style={styles.amountLabel}>Target</Text>
-            <Text style={styles.amountValue}>
-              {formatCurrency(target)}
-            </Text>
+            <Text style={styles.amountValue}>{formatCurrency(target)}</Text>
           </View>
         </View>
 
@@ -175,9 +168,7 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
             <Text style={styles.metaText}>{progress}%</Text>
           </View>
           <View style={styles.progressContainer}>
-            <View
-              style={[styles.progressBar, { width: `${progress}%` }]}
-            />
+            <View style={[styles.progressBar, { width: `${progress}%` }]} />
           </View>
         </View>
 
@@ -212,7 +203,9 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: Colors.background, marginBottom: 0 }}>
+    <View
+      style={{ flex: 1, backgroundColor: Colors.background, marginBottom: 0 }}
+    >
       <View style={styles.searchContainer}>
         <TextInput
           placeholder="Search investments..."
@@ -242,8 +235,7 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
         }
         onEndReachedThreshold={0.5}
         onEndReached={handleLoadMore}
-        onMomentumScrollBegin={() => {
-        }}
+        onMomentumScrollBegin={() => {}}
         ListFooterComponent={
           pagination?.has_more_pages ? (
             <ActivityIndicator
@@ -255,6 +247,7 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
         }
         ListEmptyComponent={
           <View style={styles.centered}>
+            <Feather name="briefcase" size={48} color={Colors.gray} />
             <Text style={styles.emptyText}>No shared programs available.</Text>
           </View>
         }
@@ -452,5 +445,4 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginLeft: 6,
   },
-
 });

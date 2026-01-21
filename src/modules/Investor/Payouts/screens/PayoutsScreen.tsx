@@ -197,16 +197,7 @@ export const PayoutsScreen: React.FC = () => {
               {pagination.total}
             </Text>
           </Text>
-          <View style={styles.balanceActionsRow}>
-            {/* <TouchableOpacity style={styles.balanceActionBtnDark}>
-              <Feather name="plus" size={18} color="#fff" />
-              <Text style={styles.balanceActionTextDark}>Top Up</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.balanceActionBtnDark}>
-              <Feather name="arrow-up-right" size={18} color="#fff" />
-              <Text style={styles.balanceActionTextDark}>Send Money</Text>
-            </TouchableOpacity> */}
-          </View>
+          <View style={styles.balanceActionsRow}></View>
         </View>
 
         {/* Filters */}
@@ -316,22 +307,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.green,
     fontFamily: "Inter_600SemiBold",
-  },
-  balanceActionBtnDark: {
-    width: "48%",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: Colors.darkButton,
-    borderRadius: 18,
-    padding: 10,
-    marginRight: 12,
-  },
-  balanceActionTextDark: {
-    color: Colors.white,
-    fontSize: 15,
-    fontFamily: "Inter_600SemiBold",
-    marginLeft: 7,
   },
   balanceActionsRow: { flexDirection: "row", marginTop: 18 },
   filterRow: {

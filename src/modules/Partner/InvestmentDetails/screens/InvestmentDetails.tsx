@@ -1,14 +1,27 @@
 import { DashboardLayout } from "@/modules/Common/components/DashboardLayout";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { fetchPartnerParticipatingInvestments, leaveInvestment } from "@/shared/store/slices/shared/investments/partnerInvestmentSlice";
+import {
+  fetchPartnerParticipatingInvestments,
+  leaveInvestment,
+} from "@/shared/store/slices/shared/investments/partnerInvestmentSlice";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather } from "@expo/vector-icons";
 import Colors from "@shared/colors/Colors";
 import React, { useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  FlatList,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 export const InvestmentDetails = ({ navigation }: any) => {
   const dispatch = useAppDispatch();
-  const { investments, summary, isLoading, error, meta, isLoadingMore } = useAppSelector((state) => state.userInvestments);
+  const { investments, summary, isLoading, error, meta, isLoadingMore } =
+    useAppSelector((state) => state.userInvestments);
   const { formatCurrency } = useCurrencyFormatter();
   const FILTERS = ["All", "Active", "Paused", "Completed"];
   const [filter, setFilter] = useState("All");
@@ -25,7 +38,7 @@ export const InvestmentDetails = ({ navigation }: any) => {
         // When User cleared the search bar — reload all investment
         dispatch(fetchPartnerParticipatingInvestments({ page: 1, search: "" }));
       } else {
-        // Normal search 
+        // Normal search
         dispatch(fetchPartnerParticipatingInvestments({ page: 1, search }));
       }
     }, 1300); // 1.3 seconds debounce
@@ -33,10 +46,13 @@ export const InvestmentDetails = ({ navigation }: any) => {
     return () => clearTimeout(delayDebounce);
   }, [search]);
 
-
   const handleLoadMore = useCallback(() => {
     if (!isLoadingMore && meta?.pagination?.has_more_pages) {
-      dispatch(fetchPartnerParticipatingInvestments({ page: meta.pagination.current_page + 1 }));
+      dispatch(
+        fetchPartnerParticipatingInvestments({
+          page: meta.pagination.current_page + 1,
+        }),
+      );
     }
   }, [isLoadingMore, meta, search]);
   const handleSearch = () => {
@@ -72,7 +88,10 @@ export const InvestmentDetails = ({ navigation }: any) => {
         style={styles.cardContainer}
         activeOpacity={0.85}
         onPress={() => {
-          navigation.navigate('PartnerInvestmentStack', { screen: 'JoinedInvestmentDetail', params: { id: item.id } })
+          navigation.navigate("PartnerInvestmentStack", {
+            screen: "JoinedInvestmentDetail",
+            params: { id: item.id },
+          });
         }}
       >
         {/* Header: Name + Status */}
@@ -87,7 +106,12 @@ export const InvestmentDetails = ({ navigation }: any) => {
               isActive ? styles.statusActive : styles.statusClosed,
             ]}
           >
-            <Text style={[styles.statusText, { color: isActive ? Colors.green : Colors.gray }]}>
+            <Text
+              style={[
+                styles.statusText,
+                { color: isActive ? Colors.green : Colors.gray },
+              ]}
+            >
               {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
             </Text>
           </View>
@@ -100,13 +124,17 @@ export const InvestmentDetails = ({ navigation }: any) => {
         <View style={styles.amountRow}>
           <View>
             <Text style={styles.amountLabel}>Invested</Text>
-            <Text style={styles.amountValue}>{formatCurrency(item.amount)}</Text>
+            <Text style={styles.amountValue}>
+              {formatCurrency(item.amount)}
+            </Text>
           </View>
 
           {item.type.toLowerCase() === "shared" && (
             <View style={{ alignItems: "flex-end" }}>
               <Text style={styles.amountLabel}>Target</Text>
-              <Text style={styles.amountValue}>{formatCurrency(item.targetAmount)}</Text>
+              <Text style={styles.amountValue}>
+                {formatCurrency(item.targetAmount)}
+              </Text>
             </View>
           )}
         </View>
@@ -114,7 +142,9 @@ export const InvestmentDetails = ({ navigation }: any) => {
         {/* Meta Row */}
         <View style={styles.metaRow}>
           <Text style={styles.metaText}>Started: {item.date}</Text>
-          <Text style={styles.metaText}>Participants: {item.participants ?? 0}</Text>
+          <Text style={styles.metaText}>
+            Participants: {item.participants ?? 0}
+          </Text>
         </View>
 
         {/* Leave Button */}
@@ -132,7 +162,7 @@ export const InvestmentDetails = ({ navigation }: any) => {
                     style: "destructive",
                     onPress: () => dispatch(leaveInvestment(item.id)),
                   },
-                ]
+                ],
               )
             }
           >
@@ -142,8 +172,6 @@ export const InvestmentDetails = ({ navigation }: any) => {
       </TouchableOpacity>
     );
   };
-
-
 
   return (
     <DashboardLayout>
@@ -160,12 +188,12 @@ export const InvestmentDetails = ({ navigation }: any) => {
             </Text>
           </Text>
           <View style={styles.balanceActionsRow}>
-            <TouchableOpacity style={styles.balanceActionBtnDark}>
+            {/* <TouchableOpacity style={styles.balanceActionBtnDark}>
               <Feather name="arrow-up-right" size={18} color="#fff" />
               <Text style={styles.balanceActionTextDark}>
                 Payouts History
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
         <View style={styles.searchContainer}>
@@ -201,12 +229,35 @@ export const InvestmentDetails = ({ navigation }: any) => {
           ListHeaderComponent={
             <View style={styles.card}>
               <Text style={styles.title}>Joined Investments Overview</Text>
-              <Text style={styles.label}>Total Investments: <Text style={styles.value}>{summary.total_investments}</Text></Text>
-              <Text style={styles.label}>Active Investments: <Text style={styles.value}>{summary.active_investments}</Text></Text>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text style={styles.label}>Current Value: <Text style={styles.value}>{formatCurrency(summary.current_value)}</Text></Text>
+              <Text style={styles.label}>
+                Total Investments:{" "}
+                <Text style={styles.value}>{summary.total_investments}</Text>
+              </Text>
+              <Text style={styles.label}>
+                Active Investments:{" "}
+                <Text style={styles.value}>{summary.active_investments}</Text>
+              </Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text style={styles.label}>
+                  Current Value:{" "}
+                  <Text style={styles.value}>
+                    {formatCurrency(summary.current_value)}
+                  </Text>
+                </Text>
                 {/* <Text style={styles.label}>Duration: <Text style={styles.value}>12 Months</Text></Text> */}
-                <TouchableOpacity style={styles.balanceActionBtnDark} onPress={() => { navigation.navigate('PartnerInvestmentStack', { screen: 'SharedInvestments' }) }}>
+                <TouchableOpacity
+                  style={styles.balanceActionBtnDark}
+                  onPress={() => {
+                    navigation.navigate("PartnerInvestmentStack", {
+                      screen: "SharedInvestments",
+                    });
+                  }}
+                >
                   <Text style={styles.balanceActionTextDark}>
                     Shared Investments
                   </Text>
@@ -216,7 +267,9 @@ export const InvestmentDetails = ({ navigation }: any) => {
           }
           ListEmptyComponent={
             <View style={styles.emptyState}>
-              <Text style={styles.emptyText}>No shared investments available.</Text>
+              <Text style={styles.emptyText}>
+                No shared investments available.
+              </Text>
             </View>
           }
         />
@@ -229,7 +282,8 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background },
   scrollContent: {
     // flex:1,
-    paddingBottom: 0, backgroundColor: Colors.background
+    paddingBottom: 0,
+    backgroundColor: Colors.background,
   },
   // innerContainer: { paddingHorizontal: 16 },
   balanceCardDark: {
@@ -265,9 +319,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "Inter_600SemiBold",
   },
-  balanceActionsRow: { flexDirection: "row", marginTop: 18 },
+  balanceActionsRow: { flexDirection: "row", marginTop: 10 },
   balanceActionBtnDark: {
-    width: '50%',
+    width: "50%",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -283,18 +337,24 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: Colors.white,
-    padding: 16, borderRadius: 8,
+    padding: 16,
+    borderRadius: 8,
     paddingHorizontal: 16,
-    marginHorizontal: 12, marginBottom: 16,
+    marginHorizontal: 12,
+    marginBottom: 16,
     shadowColor: "#000",
     shadowOpacity: 0.05,
     shadowRadius: 6,
     elevation: 2,
-
   },
-  title: { fontSize: 16, fontWeight: 'bold', color: Colors.secondary, marginBottom: 8 },
+  title: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: Colors.secondary,
+    marginBottom: 8,
+  },
   label: { fontSize: 14, color: Colors.gray, marginBottom: 4 },
-  value: { color: Colors.secondary, fontWeight: '600' },
+  value: { color: Colors.secondary, fontWeight: "600" },
   filterContainer: {
     paddingHorizontal: 12,
     paddingBottom: 8,
@@ -307,7 +367,7 @@ const styles = StyleSheet.create({
     padding: 4,
     justifyContent: "space-around",
     alignItems: "center",
-    height: 44,              // ✅ fixed height prevents jump
+    height: 44, // ✅ fixed height prevents jump
     elevation: 2,
   },
   filterBtn: {
@@ -315,15 +375,16 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 20,
     backgroundColor: Colors.white,
-    height: 36,            // 🔑 fixed height
-    justifyContent: 'center', // 🔑 vertically center
-    alignItems: 'center',
+    height: 36, // 🔑 fixed height
+    justifyContent: "center", // 🔑 vertically center
+    alignItems: "center",
   },
   filterBtnActive: { backgroundColor: Colors.secondary },
   filterText: {
-    color: "#6B7280", fontWeight: "500",
-    fontSize: 14,           // optional but keeps text stable
-    lineHeight: 20,         // ensure same lineHeight
+    color: "#6B7280",
+    fontWeight: "500",
+    fontSize: 14, // optional but keeps text stable
+    lineHeight: 20, // ensure same lineHeight
   },
   filterTextActive: { color: Colors.white },
   cardContainer: {
@@ -426,9 +487,23 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 
-  topRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 },
-  middleRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
-  bottomRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  topRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 6,
+  },
+  middleRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 4,
+  },
+  bottomRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   // statusBadge: { color: Colors.white, fontSize: 12, fontFamily: 'Inter_500Medium', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 20, overflow: 'hidden', textTransform: 'capitalize' },
 
   // statusActive: { color: Colors.green },
@@ -464,5 +539,4 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-
 });

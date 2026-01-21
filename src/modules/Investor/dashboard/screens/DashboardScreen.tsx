@@ -160,16 +160,7 @@ export const DashboardScreen: React.FC = () => {
               investments this month
             </Text>
           </Text>
-          <View style={styles.balanceActionsRow}>
-            {/* <TouchableOpacity style={styles.balanceActionBtnDark}>
-              <Feather name="plus" size={18} color="#fff" />
-              <Text style={styles.balanceActionTextDark}>Top Up</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.balanceActionBtnDark}>
-              <Feather name="arrow-up-right" size={18} color="#fff" />
-              <Text style={styles.balanceActionTextDark}>Send Money</Text>
-            </TouchableOpacity> */}
-          </View>
+          <View style={styles.balanceActionsRow}></View>
         </View>
         <ScrollView
           contentContainerStyle={styles.scrollContent}
@@ -318,22 +309,6 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_600SemiBold",
   },
   balanceActionsRow: { flexDirection: "row", marginTop: 18 },
-  balanceActionBtnDark: {
-    width: "48%",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: Colors.darkButton,
-    borderRadius: 18,
-    padding: 10,
-    marginRight: 12,
-  },
-  balanceActionTextDark: {
-    color: Colors.white,
-    fontSize: 15,
-    fontFamily: "Inter_600SemiBold",
-    marginLeft: 7,
-  },
   statCardGrid: {
     flexDirection: "row",
     flexWrap: "wrap",

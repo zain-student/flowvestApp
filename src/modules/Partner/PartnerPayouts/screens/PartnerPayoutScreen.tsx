@@ -1,9 +1,11 @@
 import { PartnerPayoutStackParamList } from "@/navigation/PartnerStacks/PartnersPayoutStack";
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { fetchPayouts, fetchPayoutStatistics } from "@/shared/store/slices/partner/payout/PartnerPayoutSlice";
+import {
+  fetchPayouts,
+  fetchPayoutStatistics,
+} from "@/shared/store/slices/partner/payout/PartnerPayoutSlice";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
-import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
@@ -13,16 +15,28 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { DashboardLayout } from "../../../Common/components/DashboardLayout";
 const FILTERS = ["All", "Cancelled", "Scheduled", "Paid"];
-type props = NativeStackNavigationProp<PartnerPayoutStackParamList, "PartnerPayouts">;
+type props = NativeStackNavigationProp<
+  PartnerPayoutStackParamList,
+  "PartnerPayouts"
+>;
 export const PartnerPayoutScreen: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { payouts, totalPayoutAmount, isLoading, isLoadingMore, pagination, payoutStatistics, isStatsLoading } = useAppSelector((state) => state.userPayouts);
+  const {
+    payouts,
+    totalPayoutAmount,
+    isLoading,
+    isLoadingMore,
+    pagination,
+    payoutStatistics,
+    isStatsLoading,
+  } = useAppSelector((state) => state.userPayouts);
   const [filter, setFilter] = useState("All");
-  const navigation = useNavigation<NativeStackNavigationProp<PartnerPayoutStackParamList>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<PartnerPayoutStackParamList>>();
 
   const formattedPayouts = payouts.map((pay: any) => ({
     id: pay.id,
@@ -118,12 +132,20 @@ export const PartnerPayoutScreen: React.FC = () => {
       <View style={styles.container}>
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Total Payouts Amount</Text>
-          <Text style={styles.cardValue}>{formatCurrency(Number(payoutStatistics?.total_amount.toFixed(2) ?? 0))}</Text>
-          <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+          <Text style={styles.cardValue}>
+            {formatCurrency(
+              Number(payoutStatistics?.total_amount.toFixed(2) ?? 0),
+            )}
+          </Text>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
             <Text style={{ color: Colors.gray, fontSize: 14 }}>
               Paid Amount:{" "}
               <Text style={styles.cardSubtitle}>
-                {formatCurrency(Number(payoutStatistics?.paid_amount.toFixed(2) ?? 0))}
+                {formatCurrency(
+                  Number(payoutStatistics?.paid_amount.toFixed(2) ?? 0),
+                )}
               </Text>
             </Text>
             <Text style={{ color: Colors.gray, fontSize: 14 }}>
@@ -133,16 +155,7 @@ export const PartnerPayoutScreen: React.FC = () => {
               </Text>
             </Text>
           </View>
-          <View style={styles.balanceActionsRow}>
-            <TouchableOpacity style={styles.balanceActionBtnDark}>
-              <Feather name="plus" size={18} color="#fff" />
-              <Text style={styles.balanceActionTextDark}>Top Up</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.balanceActionBtnDark}>
-              <Feather name="arrow-up-right" size={18} color="#fff" />
-              <Text style={styles.balanceActionTextDark}>Send Money</Text>
-            </TouchableOpacity>
-          </View>
+          <View style={styles.balanceActionsRow}></View>
         </View>
         <View style={styles.filterRow}>
           {FILTERS.map((f) => (
@@ -151,7 +164,12 @@ export const PartnerPayoutScreen: React.FC = () => {
               style={[styles.filterBtn, filter === f && styles.filterBtnActive]}
               onPress={() => setFilter(f)}
             >
-              <Text style={[styles.filterText, filter === f && styles.filterTextActive]}>
+              <Text
+                style={[
+                  styles.filterText,
+                  filter === f && styles.filterTextActive,
+                ]}
+              >
                 {f}
               </Text>
             </TouchableOpacity>
@@ -167,7 +185,9 @@ export const PartnerPayoutScreen: React.FC = () => {
           refreshing={isLoading}
           onRefresh={handleRefresh}
           ListFooterComponent={
-            isLoadingMore ? <ActivityIndicator size="small" color={Colors.green} /> : null
+            isLoadingMore ? (
+              <ActivityIndicator size="small" color={Colors.green} />
+            ) : null
           }
           contentContainerStyle={styles.scrollContent}
           ListEmptyComponent={
@@ -179,13 +199,13 @@ export const PartnerPayoutScreen: React.FC = () => {
       </View>
     </DashboardLayout>
   );
-}
+};
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background },
   scrollContent: {
     // flex:1,
     paddingBottom: 100,
-    backgroundColor: Colors.background
+    backgroundColor: Colors.background,
   },
   card: {
     backgroundColor: Colors.secondary,
@@ -206,24 +226,12 @@ const styles = StyleSheet.create({
     color: Colors.white,
     marginBottom: 4,
   },
-  cardSubtitle: { fontSize: 14, color: Colors.green, fontFamily: "Inter_600SemiBold", },
-  balanceActionBtnDark: {
-    width: '48%',
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: Colors.darkButton,
-    borderRadius: 18,
-    padding: 10,
-    marginRight: 12,
-  },
-  balanceActionTextDark: {
-    color: Colors.white,
-    fontSize: 15,
+  cardSubtitle: {
+    fontSize: 14,
+    color: Colors.green,
     fontFamily: "Inter_600SemiBold",
-    marginLeft: 7,
   },
-  balanceActionsRow: { flexDirection: "row", marginTop: 18 },
+  balanceActionsRow: { flexDirection: "row", marginTop: 10 },
   filterRow: {
     flexDirection: "row",
     marginTop: 10,

@@ -209,11 +209,12 @@ export const RegisterScreen: React.FC = () => {
 
     return (
       <View style={styles.stepContent}>
-        <Text style={styles.stepTitle}>Create Your Account</Text>
-        <Text style={styles.stepDescription}>
-          Fill in your details to get started
-        </Text>
+
         <View style={styles.form}>
+          <Text style={styles.stepTitle}>Create an Account?</Text>
+          {/* <Text style={styles.stepDescription}>
+            Fill in your details to get started
+          </Text> */}
           <Input
             label="First Name"
             placeholder="Enter your first name"
@@ -320,7 +321,7 @@ export const RegisterScreen: React.FC = () => {
               )}
             </View>
             <Text style={styles.termsText}>
-              I agree to the Terms of Service and Privacy Policy
+              I agree to the Terms of Service
             </Text>
           </TouchableOpacity>
           {errors.terms_accepted && (
@@ -366,7 +367,7 @@ export const RegisterScreen: React.FC = () => {
               <Ionicons name="arrow-back" size={24} color={Colors.secondary} />
             </TouchableOpacity>
           )}
-          <Text style={styles.headerTitle}>Join Invstrhub</Text>
+          <Text style={styles.headerTitle}>Invstrhub</Text>
         </View>
 
         {/* PROGRESS */}
@@ -411,7 +412,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background },
   keyboardAvoid: { flex: 1 },
   scrollView: { flex: 1 },
-  scrollContent: { flexGrow: 1, paddingHorizontal: 24, paddingVertical: 20 },
+  scrollContent: { flexGrow: 1, paddingHorizontal: 20, paddingVertical: 10 },
 
   // HEADER
   headerContainer: {
@@ -428,13 +429,13 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    color: Colors.secondary,
+    color: Colors.primary,
     flex: 1,
     textAlign: "center",
   },
 
   // PROGRESS
-  progressContainer: { marginVertical: 16 },
+  progressContainer: { marginVertical: 1 },
   progressBar: {
     height: 4,
     backgroundColor: Colors.lightGray,
@@ -451,7 +452,8 @@ const styles = StyleSheet.create({
   form: {
     backgroundColor: "#ffffff",
     borderRadius: 20,
-    padding: 28,
+    paddingVertical: 28,
+    paddingHorizontal: 15,
     marginBottom: 32,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 3 },

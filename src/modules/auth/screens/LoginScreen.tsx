@@ -127,72 +127,73 @@ export const LoginScreen: React.FC = () => {
           <View>
             {/* Header */}
             <View style={styles.header}>
-              <Text style={styles.title}>Welcome Back</Text>
-              <Text style={styles.subtitle}>Sign in to your Invstrhub account</Text>
-            </View>
-
-            {/* Form */}
-            <View style={styles.form}>
-              {authError && (
-                <View style={styles.errorBanner}>
-                  <Text style={styles.errorBannerText}>{authError}</Text>
-                </View>
-              )}
-              <Input
-                label="Email Address"
-                type="email"
-                placeholder="john123@gmail.com"
-                value={formData.email}
-                onChangeText={(value) => handleInputChange('email', value)}
-                error={errors.email}
-                required
-                // autoFocus
-              />
-
-              <Input
-                label="Password"
-                type="password"
-                placeholder="********"
-                value={formData.password}
-                onChangeText={(value) => handleInputChange('password', value)}
-                error={errors.password}
-                required
-              />
-
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, marginTop: 8 }}>
-                {/* Remember Me - Simple implementation */}
-                <TouchableOpacity
-                  style={styles.rememberContainer}
-                  onPress={() => handleInputChange('remember', !formData.remember)}
-                >
-                  <View style={[styles.checkbox, formData.remember && styles.checkboxActive]}>
-                    {formData.remember &&
-                      //  <Text style={styles.checkmark}>✓</Text>
-                      <Ionicons name='checkmark' size={16} color="#fff" />
-                    }
-                  </View>
-                  <Text style={styles.rememberText}>Remember me</Text>
-                </TouchableOpacity>
-                
-              </View>
-
-              {/* Submit Button */}
-              <Button
-                title="Sign In"
-                onPress={handleSubmit}
-                loading={isLoading}
-                fullWidth
-                style={styles.submitButton}
-              />
-              {/* Forgot Password Link */}
-                <TouchableOpacity
-                  style={styles.forgotPasswordContainer}
-                  onPress={navigateToForgotPassword}
-                >
-                  <Text style={styles.forgotPasswordText}>Forgot your password?</Text>
-                </TouchableOpacity>
+              <Text style={styles.title}>InvstrHub</Text>
             </View>
           </View>
+          {/* Form */}
+          <View style={styles.form}>
+             <Text style={styles.subtitle}>Welcome to Invstrhub Login now!</Text>
+            {authError && (
+              <View style={styles.errorBanner}>
+                <Text style={styles.errorBannerText}>{authError}</Text>
+              </View>
+            )}
+            <Input
+              label="Email Address"
+              type="email"
+              placeholder="john123@gmail.com"
+              value={formData.email}
+              onChangeText={(value) => handleInputChange('email', value)}
+              error={errors.email}
+              required
+            // autoFocus
+            />
+
+            <Input
+              label="Password"
+              type="password"
+              placeholder="********"
+              value={formData.password}
+              onChangeText={(value) => handleInputChange('password', value)}
+              error={errors.password}
+              required
+            />
+
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, marginTop: 8 }}>
+              {/* Remember Me - Simple implementation */}
+              <TouchableOpacity
+                style={styles.rememberContainer}
+                onPress={() => handleInputChange('remember', !formData.remember)}
+              >
+                <View style={[styles.checkbox, formData.remember && styles.checkboxActive]}>
+                  {formData.remember &&
+                    //  <Text style={styles.checkmark}>✓</Text>
+                    <Ionicons name='checkmark' size={16} color="#fff" />
+                  }
+                </View>
+                <Text style={styles.rememberText}>Remember me</Text>
+              </TouchableOpacity>
+              {/* Forgot Password Link */}
+              <TouchableOpacity
+                style={styles.forgotPasswordContainer}
+                onPress={navigateToForgotPassword}
+              >
+                <Text style={styles.forgotPasswordText}>Forgot password?</Text>
+              </TouchableOpacity>
+            </View>
+
+
+            {/* Submit Button */}
+            <Button
+              title="Sign In"
+              onPress={handleSubmit}
+              loading={isLoading}
+              fullWidth
+              style={styles.submitButton}
+            />
+
+          </View>
+
           {/* Footer */}
           <View>
             <View style={styles.footer}>
@@ -228,8 +229,8 @@ const styles = StyleSheet.create({
 
   scrollContent: {
     flexGrow: 1,
-    paddingHorizontal: 24,
-    paddingVertical: 60,
+    paddingHorizontal: 20,
+    paddingBottom: 10,
     justifyContent: 'space-between',
   },
 
@@ -242,13 +243,15 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#111827',
+    color: Colors.primary,
     marginBottom: 8,
   },
 
   subtitle: {
-    fontSize: 16,
-    color: Colors.gray,
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 24,
+    color: Colors.secondary,
     textAlign: 'center',
   },
 
@@ -257,7 +260,8 @@ const styles = StyleSheet.create({
     // marginBottom: 82,
     backgroundColor: '#ffffff',
     borderRadius: 20,
-    padding: 28,
+    paddingVertical: 28,
+    paddingHorizontal: 15,
     marginBottom: 32,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 3 },
@@ -312,7 +316,7 @@ const styles = StyleSheet.create({
 
   rememberText: {
     fontSize: 14,
-    color: Colors.secondary,
+    color: Colors.gray,
   },
 
   errorContainer: {
@@ -341,9 +345,8 @@ const styles = StyleSheet.create({
 
   forgotPasswordText: {
     fontSize: 14,
-    // color: '#2563EB',
-    color: Colors.secondary,
-    fontWeight: '500',
+    color: Colors.primary,
+    // fontWeight: '500',
   },
 
   footer: {

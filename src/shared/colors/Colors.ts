@@ -1,18 +1,18 @@
 // src/shared/colors/Colors.ts
 
 const Colors = {
-  primary: "#4f46e5",
+  primary: "#012073",
   secondary: "#18181B", // Changed to a dark gray. Used for cards etc.
   gray: "#A1A1AA", // Lighter gray for labels
   white: "#fff", // White for values
   green: "#22C55E", // Green for accents like returns
   darkButton: "#232326", // Dark button background
   lightGray: "#E5E7EB", // Light gray for backgrounds
-  yellow:"yellow",
+  yellow: "yellow",
   activeStatusBg: "#d1f7c4",
   activeStatus: "#1a7f37",
-  inActiveStatusBg:'#ffe0e0',
-  inActiveStatus:"#a00",
+  inActiveStatusBg: "#ffe0e0",
+  inActiveStatus: "#a00",
   error: "#EF4444", // Error color
   success: "#28a745",
   danger: "#dc3545",

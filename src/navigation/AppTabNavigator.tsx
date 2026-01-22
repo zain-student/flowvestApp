@@ -9,6 +9,7 @@ import { PortfolioScreen } from "@/modules/Common/portfolio/screens/PortfolioScr
 import { InvestmentStack } from "@/navigation/InvestorStacks/InvestmentStack";
 import { InvestorDashboardStack } from "@/navigation/InvestorStacks/InvestorDashboardStack";
 import { PayoutStack } from "@/navigation/InvestorStacks/PayoutStack";
+import Colors from "@/shared/colors/Colors";
 import { useAppSelector } from "@/shared/store";
 import { Feather } from "@expo/vector-icons";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
@@ -164,7 +165,7 @@ const styles = StyleSheet.create({
   },
   tabBar: {
     flexDirection: "row",
-    backgroundColor: "#18181B",
+    backgroundColor: Colors.secondary,
     borderRadius: 32,
     padding: 6,
     justifyContent: "space-between",

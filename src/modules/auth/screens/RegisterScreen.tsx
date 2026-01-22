@@ -175,7 +175,7 @@ export const RegisterScreen: React.FC = () => {
     <View style={styles.stepContent}>
       <Text style={styles.stepTitle}>Registration Type</Text>
       <Text style={styles.stepDescription}>
-        How would you like to join FlowVest?
+        How would you like to join InvestorHub?
       </Text>
       <Select
         label="Registration Type"
@@ -366,7 +366,7 @@ export const RegisterScreen: React.FC = () => {
               <Ionicons name="arrow-back" size={24} color={Colors.secondary} />
             </TouchableOpacity>
           )}
-          <Text style={styles.headerTitle}>Join FlowVest</Text>
+          <Text style={styles.headerTitle}>Join InvestorHub</Text>
         </View>
 
         {/* PROGRESS */}

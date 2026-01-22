@@ -187,7 +187,7 @@ export const InvestmentDetails = ({ navigation }: any) => {
               {summary?.average_roi ?? 0}%
             </Text>
           </Text>
-          <View style={styles.balanceActionsRow}></View>
+          {/* <View style={styles.balanceActionsRow}></View> */}
         </View>
         <View style={styles.searchContainer}>
           <TextInput

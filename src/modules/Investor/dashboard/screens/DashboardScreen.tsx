@@ -160,7 +160,7 @@ export const DashboardScreen: React.FC = () => {
               investments this month
             </Text>
           </Text>
-          <View style={styles.balanceActionsRow}></View>
+          {/* <View style={styles.balanceActionsRow}></View> */}
         </View>
         <ScrollView
           contentContainerStyle={styles.scrollContent}

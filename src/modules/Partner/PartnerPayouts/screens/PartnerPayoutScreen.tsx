@@ -156,7 +156,7 @@ export const PartnerPayoutScreen: React.FC = () => {
               </Text>
             </Text>
           </View>
-          <View style={styles.balanceActionsRow}></View>
+          {/* <View style={styles.balanceActionsRow}></View> */}
         </View>
         <View style={styles.filterRow}>
           {FILTERS.map((f) => (

@@ -126,7 +126,7 @@ export const PortfolioScreen: React.FC = () => {
             </Text>
           </Text>
         </View>
-        <View style={styles.balanceActionsRow}></View>
+        {/* <View style={styles.balanceActionsRow}></View> */}
       </View>
       <ScrollView
         showsVerticalScrollIndicator={false}

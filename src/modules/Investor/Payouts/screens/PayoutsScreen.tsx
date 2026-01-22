@@ -197,7 +197,7 @@ export const PayoutsScreen: React.FC = () => {
               {pagination.total}
             </Text>
           </Text>
-          <View style={styles.balanceActionsRow}></View>
+          {/* <View style={styles.balanceActionsRow}></View> */}
         </View>
 
         {/* Filters */}

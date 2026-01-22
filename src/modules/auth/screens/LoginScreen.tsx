@@ -128,7 +128,7 @@ export const LoginScreen: React.FC = () => {
             {/* Header */}
             <View style={styles.header}>
               <Text style={styles.title}>Welcome Back</Text>
-              <Text style={styles.subtitle}>Sign in to your invstrhub account</Text>
+              <Text style={styles.subtitle}>Sign in to your Invstrhub account</Text>
             </View>
 
             {/* Form */}

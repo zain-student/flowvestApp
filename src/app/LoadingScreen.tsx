@@ -10,7 +10,7 @@ export const LoadingScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       <ActivityIndicator size="large" color="#2563EB" />
-      <Text style={styles.text}>Loading invstrhub...</Text>
+      <Text style={styles.text}>Loading Invstrhub...</Text>
     </View>
   );
 };

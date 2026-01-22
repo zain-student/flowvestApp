@@ -36,7 +36,7 @@ export const OnBoardingScreen = () => {
 
         {/* Heading */}
         <View style={styles.textContainer}>
-          <Text style={styles.title}>invstrhub</Text>
+          <Text style={styles.title}>Invstrhub</Text>
           <Text style={styles.subtitle}>
             Grow your investments, automate payouts, and track your portfolio effortlessly.
           </Text>

@@ -145,7 +145,7 @@ export const RegisterScreen: React.FC = () => {
     <View style={styles.stepContent}>
       <Text style={styles.stepTitle}>Choose Your Role</Text>
       <Text style={styles.stepDescription}>
-        Select how you'll be using invstrhub
+        Select how you'll be using Invstrhub
       </Text>
       <Select
         label="Role"
@@ -175,7 +175,7 @@ export const RegisterScreen: React.FC = () => {
     <View style={styles.stepContent}>
       <Text style={styles.stepTitle}>Registration Type</Text>
       <Text style={styles.stepDescription}>
-        How would you like to join invstrhub?
+        How would you like to join Invstrhub?
       </Text>
       <Select
         label="Registration Type"
@@ -366,7 +366,7 @@ export const RegisterScreen: React.FC = () => {
               <Ionicons name="arrow-back" size={24} color={Colors.secondary} />
             </TouchableOpacity>
           )}
-          <Text style={styles.headerTitle}>Join invstrhub</Text>
+          <Text style={styles.headerTitle}>Join Invstrhub</Text>
         </View>
 
         {/* PROGRESS */}

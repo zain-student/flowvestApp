@@ -307,7 +307,7 @@ export const ProfileScreen: React.FC = () => {
             icon="call-outline"
             label="Contact Support"
             onPress={() =>
-              Alert.alert("Support", "Contact us at support@invstrhub.com")
+              Alert.alert("Support", "Contact us at support@Invstrhub.com")
             }
           />
         </View>

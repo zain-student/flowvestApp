@@ -67,7 +67,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         translucent={true}
       />
       <View style={styles.header}>
-        <Text style={styles.logo}>InvestorHub</Text>
+        <Text style={styles.logo}>invstrhub</Text>
         <View style={styles.headerRight}>
           <TouchableOpacity
             onPress={() => navigation.navigate("Notifications")}

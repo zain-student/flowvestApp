@@ -89,22 +89,22 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
       <SummaryCard
         label="Total Invested"
         value={formatCurrency(summary.total_invested)}
-        style={{ backgroundColor: "#E0F2FE" }}
+        style={{ backgroundColor: "#fff" }}
       />
       <SummaryCard
         label="Total Investments"
         value={summary.total_investments}
-        style={{ backgroundColor: "#FEF3C7" }}
+        style={{ backgroundColor: "#fff" }}
       />
       <SummaryCard
         label="Avg ROI"
         value={`${summary.avg_roi.toFixed(1)}`}
-        style={{ backgroundColor: "#ECFDF5" }}
+        style={{ backgroundColor: "#fff" }}
       />
       <SummaryCard
         label="Participants"
         value={summary.total_participants}
-        style={{ backgroundColor: "#FEE2E2" }}
+        style={{ backgroundColor: "#fff" }}
       />
     </View>
   );
@@ -235,7 +235,7 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
         }
         onEndReachedThreshold={0.5}
         onEndReached={handleLoadMore}
-        onMomentumScrollBegin={() => {}}
+        onMomentumScrollBegin={() => { }}
         ListFooterComponent={
           pagination?.has_more_pages ? (
             <ActivityIndicator

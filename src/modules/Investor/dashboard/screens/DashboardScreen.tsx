@@ -60,26 +60,26 @@ export const DashboardScreen: React.FC = () => {
       label: "Pending Payouts",
 
       value: stats?.pending_payouts_count ?? "--",
-      bg: "#E0F2FE", // pastel blue
+      bg: "#fff", // pastel blue
     },
     {
       icon: "activity",
       label: "Active Investments",
       value: stats?.active_investments ?? "--",
-      bg: "#DCFCE7", // pastel green
+      bg: "#fff", // pastel green
     },
     {
       icon: "users",
       label: "Partners",
 
       value: stats?.total_partners ?? "--",
-      bg: "#FDE68A", // pastel yellow
+      bg: "#fff", // pastel yellow
     },
     {
       icon: "percent",
       label: "Avg ROI",
       value: stats?.roi_average.toFixed(1) ?? "--",
-      bg: "#FCE7F3", // pastel pink
+      bg: "#fff", // pastel pink
     },
   ];
 
@@ -193,7 +193,7 @@ export const DashboardScreen: React.FC = () => {
                 </View>
                 <Feather
                   name={card.icon as any}
-                  size={38}
+                  size={36}
                   color="#888"
                   style={{ alignSelf: "flex-end" }}
                 />

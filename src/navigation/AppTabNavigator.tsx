@@ -11,7 +11,6 @@ import { InvestorDashboardStack } from "@/navigation/InvestorStacks/InvestorDash
 import { PayoutStack } from "@/navigation/InvestorStacks/PayoutStack";
 import { useAppSelector } from "@/shared/store";
 import { Feather } from "@expo/vector-icons";
-import { InvestmentDetails } from "@modules/Partner/InvestmentDetails/screens/InvestmentDetails";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useAppDispatch } from "@store/index";
@@ -24,6 +23,7 @@ import {
   View,
 } from "react-native";
 import { PartnerDashboardStack } from "./PartnerStacks/PartnerDashboardStack";
+import PartnersInvestmentDetailStack from "./PartnerStacks/PartnersInvestmentDetailStack";
 import PartnersPayoutStack from "./PartnerStacks/PartnersPayoutStack";
 import type { ProfileStackParamList } from "./ProfileStacks/ProfileStack";
 import { ProfileStack } from "./ProfileStacks/ProfileStack";
@@ -143,7 +143,8 @@ export const AppTabNavigator: React.FC = () => {
       {userRole === "user" && (
         <>
           <Tab.Screen name="Dashboard" component={PartnerDashboardStack} />
-          <Tab.Screen name="InvestmentDetails" component={InvestmentDetails} />
+          {/* <Tab.Screen name="InvestmentDetails" component={InvestmentDetails} /> */}
+          <Tab.Screen name="InvestmentDetails" component={PartnersInvestmentDetailStack} />
           <Tab.Screen name="PartnerPayouts" component={PartnersPayoutStack} />
           <Tab.Screen name="Portfolio" component={PortfolioScreen} />
           <Tab.Screen name="Profile" component={ProfileStack} />

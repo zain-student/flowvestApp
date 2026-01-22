@@ -1,4 +1,5 @@
 import { DashboardLayout } from "@/modules/Common/components/DashboardLayout";
+import type { PartnersInvestmentDetailStackParamList } from "@/navigation/PartnerStacks/PartnersInvestmentDetailStack";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import {
   fetchPartnerParticipatingInvestments,
@@ -6,6 +7,8 @@ import {
 } from "@/shared/store/slices/shared/investments/partnerInvestmentSlice";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import Colors from "@shared/colors/Colors";
 import React, { useCallback, useEffect, useState } from "react";
 import {
@@ -18,10 +21,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-export const InvestmentDetails = ({ navigation }: any) => {
+export const InvestmentDetails = () => {
   const dispatch = useAppDispatch();
   const { investments, summary, isLoading, error, meta, isLoadingMore } =
     useAppSelector((state) => state.userInvestments);
+  const navigation =
+    useNavigation<NativeStackNavigationProp<PartnersInvestmentDetailStackParamList>>();
   const { formatCurrency } = useCurrencyFormatter();
   const FILTERS = ["All", "Active", "Paused", "Completed"];
   const [filter, setFilter] = useState("All");
@@ -87,12 +92,15 @@ export const InvestmentDetails = ({ navigation }: any) => {
       <TouchableOpacity
         style={styles.cardContainer}
         activeOpacity={0.85}
-        onPress={() => {
-          navigation.navigate("PartnerInvestmentStack", {
-            screen: "JoinedInvestmentDetail",
-            params: { id: item.id },
-          });
-        }}
+        // onPress={() => {
+        //   navigation.navigate("PartnerInvestmentStack", {
+        //     screen: "JoinedInvestmentDetail",
+        //     params: { id: item.id },
+        //   });
+        // }}
+        onPress={() =>
+          navigation.navigate("JoinedInvestmentDetail", { id: item.id })
+        }
       >
         {/* Header: Name + Status */}
         <View style={styles.cardHeader}>
@@ -242,13 +250,15 @@ export const InvestmentDetails = ({ navigation }: any) => {
                     {formatCurrency(summary.current_value)}
                   </Text>
                 </Text>
-                {/* <Text style={styles.label}>Duration: <Text style={styles.value}>12 Months</Text></Text> */}
                 <TouchableOpacity
                   style={styles.balanceActionBtnDark}
+                  // onPress={() => {
+                  //   navigation.navigate("PartnerInvestmentStack", {
+                  //     screen: "SharedInvestments",
+                  //   });
+                  // }}
                   onPress={() => {
-                    navigation.navigate("PartnerInvestmentStack", {
-                      screen: "SharedInvestments",
-                    });
+                    navigation.navigate("SharedInvestments");
                   }}
                 >
                   <Text style={styles.balanceActionTextDark}>

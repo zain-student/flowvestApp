@@ -33,13 +33,6 @@
     "plugins": ["expo-router", "expo-font"],
     "experiments": {
       "typedRoutes": true
-    },
-
-    "extra": {
-      "router": {},
-      "eas": {
-        "projectId": "79a6b7af-b4d7-473e-a107-ffb4a94d37b0"
-      }
     }
   }
 }

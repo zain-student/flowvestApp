@@ -109,7 +109,7 @@ export const MyInvestments = ({ navigation }: Props) => {
 
       {/* Meta */}
       <View style={styles.metaRow}>
-        <Text style={styles.metaText}>Joined: {item.joined_at}</Text>
+        <Text style={styles.metaText}>Joined: {formatDate(item.joined_at)}</Text>
         <Text style={styles.metaText}>
           Participants: {item.total_participants}
         </Text>
@@ -139,7 +139,11 @@ export const MyInvestments = ({ navigation }: Props) => {
       </View>
     </TouchableOpacity>
   );
-
+  const formatDate = (d?: string | null) => {
+    if (!d) return "N/A";
+    const date = new Date(d);
+    return date.toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" });
+  };
   return (
     <View style={styles.container}>
       <StatusBar

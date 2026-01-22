@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
   },
   loaderContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
   card: {
-    backgroundColor: "#fff",
+    backgroundColor: Colors.secondary,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
@@ -224,9 +224,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     marginBottom: 8,
-    color: "#111827",
+    color: Colors.white,
   },
-  detail: { fontSize: 14, color: "#374151", marginBottom: 4 },
+  detail: { fontSize: 14, color: Colors.white, marginBottom: 4 },
   partnerItem: {
     padding: 12,
     borderRadius: 8,

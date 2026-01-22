@@ -145,7 +145,7 @@ export const RegisterScreen: React.FC = () => {
     <View style={styles.stepContent}>
       <Text style={styles.stepTitle}>Choose Your Role</Text>
       <Text style={styles.stepDescription}>
-        Select how you'll be using FlowVest
+        Select how you'll be using InvestorHub
       </Text>
       <Select
         label="Role"

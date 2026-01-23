@@ -12,6 +12,7 @@ import {
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { LinearGradient } from "expo-linear-gradient";
 import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect } from "react";
 import {
@@ -64,7 +65,7 @@ export const DashboardScreen: React.FC = () => {
     },
     {
       icon: "activity",
-      label: "Active Investments",
+      label: "Active INV.",
       value: stats?.active_investments ?? "--",
       bg: "#fff", // pastel green
     },
@@ -104,17 +105,24 @@ export const DashboardScreen: React.FC = () => {
                   : "activity"
             }
             size={22}
-            color={Colors.white}
+            color={Colors.primary}
           />
         </View>
 
         {/* Middle: Title & Dates */}
         <View style={styles.infoWrapper}>
           <Text style={styles.activityTitle}>{item.title}</Text>
-          <Text style={styles.activitySubText}>
-            Created: {formatDate(item.created_at ?? "N/A")}
-          </Text>
-          <Text style={styles.activitySubText}>Time: {item.time}</Text>
+          <View style={{ flexDirection: "row", alignItems: "center" }} >
+            <Ionicons name="calendar-outline" size={13} color={Colors.secondary} />
+            <Text style={styles.activitySubText}>
+              Created: {formatDate(item.created_at ?? "N/A")}
+            </Text>
+          </View>
+          <View style={{ flexDirection: "row", alignItems: "center" }} >
+            <Ionicons name="time-outline" size={13} color={Colors.secondary} />
+            <Text style={styles.activitySubText}>
+              {item.time}</Text>
+          </View>
         </View>
 
         {/* Right: Amount & Status */}
@@ -140,28 +148,37 @@ export const DashboardScreen: React.FC = () => {
     <DashboardLayout headerStyle="dark">
       {/* Main Balance Card (dark, rounded) */}
       <View style={styles.container}>
-        <View style={styles.balanceCardDark}>
+        {/* <View style={styles.balanceCardDark}> */}
+        <LinearGradient
+          colors={[Colors.primary, "#3a84fb"]} // left → right
+          start={{ x: 0, y: 1 }}
+          end={{ x: 2, y: 0 }}
+          style={styles.balanceCardDark}
+        >
           <Text style={styles.balanceLabelDark}>Total Managed Portfolio</Text>
           <Text style={styles.balanceValueDark}>
             {stats?.total_managed_portfolio
               ? formatCurrency(stats.total_managed_portfolio)
               : "--"}
           </Text>
-          <Text style={styles.balanceChangeDark}>
-            {stats?.new_investments_this_month ?? "--"}{" "}
-            <Text
-              style={{
-                color: Colors.gray,
-                fontWeight: "400",
-                fontFamily: "Inter_400Regular",
-              }}
-            >
-              {/* than last month */}
-              investments this month
+          <View style={styles.mirror}  >
+            <Text style={styles.balanceChangeDark}>
+              {stats?.new_investments_this_month ?? "--"}{" "}
+              <Text
+                style={{
+                  color: Colors.white,
+                  fontWeight: "400",
+                  fontFamily: "Inter_400Regular",
+                }}
+              >
+                {/* than last month */}
+                investments this month
+              </Text>
             </Text>
-          </Text>
+          </View>
           {/* <View style={styles.balanceActionsRow}></View> */}
-        </View>
+        </LinearGradient>
+        {/* </View> */}
         <ScrollView
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
@@ -188,15 +205,18 @@ export const DashboardScreen: React.FC = () => {
                 ]}
               >
                 <View style={{ flex: 1 }}>
+                  {/* <View style={{ marginBottom: 6,backgroundColor:Colors.lightGray,width:'28%',height:'28%',justifyContent:'center',borderRadius:20,alignItems:'center' }} > */}
+                  <Feather
+                    name={card.icon as any}
+                    size={22}
+                    color={Colors.primary}
+                    style={{  backgroundColor: Colors.lightGray, width: 44, height: 44, borderRadius: 22, justifyContent: 'center', alignItems: 'center', padding: 10 }}
+                  />
+                  {/* </View> */}
                   <Text style={styles.statLabelLarge}>{card.label}</Text>
                   <Text style={styles.statValueLarge}>{card.value}</Text>
                 </View>
-                <Feather
-                  name={card.icon as any}
-                  size={36}
-                  color="#888"
-                  style={{ alignSelf: "flex-end" }}
-                />
+
               </View>
             ))}
           </View>
@@ -235,8 +255,8 @@ export const DashboardScreen: React.FC = () => {
           }
         >
           {/* <Text style={styles.fabIcon}>＋</Text> */}
-          <Ionicons name="add" size={24} color={"white"} />
-          <Text style={styles.fabLabel}>Add Partner</Text>
+          <Ionicons name="person-add-outline" size={24} color={"white"} />
+          {/* <Text style={styles.fabLabel}>Add Partner</Text> */}
         </TouchableOpacity>
       </View>
     </DashboardLayout>
@@ -284,11 +304,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   balanceCardDark: {
-    backgroundColor: Colors.secondary,
-    borderBottomLeftRadius: 32,
-    borderBottomRightRadius: 32,
+    backgroundColor: Colors.primary,
+    borderRadius: 12,
+    marginHorizontal: 12,
+    marginTop: 12,
     padding: 24,
-    paddingTop: 36,
+    // paddingTop: 36,
     shadowColor: "#000",
     shadowOpacity: 0.08,
     shadowRadius: 12,
@@ -296,19 +317,20 @@ const styles = StyleSheet.create({
   },
   emptyState: { justifyContent: "center", alignItems: "center", padding: 20 },
   balanceLabelDark: {
-    color: Colors.gray,
-    fontSize: 15,
-    fontFamily: "Inter_400Regular",
+    color: Colors.white,
+    fontSize: 14,
+    fontFamily: "Inter_500Regular",
   },
   balanceValueDark: {
     color: Colors.white,
-    fontSize: 36,
+    fontSize: 20,
     fontFamily: "Inter_700Bold",
-    fontWeight: "700",
+    fontWeight: "600",
     marginVertical: 2,
   },
+  mirror: { backgroundColor: Colors.mirror, width: '60%', justifyContent: 'center', alignItems: 'center', borderRadius: 18, paddingVertical: 4, paddingHorizontal: 12, borderWidth: 0.3, borderColor: Colors.white, opacity: 0.7, marginTop: 4 },
   balanceChangeDark: {
-    color: Colors.green,
+    color: Colors.white,
     fontSize: 14,
     fontFamily: "Inter_600SemiBold",
   },
@@ -316,34 +338,34 @@ const styles = StyleSheet.create({
   statCardGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     marginHorizontal: 12,
     marginTop: 8,
-    marginBottom: 24,
+    marginBottom: 8,
   },
   statCardLarge: {
     width: "47%",
     flexDirection: "row",
     alignItems: "center",
     borderRadius: 22,
-    padding: 20,
-    minHeight: 90,
-    marginVertical: 8,
+    padding: 15,
+    minHeight: 100,
+    marginVertical: 9,
     shadowColor: "#000",
     shadowOpacity: 0.04,
     shadowRadius: 8,
     elevation: 2,
   },
   statLabelLarge: {
-    color: Colors.secondary,
-    fontSize: 16,
-    fontFamily: "Inter_400Regular",
+    color: Colors.gray,
+    fontSize: 14,
+    fontFamily: "Inter_500Regular",
     marginBottom: 2,
   },
   statValueLarge: {
-    color: "colors.secondary",
-    fontSize: 32,
-    fontFamily: "Inter_700Bold",
+    color: Colors.secondary,
+    fontSize: 20,
+    fontFamily: "Inter_600Bold",
     fontWeight: "700",
   },
   sectionRow: {
@@ -354,17 +376,18 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   sectionTitle: {
-    fontSize: 17,
+    fontSize: 16,
     fontFamily: "Inter_700Bold",
-    fontWeight: "700",
+    fontWeight: "500",
     color: "colors.secondary",
   },
   activityList: { paddingHorizontal: 8 },
   activityCard: {
-    backgroundColor: Colors.secondary,
+    backgroundColor: Colors.white,
     borderRadius: 14,
-    padding: 16,
+    padding: 12,
     marginVertical: 6,
+    marginHorizontal: 4,
     flexDirection: "row",
     alignItems: "center",
     shadowColor: "#000",
@@ -373,10 +396,10 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   iconWrapper: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    backgroundColor: Colors.green + "33",
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: Colors.lightGray, // 20% opacity
     justifyContent: "center",
     alignItems: "center",
     marginRight: 12,
@@ -384,7 +407,7 @@ const styles = StyleSheet.create({
   infoWrapper: { flex: 1 },
   rightWrapper: { alignItems: "flex-end" },
   activityTitle: {
-    color: Colors.white,
+    color: Colors.secondary,
     fontSize: 15,
     fontFamily: "Inter_700Bold",
     marginBottom: 2,
@@ -393,6 +416,9 @@ const styles = StyleSheet.create({
     color: Colors.gray,
     fontSize: 12,
     fontFamily: "Inter_400Regular",
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 4,
   },
   activityAmount: {
     color: Colors.green,
@@ -432,12 +458,15 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 24,
     bottom: 80,
-    backgroundColor: Colors.green,
-    borderRadius: 24,
-    flexDirection: "row",
+    backgroundColor: Colors.primary,
+    borderRadius: 30,
+    width: 60,
+    height: 60,
+    justifyContent: "center",
+    // flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 18,
-    paddingVertical: 12,
+    // paddingHorizontal: 18,
+    // paddingVertical: 12,
     shadowColor: "#000",
     shadowOpacity: 0.08,
     shadowRadius: 8,

@@ -101,7 +101,7 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({
               <Feather
                 name={TAB_ICONS[route.name]}
                 size={20}
-                color={focused ? "#18181B" : "#A1A1AA"}
+                color={focused ? Colors.white : "#A1A1AA"}
                 style={focused ? styles.iconActive : styles.icon}
               />
               {focused && (
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   },
   tabBar: {
     flexDirection: "row",
-    backgroundColor: Colors.secondary,
+    backgroundColor: Colors.background,
     borderRadius: 32,
     padding: 6,
     justifyContent: "space-between",
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
   },
   tabItemActive: {
     flexDirection: "row",
-    backgroundColor: "#fff",
+    backgroundColor: Colors.primary,
     borderRadius: 18,
     paddingHorizontal: 14,
     paddingVertical: 6,
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     marginRight: 7,
   },
   label: {
-    color: "#18181B",
+    color: Colors.white,
     fontWeight: "600",
     fontSize: 13,
     maxWidth: 70,

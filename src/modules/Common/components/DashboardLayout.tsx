@@ -1,7 +1,7 @@
 import { RootStackParamList } from "@/navigation/RootNavigator";
 import Colors from "@/shared/colors/Colors";
 import { selectHasUnreadNotifications } from "@/shared/store/slices/profile/notificationSlice";
-import { Feather } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { logoutUser } from "@modules/auth/store/authSlice";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -24,7 +24,8 @@ interface DashboardLayoutProps {
 
 const Avatar = ({ showDot }: { showDot: boolean }) => (
   <View style={styles.avatar}>
-    <Feather name="bell" size={20} color="#fff" />
+    {/* <Feather name="bell" size={20} color={Colors.secondary} /> */}
+<Ionicons name="notifications-outline" size={22} color={Colors.secondary} />
     {showDot && <View style={styles.notificationDot} />}
   </View>
 );
@@ -62,8 +63,8 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar
-        barStyle="light-content" // or "dark-content"
-        backgroundColor={Colors.secondary} // set to match your theme
+        barStyle="dark-content" // or "dark-content"
+        backgroundColor={Colors.background} // set to match your theme
         translucent={true}
       />
       <View style={styles.header}>
@@ -79,7 +80,8 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             style={styles.signOutBtn}
             accessibilityLabel="Sign Out"
           >
-            <Feather name="log-out" size={22} color="#fff" />
+            {/* <Feather name="log-out" size={22} color={Colors.secondary} /> */}
+            <Ionicons name="log-out-outline" size={22} color={Colors.secondary} />
           </TouchableOpacity>
         </View>
       </View>
@@ -97,24 +99,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 10,
     paddingBottom: 8,
-    backgroundColor: Colors.secondary,
+    backgroundColor: Colors.background,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.secondary,
+    borderBottomColor: Colors.background,
   },
-  logo: { fontSize: 22, fontWeight: "bold", color: Colors.white },
+  logo: { fontSize: 20, fontWeight: "600", color: Colors.secondary },
   headerRight: { flexDirection: "row", alignItems: "center" },
   avatar: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: Colors.secondary,
+    // backgroundColor: Colors.primary,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12,
   },
-  avatarText: { color: Colors.white, fontWeight: "bold", fontSize: 16 },
+  avatarText: { color: Colors.secondary, fontWeight: "bold", fontSize: 16 },
   signOutBtn: { padding: 6 },
-  signOutText: { fontSize: 22, color: "#EF4444" },
   notificationDot: {
     position: "absolute",
     top: 5,

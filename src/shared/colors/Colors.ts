@@ -2,10 +2,14 @@
 
 const Colors = {
   primary: "#012073",
+  mirror: "#023E8A",
   secondary: "#18181B", // Changed to a dark gray. Used for cards etc.
-  gray: "#A1A1AA", // Lighter gray for labels
+  background: "#f8f9fb",
   white: "#fff", // White for values
   green: "#22C55E", // Green for accents like returns
+  textYel: "#f6c317",
+  // gray: "#A1A1AA", // Lighter gray for labels
+  gray: "#64748B", // Medium gray for labels
   darkButton: "#232326", // Dark button background
   lightGray: "#E5E7EB", // Light gray for backgrounds
   yellow: "yellow",
@@ -20,8 +24,6 @@ const Colors = {
   info: "#17a2b8",
   light: "#f8f9fa",
   dark: "#343a40",
-
-  background: "#f5f5f5",
   text: "#212529",
   // Add more colors as needed
 };

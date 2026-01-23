@@ -6,17 +6,19 @@ import { exportReport } from "@/shared/store/slices/shared/portfolio/exportRepor
 import { fetchPortfolio } from "@/shared/store/slices/shared/portfolio/portfolioSlice";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather, Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Dimensions,
   FlatList,
+  Image,
   RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import ExportReportModal from "../components/ExportReportModal";
@@ -107,7 +109,14 @@ export const PortfolioScreen: React.FC = () => {
   };
   return (
     <DashboardLayout>
-      <View style={styles.card}>
+      {/* <View style={styles.card}> */}
+      <LinearGradient
+        colors={[Colors.primary, "#3a84fb"]} // left → right
+        start={{ x: 0, y: 1 }}
+        end={{ x: 2, y: 0 }}
+        style={styles.balanceCardDark}
+      >
+        <Image source={require('../../../../../assets/images/upperDiv.png')} style={{ position: 'absolute', width: 170, height: 170, top: -100, right: -110 }} />
         <Text style={styles.cardTitle}>Total Earned</Text>
         <Text style={styles.cardValue}>
           {formatCurrency(Number(data?.summary.total_earned)) ?? 0}
@@ -126,8 +135,9 @@ export const PortfolioScreen: React.FC = () => {
             </Text>
           </Text>
         </View>
-        {/* <View style={styles.balanceActionsRow}></View> */}
-      </View>
+        <Image source={require('../../../../../assets/images/lowerDiv.png')} style={{ position: 'absolute', width: 200, height: 260, bottom: -190, left: -140, }} />
+      </LinearGradient>
+      {/* </View> */}
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
@@ -240,8 +250,8 @@ export const PortfolioScreen: React.FC = () => {
           }
           ListEmptyComponent={
             <View style={styles.emptyState}>
-              <Feather name="briefcase" size={48} color={Colors.gray} />
-              <Text style={styles.emptyText}>No investments available.</Text>
+              <Image source={require('../../../../../assets/images/noInvestment.png')} style={{ width: 100, height: 100, alignSelf: 'center' }} />
+              <Text style={styles.emptyText}>No investments assets found</Text>
             </View>
           }
           contentContainerStyle={styles.scrollContent}
@@ -255,7 +265,6 @@ export const PortfolioScreen: React.FC = () => {
           }}
         >
           <Ionicons name="document-outline" size={24} color={"white"} />
-          <Text style={styles.fabLabel}>Export Report</Text>
         </TouchableOpacity>
       )}
       <ExportReportModal
@@ -269,14 +278,26 @@ export const PortfolioScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   scrollContent: { paddingBottom: 60, backgroundColor: Colors.background },
-  emptyState: { justifyContent: "center", alignItems: "center", padding: 20 },
-  emptyText: { fontSize: 16, color: "#6B7280" },
+  emptyState: { justifyContent: "center", alignItems: "center", padding: 2 },
+  emptyText: { fontSize: 18, color: "#6B7280" },
   card: {
-    backgroundColor: Colors.secondary,
+    backgroundColor: Colors.primary,
     borderBottomLeftRadius: 32,
     borderBottomRightRadius: 32,
     padding: 24,
     paddingTop: 36,
+    shadowColor: "#000",
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 6,
+  },
+  balanceCardDark: {
+    backgroundColor: Colors.primary,
+    borderRadius: 12,
+    marginHorizontal: 12,
+    marginTop: 12,
+    padding: 24,
+    // paddingTop: 36,
     shadowColor: "#000",
     shadowOpacity: 0.08,
     shadowRadius: 12,
@@ -388,15 +409,19 @@ const styles = StyleSheet.create({
     color: Colors.green,
   },
   fab: {
+
     position: "absolute",
     right: 24,
     bottom: 80,
-    backgroundColor: Colors.green,
-    borderRadius: 24,
-    flexDirection: "row",
+    backgroundColor: Colors.primary,
+    borderRadius: 25,
+    width: 50,
+    height: 50,
+    justifyContent: "center",
+    // flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 18,
-    paddingVertical: 12,
+    // paddingHorizontal: 18,
+    // paddingVertical: 12,
     shadowColor: "#000",
     shadowOpacity: 0.08,
     shadowRadius: 8,

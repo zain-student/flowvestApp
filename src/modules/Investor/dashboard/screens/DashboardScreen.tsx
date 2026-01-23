@@ -17,6 +17,7 @@ import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect } from "react";
 import {
   FlatList,
+  Image,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -155,6 +156,7 @@ export const DashboardScreen: React.FC = () => {
           end={{ x: 2, y: 0 }}
           style={styles.balanceCardDark}
         >
+          <Image source={require('../../../../../assets/images/upperDiv.png')} style={{ position: 'absolute', width: 170, height: 170, top: -100, right: -110 }} />
           <Text style={styles.balanceLabelDark}>Total Managed Portfolio</Text>
           <Text style={styles.balanceValueDark}>
             {stats?.total_managed_portfolio
@@ -162,20 +164,21 @@ export const DashboardScreen: React.FC = () => {
               : "--"}
           </Text>
           <View style={styles.mirror}  >
-            <Text style={styles.balanceChangeDark}>
-              {stats?.new_investments_this_month ?? "--"}{" "}
-              <Text
-                style={{
-                  color: Colors.white,
-                  fontWeight: "400",
-                  fontFamily: "Inter_400Regular",
-                }}
-              >
-                {/* than last month */}
-                investments this month
-              </Text>
+            {/* <Text style={styles.balanceChangeDark}> */}
+
+            <Text
+              style={{
+                color: Colors.white,
+                fontWeight: "400",
+                fontFamily: "Inter_400Regular",
+              }}
+            >
+              {/* than last month */}
+              {stats?.new_investments_this_month ?? "--"} investments this month
+              {/* </Text> */}
             </Text>
           </View>
+          <Image source={require('../../../../../assets/images/lowerDiv.png')} style={{ position: 'absolute', width: 200, height: 260, bottom: -190, left: -140, }} />
           {/* <View style={styles.balanceActionsRow}></View> */}
         </LinearGradient>
         {/* </View> */}
@@ -210,7 +213,7 @@ export const DashboardScreen: React.FC = () => {
                     name={card.icon as any}
                     size={22}
                     color={Colors.primary}
-                    style={{  backgroundColor: Colors.lightGray, width: 44, height: 44, borderRadius: 22, justifyContent: 'center', alignItems: 'center', padding: 10 }}
+                    style={{ backgroundColor: Colors.lightGray, width: 44, height: 44, borderRadius: 22, justifyContent: 'center', alignItems: 'center', padding: 10 }}
                   />
                   {/* </View> */}
                   <Text style={styles.statLabelLarge}>{card.label}</Text>
@@ -225,7 +228,10 @@ export const DashboardScreen: React.FC = () => {
             {isLoading ? (
               <Text style={styles.emptyText}>Loading...</Text>
             ) : recent_activities?.length === 0 ? (
-              <Text style={styles.emptyText}>No recent activities.</Text>
+              <>
+              <Image source={require('../../../../../assets/images/noRecentActivity.png')} style={{width: 100, height:100,alignSelf:'center'}} />
+              <Text style={styles.emptyText}>No recent activities availible</Text>
+              </>
             ) : (
               <FlatList
                 data={recent_activities}
@@ -328,7 +334,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginVertical: 2,
   },
-  mirror: { backgroundColor: Colors.mirror, width: '60%', justifyContent: 'center', alignItems: 'center', borderRadius: 18, paddingVertical: 4, paddingHorizontal: 12, borderWidth: 0.3, borderColor: Colors.white, opacity: 0.7, marginTop: 4 },
+  mirror: { backgroundColor: Colors.mirror, width: '70%', justifyContent: 'center', alignItems: 'center', borderRadius: 18, paddingVertical: 4, paddingHorizontal: 12, borderWidth: 0.3, borderColor: Colors.white, opacity: 0.7, marginTop: 4 },
   balanceChangeDark: {
     color: Colors.white,
     fontSize: 14,
@@ -433,7 +439,7 @@ const styles = StyleSheet.create({
   list: { paddingBottom: 20 },
   emptyText: {
     color: Colors.gray,
-    fontSize: 15,
+    fontSize: 18,
     fontFamily: "Inter_400Regular",
     textAlign: "center",
     paddingVertical: 16,
@@ -459,9 +465,9 @@ const styles = StyleSheet.create({
     right: 24,
     bottom: 80,
     backgroundColor: Colors.primary,
-    borderRadius: 30,
-    width: 60,
-    height: 60,
+    borderRadius: 25,
+    width: 50,
+    height: 50,
     justifyContent: "center",
     // flexDirection: "row",
     alignItems: "center",

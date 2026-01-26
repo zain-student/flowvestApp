@@ -131,11 +131,14 @@ export const InvestmentsScreen: React.FC = () => {
       </View>
 
       {/* Divider */}
-      <View style={styles.divider} />
+      {/* <View style={styles.divider} /> */}
 
       {/* Amount */}
       <View style={styles.amountRow}>
-        <Text style={styles.amountLabel}>Invested Amount</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Ionicons name="wallet-outline" size={13} color={Colors.secondary} />
+          <Text style={styles.amountLabel}>Invested Amount</Text>
+        </View>
         <Text style={styles.amountValue}>
           {formatCurrency(
             item.type === "shared" ? item.shared_amount : item.amount,
@@ -145,8 +148,10 @@ export const InvestmentsScreen: React.FC = () => {
 
       {/* Footer */}
       <View style={styles.footerRow}>
-        <Text style={styles.startDate}>Started: {item.date}</Text>
-
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Ionicons name="calendar-outline" size={13} color={Colors.secondary} />
+          <Text style={styles.startDate}>Started: {item.date}</Text>
+        </View>
         {item.type === "shared" &&
           item.status === "Active" &&
           item.can_join && (
@@ -250,6 +255,19 @@ export const InvestmentsScreen: React.FC = () => {
           <Image source={require('../../../../../assets/images/lowerDiv.png')} style={{ position: 'absolute', width: 200, height: 260, bottom: -190, left: -150, }} />
           {/* <View style={styles.balanceActionsRow}></View> */}
         </LinearGradient>
+        <View style={styles.searchContainer}>
+          <TextInput
+            placeholder="Search investments..."
+            value={search}
+            onChangeText={setSearch}
+            style={styles.searchInput}
+            returnKeyType="search"
+            onSubmitEditing={handleSearch} // ✅ allow Enter key search
+          />
+          <TouchableOpacity style={styles.searchBtn} onPress={handleSearch}>
+            <Feather name="search" size={20} color={Colors.primary} />
+          </TouchableOpacity>
+        </View>
         {/* Filters */}
         <View style={styles.filterRow}>
           {FILTERS.map((f) => (
@@ -269,19 +287,7 @@ export const InvestmentsScreen: React.FC = () => {
             </TouchableOpacity>
           ))}
         </View>
-        <View style={styles.searchContainer}>
-          <TextInput
-            placeholder="Search investments..."
-            value={search}
-            onChangeText={setSearch}
-            style={styles.searchInput}
-            returnKeyType="search"
-            onSubmitEditing={handleSearch} // ✅ allow Enter key search
-          />
-          <TouchableOpacity style={styles.searchBtn} onPress={handleSearch}>
-            <Feather name="search" size={20} color={Colors.primary} />
-          </TouchableOpacity>
-        </View>
+
         {/* Investment list */}
         <FlatList
           data={filtered}
@@ -362,7 +368,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "Inter_500SemiBold",
   },
-  balanceActionsRow: { flexDirection: "row", marginTop: 10 },
+  balanceActionsRow: { flexDirection: "row", marginTop: 4 },
   balanceActionBtnDark: {
     width: "60%",
     flexDirection: "row",
@@ -370,7 +376,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: Colors.green,
     borderRadius: 18,
-    padding: 10,
+    padding: 6,
     marginRight: 12,
   },
   balanceActionTextDark: {
@@ -383,17 +389,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: Colors.white,
-    borderRadius: 10,
+    borderRadius: 28,
     marginHorizontal: 12,
-    marginBottom: 10,
+    marginVertical: 6,
     paddingHorizontal: 8,
-    elevation: 2,
+    borderColor: "#E6EDFF",
+    borderWidth: 1,
   },
   searchInput: {
     flex: 1,
-    paddingVertical: 10,
+    // paddingVertical: 10,
     paddingHorizontal: 12,
-    fontSize: 16,
+    fontSize: 14,
     color: Colors.secondary,
   },
   searchBtn: {
@@ -424,31 +431,32 @@ const styles = StyleSheet.create({
   },
   filterRow: {
     flexDirection: "row",
-    marginBottom: 10,
-    marginTop: 10,
+    marginBottom: 4,
+    // marginTop: 10,
     gap: 1,
     marginHorizontal: 12,
     backgroundColor: Colors.white,
     borderRadius: 20,
     padding: 4,
     justifyContent: "space-around",
+    borderColor: "#E6EDFF",
+    borderWidth: 1
   },
   filterBtn: {
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
     backgroundColor: Colors.white,
+
   },
   cardContainer: {
-    backgroundColor: Colors.secondary,
-    borderRadius: 16,
-    padding: 16,
     marginHorizontal: 12,
-    marginBottom: 14,
-    shadowColor: "#000",
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 4,
+    backgroundColor: Colors.white,
+    borderRadius: 14,
+    padding: 12,
+    marginVertical: 2,
+    borderWidth: 1,
+    borderColor: "#E6EDFF",
   },
 
   cardHeader: {
@@ -458,15 +466,19 @@ const styles = StyleSheet.create({
   },
 
   investmentName: {
-    fontSize: 17,
-    fontWeight: "600",
-    color: Colors.white,
+    color: Colors.secondary,
+    fontSize: 15,
+    fontFamily: "Inter_700Bold",
+    marginBottom: 2,
   },
 
   investmentType: {
-    fontSize: 13,
-    color: Colors.gray,
-    marginTop: 2,
+    color: Colors.secondary,
+    fontSize: 12,
+    fontFamily: "Inter_400Regular",
+    flexDirection: "row",
+    alignItems: "center",
+    // marginLeft: 4,
   },
 
   statusBadge: {
@@ -499,36 +511,47 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginTop: 6
   },
 
   amountLabel: {
-    fontSize: 13,
-    color: Colors.gray,
+    color: Colors.secondary,
+    fontSize: 12,
+    fontFamily: "Inter_400Regular",
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 4,
   },
 
   amountValue: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: Colors.white,
+    color: Colors.secondary,
+    fontSize: 12,
+    fontFamily: "Inter_400Regular",
+    flexDirection: "row",
+    alignItems: "center",
   },
 
   footerRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 12,
+    marginTop: 6,
   },
 
   startDate: {
-    fontSize: 12,
     color: Colors.gray,
+    fontSize: 12,
+    fontFamily: "Inter_400Regular",
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 4,
   },
 
   joinButton: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: Colors.primary,
-    paddingHorizontal: 12,
+    paddingHorizontal: 8,
     paddingVertical: 6,
     borderRadius: 8,
   },
@@ -543,7 +566,7 @@ const styles = StyleSheet.create({
   actionsRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 14,
+    marginTop: 6,
     gap: 10,
   },
 
@@ -554,7 +577,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 6,
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.1)",
+    borderColor: "#E6EDFF",
     borderRadius: 10,
     paddingVertical: 10,
   },
@@ -566,7 +589,7 @@ const styles = StyleSheet.create({
   },
 
   filterBtnActive: { backgroundColor: Colors.primary },
-  filterText: { color: "#6B7280", fontWeight: "400",fontSize:16 },
+  filterText: { color: Colors.gray, fontWeight: "400", fontSize: 16 },
   filterTextActive: { color: Colors.white },
   emptyState: { justifyContent: "center", alignItems: "center", padding: 40 },
   emptyText: {

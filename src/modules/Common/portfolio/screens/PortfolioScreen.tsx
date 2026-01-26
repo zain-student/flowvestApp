@@ -116,7 +116,7 @@ export const PortfolioScreen: React.FC = () => {
         end={{ x: 2, y: 0 }}
         style={styles.balanceCardDark}
       >
-        <Image source={require('../../../../../assets/images/upperDiv.png')} style={{ position: 'absolute', width: 170, height: 170, top: -100, right: -110 }} />
+        <Image source={require('../../../../../assets/images/upperDiv.png')} style={{ position: 'absolute', width: 170, height: 170, top: -100, right: -115 }} />
         <Text style={styles.cardTitle}>Total Earned</Text>
         <Text style={styles.cardValue}>
           {formatCurrency(Number(data?.summary.total_earned)) ?? 0}
@@ -135,7 +135,7 @@ export const PortfolioScreen: React.FC = () => {
             </Text>
           </Text>
         </View>
-        <Image source={require('../../../../../assets/images/lowerDiv.png')} style={{ position: 'absolute', width: 200, height: 260, bottom: -190, left: -140, }} />
+        <Image source={require('../../../../../assets/images/lowerDiv.png')} style={{ position: 'absolute', width: 200, height: 260, bottom: -190, left: -150, }} />
       </LinearGradient>
       {/* </View> */}
       <ScrollView
@@ -150,24 +150,19 @@ export const PortfolioScreen: React.FC = () => {
         }
       >
         <View style={styles.chartContainer}>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              marginTop: 3,
-            }}
-          >
+          <View style={styles.toggleWrapper}>
             <TouchableOpacity
               style={[
-                styles.toggleBtn,
-                activeChart === "roi" && styles.toggleBtnActive,
+                styles.toggleItem,
+                activeChart === "roi" && styles.toggleItemActive,
               ]}
               onPress={() => setActiveChart("roi")}
+              activeOpacity={0.8}
             >
               <Text
                 style={[
-                  styles.toggleBtnText,
-                  activeChart === "roi" && styles.toggleBtnTextActive,
+                  styles.toggleText,
+                  activeChart === "roi" && styles.toggleTextActive,
                 ]}
               >
                 ROI %
@@ -176,21 +171,23 @@ export const PortfolioScreen: React.FC = () => {
 
             <TouchableOpacity
               style={[
-                styles.toggleBtn,
-                activeChart === "earned" && styles.toggleBtnActive,
+                styles.toggleItem,
+                activeChart === "earned" && styles.toggleItemActive,
               ]}
               onPress={() => setActiveChart("earned")}
+              activeOpacity={0.8}
             >
               <Text
                 style={[
-                  styles.toggleBtnText,
-                  activeChart === "earned" && styles.toggleBtnTextActive,
+                  styles.toggleText,
+                  activeChart === "earned" && styles.toggleTextActive,
                 ]}
               >
                 Earned
               </Text>
             </TouchableOpacity>
           </View>
+
           {activeChart === "roi" ? (
             <LineChart
               data={{
@@ -304,23 +301,45 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   cardTitle: { fontSize: 15, color: Colors.gray, marginBottom: 6 },
+  toggleWrapper: {
+    flexDirection: "row",
+    backgroundColor: "#E6EDFF",
+    borderRadius: 24,
+    padding: 4,
+    alignSelf: "flex-start",
+    marginLeft: 16,
+    marginTop: 12,
+  },
+
+  toggleItem: {
+    paddingVertical: 8,
+    paddingHorizontal: 22,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  toggleItemActive: {
+    backgroundColor: Colors.green,
+  },
+
+  toggleText: {
+    fontSize: 14,
+    color: "#64748B",
+    fontWeight: "500",
+  },
+
+  toggleTextActive: {
+    color: "#FFFFFF",
+    fontWeight: "600",
+  },
+
   cardValue: {
     fontSize: 36,
     fontWeight: "bold",
     color: Colors.white,
     marginBottom: 4,
   },
-  toggleBtn: {
-    paddingVertical: 6,
-    paddingHorizontal: 16,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: Colors.green,
-    marginHorizontal: 6,
-  },
-  toggleBtnActive: { backgroundColor: Colors.green },
-  toggleBtnText: { color: Colors.green, fontWeight: "600" },
-  toggleBtnTextActive: { color: "#fff" },
   chart: { borderRadius: 12, marginVertical: 8 },
   cardSubtitle: { fontSize: 14, color: Colors.gray },
   balanceChangeDark: {
@@ -334,12 +353,10 @@ const styles = StyleSheet.create({
     marginBottom: 18,
     backgroundColor: Colors.white,
     margin: 12,
-    borderRadius: 25,
+    borderRadius: 12,
     justifyContent: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    elevation: 4,
+    borderColor: "#E6EDFF",
+    borderWidth: 1,
   },
   sectionTitle: {
     fontSize: 16,

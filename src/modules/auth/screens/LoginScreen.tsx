@@ -127,25 +127,22 @@ export const LoginScreen: React.FC = () => {
           <View>
             {/* Header */}
             <View style={styles.header}>
-              <Text style={styles.title}>InvstrHub</Text>
+              <Text style={styles.title}>Welcome back</Text>
+             <Text style={styles.subtitle}>Your journey to financial freedom continues here.</Text>
             </View>
           </View>
           {/* Form */}
           <View style={styles.form}>
-             <Text style={styles.subtitle}>Welcome to Invstrhub Login now!</Text>
-            {authError && (
-              <View style={styles.errorBanner}>
-                <Text style={styles.errorBannerText}>{authError}</Text>
-              </View>
-            )}
             <Input
-              label="Email Address"
+              label="Email"
               type="email"
-              placeholder="john123@gmail.com"
+              placeholder="ulfa123@gmail.com"
               value={formData.email}
               onChangeText={(value) => handleInputChange('email', value)}
               error={errors.email}
-              required
+              leftIcon={<Ionicons name="mail-outline" size={20} color={Colors.gray} />}
+              rightIcon={<Ionicons name="checkmark-circle-outline" size={20} color={Colors.primary} />}
+              // required
             // autoFocus
             />
 
@@ -156,7 +153,8 @@ export const LoginScreen: React.FC = () => {
               value={formData.password}
               onChangeText={(value) => handleInputChange('password', value)}
               error={errors.password}
-              required
+              leftIcon={<Ionicons name="lock-closed-outline" size={20} color={Colors.gray} />}
+              // required
             />
 
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, marginTop: 8 }}>
@@ -168,10 +166,10 @@ export const LoginScreen: React.FC = () => {
                 <View style={[styles.checkbox, formData.remember && styles.checkboxActive]}>
                   {formData.remember &&
                     //  <Text style={styles.checkmark}>✓</Text>
-                    <Ionicons name='checkmark' size={16} color="#fff" />
+                    <Ionicons name='checkmark' size={16} color={Colors.primary} />
                   }
                 </View>
-                <Text style={styles.rememberText}>Remember me</Text>
+                <Text style={styles.rememberText}>Keep Login</Text>
               </TouchableOpacity>
               {/* Forgot Password Link */}
               <TouchableOpacity
@@ -185,7 +183,7 @@ export const LoginScreen: React.FC = () => {
 
             {/* Submit Button */}
             <Button
-              title="Sign In"
+              title="Login →"
               onPress={handleSubmit}
               loading={isLoading}
               fullWidth
@@ -199,7 +197,7 @@ export const LoginScreen: React.FC = () => {
             <View style={styles.footer}>
               <Text style={styles.footerText}>Don't have an account? </Text>
               <TouchableOpacity onPress={navigateToRegister}>
-                <Text style={styles.footerLink}>Sign Up</Text>
+                <Text style={styles.footerLink}>Register</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -222,9 +220,6 @@ const styles = StyleSheet.create({
 
   scrollView: {
     flex: 1,
-    // backgroundColor: Colors.green,
-    // paddingHorizontal: 24,
-    // paddingVertical: 50,
   },
 
   scrollContent: {
@@ -235,39 +230,28 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    alignItems: 'center',
+    // alignItems: '',
     marginTop: 40,
     marginBottom: 40,
   },
 
   title: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: 'bold',
-    color: Colors.primary,
+    color: Colors.secondary,
     marginBottom: 8,
   },
 
   subtitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 16,
+    fontWeight: '400',
     marginBottom: 24,
-    color: Colors.secondary,
-    textAlign: 'center',
+    color: Colors.gray,
+    // textAlign: 'center',
   },
 
   form: {
-    // flex: 1,
-    // marginBottom: 82,
-    backgroundColor: '#ffffff',
-    borderRadius: 20,
-    paddingVertical: 28,
-    paddingHorizontal: 15,
-    marginBottom: 32,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.08,
-    shadowRadius: 10,
-    elevation: 4,
+    flex: 1,
   },
 
   rememberContainer: {
@@ -276,18 +260,18 @@ const styles = StyleSheet.create({
     // marginBottom: 24,
   },
   checkbox: {
-    width: 22,
-    height: 22,
-    borderRadius: 6,
+    width: 20,
+    height: 20,
+    borderRadius: 3,
     borderWidth: 2,
-    borderColor: '#cbd5e1',
+    borderColor: Colors.primary,
     marginRight: 10,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },
   checkboxActive: {
-    backgroundColor: Colors.primary,
+    // backgroundColor: Colors.primary,
     borderColor: Colors.primary,
   },
   errorBanner: {
@@ -316,7 +300,7 @@ const styles = StyleSheet.create({
 
   rememberText: {
     fontSize: 14,
-    color: Colors.gray,
+    color: Colors.secondary,
   },
 
   errorContainer: {
@@ -346,17 +330,17 @@ const styles = StyleSheet.create({
   forgotPasswordText: {
     fontSize: 14,
     color: Colors.primary,
-    // fontWeight: '500',
+    fontWeight: '600',
   },
 
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',
     // alignItems: 'center',
-    paddingTop: 20,
-    borderTopWidth: 1,
-    borderTopColor: Colors.lightGray,
-    marginTop: 10,
+    // paddingTop: 20,
+    // borderTopWidth: 1,
+    // borderTopColor: Colors.lightGray,
+    // marginTop: 10,
   },
 
   footerText: {

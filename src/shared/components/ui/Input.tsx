@@ -127,7 +127,7 @@ export const Input: React.FC<InputProps> = ({
               >
                 <Text style={styles.passwordToggleText}>
                 
-                  {isPasswordVisible ?<Ionicons name='eye-outline' size={24}/>: <Ionicons name='eye-off-outline' size={24}/>}
+                  {isPasswordVisible ?<Ionicons name='eye-outline' size={20}/>: <Ionicons name='eye-off-outline' size={20}/>}
                 </Text>
               </TouchableOpacity>
             ) : (
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#374151',
+    color: Colors.gray,
     marginBottom: 6,
   },
   
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 16,
-    color: '#111827',
+    color: Colors.secondary,
     paddingHorizontal: 12,
     paddingVertical: 12,
   },

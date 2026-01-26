@@ -115,7 +115,7 @@ export const DashboardScreen: React.FC = () => {
           <Text style={styles.activityTitle}>{item.title}</Text>
           <View style={{ flexDirection: "row", alignItems: "center" }} >
             <Ionicons name="calendar-outline" size={13} color={Colors.secondary} />
-            <Text style={styles.activitySubText}>
+            <Text style={styles.createdDate}>
               Created: {formatDate(item.created_at ?? "N/A")}
             </Text>
           </View>
@@ -156,7 +156,7 @@ export const DashboardScreen: React.FC = () => {
           end={{ x: 2, y: 0 }}
           style={styles.balanceCardDark}
         >
-          <Image source={require('../../../../../assets/images/upperDiv.png')} style={{ position: 'absolute', width: 170, height: 170, top: -100, right: -110 }} />
+          <Image source={require('../../../../../assets/images/upperDiv.png')} style={{ position: 'absolute', width: 170, height: 170, top: -100, right: -115 }} />
           <Text style={styles.balanceLabelDark}>Total Managed Portfolio</Text>
           <Text style={styles.balanceValueDark}>
             {stats?.total_managed_portfolio
@@ -178,7 +178,7 @@ export const DashboardScreen: React.FC = () => {
               {/* </Text> */}
             </Text>
           </View>
-          <Image source={require('../../../../../assets/images/lowerDiv.png')} style={{ position: 'absolute', width: 200, height: 260, bottom: -190, left: -140, }} />
+          <Image source={require('../../../../../assets/images/lowerDiv.png')} style={{ position: 'absolute', width: 200, height: 260, bottom: -190, left: -150, }} />
           {/* <View style={styles.balanceActionsRow}></View> */}
         </LinearGradient>
         {/* </View> */}
@@ -357,10 +357,12 @@ const styles = StyleSheet.create({
     padding: 15,
     minHeight: 100,
     marginVertical: 9,
-    shadowColor: "#000",
-    shadowOpacity: 0.04,
-    shadowRadius: 8,
-    elevation: 2,
+    borderColor: "#E6EDFF",
+    borderWidth: 1,
+    // shadowColor: "#000",
+    // shadowOpacity: 0.04,
+    // shadowRadius: 8,
+    // elevation: 2,
   },
   statLabelLarge: {
     color: Colors.gray,
@@ -396,10 +398,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
     flexDirection: "row",
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowRadius: 6,
-    elevation: 3,
+    borderWidth: 1,
+    borderColor: "#E6EDFF",
   },
   iconWrapper: {
     width: 48,
@@ -418,8 +418,16 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_700Bold",
     marginBottom: 2,
   },
-  activitySubText: {
+  createdDate: {
     color: Colors.gray,
+    fontSize: 12,
+    fontFamily: "Inter_400Regular",
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 4,
+  },
+  activitySubText: {
+    color: Colors.secondary,
     fontSize: 12,
     fontFamily: "Inter_400Regular",
     flexDirection: "row",

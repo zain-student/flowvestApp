@@ -69,7 +69,7 @@ export const Button: React.FC<ButtonProps> = ({
     >
       {variant === 'primary' ? (
         <LinearGradient
-          colors={['#4f46e5', '#1e2667']} // 🔥 two-color shade
+          colors={['#012073', '#023CD9']} // 🔥 two-color shade
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={buttonStyle}
@@ -208,5 +208,7 @@ const styles = StyleSheet.create({
 
   fullWidth: {
     width: '100%',
+    height: 52,
+    borderRadius: 22,
   },
 }); 

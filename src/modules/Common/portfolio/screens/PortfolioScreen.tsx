@@ -57,13 +57,19 @@ export const PortfolioScreen: React.FC = () => {
         {/* Left */}
         <View style={styles.assetLeft}>
           <View style={styles.assetIconWrapper}>
-            <Feather name="briefcase" size={18} color={Colors.white} />
+            <Feather name="briefcase" size={22} color={Colors.primary} />
           </View>
 
           <View>
             <Text style={styles.assetName}>{item.name}</Text>
+            <View style={{ flexDirection: "row", alignItems: "center", marginTop: 2 }}>
+            <Ionicons name="wallet-outline" size={12} color={Colors.gray} />
             <Text style={styles.assetValue}>{formatCurrency(item.value)}</Text>
+            </View>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Ionicons name="calendar-outline" size={12} color={Colors.secondary} />
             <Text style={styles.assetMeta}>Start: {item.start}</Text>
+            </View>
           </View>
         </View>
 
@@ -122,18 +128,22 @@ export const PortfolioScreen: React.FC = () => {
           {formatCurrency(Number(data?.summary.total_earned)) ?? 0}
         </Text>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text style={styles.cardSubtitle}>
-            Total Investments:
-            <Text style={styles.balanceChangeDark}>
-              {data?.summary.total_investments}
+          <View style={styles.mirror}>
+            <Text style={styles.cardSubtitle}>
+              Total Investments:
+              <Text style={styles.balanceChangeDark}>
+                {data?.summary.total_investments}
+              </Text>
             </Text>
-          </Text>
-          <Text style={styles.cardSubtitle}>
-            Active Investments:
-            <Text style={styles.balanceChangeDark}>
-              {data?.summary.active_investments}
+          </View>
+          <View style={styles.mirror}>
+            <Text style={styles.cardSubtitle}>
+              Active Investments:
+              <Text style={styles.balanceChangeDark}>
+                {data?.summary.active_investments}
+              </Text>
             </Text>
-          </Text>
+          </View>
         </View>
         <Image source={require('../../../../../assets/images/lowerDiv.png')} style={{ position: 'absolute', width: 200, height: 260, bottom: -190, left: -150, }} />
       </LinearGradient>
@@ -300,7 +310,11 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 6,
   },
-  cardTitle: { fontSize: 15, color: Colors.gray, marginBottom: 6 },
+  cardTitle: {
+    color: Colors.white,
+    fontSize: 14,
+    fontFamily: "Inter_500Regular",
+  },
   toggleWrapper: {
     flexDirection: "row",
     backgroundColor: "#E6EDFF",
@@ -335,15 +349,22 @@ const styles = StyleSheet.create({
   },
 
   cardValue: {
-    fontSize: 36,
-    fontWeight: "bold",
     color: Colors.white,
-    marginBottom: 4,
+    fontSize: 20,
+    fontFamily: "Inter_700Bold",
+    fontWeight: "600",
+    marginVertical: 2,
   },
   chart: { borderRadius: 12, marginVertical: 8 },
-  cardSubtitle: { fontSize: 14, color: Colors.gray },
+  mirror: { backgroundColor: Colors.mirror, width: '47%', justifyContent: 'center', alignItems: 'center', borderRadius: 18, paddingVertical: 4, paddingHorizontal: 12, borderWidth: 0.3, borderColor: Colors.white, opacity: 0.7, marginTop: 4, },
+  cardSubtitle: {
+    color: Colors.white,
+    fontWeight: "400",
+    fontFamily: "Inter_400Regular",
+    fontSize: 12,
+  },
   balanceChangeDark: {
-    color: Colors.green,
+    color: Colors.white,
     fontSize: 14,
     fontFamily: "Inter_600SemiBold",
   },
@@ -366,43 +387,63 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
   },
   assetCard: {
-    backgroundColor: Colors.secondary,
-    borderRadius: 16,
-    padding: 14,
-    marginBottom: 12,
+    // backgroundColor: Colors.secondary,
+    // borderRadius: 16,
+    // padding: 14,
+    // marginBottom: 12,
+    // flexDirection: "row",
+    // alignItems: "center",
+    // justifyContent: "space-between",
+    // borderWidth: 1,
+    // borderColor: Colors.lightGray,
+    backgroundColor: Colors.white,
+    borderRadius: 14,
+    padding: 12,
+    marginVertical: 6,
     marginHorizontal: 12,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
     borderWidth: 1,
-    borderColor: Colors.lightGray,
+    borderColor: "#E6EDFF",
   },
   assetLeft: { flexDirection: "row", alignItems: "center", flex: 1 },
   assetIconWrapper: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: Colors.darkButton,
-    alignItems: "center",
+    // width: 40,
+    // height: 40,
+    // borderRadius: 20,
+    // backgroundColor: Colors.darkButton,
+    // alignItems: "center",
+    // justifyContent: "center",
+    // marginRight: 12,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: Colors.lightGray, // 20% opacity
     justifyContent: "center",
+    alignItems: "center",
     marginRight: 12,
   },
   assetName: {
-    fontSize: 15,
-    fontFamily: "Inter_600SemiBold",
-    color: Colors.white,
-  },
-  assetValue: {
+    color: Colors.secondary,
     fontSize: 15,
     fontFamily: "Inter_700Bold",
-    color: Colors.white,
-    marginTop: 2,
+    marginBottom: 2,
+  },
+  assetValue: {
+    color: Colors.gray,
+    fontSize: 12,
+    fontFamily: "Inter_400Regular",
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 4,
   },
   assetMeta: {
-    fontSize: 13,
+    color: Colors.secondary,
+    fontSize: 12,
     fontFamily: "Inter_400Regular",
-    color: Colors.gray,
-    marginTop: 2,
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 4,
   },
   assetRight: {
     alignItems: "flex-end",

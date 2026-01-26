@@ -6,19 +6,20 @@ import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { LinearGradient } from "expo-linear-gradient";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
+  Image,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { DashboardLayout } from "../../../Common/components/DashboardLayout";
 import InvestmentPartnersModal from "../components/InvestmentPartnersModal";
-
 const FILTERS = ["All", "Active", "Paused", "Completed"];
 type Props = NativeStackNavigationProp<
   InvestmentStackParamList,
@@ -193,8 +194,21 @@ export const InvestmentsScreen: React.FC = () => {
     <DashboardLayout>
       <View style={styles.container}>
         {/* Top card */}
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Total Invested Amount</Text>
+        <LinearGradient
+          colors={[Colors.primary, "#3a84fb"]} // left → right
+          start={{ x: 0, y: 1 }}
+          end={{ x: 2, y: 0 }}
+          style={styles.card}
+        >
+          <Image source={require('../../../../../assets/images/upperDiv.png')} style={{ position: 'absolute', width: 170, height: 170, top: -100, right: -115 }} />
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text style={styles.cardTitle}>Total Invested Amount</Text>
+            <View style={{ alignSelf: 'flex-end', backgroundColor: '#0AFF5C47', borderRadius: 8, height: 29, width: 71, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+              <Ionicons name="trending-up" size={24} color={Colors.green} />
+              <Text style={styles.increment}>
+                +8.2% </Text>
+            </View>
+          </View>
           <Text style={styles.cardValue}>
             {formatCurrency(stats.total_invested)}
           </Text>
@@ -205,16 +219,23 @@ export const InvestmentsScreen: React.FC = () => {
               alignItems: "center",
             }}
           >
-            <Text style={{ color: Colors.gray, fontWeight: "400" }}>
-              <Text style={styles.cardSubtitle}>+8.2% </Text>
-              this year
-            </Text>
-            <Text style={{ color: Colors.gray, fontWeight: "400" }}>
-              Total Investments:
-              <Text style={styles.cardSubtitle}>
-                {stats.total_investments}{" "}
+
+            <View style={styles.mirror}  >
+              <Text style={{
+                color: Colors.white,
+                fontWeight: "400",
+                fontFamily: "Inter_400Regular",
+              }}>
+                Total Investments:
+                <Text style={styles.cardSubtitle}>
+                  {stats.total_investments}{" "}
+                </Text>
               </Text>
-            </Text>
+            </View>
+
+            {/* <Text style={{ color: Colors.gray, fontWeight: "400" }}>
+              this year
+            </Text> */}
           </View>
           <View style={styles.balanceActionsRow}>
             <TouchableOpacity
@@ -225,8 +246,10 @@ export const InvestmentsScreen: React.FC = () => {
               <Text style={styles.balanceActionTextDark}>My Investments</Text>
             </TouchableOpacity>
           </View>
-        </View>
-
+          {/* </View> */}
+          <Image source={require('../../../../../assets/images/lowerDiv.png')} style={{ position: 'absolute', width: 200, height: 260, bottom: -190, left: -150, }} />
+          {/* <View style={styles.balanceActionsRow}></View> */}
+        </LinearGradient>
         {/* Filters */}
         <View style={styles.filterRow}>
           {FILTERS.map((f) => (
@@ -275,7 +298,7 @@ export const InvestmentsScreen: React.FC = () => {
           }
           ListEmptyComponent={
             <View style={styles.emptyState}>
-              <Feather name="briefcase" size={48} color={Colors.gray} />
+              <Image source={require('../../../../../assets/images/noInvestment.png')} style={{ width: 100, height: 100, alignSelf: 'center' }} />
               <Text style={styles.emptyText}>No investments available.</Text>
             </View>
           }
@@ -288,7 +311,6 @@ export const InvestmentsScreen: React.FC = () => {
           style={styles.fab}
         >
           <Ionicons name="add" size={24} color={"white"} />
-          <Text style={styles.fabLabel}>Add Investment</Text>
         </TouchableOpacity>
       </View>
       {/* Investment Partners Modal */}
@@ -306,27 +328,39 @@ export const InvestmentsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background },
   card: {
-    backgroundColor: Colors.secondary,
-    borderBottomLeftRadius: 32,
-    borderBottomRightRadius: 32,
+    backgroundColor: Colors.primary,
+    borderRadius: 12,
+    marginHorizontal: 12,
+    marginTop: 12,
     padding: 24,
-    paddingTop: 36,
+    // paddingTop: 36,
     shadowColor: "#000",
     shadowOpacity: 0.08,
     shadowRadius: 12,
     elevation: 6,
   },
-  cardTitle: { fontSize: 15, color: Colors.gray, marginBottom: 6 },
-  cardValue: {
-    fontSize: 36,
-    fontWeight: "bold",
+  cardTitle: {
     color: Colors.white,
-    marginBottom: 4,
-  },
-  cardSubtitle: {
     fontSize: 14,
-    color: Colors.green,
+    fontFamily: "Inter_500Regular",
+  },
+  cardValue: {
+    color: Colors.white,
+    fontSize: 20,
+    fontFamily: "Inter_700Bold",
+    fontWeight: "600",
+    marginVertical: 2,
+  },
+  mirror: { backgroundColor: Colors.mirror, width: '60%', justifyContent: 'center', alignItems: 'center', borderRadius: 18, paddingVertical: 4, paddingHorizontal: 12, borderWidth: 0.3, borderColor: Colors.white, opacity: 0.7, marginTop: 4 },
+  cardSubtitle: {
+    color: Colors.white,
+    fontSize: 14,
     fontFamily: "Inter_600SemiBold",
+  },
+  increment: {
+    color: Colors.green,
+    fontSize: 14,
+    fontFamily: "Inter_500SemiBold",
   },
   balanceActionsRow: { flexDirection: "row", marginTop: 10 },
   balanceActionBtnDark: {
@@ -334,7 +368,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: Colors.success,
+    backgroundColor: Colors.green,
     borderRadius: 18,
     padding: 10,
     marginRight: 12,
@@ -392,7 +426,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginBottom: 10,
     marginTop: 10,
-    gap: 10,
+    gap: 1,
     marginHorizontal: 12,
     backgroundColor: Colors.white,
     borderRadius: 20,
@@ -531,21 +565,27 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
 
-  filterBtnActive: { backgroundColor: Colors.secondary },
-  filterText: { color: "#6B7280", fontWeight: "500" },
+  filterBtnActive: { backgroundColor: Colors.primary },
+  filterText: { color: "#6B7280", fontWeight: "400",fontSize:16 },
   filterTextActive: { color: Colors.white },
-  emptyState: { justifyContent: "center", alignItems: "center", padding: 20 },
-  emptyText: { fontSize: 16, color: "#6B7280" },
+  emptyState: { justifyContent: "center", alignItems: "center", padding: 40 },
+  emptyText: {
+    color: Colors.gray,
+    fontSize: 18,
+    fontFamily: "Inter_400Regular",
+    textAlign: "center",
+    paddingVertical: 16,
+  },
   fab: {
     position: "absolute",
     right: 24,
     bottom: 80,
-    backgroundColor: Colors.green,
-    borderRadius: 24,
-    flexDirection: "row",
+    backgroundColor: Colors.primary,
+    borderRadius: 25,
+    width: 50,
+    height: 50,
+    justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 18,
-    paddingVertical: 12,
     shadowColor: "#000",
     shadowOpacity: 0.08,
     shadowRadius: 8,

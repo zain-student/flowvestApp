@@ -183,7 +183,7 @@ export const LoginScreen: React.FC = () => {
 
             {/* Submit Button */}
             <Button
-              title="Login →"
+              title="Login"
               onPress={handleSubmit}
               loading={isLoading}
               fullWidth

@@ -243,16 +243,16 @@ export const DashboardScreen: React.FC = () => {
                 renderItem={renderActivityItem}
                 showsVerticalScrollIndicator={false}
                 scrollEnabled={false}
-                ListEmptyComponent={
-                  !isLoading && (
-                    <View style={styles.emptyState}>
-                      <Feather name="inbox" size={48} color={Colors.gray} />
-                      <Text style={styles.emptyText}>
-                        No recent activities found
-                      </Text>
-                    </View>
-                  )
-                }
+                // ListEmptyComponent={
+                //   !isLoading && (
+                //     <View style={styles.emptyState}>
+                //       <Feather name="inbox" size={48} color={Colors.gray} />
+                //       <Text style={styles.emptyText}>
+                //         No recent activities found
+                //       </Text>
+                //     </View>
+                //   )
+                // }
               />
             )}
           </View>

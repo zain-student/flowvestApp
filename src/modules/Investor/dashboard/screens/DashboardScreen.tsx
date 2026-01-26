@@ -209,6 +209,7 @@ export const DashboardScreen: React.FC = () => {
               >
                 <View style={{ flex: 1 }}>
                   {/* <View style={{ marginBottom: 6,backgroundColor:Colors.lightGray,width:'28%',height:'28%',justifyContent:'center',borderRadius:20,alignItems:'center' }} > */}
+
                   <Feather
                     name={card.icon as any}
                     size={22}
@@ -216,8 +217,10 @@ export const DashboardScreen: React.FC = () => {
                     style={{ backgroundColor: Colors.lightGray, width: 44, height: 44, borderRadius: 22, justifyContent: 'center', alignItems: 'center', padding: 10 }}
                   />
                   {/* </View> */}
-                  <Text style={styles.statLabelLarge}>{card.label}</Text>
-                  <Text style={styles.statValueLarge}>{card.value}</Text>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }} >
+                    <Text style={styles.statLabelLarge}>{card.label}: </Text>
+                    <Text style={styles.statValueLarge}>{card.value}</Text>
+                  </View>
                 </View>
 
               </View>
@@ -229,8 +232,8 @@ export const DashboardScreen: React.FC = () => {
               <Text style={styles.emptyText}>Loading...</Text>
             ) : recent_activities?.length === 0 ? (
               <>
-              <Image source={require('../../../../../assets/images/noRecentActivity.png')} style={{width: 100, height:100,alignSelf:'center'}} />
-              <Text style={styles.emptyText}>No recent activities availible</Text>
+                <Image source={require('../../../../../assets/images/noRecentActivity.png')} style={{ width: 100, height: 100, alignSelf: 'center' }} />
+                <Text style={styles.emptyText}>No recent activities availible</Text>
               </>
             ) : (
               <FlatList
@@ -260,9 +263,7 @@ export const DashboardScreen: React.FC = () => {
             () => navigation.navigate("AddPartner", {}) // Adjust navigation to your stack
           }
         >
-          {/* <Text style={styles.fabIcon}>＋</Text> */}
           <Ionicons name="person-add-outline" size={24} color={"white"} />
-          {/* <Text style={styles.fabLabel}>Add Partner</Text> */}
         </TouchableOpacity>
       </View>
     </DashboardLayout>
@@ -335,45 +336,35 @@ const styles = StyleSheet.create({
     marginVertical: 2,
   },
   mirror: { backgroundColor: Colors.mirror, width: '70%', justifyContent: 'center', alignItems: 'center', borderRadius: 18, paddingVertical: 4, paddingHorizontal: 12, borderWidth: 0.3, borderColor: Colors.white, opacity: 0.7, marginTop: 4 },
-  balanceChangeDark: {
-    color: Colors.white,
-    fontSize: 14,
-    fontFamily: "Inter_600SemiBold",
-  },
-  balanceActionsRow: { flexDirection: "row", marginTop: 18 },
   statCardGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "space-around",
+    // justifyContent: "space-around",
     marginHorizontal: 12,
-    marginTop: 8,
-    marginBottom: 8,
+    marginTop: 2,
+    marginBottom: 2,
   },
   statCardLarge: {
-    width: "47%",
+    width: "47.5%",
     flexDirection: "row",
     alignItems: "center",
     borderRadius: 22,
-    padding: 15,
+    paddingHorizontal: 15,
     minHeight: 100,
-    marginVertical: 9,
+    marginVertical: 3,
     borderColor: "#E6EDFF",
     borderWidth: 1,
-    // shadowColor: "#000",
-    // shadowOpacity: 0.04,
-    // shadowRadius: 8,
-    // elevation: 2,
   },
   statLabelLarge: {
     color: Colors.gray,
     fontSize: 14,
     fontFamily: "Inter_500Regular",
-    marginBottom: 2,
+    // marginBottom: 2,
   },
   statValueLarge: {
     color: Colors.secondary,
-    fontSize: 20,
-    fontFamily: "Inter_600Bold",
+    fontSize: 14,
+    fontFamily: "Inter_500Bold",
     fontWeight: "700",
   },
   sectionRow: {
@@ -394,7 +385,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderRadius: 14,
     padding: 12,
-    marginVertical: 6,
+    marginVertical: 2,
     marginHorizontal: 4,
     flexDirection: "row",
     alignItems: "center",
@@ -477,10 +468,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     justifyContent: "center",
-    // flexDirection: "row",
     alignItems: "center",
-    // paddingHorizontal: 18,
-    // paddingVertical: 12,
     shadowColor: "#000",
     shadowOpacity: 0.08,
     shadowRadius: 8,

@@ -63,12 +63,12 @@ export const PortfolioScreen: React.FC = () => {
           <View>
             <Text style={styles.assetName}>{item.name}</Text>
             <View style={{ flexDirection: "row", alignItems: "center", marginTop: 2 }}>
-            <Ionicons name="wallet-outline" size={12} color={Colors.gray} />
-            <Text style={styles.assetValue}>{formatCurrency(item.value)}</Text>
+              <Ionicons name="wallet-outline" size={12} color={Colors.gray} />
+              <Text style={styles.assetValue}>{formatCurrency(item.value)}</Text>
             </View>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Ionicons name="calendar-outline" size={12} color={Colors.secondary} />
-            <Text style={styles.assetMeta}>Start: {item.start}</Text>
+              <Ionicons name="calendar-outline" size={12} color={Colors.secondary} />
+              <Text style={styles.assetMeta}>Start: {item.start}</Text>
             </View>
           </View>
         </View>
@@ -373,7 +373,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 18,
     backgroundColor: Colors.white,
-    margin: 12,
+    marginHorizontal: 12,
+    marginVertical: 4,
     borderRadius: 12,
     justifyContent: "center",
     borderColor: "#E6EDFF",
@@ -387,19 +388,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
   },
   assetCard: {
-    // backgroundColor: Colors.secondary,
-    // borderRadius: 16,
-    // padding: 14,
-    // marginBottom: 12,
-    // flexDirection: "row",
-    // alignItems: "center",
-    // justifyContent: "space-between",
-    // borderWidth: 1,
-    // borderColor: Colors.lightGray,
     backgroundColor: Colors.white,
     borderRadius: 14,
     padding: 12,
-    marginVertical: 6,
+    marginVertical: 2,
     marginHorizontal: 12,
     flexDirection: "row",
     alignItems: "center",
@@ -408,13 +400,6 @@ const styles = StyleSheet.create({
   },
   assetLeft: { flexDirection: "row", alignItems: "center", flex: 1 },
   assetIconWrapper: {
-    // width: 40,
-    // height: 40,
-    // borderRadius: 20,
-    // backgroundColor: Colors.darkButton,
-    // alignItems: "center",
-    // justifyContent: "center",
-    // marginRight: 12,
     width: 48,
     height: 48,
     borderRadius: 24,

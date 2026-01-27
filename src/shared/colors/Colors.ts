@@ -9,6 +9,8 @@ const Colors = {
   // green: "#22C55E", // Green for accents like returns
   green: "#F6C317",
   textYel: "#f6c317",
+  statusbg: "rgba(59,130,246,0.15)",
+  statusText: "#60A5FA",
   // gray: "#A1A1AA", // Lighter gray for labels
   gray: "#64748B", // Medium gray for labels
   darkButton: "#232326", // Dark button background

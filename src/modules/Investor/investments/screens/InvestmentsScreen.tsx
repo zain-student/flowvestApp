@@ -205,7 +205,7 @@ export const InvestmentsScreen: React.FC = () => {
           end={{ x: 2, y: 0 }}
           style={styles.card}
         >
-          <Image source={require('../../../../../assets/images/upperDiv.png')} style={{position: 'absolute', width: 100, height: 110, top: -30, right: -50 }} />
+          <Image source={require('../../../../../assets/images/upperDiv.png')} style={{ position: 'absolute', width: 100, height: 110, top: -30, right: -50 }} />
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={styles.cardTitle}>Total Invested Amount</Text>
             <View style={{ alignSelf: 'flex-end', backgroundColor: '#0AFF5C47', borderRadius: 8, height: 29, width: 71, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
@@ -217,19 +217,22 @@ export const InvestmentsScreen: React.FC = () => {
           <Text style={styles.cardValue}>
             {formatCurrency(stats.total_invested)}
           </Text>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-
-            <View style={styles.mirror}  >
+          {/* <View style={{
+            flexDirection: "row", backgroundColor: 'green', justifyContent: "space-between",
+            alignItems: "center"
+          }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
               <Text style={{
                 color: Colors.white,
                 fontWeight: "400",
                 fontFamily: "Inter_400Regular",
+                fontSize: 12
               }}>
                 Total Investments:
                 <Text style={styles.cardSubtitle}>
@@ -237,20 +240,36 @@ export const InvestmentsScreen: React.FC = () => {
                 </Text>
               </Text>
             </View>
+            <View style={styles.balanceActionsRow}>
+              <TouchableOpacity
+                style={styles.mirror}
+                onPress={() => navigation.navigate("MyInvestments")}
+              >
+                <Text style={styles.balanceActionTextDark}>My Investments</Text>
+                <Feather name="arrow-right" size={16} color={Colors.yellow} />
+              </TouchableOpacity>
+            </View>
+          </View> */}
+          <View style={styles.investmentRow}>
+            {/* Left: Total Investments */}
+            <Text style={styles.totalInvestmentText}>
+              Total Investments:{" "}
+              <Text style={styles.totalInvestmentValue}>
+                {stats.total_investments}
+              </Text>
+            </Text>
 
-            {/* <Text style={{ color: Colors.gray, fontWeight: "400" }}>
-              this year
-            </Text> */}
-          </View>
-          <View style={styles.balanceActionsRow}>
+            {/* Right: Button */}
             <TouchableOpacity
-              style={styles.balanceActionBtnDark}
+              style={styles.mirror}
               onPress={() => navigation.navigate("MyInvestments")}
+              activeOpacity={0.7}
             >
-              <Feather name="arrow-up-right" size={18} color="#fff" />
-              <Text style={styles.balanceActionTextDark}>My Investments</Text>
+              <Text style={styles.myInvestmentsText}>My Investments</Text>
+              <Feather name="arrow-right" size={14} color={Colors.yellow} />
             </TouchableOpacity>
           </View>
+
           {/* </View> */}
           <Image source={require('../../../../../assets/images/lowerDiv.png')} style={{ position: 'absolute', width: 200, height: 260, bottom: -190, left: -150, }} />
           {/* <View style={styles.balanceActionsRow}></View> */}
@@ -357,7 +376,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginVertical: 2,
   },
-  mirror: { backgroundColor: Colors.mirror, width: '60%', justifyContent: 'center', alignItems: 'center', borderRadius: 18, paddingVertical: 4, paddingHorizontal: 12, borderWidth: 0.3, borderColor: Colors.white, opacity: 0.7, marginTop: 4 },
+  mirror: { backgroundColor: Colors.mirror, width: '50%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 18, paddingVertical: 6, paddingHorizontal: 6, borderWidth: 0.3, borderColor: Colors.white, opacity: 0.7, },
   cardSubtitle: {
     color: Colors.white,
     fontSize: 14,
@@ -368,23 +387,43 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "Inter_500SemiBold",
   },
-  balanceActionsRow: { flexDirection: "row", marginTop: 4 },
-  balanceActionBtnDark: {
-    width: "60%",
+  balanceActionsRow: { flexDirection: "row", },
+  balanceActionTextDark: {
+    color: Colors.yellow,
+    fontSize: 13,
+    fontFamily: "Inter_400SemiBold",
+    // marginLeft: ,
+  },
+  investmentRow: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: Colors.green,
-    borderRadius: 18,
-    padding: 6,
-    marginRight: 12,
+    justifyContent: "space-between",
+    paddingVertical: 6,
   },
-  balanceActionTextDark: {
+
+  totalInvestmentText: {
     color: Colors.white,
-    fontSize: 15,
-    fontFamily: "Inter_600SemiBold",
-    marginLeft: 7,
+    fontSize: 12,
+    fontFamily: "Inter_400Regular",
   },
+
+  totalInvestmentValue: {
+    fontWeight: "600",
+    fontFamily: "Inter_600SemiBold",
+  },
+
+  myInvestmentsBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+
+  myInvestmentsText: {
+    color: Colors.yellow,
+    fontSize: 12,
+    fontFamily: "Inter_500Medium",
+  },
+
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -488,7 +527,7 @@ const styles = StyleSheet.create({
   },
 
   statusActive: {
-    backgroundColor: "rgba(16,185,129,0.15)",
+    backgroundColor: Colors.statusbg,
   },
 
   statusClosed: {
@@ -498,7 +537,7 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 12,
     fontWeight: "600",
-    color: Colors.green,
+    color: Colors.statusText,
   },
 
   divider: {

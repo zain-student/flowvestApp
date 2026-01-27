@@ -439,12 +439,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
-    backgroundColor: "rgba(59,130,246,0.15)",
+    backgroundColor: Colors.statusbg,
   },
   assetBadgeText: {
     fontSize: 12,
     fontFamily: "Inter_600SemiBold",
-    color: "#60A5FA",
+    color: Colors.statusText,
   },
   assetGrowth: {
     fontSize: 14,

@@ -6,8 +6,8 @@ const Colors = {
   secondary: "#18181B", // Changed to a dark gray. Used for cards etc.
   background: "#f8f9fb",
   white: "#fff", // White for values
-  // green: "#22C55E", // Green for accents like returns
-  green: "#F6C317",
+  green: "#22C55E", // Green for accents like returns
+  // green: "#F6C317",
   textYel: "#f6c317",
   statusbg: "rgba(59,130,246,0.15)",
   statusText: "#60A5FA",

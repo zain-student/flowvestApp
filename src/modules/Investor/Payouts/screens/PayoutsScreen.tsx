@@ -6,7 +6,7 @@ import {
   fetchPayouts,
 } from "@/shared/store/slices/investor/payouts/payoutSlice";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
-import { Feather } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { LinearGradient } from "expo-linear-gradient";
@@ -138,16 +138,22 @@ export const PayoutsScreen: React.FC = () => {
         {/* Left */}
         <View style={styles.payoutLeft}>
           <View style={styles.payoutIconWrapper}>
-            <Feather name="dollar-sign" size={18} color={Colors.white} />
+            <Feather name="dollar-sign" size={22} color={Colors.primary} />
           </View>
 
-          <View>
+          <View style={{ flex: 1 }}>
             <Text style={styles.payoutAmount}>
               {formatCurrency(item.amount)}
             </Text>
             <Text style={styles.payoutTitle}>{item.title}</Text>
-            <Text style={styles.payoutMeta}>{item.email}</Text>
-            <Text style={styles.payoutMeta}>Scheduled: {item.due_date}</Text>
+            <View style={{ flexDirection: "row", alignItems: "center" }} >
+              <Ionicons name="mail-outline" size={13} color={Colors.secondary} />
+              <Text style={styles.payoutMeta}>{item.email}</Text>
+            </View>
+            <View style={{ flexDirection: "row", alignItems: "center" }} >
+              <Ionicons name="calendar-outline" size={13} color={Colors.secondary} />
+              <Text style={styles.payoutMeta}>Scheduled: {item.due_date}</Text>
+            </View>
           </View>
         </View>
 
@@ -164,7 +170,7 @@ export const PayoutsScreen: React.FC = () => {
               styles.statusBadge,
               {
                 backgroundColor: isScheduled
-                  ? "rgba(34,197,94,0.15)"
+                  ? Colors.statusbg
                   : "rgba(156,163,175,0.15)",
               },
             ]}
@@ -172,7 +178,7 @@ export const PayoutsScreen: React.FC = () => {
             <Text
               style={[
                 styles.statusText,
-                { color: isScheduled ? Colors.green : Colors.gray },
+                { color: isScheduled ? Colors.statusText : Colors.gray },
               ]}
             >
               {item.status}
@@ -312,7 +318,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
     borderRadius: 12,
     marginHorizontal: 12,
-    marginBottom:6,
+    marginBottom: 6,
     marginTop: 12,
     padding: 24,
     // paddingTop: 36,
@@ -369,7 +375,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   filterBtnActive: { backgroundColor: Colors.primary },
-  filterText: { color: Colors.gray, fontWeight: "400", fontSize: 16  },
+  filterText: { color: Colors.gray, fontWeight: "400", fontSize: 16 },
   filterTextActive: { color: Colors.white },
   sectionTitle: {
     fontSize: 16,
@@ -379,16 +385,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
   },
   payoutCard: {
-    backgroundColor: Colors.secondary,
-    borderRadius: 16,
-    padding: 14,
-    marginBottom: 12,
+    backgroundColor: Colors.white,
+    borderRadius: 14,
+    padding: 12,
+    marginVertical: 2,
     marginHorizontal: 12,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
     borderWidth: 1,
-    borderColor: Colors.lightGray,
+    borderColor: "#E6EDFF",
   },
 
   payoutSelected: {
@@ -403,33 +408,36 @@ const styles = StyleSheet.create({
   },
 
   payoutIconWrapper: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: Colors.darkButton,
-    alignItems: "center",
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: Colors.lightGray, // 20% opacity
     justifyContent: "center",
+    alignItems: "center",
     marginRight: 12,
   },
 
   payoutAmount: {
-    fontSize: 16,
+    color: Colors.secondary,
+    fontSize: 15,
     fontFamily: "Inter_700Bold",
-    color: Colors.white,
+    marginBottom: 2,
   },
 
   payoutTitle: {
     fontSize: 14,
     fontFamily: "Inter_600SemiBold",
-    color: Colors.white,
+    color: Colors.secondary,
     marginTop: 2,
   },
 
   payoutMeta: {
-    fontSize: 13,
-    fontFamily: "Inter_400Regular",
     color: Colors.gray,
-    marginTop: 1,
+    fontSize: 12,
+    fontFamily: "Inter_400Regular",
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 4,
   },
 
   statusBadge: {

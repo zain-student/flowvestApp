@@ -1,5 +1,6 @@
 import { InvestmentStackParamList } from "@/navigation/InvestorStacks/InvestmentStack";
 import Colors from "@/shared/colors/Colors";
+import { Button } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather } from "@expo/vector-icons";
@@ -13,12 +14,13 @@ import {
   ActivityIndicator,
   Alert,
   FlatList,
+  Image,
   StatusBar,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 type Props = NativeStackScreenProps<InvestmentStackParamList, "MyInvestments">;
 export const MyInvestments = ({ navigation }: Props) => {
@@ -88,7 +90,7 @@ export const MyInvestments = ({ navigation }: Props) => {
       </View>
 
       {/* Divider */}
-      <View style={styles.divider} />
+      {/* <View style={styles.divider} /> */}
 
       {/* Amounts */}
       <View style={styles.amountRow}>
@@ -183,45 +185,57 @@ export const MyInvestments = ({ navigation }: Props) => {
         ListHeaderComponent={
           <View style={styles.card}>
             <Text style={styles.title}>Joined Investments Overview</Text>
-            <Text style={styles.label}>
-              Total Investments:{" "}
-              <Text style={styles.value}>{summary.total_investments}</Text>
-            </Text>
-            <Text style={styles.label}>
-              Active Investments:{" "}
-              <Text style={styles.value}>{summary.active_investments}</Text>
-            </Text>
-            <Text style={styles.label}>
-              Average ROI:{" "}
-              <Text style={styles.value}>{summary.average_roi}%</Text>
-            </Text>
-            {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}> */}
-            <Text style={styles.label}>
-              Invested:{" "}
-              <Text style={styles.value}>
-                {formatCurrency(summary.total_invested)}
-              </Text>
-            </Text>
-            {/* <Text style={styles.label}>Duration: <Text style={styles.value}>12 Months</Text></Text> */}
-            <TouchableOpacity
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 4 }}>
+              <View>
+                <Text style={styles.label}>
+                  Invested:{" "}
+                </Text>
+                <Text style={styles.value}>
+                  {formatCurrency(summary.total_invested)}
+                </Text>
+              </View>
+
+              <View >
+                <Text style={styles.label}>
+                  Total:{" "}
+                </Text>
+                <Text style={styles.value}>{summary.total_investments}</Text>
+              </View>
+
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 4 }}>
+              <View >
+                <Text style={styles.label}>
+                  Avg. ROI:{" "}
+                </Text>
+                <Text style={styles.value}>{summary.average_roi}%</Text>
+              </View>
+
+
+              {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}> */}
+              <View>
+                <Text style={styles.label}>
+                  Active:{" "}
+                </Text>
+                <Text style={styles.value}>{summary.active_investments}</Text>
+              </View>
+            </View>
+            <Button
+              title="Browse Investment"
+              // icon={<Ionicons name="trash" size={20} color={Colors.white} />}
+              onPress={() => { navigation.navigate("SharedInvestments"); }
+              }
               style={styles.balanceActionBtnDark}
-              onPress={() => {
-                navigation.navigate("SharedInvestments");
-              }}
-            >
-              <Text style={styles.balanceActionTextDark}>
-                Browse Investments
-              </Text>
-            </TouchableOpacity>
+              textStyle={styles.balanceActionTextDark}
+              variant="primary"
+            />
             {/* </View> */}
           </View>
         }
         ListEmptyComponent={
           <View style={styles.emptyState}>
-            <Feather name="briefcase" size={48} color={Colors.gray} />
-            <Text style={styles.emptyText}>
-              No shared investments available.
-            </Text>
+            <Image source={require('../../../../../assets/images/noInvestment.png')} style={{ width: 100, height: 100, alignSelf: 'center' }} />
+            <Text style={styles.emptyText}>No joined investments available.</Text>
           </View>
         }
       />
@@ -234,26 +248,24 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
     paddingHorizontal: 16,
-    // paddingTop: 16,
-    // paddingBottom: 80,
-    marginTop: 16,
     marginBottom: 40,
   },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: Colors.white,
-    borderRadius: 10,
+    borderRadius: 28,
     // marginHorizontal: 12,
-    marginBottom: 12,
+    marginVertical: 6,
     paddingHorizontal: 8,
-    elevation: 2,
+    borderColor: "#E6EDFF",
+    borderWidth: 1,
   },
   searchInput: {
     flex: 1,
-    paddingVertical: 10,
+    // paddingVertical: 10,
     paddingHorizontal: 12,
-    fontSize: 16,
+    fontSize: 14,
     color: Colors.secondary,
   },
   searchBtn: {
@@ -268,54 +280,57 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: Colors.white,
-    padding: 16,
-    borderRadius: 8,
+    paddingTop: 16,
+    borderRadius: 22,
     paddingHorizontal: 16,
     // marginHorizontal: 12,
-    marginBottom: 16,
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowRadius: 6,
-    elevation: 2,
+    marginBottom: 6,
+    borderWidth: 1,
+    borderColor: "#E6EDFF"
+
   },
   title: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: Colors.secondary,
+    fontSize: 13,
+    fontWeight: "500",
+    color: Colors.gray,
     marginBottom: 8,
   },
-  label: { fontSize: 14, color: Colors.gray, marginBottom: 4 },
-  value: { color: Colors.secondary, fontWeight: "600" },
+  label: { fontSize: 12, fontWeight: '500', lineHeight: 18, color: Colors.gray, marginBottom: 4 },
+  value: { color: Colors.secondary, fontWeight: "600", fontSize: 14 },
   balanceActionBtnDark: {
-    width: "60%",
+    width: "100%",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "flex-end",
     backgroundColor: Colors.darkButton,
-    borderRadius: 18,
+    borderRadius: 22,
     paddingHorizontal: 10,
-    paddingVertical: 10,
+    paddingVertical: 12,
     marginTop: 8,
   },
   balanceActionTextDark: {
     color: Colors.white,
-    fontSize: 15,
+    fontSize: 16,
     fontFamily: "Inter_600SemiBold",
     marginLeft: 7,
   },
-  investmentName: { fontSize: 16, fontWeight: "600", color: Colors.white },
+  investmentName: {
+    color: Colors.secondary,
+    fontSize: 15,
+    fontFamily: "Inter_700Bold",
+    marginBottom: 2,
+  },
   emptyState: { justifyContent: "center", alignItems: "center", padding: 20 },
   emptyText: { fontSize: 16, color: "#6B7280" },
   cardContainer: {
-    backgroundColor: Colors.secondary,
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 14,
-    shadowColor: "#000",
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 4,
+    // marginHorizontal: 12,
+    backgroundColor: Colors.white,
+    borderRadius: 14,
+    padding: 12,
+    marginVertical: 2,
+    borderWidth: 1,
+    borderColor: "#E6EDFF",
   },
   cardHeader: {
     flexDirection: "row",
@@ -323,9 +338,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   investmentType: {
-    fontSize: 13,
-    color: Colors.gray,
-    marginTop: 2,
+    color: Colors.secondary,
+    fontSize: 12,
+    fontFamily: "Inter_400Regular",
+    flexDirection: "row",
+    alignItems: "center",
   },
   statusBadge: {
     paddingHorizontal: 10,
@@ -333,7 +350,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   statusActive: {
-    backgroundColor: "rgba(16,185,129,0.15)",
+    backgroundColor: Colors.statusbg,
   },
   statusClosed: {
     backgroundColor: "rgba(107,114,128,0.15)",
@@ -341,7 +358,7 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 12,
     fontWeight: "600",
-    color: Colors.green,
+    color: Colors.statusText,
   },
   divider: {
     height: 1,
@@ -353,19 +370,19 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   amountLabel: {
-    fontSize: 13,
-    color: Colors.gray,
+    fontSize: 12, fontWeight: '500', color: Colors.gray, marginTop: 10
   },
   amountValue: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: Colors.white,
-    marginTop: 2,
+    color: Colors.secondary,
+    fontSize: 14,
+    fontFamily: "Inter_400Regular",
+    flexDirection: "row",
+    alignItems: "center",
   },
   metaRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 12,
+    marginTop: 2,
   },
   metaText: {
     fontSize: 12,

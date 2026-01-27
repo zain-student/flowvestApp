@@ -9,15 +9,17 @@ import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
+  Image,
   StyleSheet,
   Text,
   ToastAndroid,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { DashboardLayout } from "../../../Common/components/DashboardLayout";
 import { MarkAsPaidModal } from "../components/MarkAsPaidModal";
@@ -185,21 +187,38 @@ export const PayoutsScreen: React.FC = () => {
     <DashboardLayout>
       <View style={styles.container}>
         {/* Card Header */}
-        <View style={styles.card}>
+        <LinearGradient
+          colors={[Colors.primary, "#3a84fb"]} // left → right
+          start={{ x: 0, y: 1 }}
+          end={{ x: 2, y: 0 }}
+          style={styles.card}
+        >
+          <Image source={require('../../../../../assets/images/upperDiv.png')} style={{ position: 'absolute', width: 100, height: 110, top: -30, right: -50 }} />
+          {/* <View style={styles.card}> */}
+
           <Text style={styles.cardTitle}>Total Payouts amount</Text>
           <Text style={styles.cardValue}>
             {formatCurrency(Number(totalPayoutAmount.toFixed(1) ?? "--"))}
           </Text>
-          <Text style={{ color: Colors.gray }}>
-            Total payouts:{" "}
-            <Text style={styles.cardSubtitle}>
-              {/* July 15, 2024 */}
-              {pagination.total}
+          <View style={styles.mirror}>
+            <Text style={{
+              color: Colors.white,
+              fontWeight: "400",
+              fontFamily: "Inter_400Regular",
+              fontSize: 12,
+            }}>
+              Total payouts:{" "}
+              <Text style={styles.cardSubtitle}>
+                {/* July 15, 2024 */}
+                {pagination.total}
+              </Text>
             </Text>
-          </Text>
+          </View>
           {/* <View style={styles.balanceActionsRow}></View> */}
-        </View>
-
+          {/* </View> */}
+          <Image source={require('../../../../../assets/images/lowerDiv.png')} style={{ position: 'absolute', width: 200, height: 260, bottom: -190, left: -150, }} />
+          {/* <View style={styles.balanceActionsRow}></View> */}
+        </LinearGradient>
         {/* Filters */}
         <View style={styles.filterRow}>
           {FILTERS.map((f) => (
@@ -272,7 +291,7 @@ export const PayoutsScreen: React.FC = () => {
           }
           ListEmptyComponent={
             <View style={styles.emptyState}>
-              <Feather name="inbox" size={48} color={Colors.gray} />
+              <Image source={require('../../../../../assets/images/noInvestment.png')} style={{ width: 100, height: 100, }} />
               <Text style={styles.emptyText}>No payouts available.</Text>
             </View>
           }
@@ -285,52 +304,72 @@ export const PayoutsScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background },
-  scrollContent: { paddingBottom: 100, backgroundColor: Colors.background },
+  scrollContent: {
+    //  paddingBottom: 100,
+    backgroundColor: Colors.background
+  },
   card: {
-    backgroundColor: Colors.secondary,
-    borderBottomLeftRadius: 32,
-    borderBottomRightRadius: 32,
+    backgroundColor: Colors.primary,
+    borderRadius: 12,
+    marginHorizontal: 12,
+    marginBottom:6,
+    marginTop: 12,
     padding: 24,
-    paddingTop: 36,
+    // paddingTop: 36,
     shadowColor: "#000",
     shadowOpacity: 0.08,
     shadowRadius: 12,
     elevation: 6,
   },
-  cardTitle: { fontSize: 15, color: Colors.gray, marginBottom: 6 },
-  cardValue: {
-    fontSize: 36,
-    fontWeight: "bold",
+  cardTitle: {
     color: Colors.white,
-    marginBottom: 4,
+    fontSize: 14,
+    fontFamily: "Inter_500Regular",
+  },
+  mirror: { backgroundColor: Colors.mirror, width: '50%', justifyContent: 'center', alignItems: 'center', borderRadius: 18, paddingVertical: 4, paddingHorizontal: 12, borderWidth: 0.3, borderColor: Colors.white, opacity: 0.7, marginTop: 4 },
+  cardValue: {
+    color: Colors.white,
+    fontSize: 20,
+    fontFamily: "Inter_700Bold",
+    fontWeight: "600",
+    marginVertical: 2,
   },
   cardSubtitle: {
+    color: Colors.white,
     fontSize: 14,
-    color: Colors.green,
     fontFamily: "Inter_600SemiBold",
   },
   balanceActionsRow: { flexDirection: "row", marginTop: 18 },
   filterRow: {
     flexDirection: "row",
-    marginTop: 10,
-    marginBottom: 16,
-    gap: 10,
+    marginBottom: 4,
+    // marginTop: 10,
+    gap: 1,
     marginHorizontal: 12,
     backgroundColor: Colors.white,
     borderRadius: 20,
     padding: 4,
     justifyContent: "space-around",
+    borderColor: "#E6EDFF",
+    borderWidth: 1
   },
-  emptyState: { justifyContent: "center", alignItems: "center", padding: 20 },
-  emptyText: { fontSize: 16, color: "#6B7280" },
+  emptyState: { justifyContent: "center", alignItems: "center", padding: 0, marginTop: 70 },
+  emptyText: {
+    color: Colors.gray,
+    fontSize: 18,
+    fontFamily: "Inter_400Regular",
+    textAlign: "center",
+    marginTop: 30
+    // paddingVertical: 16,
+  },
   filterBtn: {
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
     backgroundColor: Colors.white,
   },
-  filterBtnActive: { backgroundColor: Colors.secondary },
-  filterText: { color: "#6B7280", fontWeight: "500" },
+  filterBtnActive: { backgroundColor: Colors.primary },
+  filterText: { color: Colors.gray, fontWeight: "400", fontSize: 16  },
   filterTextActive: { color: Colors.white },
   sectionTitle: {
     fontSize: 16,

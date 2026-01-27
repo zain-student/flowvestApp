@@ -217,39 +217,6 @@ export const InvestmentsScreen: React.FC = () => {
           <Text style={styles.cardValue}>
             {formatCurrency(stats.total_invested)}
           </Text>
-          {/* <View style={{
-            flexDirection: "row", backgroundColor: 'green', justifyContent: "space-between",
-            alignItems: "center"
-          }}>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <Text style={{
-                color: Colors.white,
-                fontWeight: "400",
-                fontFamily: "Inter_400Regular",
-                fontSize: 12
-              }}>
-                Total Investments:
-                <Text style={styles.cardSubtitle}>
-                  {stats.total_investments}{" "}
-                </Text>
-              </Text>
-            </View>
-            <View style={styles.balanceActionsRow}>
-              <TouchableOpacity
-                style={styles.mirror}
-                onPress={() => navigation.navigate("MyInvestments")}
-              >
-                <Text style={styles.balanceActionTextDark}>My Investments</Text>
-                <Feather name="arrow-right" size={16} color={Colors.yellow} />
-              </TouchableOpacity>
-            </View>
-          </View> */}
           <View style={styles.investmentRow}>
             {/* Left: Total Investments */}
             <Text style={styles.totalInvestmentText}>
@@ -410,12 +377,6 @@ const styles = StyleSheet.create({
   totalInvestmentValue: {
     fontWeight: "600",
     fontFamily: "Inter_600SemiBold",
-  },
-
-  myInvestmentsBtn: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
   },
 
   myInvestmentsText: {

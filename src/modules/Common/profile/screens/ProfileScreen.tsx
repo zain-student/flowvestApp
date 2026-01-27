@@ -28,6 +28,7 @@ import {
   updatePreferences,
   uploadUserAvatar,
 } from "@/shared/store/slices/profile/profileSlice";
+import { logoutUser } from "@modules/auth/store/authSlice";
 import { DashboardLayout } from "../../components/DashboardLayout";
 
 //  Constants
@@ -112,7 +113,29 @@ export const ProfileScreen: React.FC = () => {
 
   const getInitials = (name?: string) =>
     name ? name.charAt(0).toUpperCase() : "U";
+ const handleSignOut = () => {
+    const signOut = async () => {
+      try {
+        await dispatch(logoutUser());
+        // await storage.clear();
+        // navigation.navigate("Profile"); // Or use navigation.reset if you have a root stack
+      } catch (error) {
+        Alert.alert("Error", "Failed to sign out. Please try again.");
+      }
+    };
+    Alert.alert("Sign Out", "Are you sure you want to sign out?", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Sign Out",
+        onPress: () => signOut(),
+        style: "destructive",
+      },
+    ]);
 
+  };
   //  Conditional states
   const showLoader = isLoading || (!user && !imageLoading);
   const handleCurrencySelect = (currency: any) => {
@@ -296,6 +319,11 @@ export const ProfileScreen: React.FC = () => {
                 );
               }
             }}
+          />
+          <SettingsButton
+            icon="log-out-outline"
+            label="Logout"
+             onPress={handleSignOut}
           />
         </View>
 

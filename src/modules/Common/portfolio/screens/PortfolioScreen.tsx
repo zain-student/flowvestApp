@@ -122,7 +122,7 @@ export const PortfolioScreen: React.FC = () => {
         end={{ x: 2, y: 0 }}
         style={styles.balanceCardDark}
       >
-        <Image source={require('../../../../../assets/images/upperDiv.png')} style={{ position: 'absolute', width: 170, height: 170, top: -100, right: -115 }} />
+        <Image source={require('../../../../../assets/images/upperDiv.png')} style={{ position: 'absolute', width: 100, height: 110, top: -30, right: -50  }} />
         <Text style={styles.cardTitle}>Total Earned</Text>
         <Text style={styles.cardValue}>
           {formatCurrency(Number(data?.summary.total_earned)) ?? 0}
@@ -334,7 +334,7 @@ const styles = StyleSheet.create({
   },
 
   toggleItemActive: {
-    backgroundColor: Colors.green,
+    backgroundColor: Colors.primary,
   },
 
   toggleText: {

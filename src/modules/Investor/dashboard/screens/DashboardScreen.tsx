@@ -146,7 +146,7 @@ export const DashboardScreen: React.FC = () => {
     );
   };
   return (
-    <DashboardLayout headerStyle="dark">
+    <DashboardLayout>
       {/* Main Balance Card (dark, rounded) */}
       <View style={styles.container}>
         {/* <View style={styles.balanceCardDark}> */}
@@ -156,7 +156,8 @@ export const DashboardScreen: React.FC = () => {
           end={{ x: 2, y: 0 }}
           style={styles.balanceCardDark}
         >
-          <Image source={require('../../../../../assets/images/upperDiv.png')} style={{ position: 'absolute', width: 170, height: 170, top: -100, right: -115 }} />
+          <Image source={require('../../../../../assets/images/upperDiv.png')}
+            style={{ position: 'absolute', width: 100, height: 110, top: -30, right: -50 }} />
           <Text style={styles.balanceLabelDark}>Total Managed Portfolio</Text>
           <Text style={styles.balanceValueDark}>
             {stats?.total_managed_portfolio
@@ -243,16 +244,16 @@ export const DashboardScreen: React.FC = () => {
                 renderItem={renderActivityItem}
                 showsVerticalScrollIndicator={false}
                 scrollEnabled={false}
-                // ListEmptyComponent={
-                //   !isLoading && (
-                //     <View style={styles.emptyState}>
-                //       <Feather name="inbox" size={48} color={Colors.gray} />
-                //       <Text style={styles.emptyText}>
-                //         No recent activities found
-                //       </Text>
-                //     </View>
-                //   )
-                // }
+              // ListEmptyComponent={
+              //   !isLoading && (
+              //     <View style={styles.emptyState}>
+              //       <Feather name="inbox" size={48} color={Colors.gray} />
+              //       <Text style={styles.emptyText}>
+              //         No recent activities found
+              //       </Text>
+              //     </View>
+              //   )
+              // }
               />
             )}
           </View>

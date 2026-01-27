@@ -2,18 +2,16 @@ import { RootStackParamList } from "@/navigation/RootNavigator";
 import Colors from "@/shared/colors/Colors";
 import { selectHasUnreadNotifications } from "@/shared/store/slices/profile/notificationSlice";
 import { Ionicons } from "@expo/vector-icons";
-import { logoutUser } from "@modules/auth/store/authSlice";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useAppDispatch, useAppSelector } from "@store/index";
 import React from "react";
 import {
-  Alert,
   StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -25,7 +23,7 @@ interface DashboardLayoutProps {
 const Avatar = ({ showDot }: { showDot: boolean }) => (
   <View style={styles.avatar}>
     {/* <Feather name="bell" size={20} color={Colors.secondary} /> */}
-<Ionicons name="notifications-outline" size={22} color={Colors.secondary} />
+    <Ionicons name="notifications-outline" size={22} color={Colors.secondary} />
     {showDot && <View style={styles.notificationDot} />}
   </View>
 );
@@ -37,28 +35,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const hasUnread = useAppSelector(selectHasUnreadNotifications);
   const dispatch = useAppDispatch();
-  const handleSignOut = async () => {
-    Alert.alert("Sign Out", "Are you sure you want to sign out?", [
-      {
-        text: "Cancel",
-        style: "cancel",
-      },
-      {
-        text: "Sign Out",
-        onPress: () => signOut(),
-        style: "destructive",
-      },
-    ]);
-    const signOut = async () => {
-      try {
-        await dispatch(logoutUser());
-        // await storage.clear();
-        // navigation.navigate("Profile"); // Or use navigation.reset if you have a root stack
-      } catch (error) {
-        Alert.alert("Error", "Failed to sign out. Please try again.");
-      }
-    };
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -75,17 +51,12 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           >
             <Avatar showDot={hasUnread} />
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={handleSignOut}
-            style={styles.signOutBtn}
-            accessibilityLabel="Sign Out"
-          >
-            {/* <Feather name="log-out" size={22} color={Colors.secondary} /> */}
-            <Ionicons name="log-out-outline" size={22} color={Colors.secondary} />
-          </TouchableOpacity>
+          
         </View>
       </View>
-      {children}
+      <View style={{ flex: 1 }}>
+        {children}
+      </View>
     </SafeAreaView>
   );
 };
@@ -112,7 +83,7 @@ const styles = StyleSheet.create({
     // backgroundColor: Colors.primary,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 12,
+    marginRight: 6,
   },
   avatarText: { color: Colors.secondary, fontWeight: "bold", fontSize: 16 },
   signOutBtn: { padding: 6 },

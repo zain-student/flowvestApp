@@ -205,7 +205,7 @@ export const InvestmentsScreen: React.FC = () => {
           end={{ x: 2, y: 0 }}
           style={styles.card}
         >
-          <Image source={require('../../../../../assets/images/upperDiv.png')} style={{ position: 'absolute', width: 170, height: 170, top: -100, right: -115 }} />
+          <Image source={require('../../../../../assets/images/upperDiv.png')} style={{position: 'absolute', width: 100, height: 110, top: -30, right: -50 }} />
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={styles.cardTitle}>Total Invested Amount</Text>
             <View style={{ alignSelf: 'flex-end', backgroundColor: '#0AFF5C47', borderRadius: 8, height: 29, width: 71, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>

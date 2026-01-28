@@ -1,11 +1,13 @@
 import { InvestmentStackParamList } from "@/navigation/InvestorStacks/InvestmentStack";
 import Colors from "@/shared/colors/Colors";
+import { Button } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import {
   fetchPartners,
   invitePartnerToInvestment,
 } from "@/shared/store/slices/investor/dashboard/addPartnerSlice";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
+import { Ionicons } from "@expo/vector-icons";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import React, { useEffect, useMemo, useState } from "react";
 import {
@@ -117,22 +119,33 @@ export default function AddInvestmentPartner() {
         ListHeaderComponent={
           <View style={styles.card}>
             <Text style={styles.cardTitle}>Investment Details</Text>
-            <Text style={styles.detail}>Name: {investment.name}</Text>
-            <Text style={styles.detail}>
-              Total:{" "}
-              {formatCurrency(
-                Number(
-                  investment.type === "solo"
-                    ? investment.initial_amount
-                    : investment.current_total_invested,
-                ),
-              )}
-            </Text>
-            <Text style={styles.detail}>Status: {investment.status}</Text>
-            <Text style={styles.detail}>
-              Expected Return:{" "}
-              {parseFloat(investment.expected_return_rate).toFixed(1)}%
-            </Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 4 }}>
+              <View>
+                <Text style={styles.label}>Name: </Text>
+                <Text style={styles.value}>{investment.name}</Text>
+              </View>
+              <View>
+                <Text style={styles.label}>Status: </Text>
+                <Text style={styles.value}>{investment.status}</Text>
+              </View>
+
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 4 }}>
+              <View>
+                <Text style={styles.label}>Expected Return:{" "}</Text>
+                <Text style={styles.value}> {parseFloat(investment.expected_return_rate).toFixed(1)}%</Text>
+              </View>
+              <View>
+                <Text style={styles.label}>Total:{" "}</Text>
+                <Text style={styles.value}>{formatCurrency(
+                  Number(
+                    investment.type === "solo"
+                      ? investment.initial_amount
+                      : investment.current_total_invested,
+                  ),
+                )}</Text>
+              </View>
+            </View>
           </View>
         }
         renderItem={({ item }) => (
@@ -144,7 +157,10 @@ export default function AddInvestmentPartner() {
             onPress={() => setSelectedPartner(item)}
           >
             <Text style={styles.partnerName}>{item.name}</Text>
-            <Text style={styles.partnerEmail}>{item.email}</Text>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Ionicons name="mail-outline" size={13} color={Colors.gray} />
+              <Text style={styles.partnerEmail}>{item.email}</Text>
+            </View>
           </TouchableOpacity>
         )}
         ListEmptyComponent={
@@ -183,18 +199,15 @@ export default function AddInvestmentPartner() {
             value={minExperience}
             onChangeText={setMinExperience}
           />
-
-          <TouchableOpacity
-            style={[styles.addButton, isLoading && { opacity: 0.6 }]}
+          <Button
+            title="Add Partner"
+            // icon={<Ionicons name="add-circle-outline" size={20} color={Colors.white} />}
             disabled={isLoading}
             onPress={handleAddPartner}
-          >
-            {isLoading ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Text style={styles.addButtonText}>Add Partner</Text>
-            )}
-          </TouchableOpacity>
+            style={styles.joinButton}
+            textStyle={styles.joinText}
+            variant="primary"
+          />
         </View>
       )}
     </View>
@@ -210,34 +223,52 @@ const styles = StyleSheet.create({
   },
   loaderContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
   card: {
-    backgroundColor: Colors.secondary,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-    elevation: 3,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    // marginHorizontal: 12,
+    backgroundColor: Colors.white,
+    borderRadius: 14,
+    padding: 12,
+    marginVertical: 2,
+    borderWidth: 1,
+    borderColor: "#E6EDFF",
   },
   cardTitle: {
-    fontSize: 18,
-    fontWeight: "600",
+    fontSize: 13,
+    fontWeight: "500",
+    color: Colors.gray,
     marginBottom: 8,
-    color: Colors.white,
   },
-  detail: { fontSize: 14, color: Colors.white, marginBottom: 4 },
+  label: { fontSize: 12, fontWeight: '500', lineHeight: 18, color: Colors.gray, marginBottom: 4 },
+  value: { color: Colors.secondary, fontWeight: "600", fontSize: 14 },
+  detail: {
+    color: Colors.secondary,
+    fontSize: 12,
+    fontFamily: "Inter_400Regular",
+    flexDirection: "row",
+    alignItems: "center",
+  },
   partnerItem: {
+    backgroundColor: Colors.white,
+    borderRadius: 14,
     padding: 12,
-    borderRadius: 8,
-    backgroundColor: "#fff",
-    marginBottom: 8,
+    marginVertical: 2,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: "#E6EDFF",
   },
   selectedPartner: { borderColor: "#2563EB", backgroundColor: "#EFF6FF" },
-  partnerName: { fontSize: 15, fontWeight: "500", color: "#111827" },
-  partnerEmail: { fontSize: 13, color: "#6B7280" },
+  partnerName: {
+    color: Colors.secondary,
+    fontSize: 15,
+    fontFamily: "Inter_700Bold",
+    marginBottom: 2,
+  },
+  partnerEmail: {
+    color: Colors.gray,
+    fontSize: 12,
+    fontFamily: "Inter_400Regular",
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 4
+  },
   emptyState: { justifyContent: "center", alignItems: "center", padding: 20 },
   emptyText: { fontSize: 16, color: "#6B7280" },
   formCard: {
@@ -260,11 +291,22 @@ const styles = StyleSheet.create({
     backgroundColor: "#F9FAFB",
     fontSize: 14,
   },
-  addButton: {
-    backgroundColor: "#2563EB",
-    padding: 14,
-    borderRadius: 8,
+  joinButton: {
+    paddingVertical: 10,
+    marginTop: 6,
+    flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
+    backgroundColor: Colors.primary,
+    // paddingVertical: 10,
+    borderRadius: 10,
   },
-  addButtonText: { color: "#fff", fontWeight: "600", fontSize: 16 },
+
+  joinText: {
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: "600",
+    marginLeft: 6,
+  },
+
 });

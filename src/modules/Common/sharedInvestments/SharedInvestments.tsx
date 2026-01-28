@@ -435,6 +435,7 @@ const styles = StyleSheet.create({
   },
 
   joinButton: {
+    paddingVertical: 10,
     marginTop: 6,
     flexDirection: "row",
     justifyContent: "center",

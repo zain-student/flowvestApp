@@ -4,7 +4,7 @@ import { Button, Input } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { joinInvestment } from "@/shared/store/slices/shared/investments/partnerInvestmentSlice";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
-import { Feather } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useMemo, useState } from "react";
 import {
@@ -87,24 +87,26 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
           <Text style={styles.investmentName}>{currentInvestment.creator.name || "N/A"}</Text>
           <View style={styles.badgeRow}>
             <View style={styles.statusBadge}>
-              <Text style={styles.statusText}>Active</Text>
+              <Text style={styles.statusText}> {currentInvestment.status.charAt(0).toUpperCase() +
+                currentInvestment.status.slice(1)}</Text>
             </View>
             <View style={styles.sharedBadge}>
-              <Text style={styles.sharedText}>Shared</Text>
+              <Text style={styles.sharedText}> {currentInvestment.type.charAt(0).toUpperCase() +
+                currentInvestment.type.slice(1)}</Text>
             </View>
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <View>
+              <Text style={styles.subText}>Current Total Invested</Text>
               <Text style={styles.investmentAmount}>
                 {formatCurrency(Number(currentInvestment.current_total_invested ?? 0))}
               </Text>
-              <Text style={styles.subText}>Current Total Invested</Text>
             </View>
             <View>
+              <Text style={styles.subText}>Target Amount</Text>
               <Text style={styles.investmentAmount}>
                 {formatCurrency(Number(currentInvestment.total_target_amount ?? "0"))}
               </Text>
-              <Text style={styles.subText}>Target Amount</Text>
             </View>
           </View>
 
@@ -132,14 +134,15 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
             <Text style={styles.sectionTitle}>Performance</Text>
             <View style={styles.performanceContainer}>
               <PerformanceCard
-                icon="dollar-sign"
+                icon="cash"
                 label="Total Paid Out"
                 value={formatCurrency(currentInvestment.performance?.total_paid_out ?? 0)}
               />
               <PerformanceCard
-                icon="clock"
+                icon="time-outline"
                 label="Pending Payouts"
                 value={formatCurrency(currentInvestment.performance?.pending_payouts ?? 0)}
+                highlight
               />
               {currentInvestment.performance.next_payout_date && (
                 <PerformanceCard
@@ -206,13 +209,13 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
 const PerformanceCard = ({ icon, label, subLabel, value, highlight }: any) => (
   <View style={styles.performanceRow}>
     <View style={styles.iconWrapper}>
-      <Feather name={icon} size={18} color={Colors.secondary} />
+      <Ionicons name={icon} size={18} color={Colors.secondary} />
     </View>
     <View style={{ flex: 1 }}>
       <Text style={styles.performanceLabel}>{label}</Text>
       {/* <Text style={styles.performanceSub}>{subLabel}</Text> */}
     </View>
-    <Text style={[styles.performanceValue, highlight && { color: Colors.gray }]}>
+    <Text style={[styles.performanceValue, highlight && { color: Colors.green }]}>
       {value}
     </Text>
   </View>
@@ -220,10 +223,10 @@ const PerformanceCard = ({ icon, label, subLabel, value, highlight }: any) => (
 const Divider = () => <View style={styles.rowDivider} />;
 const MetaItem = ({ label, value, positive }: any) => (
   <View style={{}}>
+    <Text style={styles.metaLabel}>{label}</Text>
     <Text style={[styles.metaValue, positive && { color: Colors.green }]}>
       {value}
     </Text>
-    <Text style={styles.metaLabel}>{label}</Text>
   </View>
 );
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -258,12 +261,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: Colors.secondary,
+    marginBottom: 10
   },
 
   subText: {
     fontSize: 12,
     color: Colors.gray,
-    marginBottom: 12,
+    // marginBottom: 12,
   },
 
   badgeRow: {

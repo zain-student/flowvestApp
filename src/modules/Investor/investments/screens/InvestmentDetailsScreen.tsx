@@ -135,13 +135,6 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.closeBtn}
-        onPress={() => navigation.goBack()}
-      >
-        <Ionicons name="close" size={27} />
-      </TouchableOpacity>
-
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
@@ -156,7 +149,7 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
               style={styles.menuBtn}
               onPress={() => setShowMenu((prev) => !prev)}
             >
-              <Ionicons name="ellipsis-vertical" size={24} color="white" />
+              <Ionicons name="ellipsis-vertical" size={24} color={Colors.secondary} />
             </TouchableOpacity>
           )}
           {/* Simple Dropdown */}
@@ -188,15 +181,36 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
               ),
             )}
           </Text>
+
+          <View style={styles.badgeRow}>
+            <View style={styles.statusBadge}>
+              <Text style={styles.statusText}>{currentInvestment.status.charAt(0).toUpperCase() +
+                currentInvestment.status.slice(1)}</Text>
+            </View>
+            <View style={styles.sharedBadge}>
+              <Text style={styles.sharedText}> {currentInvestment.type.charAt(0).toUpperCase() +
+                currentInvestment.type.slice(1)}</Text>
+            </View>
+          </View>
           {currentInvestment.type === "shared" && (
-            <Text style={styles.value}>
-              Min:{" "}
-              {formatCurrency(Number(currentInvestment.min_investment_amount))}{" "}
-              - Max:{" "}
-              {formatCurrency(Number(currentInvestment.max_investment_amount))}
-            </Text>
+            <View style={{ flexDirection: 'row', justifyContent: "space-between" }}>
+              <View>
+                <Text style={styles.value}>
+                  {formatCurrency(Number(currentInvestment.min_investment_amount))}{" "}
+                </Text>
+                <Text style={styles.label}>
+                  Min:{" "}
+                </Text>
+              </View>
+              <View>
+                <Text style={styles.value}>
+                  {formatCurrency(Number(currentInvestment.max_investment_amount))}
+                </Text>
+                <Text style={styles.label}>Max:{" "}</Text>
+              </View>
+            </View>
           )}
-          <Text style={styles.label}>Status</Text>
+          {/* <Text style={styles.label}>Status</Text>
           <Text
             style={[
               styles.status,
@@ -212,23 +226,37 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
           <Text style={styles.returns}>
             {currentInvestment.type.charAt(0).toUpperCase() +
               currentInvestment.type.slice(1)}
-          </Text>
-          <Text style={styles.label}>Returns</Text>
-          <Text style={styles.returns}>
-            {currentInvestment.expected_return_rate != null
-              ? parseFloat(currentInvestment.expected_return_rate).toFixed(1)
-              : "--"}
-            %
-          </Text>
-          <Text style={styles.label}>Frequency</Text>
-          <Text style={styles.returns}>
-            {currentInvestment.frequency.charAt(0).toUpperCase() +
-              currentInvestment.frequency.slice(1)}
-          </Text>
-          <Text style={styles.label}>Start Date</Text>
-          <Text style={styles.value}>{currentInvestment.start_date}</Text>
-          <Text style={styles.label}>End Date</Text>
-          <Text style={styles.value}>{currentInvestment.end_date}</Text>
+          </Text> */}
+          <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+            <View>
+              <Text style={styles.returns}>
+                {currentInvestment.expected_return_rate != null
+                  ? parseFloat(currentInvestment.expected_return_rate).toFixed(1)
+                  : "--"}
+                %
+              </Text>
+              <Text style={styles.label}>Returns</Text>
+            </View>
+            <View>
+              <Text style={styles.returns}>
+                {currentInvestment.frequency.charAt(0).toUpperCase() +
+                  currentInvestment.frequency.slice(1)}
+              </Text>
+              <Text style={styles.label}>Frequency</Text>
+            </View>
+          </View>
+          <Divider />
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View>
+              <Text style={styles.value}>{currentInvestment.start_date}</Text>
+              <Text style={styles.label}>Start Date</Text>
+            </View>
+            <View>
+              <Text style={styles.value}>{currentInvestment.end_date}</Text>
+              <Text style={styles.label}>End Date</Text>
+            </View>
+          </View>
+          <Divider />
           {!showJoinForm && (
             <View style={styles.footer}>
               <Button
@@ -322,7 +350,7 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
               }}
               // error={errors.email}
               required
-              // autoFocus
+            // autoFocus
             />
             {/* {errors.amount && <Text style={styles.error}>{errors.amount.message}</Text>} */}
 
@@ -332,9 +360,9 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
               placeholder="Any notes for your investment"
               value={notes}
               onChangeText={setNotes}
-              // error={errors.email}
-              // required
-              // autoFocus
+            // error={errors.email}
+            // required
+            // autoFocus
             />
             {formError ? <Text style={styles.error}>{formError}</Text> : null}
 
@@ -356,32 +384,12 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
     </View>
   );
 };
-
+const Divider = () => <View style={styles.rowDivider} />;
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: Colors.background,
-    marginBottom: 60,
-    // paddingBottom: 100,
+    flex: 1, backgroundColor: Colors.background, paddingBottom: 0
   },
-  closeBtn: {
-    position: "absolute",
-    top: 32,
-    right: 24,
-    zIndex: 10,
-    backgroundColor: Colors.white,
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    elevation: 4,
-  },
-
-  closeText: { fontSize: 22, fontWeight: "bold", color: Colors.secondary },
+  scrollContent: { paddingHorizontal: 24, paddingBottom: 70, marginTop: 20 },
   menuBtn: {
     position: "absolute",
     top: 20,
@@ -416,12 +424,12 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     fontSize: 16,
   },
-  scrollContent: { padding: 24, paddingTop: 60, paddingBottom: 40 },
   title: {
-    fontSize: 24,
-    fontWeight: "700",
+    fontSize: 18,
+    fontWeight: "500",
     color: Colors.secondary,
-    marginBottom: 16,
+    marginTop: 16,
+    marginBottom: 14,
   },
   descriptionText: {
     fontSize: 16,
@@ -429,17 +437,49 @@ const styles = StyleSheet.create({
     marginBottom: 18,
   },
   summaryCard: {
-    backgroundColor: Colors.secondary,
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 24,
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowRadius: 6,
-    elevation: 3,
+    backgroundColor: Colors.white,
+    borderRadius: 18,
+    padding: 16,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: "#E6EDFF",
   },
-  label: { fontSize: 13, color: Colors.gray, marginTop: 8 },
-  value: { fontSize: 16, color: Colors.white, fontWeight: "600" },
+  label: { fontSize: 13, color: Colors.gray, marginTop: 0 },
+  value: {
+    fontSize: 16,
+    marginTop: 8,
+    fontWeight: "600",
+    color: Colors.secondary,
+  },
+  badgeRow: {
+    flexDirection: "row",
+    // marginBottom: 12,
+    marginVertical: 12
+  },
+
+  statusBadge: {
+    backgroundColor: Colors.statusbg,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+    marginRight: 8,
+  },
+
+  statusText: {
+    fontSize: 12,
+    color: Colors.statusText,
+  },
+  sharedText: {
+    fontSize: 12,
+    color: Colors.primary,
+  },
+  sharedBadge: {
+    backgroundColor: "#EAF2FF",
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+    marginRight: 8,
+  },
   status: { fontSize: 15, fontWeight: "600", marginTop: 2 },
   statusActive: { color: Colors.green },
   statusCompleted: { color: Colors.gray },
@@ -504,6 +544,11 @@ const styles = StyleSheet.create({
   footerButtonText: {
     color: "#fff",
     fontWeight: "bold",
+  },
+  rowDivider: {
+    marginTop: 4,
+    height: 1,
+    backgroundColor: "#EFEFEF",
   },
 });
 // export default InvestmentDetailsScreen;

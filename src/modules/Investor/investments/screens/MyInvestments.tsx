@@ -246,9 +246,9 @@ export const MyInvestments = ({ navigation }: Props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    // backgroundColor: Colors.background,
     paddingHorizontal: 16,
-    marginBottom: 40,
+    marginBottom: 50,
   },
   searchContainer: {
     flexDirection: "row",

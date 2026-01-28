@@ -1,4 +1,5 @@
 import Colors from "@/shared/colors/Colors";
+import { Button } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import type { PartnerInvestment } from "@/shared/store/slices/shared/investments/partnerInvestmentSlice";
 import { fetchAvailableSharedPrograms } from "@/shared/store/slices/shared/investments/partnerInvestmentSlice";
@@ -8,12 +9,13 @@ import React, { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
+  Image,
   RefreshControl,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 export const SharedInvestments: React.FC = ({ navigation }: any) => {
   const dispatch = useAppDispatch();
@@ -28,13 +30,6 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
     summary,
     meta: { pagination },
   } = useAppSelector((state) => state.userInvestments.sharedPrograms);
-
-  // Initial load
-  // useEffect(() => {
-  //   if (search === "") {
-  //     dispatch(fetchAvailableSharedPrograms({ page: 1, search }));
-  //   }
-  // }, [search, dispatch]);
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
@@ -89,22 +84,22 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
       <SummaryCard
         label="Total Invested"
         value={formatCurrency(summary.total_invested)}
-        style={{ backgroundColor: "#fff" }}
+        style={{ backgroundColor: Colors.white }}
       />
       <SummaryCard
         label="Total Investments"
         value={summary.total_investments}
-        style={{ backgroundColor: "#fff" }}
+        style={{ backgroundColor: Colors.white }}
       />
       <SummaryCard
         label="Avg ROI"
         value={`${summary.avg_roi.toFixed(1)}`}
-        style={{ backgroundColor: "#fff" }}
+        style={{ backgroundColor: Colors.white }}
       />
       <SummaryCard
         label="Participants"
         value={summary.total_participants}
-        style={{ backgroundColor: "#fff" }}
+        style={{ backgroundColor: Colors.white }}
       />
     </View>
   );
@@ -146,7 +141,7 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
         </View>
 
         {/* Divider */}
-        <View style={styles.divider} />
+        {/* <View style={styles.divider} /> */}
 
         {/* Amount */}
         <View style={styles.amountRow}>
@@ -186,18 +181,23 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
         </View>
 
         {/* Action */}
-        <TouchableOpacity
-          style={styles.joinButton}
+
+        <Button
+          title="Join Investment"
+          icon={<Ionicons name="add-circle-outline" size={20} color={Colors.white} />}
+          // onPress={() => { navigation.navigate("SharedInvestments"); }
+          // }
           onPress={() =>
             navigation.navigate("SharedInvestmentDetail", {
               id: item.id,
               showJoinForm: "true",
             })
           }
-        >
-          <Ionicons name="add-circle-outline" size={18} color="#fff" />
-          <Text style={styles.joinText}>Join Investment</Text>
-        </TouchableOpacity>
+          style={styles.joinButton}
+          textStyle={styles.joinText}
+          variant="primary"
+        />
+
       </TouchableOpacity>
     );
   };
@@ -247,7 +247,8 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
         }
         ListEmptyComponent={
           <View style={styles.centered}>
-            <Feather name="briefcase" size={48} color={Colors.gray} />
+            {/* <Feather name="briefcase" size={48} color={Colors.gray} /> */}
+            <Image source={require('../../../../assets/images/noInvestment.png')} style={{ width: 100, height: 100, alignSelf: 'center' }} />
             <Text style={styles.emptyText}>No shared programs available.</Text>
           </View>
         }
@@ -276,21 +277,21 @@ const styles = StyleSheet.create({
   centered: { flex: 1, justifyContent: "center", alignItems: "center" },
   emptyText: { fontSize: 16, color: Colors.gray },
   searchContainer: {
-    marginTop: 12,
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: Colors.white,
-    borderRadius: 10,
+    borderRadius: 28,
     marginHorizontal: 12,
-    marginBottom: 12,
+    marginTop: 6,
     paddingHorizontal: 8,
-    elevation: 2,
+    borderColor: "#E6EDFF",
+    borderWidth: 1,
   },
   searchInput: {
     flex: 1,
-    paddingVertical: 10,
+    // paddingVertical: 10,
     paddingHorizontal: 12,
-    fontSize: 16,
+    fontSize: 14,
     color: Colors.secondary,
   },
   searchBtn: {
@@ -307,31 +308,32 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
-    marginBottom: 6,
+    marginBottom: 2,
   },
   summaryCard: {
     borderRadius: 12,
     padding: 16,
     width: "48%",
-    marginBottom: 12,
-    elevation: 2,
+    marginBottom: 6,
+    borderWidth: 1,
+    borderColor: "#E6EDFF"
+    // elevation: 2,
   },
   summaryValue: {
-    fontSize: 18,
-    fontWeight: "700",
     color: Colors.secondary,
-    marginBottom: 4,
+    fontSize: 14,
+    fontFamily: "Inter_500Bold",
+    fontWeight: "700",
   },
   summaryLabel: { fontSize: 13, color: Colors.gray },
   cardContainer: {
-    backgroundColor: Colors.secondary,
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 14,
-    shadowColor: "#000",
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 4,
+    // marginHorizontal: 12,
+    backgroundColor: Colors.white,
+    borderRadius: 14,
+    padding: 12,
+    marginVertical: 2,
+    borderWidth: 1,
+    borderColor: "#E6EDFF",
   },
 
   cardHeader: {
@@ -341,15 +343,18 @@ const styles = StyleSheet.create({
   },
 
   investmentName: {
-    fontSize: 17,
-    fontWeight: "600",
-    color: Colors.white,
+    color: Colors.secondary,
+    fontSize: 15,
+    fontFamily: "Inter_700Bold",
+    marginBottom: 2,
   },
 
   investmentType: {
-    fontSize: 13,
-    color: Colors.gray,
-    marginTop: 2,
+    color: Colors.secondary,
+    fontSize: 12,
+    fontFamily: "Inter_400Regular",
+    flexDirection: "row",
+    alignItems: "center",
   },
 
   statusBadge: {
@@ -359,7 +364,7 @@ const styles = StyleSheet.create({
   },
 
   statusActive: {
-    backgroundColor: "rgba(16,185,129,0.15)",
+    backgroundColor: Colors.statusbg,
   },
 
   statusClosed: {
@@ -369,7 +374,7 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 12,
     fontWeight: "600",
-    color: Colors.green,
+    color: Colors.statusText,
   },
 
   divider: {
@@ -384,19 +389,19 @@ const styles = StyleSheet.create({
   },
 
   amountLabel: {
-    fontSize: 13,
-    color: Colors.gray,
+    fontSize: 12, fontWeight: '500', color: Colors.gray, marginTop: 10
   },
 
   amountValue: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: Colors.white,
-    marginTop: 2,
+    color: Colors.secondary,
+    fontSize: 14,
+    fontFamily: "Inter_400Regular",
+    flexDirection: "row",
+    alignItems: "center",
   },
 
   progressSection: {
-    marginTop: 12,
+    marginTop: 6,
   },
 
   progressHeader: {
@@ -407,7 +412,7 @@ const styles = StyleSheet.create({
 
   progressContainer: {
     height: 8,
-    backgroundColor: "rgba(255,255,255,0.15)",
+    backgroundColor: "rgba(248, 81, 81, 0.15)",
     borderRadius: 10,
     overflow: "hidden",
   },
@@ -421,7 +426,7 @@ const styles = StyleSheet.create({
   metaRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 12,
+    marginTop: 2,
   },
 
   metaText: {
@@ -430,12 +435,12 @@ const styles = StyleSheet.create({
   },
 
   joinButton: {
-    marginTop: 14,
+    marginTop: 6,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: Colors.primary,
-    paddingVertical: 10,
+    // paddingVertical: 10,
     borderRadius: 10,
   },
 

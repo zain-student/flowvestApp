@@ -311,7 +311,7 @@ export const PayoutsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background },
   scrollContent: {
-    //  paddingBottom: 100,
+     paddingBottom: 80,
     backgroundColor: Colors.background
   },
   card: {

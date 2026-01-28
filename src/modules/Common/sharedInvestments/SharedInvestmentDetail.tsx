@@ -282,7 +282,6 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 12,
     color: Colors.green,
-    fontWeight: "500",
   },
 
   sharedBadge: {
@@ -290,6 +289,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
+    marginRight: 8,
   },
 
   sharedText: {
@@ -311,7 +311,8 @@ const styles = StyleSheet.create({
   performanceRow: {
     backgroundColor: Colors.white,
     borderRadius: 16,
-    padding: 14,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
     marginBottom: 12,
     flexDirection: "row",
     justifyContent: "space-between",

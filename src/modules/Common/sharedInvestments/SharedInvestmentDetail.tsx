@@ -220,10 +220,10 @@ const PerformanceCard = ({ icon, label, subLabel, value, highlight }: any) => (
 const Divider = () => <View style={styles.rowDivider} />;
 const MetaItem = ({ label, value, positive }: any) => (
   <View style={{}}>
-    <Text style={styles.metaLabel}>{label}</Text>
     <Text style={[styles.metaValue, positive && { color: Colors.green }]}>
       {value}
     </Text>
+    <Text style={styles.metaLabel}>{label}</Text>
   </View>
 );
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -232,13 +232,13 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background, paddingBottom: 0 },
   centered: { flex: 1, justifyContent: "center", alignItems: "center" },
   notFound: { fontSize: 16, color: Colors.secondary },
-  scrollContent: { paddingHorizontal: 24, paddingBottom: 70 },
+  scrollContent: { paddingHorizontal: 24, paddingBottom: 70, marginTop: 20 },
   title: {
     fontSize: 18,
     fontWeight: "500",
     color: Colors.secondary,
     marginTop: 16,
-    marginBottom: 6,
+    marginBottom: 14,
   },
   investmentCard: {
     backgroundColor: Colors.white,
@@ -281,7 +281,7 @@ const styles = StyleSheet.create({
 
   statusText: {
     fontSize: 12,
-    color: Colors.green,
+    color: Colors.statusText,
   },
 
   sharedBadge: {

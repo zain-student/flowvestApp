@@ -4,7 +4,7 @@ import { Button, Input } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { joinInvestment } from "@/shared/store/slices/shared/investments/partnerInvestmentSlice";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
-import { Feather, Ionicons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useMemo, useState } from "react";
 import {
@@ -12,7 +12,6 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View
 } from "react-native";
 
@@ -79,57 +78,57 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.closeBtn} onPress={() => navigation.goBack()}>
-        <Ionicons name="close" size={27} />
-      </TouchableOpacity>
-
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
         <Text style={styles.title}>{currentInvestment.name}</Text>
+        <View style={styles.investmentCard}>
+          <Text style={styles.investmentName}>{currentInvestment.creator.name || "N/A"}</Text>
+          <View style={styles.badgeRow}>
+            <View style={styles.statusBadge}>
+              <Text style={styles.statusText}>Active</Text>
+            </View>
+            <View style={styles.sharedBadge}>
+              <Text style={styles.sharedText}>Shared</Text>
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View>
+              <Text style={styles.investmentAmount}>
+                {formatCurrency(Number(currentInvestment.current_total_invested ?? 0))}
+              </Text>
+              <Text style={styles.subText}>Current Total Invested</Text>
+            </View>
+            <View>
+              <Text style={styles.investmentAmount}>
+                {formatCurrency(Number(currentInvestment.total_target_amount ?? "0"))}
+              </Text>
+              <Text style={styles.subText}>Target Amount</Text>
+            </View>
+          </View>
 
-        <View style={styles.summaryCard}>
-          <LabelValue label="Creator" value={currentInvestment.creator.name || "N/A"} />
-          <LabelValue label="Target Amount" value={formatCurrency(Number(currentInvestment.total_target_amount ?? "0"))} />
-          <LabelValue label="Currently Invested" value={formatCurrency(Number(currentInvestment.current_total_invested ?? "0"))} />
-          <LabelValue label="Remaining Capacity" value={
-            `${formatCurrency((Number(currentInvestment.total_target_amount ?? 0)) - Number(currentInvestment.current_total_invested ?? 0))}`
-          } />
-
-          <LabelValue
-            label="Status"
-            value={capitalize(currentInvestment.status)}
-            valueStyle={currentInvestment.status === "active" ? styles.statusActive : styles.statusCompleted}
-          />
-          <LabelValue label="Total Participants" value={`${currentInvestment.total_participants ?? 0}`} />
-          <LabelValue label="Type" value={currentInvestment.type.charAt(0).toUpperCase() + currentInvestment.type.slice(1)} />
-          <LabelValue label="Expected Return Rate" value={`${parseFloat(currentInvestment.expected_return_rate).toFixed(1)}`} />
-          <LabelValue label="Start Date" value={currentInvestment.start_date} />
-          {/* show end date if avilible */}
-          {currentInvestment.end_date &&
-            <LabelValue label="End Date" value={currentInvestment.end_date} />
-          }
-
+          <View style={styles.metaRow}>
+            <MetaItem
+              label="Total Participants"
+              value={`${currentInvestment.total_participants ?? 0}`}
+            />
+            <MetaItem
+              label="Expected Returns"
+              value={`+${parseFloat(currentInvestment.expected_return_rate).toFixed(1)}%`}
+              positive
+            />
+          </View>
+          <Divider />
+          <View style={styles.dateRow}>
+            <MetaItem label="Start Date" value={currentInvestment.start_date} />
+            {currentInvestment.end_date && (
+              <MetaItem label="End Date" value={currentInvestment.end_date} />
+            )}
+          </View>
         </View>
         {showJoinForm ? null :
           <>
-            {/* <Text style={styles.sectionTitle}>Performance</Text>
-            <View style={styles.txCard}>
-              <Text style={styles.txType}>Total Paid Out</Text>
-              <Text style={styles.txAmount}>{formatCurrency(currentInvestment.performance?.total_paid_out ?? 0)}</Text>
-            </View>
-            <View style={styles.txCard}>
-              <Text style={styles.txType}>Pending Payouts</Text>
-              <Text style={styles.txAmount}>{formatCurrency(currentInvestment.performance?.pending_payouts ?? 0)}</Text>
-            </View>
-            {currentInvestment.performance.next_payout_date && (
-              <View style={styles.txCard}>
-                <Text style={styles.txType}>Next Payout</Text>
-                <Text style={styles.txDate}>{currentInvestment.performance?.next_payout_date ?? 0}</Text>
-              </View>
-            )} */}
-
             <Text style={styles.sectionTitle}>Performance</Text>
             <View style={styles.performanceContainer}>
               <PerformanceCard
@@ -183,60 +182,49 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
               required
             // autoFocus
             />
-            {/* {errors.amount && <Text style={styles.error}>{errors.amount.message}</Text>} */}
-
             <Input
               label="Notes (optional)"
               type="text"
               placeholder="Any notes for your investment"
               value={notes}
               onChangeText={setNotes}
-            // error={errors.email}
-            // required
-            // autoFocus
             />
             {formError ? <Text style={styles.error}>{formError}</Text> : null}
-            {/* {joinError ? <Text style={styles.error}>{joinError}</Text> : null} */}
 
             <Button
-              // title={isJoining ? "Joining..." : "Join Investment"}
               title="Join Investment"
               onPress={handleJoinInvestment}
               disabled={isJoining}
               style={{ marginTop: 5, backgroundColor: Colors.primary, borderColor: Colors.lightGray }}
             />
-            {/* {joinError && <Text style={{ color: "red", marginTop: 6 }}>{joinError}</Text>} */}
           </View>
         }
       </ScrollView>
     </View>
   );
 };
-
-const PerformanceCard = ({
-  icon,
-  label,
-  value,
-}: {
-  icon: string;
-  label: string;
-  value: string;
-}) => (
-  <View style={styles.txCard}>
-    <View style={styles.txLeft}>
-      <Feather name={icon as any} size={20} color={Colors.white} style={{ marginRight: 8 }} />
-      <Text style={styles.txType}>{label}</Text>
+const PerformanceCard = ({ icon, label, subLabel, value, highlight }: any) => (
+  <View style={styles.performanceRow}>
+    <View style={styles.iconWrapper}>
+      <Feather name={icon} size={18} color={Colors.secondary} />
     </View>
-    <Text style={styles.txAmount}>{value}</Text>
+    <View style={{ flex: 1 }}>
+      <Text style={styles.performanceLabel}>{label}</Text>
+      {/* <Text style={styles.performanceSub}>{subLabel}</Text> */}
+    </View>
+    <Text style={[styles.performanceValue, highlight && { color: Colors.gray }]}>
+      {value}
+    </Text>
   </View>
 );
-
-/* ---------- helpers (unchanged) ---------- */
-const LabelValue = ({ label, value, valueStyle }: { label: string; value: string; valueStyle?: any }) => (
-  <>
-    <Text style={styles.label}>{label}</Text>
-    <Text style={[styles.value, valueStyle]}>{value}</Text>
-  </>
+const Divider = () => <View style={styles.rowDivider} />;
+const MetaItem = ({ label, value, positive }: any) => (
+  <View style={{}}>
+    <Text style={styles.metaLabel}>{label}</Text>
+    <Text style={[styles.metaValue, positive && { color: Colors.green }]}>
+      {value}
+    </Text>
+  </View>
 );
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 /* ---------- styles (same as your file) ---------- */
@@ -244,80 +232,133 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background, paddingBottom: 0 },
   centered: { flex: 1, justifyContent: "center", alignItems: "center" },
   notFound: { fontSize: 16, color: Colors.secondary },
-  closeBtn: {
-    position: "absolute",
-    top: 32,
-    right: 24,
-    zIndex: 10,
-    backgroundColor: Colors.white,
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    elevation: 4,
-  },
-  scrollContent: { padding: 24, paddingTop: 60, paddingBottom: 70 },
+  scrollContent: { paddingHorizontal: 24, paddingBottom: 70 },
   title: {
-    fontSize: 24,
-    fontWeight: "700",
+    fontSize: 18,
+    fontWeight: "500",
     color: Colors.secondary,
+    marginTop: 16,
+    marginBottom: 6,
+  },
+  investmentCard: {
+    backgroundColor: Colors.white,
+    borderRadius: 18,
+    padding: 16,
     marginBottom: 16,
+    borderWidth: 1,
+    borderColor: "#E6EDFF",
   },
-  summaryCard: {
-    backgroundColor: Colors.secondary,
+  investmentName: {
+    fontSize: 14,
+    color: Colors.gray,
+    marginBottom: 4,
+  },
+
+  investmentAmount: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: Colors.secondary,
+  },
+
+  subText: {
+    fontSize: 12,
+    color: Colors.gray,
+    marginBottom: 12,
+  },
+
+  badgeRow: {
+    flexDirection: "row",
+    marginBottom: 12,
+  },
+
+  statusBadge: {
+    backgroundColor: Colors.statusbg,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+    marginRight: 8,
+  },
+
+  statusText: {
+    fontSize: 12,
+    color: Colors.green,
+    fontWeight: "500",
+  },
+
+  sharedBadge: {
+    backgroundColor: "#EAF2FF",
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+
+  sharedText: {
+    fontSize: 12,
+    color: Colors.primary,
+  },
+  metaRow: {
+    flexDirection: "row",
+    marginBottom: 10,
+    justifyContent: 'space-between'
+  },
+  dateRow: {
+    flexDirection: "row",
+    justifyContent: 'space-between'
+  },
+
+  sectionTitle: { fontSize: 16, fontWeight: "500", color: Colors.secondary, marginBottom: 5 },
+  performanceContainer: { marginBottom: 2 },
+  performanceRow: {
+    backgroundColor: Colors.white,
     borderRadius: 16,
-    padding: 20,
-    marginBottom: 24,
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowRadius: 6,
-    elevation: 3,
-  },
-  label: { fontSize: 13, color: Colors.gray, marginTop: 6 },
-  value: { fontSize: 16, color: Colors.white, fontWeight: "600" },
-  statusActive: { color: Colors.green },
-  statusCompleted: { color: Colors.gray },
-  sectionTitle: { fontSize: 16, fontWeight: "600", color: Colors.secondary, marginBottom: 5 },
-  performanceContainer: { marginBottom: 20 },
-  txCard: {
-    backgroundColor: Colors.secondary,
-    borderRadius: 10,
     padding: 14,
     marginBottom: 12,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-  },
-  txLeft: { flexDirection: "row", alignItems: "center" },
-  txType: { fontSize: 15, color: Colors.white, fontWeight: "600" },
-  txAmount: { fontSize: 15, color: Colors.white, fontWeight: "500" },
-  txDate: { fontSize: 13, color: Colors.gray },
-  input: {
-    backgroundColor: Colors.white,
-    borderRadius: 8,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    marginBottom: 8,
     borderWidth: 1,
-    borderColor: Colors.gray,
+    borderColor: '#E6EDFF'
+  },
+
+  iconWrapper: {
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    backgroundColor: "#F1F5FF",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 12,
+  },
+
+  performanceLabel: {
+    fontSize: 14,
+    fontWeight: "500",
+    color: Colors.secondary,
+  },
+  performanceValue: {
+    fontSize: 14,
+    fontWeight: "500",
+    color: Colors.secondary,
+  },
+  metaLabel: {
+    fontSize: 12,
+    color: Colors.gray,
+  },
+
+  metaValue: {
     fontSize: 16,
+    fontWeight: "500",
+    color: Colors.secondary,
+  },
+  rowDivider: {
+    marginTop: 4,
+    height: 1,
+    backgroundColor: "#EFEFEF",
   },
   error: {
     color: Colors.error,
     marginBottom: 8,
     fontSize: 13,
   },
-  joinBtn: {
-    backgroundColor: Colors.primary,
-    paddingVertical: 14,
-    borderRadius: 10,
-    alignItems: "center",
-    marginTop: 16,
-  },
-  joinText: { color: "#fff", fontWeight: "600", fontSize: 16 },
 
 });

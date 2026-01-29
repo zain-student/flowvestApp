@@ -156,7 +156,7 @@ const formatDate = (d?: string | null) => {
 /* --- Styles --- */
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background, paddingBottom: 0 },
-  scrollContent: { paddingHorizontal: 24, paddingBottom: 70, marginTop: 20 },
+  scrollContent: { paddingHorizontal: 12, paddingBottom: 70, marginTop: 20 },
   centered: { flex: 1, justifyContent: "center", alignItems: "center" },
   notFound: { fontSize: 16, color: Colors.secondary },
   title: {

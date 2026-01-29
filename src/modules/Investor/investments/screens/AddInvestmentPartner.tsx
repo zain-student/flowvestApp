@@ -116,6 +116,7 @@ export default function AddInvestmentPartner() {
         data={partners}
         keyExtractor={(item) => item.id.toString()}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.list}
         ListHeaderComponent={
           <View style={styles.card}>
             <Text style={styles.cardTitle}>Investment Details</Text>
@@ -217,11 +218,14 @@ export default function AddInvestmentPartner() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-    paddingBottom: 80,
+    paddingHorizontal: 12,
+    // paddingBottom: 80,
     backgroundColor: "#F9FAFB",
   },
   loaderContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
+  list: {
+    paddingBottom: 75
+  },
   card: {
     // marginHorizontal: 12,
     backgroundColor: Colors.white,

@@ -14,7 +14,6 @@ import {
   StyleSheet,
   Text,
   ToastAndroid,
-  TouchableOpacity,
   View
 } from "react-native";
 import { MarkAsPaidModal } from "../components/MarkAsPaidModal";
@@ -76,13 +75,6 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.closeBtn}
-        onPress={() => navigation.goBack()}
-      >
-        {/* <Text style={styles.closeText}>✕</Text> */}
-        <Ionicons name="close" size={27} />
-      </TouchableOpacity>
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
@@ -189,43 +181,29 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Colors.background, marginBottom: 40 },
-  closeBtn: {
-    position: "absolute",
-    top: 32,
-    right: 24,
-    zIndex: 10,
-    backgroundColor: Colors.white,
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    elevation: 4,
-  },
-  closeText: { fontSize: 22, fontWeight: "bold", color: Colors.secondary },
-  scrollContent: { padding: 24, paddingTop: 60, paddingBottom: 40 },
+  container: { flex: 1, backgroundColor: Colors.background, paddingBottom: 0 },
+  scrollContent: { paddingHorizontal: 12, paddingBottom: 70, marginTop: 20 },
   title: {
-    fontSize: 24,
-    fontWeight: "700",
+    fontSize: 18,
+    fontWeight: "500",
     color: Colors.secondary,
-    marginBottom: 16,
+    marginTop: 16,
+    marginBottom: 14,
   },
   summaryCard: {
-    backgroundColor: Colors.secondary,
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 24,
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowRadius: 6,
-    elevation: 3,
+    backgroundColor: Colors.white,
+    borderRadius: 18,
+    padding: 16,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: "#E6EDFF",
   },
-  label: { fontSize: 13, color: Colors.gray, marginTop: 8 },
-  value: { fontSize: 16, color: Colors.white, fontWeight: "600" },
+  label: { fontSize: 13, color: Colors.gray, marginTop: 8, },
+  value: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: Colors.secondary,
+  },
   status: { fontSize: 15, fontWeight: "600", marginTop: 2 },
   statusScheduled: { color: Colors.green },
   statusCompleted: { color: Colors.gray },

@@ -14,12 +14,12 @@ import React from "react";
 import { TouchableOpacity } from "react-native";
 export type InvestmentStackParamList = {
   InvestmentScreen: undefined;
-  InvestmentDetails: { id: number,showJoinForm?: String, };
-  AddInvestments:undefined;
+  InvestmentDetails: { id: number, showJoinForm?: String, };
+  AddInvestments: undefined;
   EditInvestments: { id: number, mode: string };
-  AddPartner:{id: number}
+  AddPartner: { id: number }
   MyInvestments: undefined;
-  JoinedInvestmentDetail: { id: number};
+  JoinedInvestmentDetail: { id: number };
   SharedInvestments: undefined;
   SharedInvestmentDetail: { id: number, showJoinForm?: boolean, };
   // BrowseInvestments: undefined;
@@ -31,10 +31,10 @@ export const InvestmentStack = () => {
   return (
     <Stack.Navigator
       initialRouteName="InvestmentScreen"
-      //   screenOptions={{
-      //     headerShown: false,
-      //     animation: 'slide_from_right',
-      //   }}
+    //   screenOptions={{
+    //     headerShown: false,
+    //     animation: 'slide_from_right',
+    //   }}
     >
       <Stack.Screen
         name="InvestmentScreen"
@@ -55,9 +55,9 @@ export const InvestmentStack = () => {
               onPress={() => navigation.goBack()}
               style={{
                 marginRight: 16,
-                marginLeft:10,
-                marginTop:5,
-                marginBottom:5,
+                marginLeft: 10,
+                marginTop: 5,
+                marginBottom: 5,
                 backgroundColor: "#F3F4F6",
                 width: 50,
                 height: 50,
@@ -66,7 +66,7 @@ export const InvestmentStack = () => {
                 alignItems: "center",
               }}
             >
-              <Ionicons name="chevron-back" color={"black"} size={30}/>
+              <Ionicons name="chevron-back" color={"black"} size={30} />
             </TouchableOpacity>
           ),
         })}
@@ -82,9 +82,9 @@ export const InvestmentStack = () => {
               onPress={() => navigation?.goBack()}
               style={{
                 marginRight: 16,
-                marginLeft:10,
-                marginTop:5,
-                marginBottom:5,
+                marginLeft: 10,
+                marginTop: 5,
+                marginBottom: 5,
                 backgroundColor: "#F3F4F6",
                 width: 50,
                 height: 50,
@@ -93,7 +93,7 @@ export const InvestmentStack = () => {
                 alignItems: "center",
               }}
             >
-              <Ionicons name="chevron-back" color={"black"} size={30}/>
+              <Ionicons name="chevron-back" color={"black"} size={30} />
             </TouchableOpacity>
           ),
         })}
@@ -109,9 +109,9 @@ export const InvestmentStack = () => {
               onPress={() => navigation?.goBack()}
               style={{
                 marginRight: 16,
-                marginLeft:10,
-                marginTop:5,
-                marginBottom:5,
+                marginLeft: 10,
+                marginTop: 5,
+                marginBottom: 5,
                 backgroundColor: "#F3F4F6",
                 width: 50,
                 height: 50,
@@ -120,9 +120,9 @@ export const InvestmentStack = () => {
                 alignItems: "center",
               }}
             >
-              <Ionicons name="chevron-back" color={"black"} size={30}/>
+              <Ionicons name="chevron-back" color={"black"} size={30} />
             </TouchableOpacity>
-            
+
           ),
         })}
       />
@@ -137,9 +137,9 @@ export const InvestmentStack = () => {
               onPress={() => navigation?.goBack()}
               style={{
                 marginRight: 16,
-                marginLeft:10,
-                marginTop:5,
-                marginBottom:5,
+                marginLeft: 10,
+                marginTop: 5,
+                marginBottom: 5,
                 backgroundColor: "#F3F4F6",
                 width: 50,
                 height: 50,
@@ -148,7 +148,7 @@ export const InvestmentStack = () => {
                 alignItems: "center",
               }}
             >
-              <Ionicons name="chevron-back" color={"black"} size={30}/>
+              <Ionicons name="chevron-back" color={"black"} size={30} />
             </TouchableOpacity>
           ),
         })}
@@ -164,9 +164,9 @@ export const InvestmentStack = () => {
               onPress={() => navigation?.goBack()}
               style={{
                 marginRight: 16,
-                marginLeft:10,
-                marginTop:5,
-                marginBottom:5,
+                marginLeft: 10,
+                marginTop: 5,
+                marginBottom: 5,
                 backgroundColor: "#F3F4F6",
                 width: 50,
                 height: 50,
@@ -175,7 +175,7 @@ export const InvestmentStack = () => {
                 alignItems: "center",
               }}
             >
-              <Ionicons name="chevron-back" color={"black"} size={30}/>
+              <Ionicons name="chevron-back" color={"black"} size={30} />
             </TouchableOpacity>
           ),
         })}
@@ -191,9 +191,9 @@ export const InvestmentStack = () => {
               onPress={() => navigation?.goBack()}
               style={{
                 marginRight: 16,
-                marginLeft:10,
-                marginTop:5,
-                marginBottom:5,
+                marginLeft: 10,
+                marginTop: 5,
+                marginBottom: 5,
                 backgroundColor: "#F3F4F6",
                 width: 50,
                 height: 50,
@@ -202,7 +202,7 @@ export const InvestmentStack = () => {
                 alignItems: "center",
               }}
             >
-              <Ionicons name="chevron-back" color={"black"} size={30}/>
+              <Ionicons name="chevron-back" color={"black"} size={30} />
             </TouchableOpacity>
           ),
         })}
@@ -218,9 +218,9 @@ export const InvestmentStack = () => {
               onPress={() => navigation?.goBack()}
               style={{
                 marginRight: 16,
-                marginLeft:10,
-                marginTop:5,
-                marginBottom:5,
+                marginLeft: 10,
+                marginTop: 5,
+                marginBottom: 5,
                 backgroundColor: "#F3F4F6",
                 width: 50,
                 height: 50,
@@ -229,7 +229,7 @@ export const InvestmentStack = () => {
                 alignItems: "center",
               }}
             >
-              <Ionicons name="chevron-back" color={"black"} size={30}/>
+              <Ionicons name="chevron-back" color={"black"} size={30} />
             </TouchableOpacity>
           ),
         })}
@@ -245,9 +245,9 @@ export const InvestmentStack = () => {
               onPress={() => navigation?.goBack()}
               style={{
                 marginRight: 16,
-                marginLeft:10,
-                marginTop:5,
-                marginBottom:5,
+                marginLeft: 10,
+                marginTop: 5,
+                marginBottom: 5,
                 backgroundColor: "#F3F4F6",
                 width: 50,
                 height: 50,
@@ -256,7 +256,7 @@ export const InvestmentStack = () => {
                 alignItems: "center",
               }}
             >
-              <Ionicons name="chevron-back" color={"black"} size={30}/>
+              <Ionicons name="chevron-back" color={"black"} size={30} />
             </TouchableOpacity>
           ),
         })}

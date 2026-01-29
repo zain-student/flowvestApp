@@ -149,7 +149,7 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
               style={styles.menuBtn}
               onPress={() => setShowMenu((prev) => !prev)}
             >
-              <Ionicons name="ellipsis-vertical" size={24} color={Colors.secondary} />
+              <Ionicons name="ellipsis-vertical" size={20} color={Colors.secondary} />
             </TouchableOpacity>
           )}
           {/* Simple Dropdown */}
@@ -195,70 +195,54 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
           {currentInvestment.type === "shared" && (
             <View style={{ flexDirection: 'row', justifyContent: "space-between" }}>
               <View>
-                <Text style={styles.value}>
-                  {formatCurrency(Number(currentInvestment.min_investment_amount))}{" "}
-                </Text>
                 <Text style={styles.label}>
                   Min:{" "}
                 </Text>
+                <Text style={styles.value}>
+                  {formatCurrency(Number(currentInvestment.min_investment_amount))}{" "}
+                </Text>
               </View>
               <View>
+                <Text style={styles.label}>Max:{" "}</Text>
                 <Text style={styles.value}>
                   {formatCurrency(Number(currentInvestment.max_investment_amount))}
                 </Text>
-                <Text style={styles.label}>Max:{" "}</Text>
               </View>
             </View>
           )}
-          {/* <Text style={styles.label}>Status</Text>
-          <Text
-            style={[
-              styles.status,
-              currentInvestment.status === "active"
-                ? styles.statusActive
-                : styles.statusCompleted,
-            ]}
-          >
-            {currentInvestment.status.charAt(0).toUpperCase() +
-              currentInvestment.status.slice(1)}
-          </Text>
-          <Text style={styles.label}>Type</Text>
-          <Text style={styles.returns}>
-            {currentInvestment.type.charAt(0).toUpperCase() +
-              currentInvestment.type.slice(1)}
-          </Text> */}
           <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
             <View>
+              <Text style={styles.label}>Returns</Text>
               <Text style={styles.returns}>
                 {currentInvestment.expected_return_rate != null
                   ? parseFloat(currentInvestment.expected_return_rate).toFixed(1)
                   : "--"}
                 %
               </Text>
-              <Text style={styles.label}>Returns</Text>
             </View>
             <View>
+              <Text style={styles.label}>Frequency</Text>
               <Text style={styles.returns}>
                 {currentInvestment.frequency.charAt(0).toUpperCase() +
                   currentInvestment.frequency.slice(1)}
               </Text>
-              <Text style={styles.label}>Frequency</Text>
             </View>
           </View>
           <Divider />
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <View>
-              <Text style={styles.value}>{currentInvestment.start_date}</Text>
               <Text style={styles.label}>Start Date</Text>
+              <Text style={styles.value}>{currentInvestment.start_date}</Text>
             </View>
             <View>
-              <Text style={styles.value}>{currentInvestment.end_date}</Text>
               <Text style={styles.label}>End Date</Text>
+              <Text style={styles.value}>{currentInvestment.end_date}</Text>
             </View>
           </View>
-          <Divider />
+          {/* <Divider /> */}
           {!showJoinForm && (
             <View style={styles.footer}>
+              {/* <View> */}
               <Button
                 title="Update"
                 icon={
@@ -280,20 +264,14 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
                 textStyle={styles.footerButtonText}
                 variant="primary"
               />
-              <Button
-                title="Delete"
-                icon={
-                  <Ionicons
-                    name="trash-outline"
-                    size={20}
-                    color={Colors.white}
-                  />
-                }
-                onPress={() => handleDelete()}
+              {/* </View>
+              <View> */}
+              <TouchableOpacity
                 style={styles.deleteButton}
-                textStyle={styles.footerButtonText}
-                variant="primary"
-              />
+                onPress={() => handleDelete()}
+              >
+                <Ionicons name="trash-outline" size={20} color="#C50003" />
+              </TouchableOpacity>
             </View>
           )}
         </View>
@@ -389,13 +367,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1, backgroundColor: Colors.background, paddingBottom: 0
   },
-  scrollContent: { paddingHorizontal: 24, paddingBottom: 70, marginTop: 20 },
+  scrollContent: { paddingHorizontal: 12, paddingBottom: 70, marginTop: 20 },
   menuBtn: {
     position: "absolute",
     top: 20,
     right: 20,
-    padding: 8,
+    padding: 12,
     zIndex: 20,
+    backgroundColor: '#0120730D',
+    borderRadius: 25
   },
   overlay: {
     position: "absolute",
@@ -444,10 +424,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#E6EDFF",
   },
-  label: { fontSize: 13, color: Colors.gray, marginTop: 0 },
+  label: { fontSize: 13, color: Colors.gray, marginTop: 8, },
   value: {
     fontSize: 16,
-    marginTop: 8,
     fontWeight: "600",
     color: Colors.secondary,
   },
@@ -513,11 +492,9 @@ const styles = StyleSheet.create({
   txDate: { fontSize: 13, color: Colors.gray },
   footer: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 16,
-    borderTopWidth: 0.2,
-    borderTopColor: Colors.gray,
-    paddingTop: 12,
+    alignItems: "center", // 👈 important
+    justifyContent: "flex-end",
+    paddingTop: 18,
   },
   error: {
     color: Colors.error,
@@ -525,25 +502,25 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   updateButton: {
-    flex: 1,
-    paddingVertical: 10,
-    borderRadius: 6,
+    // flex: 1,
+    borderRadius: 22,
     alignItems: "center",
+    justifyContent: 'center',
     marginHorizontal: 5,
-    backgroundColor: "#3B82F6", // Blue
   },
   deleteButton: {
-    flex: 1,
-    flexDirection: "row",
-    paddingVertical: 10,
-    borderRadius: 6,
+    width: 52,
+    height: 52,
+    justifyContent: 'center',
+    borderRadius: 26,
     alignItems: "center",
-    marginHorizontal: 5,
-    backgroundColor: "#EF4444", // Red
+    marginBottom: 24,
+    backgroundColor: "#0120730D", // Red
   },
   footerButtonText: {
     color: "#fff",
-    fontWeight: "bold",
+    fontWeight: "500",
+    fontSize: 12
   },
   rowDivider: {
     marginTop: 4,

@@ -4,12 +4,14 @@ import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { fetchPartnerDashboard } from "@/shared/store/slices/partner/dashboard/partnerDashboardSlice";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
-import { Feather } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect } from "react";
 import {
   ActivityIndicator,
+  Image,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -48,28 +50,28 @@ export const PartnersDashboard = () => {
       icon: "layers",
       label: "Pending Payouts",
       value: stats?.pending_payouts_count ?? "--",
-      bg: "#E0F2FE", // pastel blue
+      bg: "#fff", // pastel blue
     },
     {
       icon: "activity",
-      label: "Active Investments",
+      label: "Active INV.",
       value: stats?.active_investments ?? "--",
-      bg: "#DCFCE7", // pastel green
+      bg: "#fff", // pastel green
     },
     {
       icon: "dollar-sign",
-      label: "Total Invested",
+      label: "Invested",
       value: stats?.total_invested ?? "--",
-      bg: "#FDE68A",  // pastel yellow
+      bg: "#fff",  // pastel yellow
     },
     {
       icon: "percent",
-      label: "ROI %",
+      label: "Avg ROI",
       value:
         stats?.roi_percentage !== undefined
           ? `${stats?.roi_percentage.toFixed(1)}`
           : "--",
-      bg: "#FCE7F3", // pastel pink
+      bg: "#fff", // pastel pink
     },
   ];
   const pullToRefresh = () => {
@@ -78,42 +80,55 @@ export const PartnersDashboard = () => {
   return (
     <DashboardLayout>
       <View style={styles.container}>
-        {/* 💰 Portfolio Summary Card */}
-        <View style={styles.balanceCardDark}>
-          <Text style={styles.balanceLabelDark}>Portfolio Value</Text>
+        <LinearGradient
+          colors={[Colors.primary, "#3a84fb"]} // left → right
+          start={{ x: 0, y: 1 }}
+          end={{ x: 2, y: 0 }}
+          style={styles.balanceCardDark}
+        >
+          <Image source={require('../../../../../assets/images/upperDiv.png')}
+            style={{ position: 'absolute', width: 100, height: 110, top: -30, right: -50 }} />
+          {/* 💰 Portfolio Summary Card */}
+          {/* <View style={styles.balanceCardDark}> */}
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text style={styles.balanceLabelDark}>Portfolio Value</Text>
+            {/* Total Earned */}
+            <View style={{ alignSelf: 'flex-end', backgroundColor: '#0AFF5C47', borderRadius: 8, height: 29, width: 71, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+              <Ionicons name="add" size={16} color={Colors.green} />
+              <Text style={styles.increment}>
+                {formatCurrency(stats?.total_earned ?? 0)}{" "}</Text>
+            </View>
+          </View>
           <Text style={styles.balanceValueDark}>
             {formatCurrency(Number(stats?.portfolio_value ?? "--"))}
           </Text>
-          <Text style={styles.changeSubLabel}>
-            <Text style={styles.balanceChangeDark}>
-              {formatCurrency(stats?.total_earned ?? 0)}{" "}
-            </Text>
-            Total Earned</Text>
 
           <View style={styles.balanceActionsRow}>
             <TouchableOpacity
-              style={styles.balanceActionBtnDark}
+              style={styles.mirror}
               onPress={() =>
                 navigation.navigate("RecentPayouts")}
             >
-              <Feather name="arrow-down-right" size={18} color="#fff" />
+              <Feather name="arrow-down-right" size={14} color={Colors.yellow} />
               <Text style={styles.balanceActionTextDark}>Recent Payouts</Text>
             </TouchableOpacity>
-
             <TouchableOpacity
               style={[
-                styles.balanceActionBtnDark,
+                styles.mirror,
                 // { backgroundColor: Colors.gray },
               ]}
               onPress={() =>
                 navigation.navigate("UpcomingPayouts")
               }
             >
-              <Feather name="calendar" size={18} color="#fff" />
+              <Feather name="calendar" size={14} color={Colors.yellow} />
               <Text style={styles.balanceActionTextDark}>Upcoming Payouts</Text>
             </TouchableOpacity>
           </View>
-        </View>
+          {/* </View> */}
+          <Image source={require('../../../../../assets/images/lowerDiv.png')} style={{ position: 'absolute', width: 200, height: 260, bottom: -190, left: -150, }} />
+          {/* <View style={styles.balanceActionsRow}></View> */}
+        </LinearGradient>
 
         {/* 📊 Dashboard Content */}
         <ScrollView
@@ -146,15 +161,17 @@ export const PartnersDashboard = () => {
                   
                 </View> */}
                 <View style={{ flex: 1 }}>
-                  <Text style={styles.statLabel}>{card.label}</Text>
-                  <Text style={styles.statValue}>{card.value}</Text>
+                  <Feather
+                    name={card.icon as any}
+                    size={22}
+                    color={Colors.primary}
+                    style={{ backgroundColor: Colors.lightGray, width: 44, height: 44, borderRadius: 22, justifyContent: 'center', alignItems: 'center', padding: 10 }}
+                  />
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Text style={styles.statLabel}>{card.label}:</Text>
+                    <Text style={styles.statValue}>{card.value}</Text>
+                  </View>
                 </View>
-                <Feather
-                  name={card.icon as any}
-                  size={38}
-                  color="#888"
-                  style={{ alignSelf: "flex-end" }}
-                />
               </View>
             ))}
           </View>
@@ -174,27 +191,33 @@ const styles = StyleSheet.create({
     // paddingBottom: 80,
   },
   balanceCardDark: {
-    backgroundColor: Colors.secondary,
-    borderBottomLeftRadius: 32,
-    borderBottomRightRadius: 32,
+    backgroundColor: Colors.primary,
+    borderRadius: 12,
+    marginHorizontal: 12,
+    marginTop: 12,
     padding: 24,
-    paddingTop: 36,
+    // paddingTop: 36,
     shadowColor: "#000",
     shadowOpacity: 0.08,
     shadowRadius: 12,
     elevation: 6,
   },
   balanceLabelDark: {
-    color: Colors.gray,
-    fontSize: 15,
-    fontFamily: "Inter_400Regular",
+    color: Colors.white,
+    fontSize: 14,
+    fontFamily: "Inter_500Regular",
+  },
+  increment: {
+    color: Colors.green,
+    fontSize: 14,
+    fontFamily: "Inter_500SemiBold",
   },
   balanceValueDark: {
     color: Colors.white,
-    fontSize: 36,
+    fontSize: 20,
     fontFamily: "Inter_700Bold",
-    fontWeight: "700",
-    marginVertical: 2
+    fontWeight: "600",
+    marginVertical: 2,
   },
   balanceChangeDark: {
     color: Colors.green,
@@ -208,58 +231,47 @@ const styles = StyleSheet.create({
   balanceActionsRow: {
     flexDirection: "row",
   },
-  balanceActionBtnDark: {
-    // flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: Colors.green,
-    borderRadius: 18,
-    paddingVertical: 10,
-    paddingHorizontal: 2,
-    marginHorizontal: 5,
-    width: '48%',
-  },
+  mirror: { backgroundColor: Colors.mirror, width: '47%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 18, paddingVertical: 6, paddingHorizontal: 6, borderWidth: 0.3, borderColor: Colors.white, opacity: 0.7, marginHorizontal: 6 },
   balanceActionTextDark: {
-    color: Colors.white,
-    fontSize: 14,
-    fontFamily: "Inter_600SemiBold",
-    flexWrap: 'wrap'
-    // marginLeft: 7,
+    color: Colors.yellow,
+    fontSize: 12,
+    fontFamily: "Inter_500Medium",
   },
   scrollContent: {
     paddingHorizontal: 12,
-    paddingTop: 10,
+    // paddingTop: 10,
+    padding: 0,
+    paddingBottom: 80,
+    backgroundColor: Colors.background,
   },
   statsGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "space-between",
-    marginBottom: 12,
+    // justifyContent: "space-around",
+    // marginHorizontal: 12,
+    marginTop: 2,
+    marginBottom: 2,
   },
   statCardLarge: {
-    width: "47%",
+    width: "47.5%",
     flexDirection: "row",
     alignItems: "center",
     borderRadius: 22,
-    padding: 20,
-    minHeight: 90,
-    marginVertical: 8,
-    shadowColor: "#000",
-    shadowOpacity: 0.04,
-    shadowRadius: 8,
-    elevation: 2,
+    paddingHorizontal: 15,
+    minHeight: 100,
+    marginVertical: 3,
+    borderColor: "#E6EDFF",
+    borderWidth: 1,
   },
   statLabel: {
-    color: "colors.secondary",
-    fontSize: 16,
-    fontFamily: "Inter_400Regular",
-    marginBottom: 2,
+    color: Colors.gray,
+    fontSize: 14,
+    fontFamily: "Inter_500Regular",
   },
   statValue: {
-    color: "colors.secondary",
-    fontSize: 32,
-    fontFamily: "Inter_700Bold",
+    color: Colors.secondary,
+    fontSize: 14,
+    fontFamily: "Inter_500Bold",
     fontWeight: "700",
   },
 });

@@ -368,13 +368,6 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_500Bold",
     fontWeight: "700",
   },
-  sectionRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    marginBottom: 6,
-  },
   sectionTitle: {
     fontSize: 16,
     fontFamily: "Inter_700Bold",

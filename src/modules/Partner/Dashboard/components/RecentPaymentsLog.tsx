@@ -1,6 +1,6 @@
 import { useAppSelector } from "@/shared/store";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
-import { Feather } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import Colors from "../../../../shared/colors/Colors";
@@ -22,15 +22,21 @@ export const RecentPaymentsLog = () => {
                 : "activity"
           }
           size={22}
-          color={Colors.white}
+          color={Colors.primary}
         />
       </View>
 
       {/* Middle: Title & Dates */}
       <View style={styles.infoWrapper}>
         <Text style={styles.activityTitle}>{item.title}</Text>
-        <Text style={styles.activitySubText}>Created: {formatDate(item.created_at)}</Text>
-        <Text style={styles.activitySubText}>Time: {item.time}</Text>
+        <View style={{ flexDirection: "row", alignItems: "center" }} >
+          <Ionicons name="calendar-outline" size={13} color={Colors.secondary} />
+          <Text style={styles.activitySubText}>Created: {formatDate(item.created_at)}</Text>
+        </View>
+        <View style={{ flexDirection: "row", alignItems: "center" }} >
+          <Ionicons name="time-outline" size={13} color={Colors.secondary} />
+          <Text style={styles.activitySubText}>Time: {item.time}</Text>
+        </View>
       </View>
 
       {/* Right: Amount & Status */}
@@ -84,29 +90,27 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   sectionTitle: {
-    fontSize: 17,
+    fontSize: 16,
     fontFamily: "Inter_700Bold",
-    fontWeight: "700",
-    color: Colors.secondary,
-    marginBottom: 12,
+    fontWeight: "500",
+    color: "colors.secondary",
   },
   activityCard: {
-    backgroundColor: Colors.secondary,
+    backgroundColor: Colors.white,
     borderRadius: 14,
-    padding: 16,
-    marginVertical: 6,
+    padding: 12,
+    marginVertical: 2,
+    marginHorizontal: 4,
     flexDirection: "row",
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowRadius: 6,
-    elevation: 3,
+    borderWidth: 1,
+    borderColor: "#E6EDFF",
   },
   iconWrapper: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    backgroundColor: Colors.green + "33", // slightly transparent green background
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: Colors.lightGray, // 20% opacity
     justifyContent: "center",
     alignItems: "center",
     marginRight: 12,
@@ -115,10 +119,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   rightWrapper: {
-    alignItems: "flex-end",
+     alignItems: "flex-end" 
   },
   activityTitle: {
-    color: Colors.white,
+    color: Colors.secondary,
     fontSize: 15,
     fontFamily: "Inter_700Bold",
     marginBottom: 2,
@@ -127,6 +131,9 @@ const styles = StyleSheet.create({
     color: Colors.gray,
     fontSize: 12,
     fontFamily: "Inter_400Regular",
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 4,
   },
   activityAmount: {
     color: Colors.green,
@@ -135,8 +142,7 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   activityStatus: {
-    fontSize: 13,
-    fontFamily: "Inter_600SemiBold",
+   fontSize: 13, fontFamily: "Inter_600SemiBold"
   },
   statusCompleted: { color: Colors.green },
   statusProcessing: { color: Colors.yellow },

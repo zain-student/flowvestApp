@@ -2,7 +2,7 @@ import { useAppSelector } from "@/shared/store";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, Image, StyleSheet, Text, View } from "react-native";
 import Colors from "../../../../shared/colors/Colors";
 
 export const RecentPaymentsLog = () => {
@@ -66,7 +66,10 @@ export const RecentPaymentsLog = () => {
     <View style={styles.container}>
       <Text style={styles.sectionTitle}>Recent Activities</Text>
       {recent_activities.length === 0 ? (
-        <Text style={styles.emptyText}>No recent activities.</Text>
+        <>
+          <Image source={require('../../../../../assets/images/noRecentActivity.png')} style={{ width: 100, height: 100, alignSelf: 'center' }} />
+          <Text style={styles.emptyText}>No recent activities.</Text>
+        </>
       ) : (
         <FlatList
           data={recent_activities}
@@ -119,7 +122,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   rightWrapper: {
-     alignItems: "flex-end" 
+    alignItems: "flex-end"
   },
   activityTitle: {
     color: Colors.secondary,
@@ -142,7 +145,7 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   activityStatus: {
-   fontSize: 13, fontFamily: "Inter_600SemiBold"
+    fontSize: 13, fontFamily: "Inter_600SemiBold"
   },
   statusCompleted: { color: Colors.green },
   statusProcessing: { color: Colors.yellow },

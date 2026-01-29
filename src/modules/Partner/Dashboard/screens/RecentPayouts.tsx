@@ -2,17 +2,18 @@ import { PartnerDashboardStackParamList } from "@/navigation/PartnerStacks/Partn
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
-import { Feather } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { fetchPartnerDashboard } from "@store/slices/partner/dashboard/partnerDashboardSlice";
 import React from "react";
 import {
   FlatList,
+  Image,
   RefreshControl,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 
 type Props = NativeStackScreenProps<
@@ -43,41 +44,47 @@ export const RecentPayouts = ({ navigation }: Props) => {
       <TouchableOpacity
         style={styles.card}
         activeOpacity={0.7}
-        // onPress={() =>
-        // navigation.navigate("PayoutDetails", { payoutId: item.id })
-        // } // Navigate to payout details
       >
-        {/* Top Row */}
-        <View style={styles.headerRow}>
-          <View style={styles.leftRow}>
-            <Feather
-              name="arrow-down-right"
-              size={20}
-              color={statusColor}
-              style={styles.icon}
-            />
+        <View style={styles.iconWrapper}>
+          <Feather
+            name="arrow-down-right"
+            size={22}
+            color={Colors.primary}
+            style={styles.icon}
+          />
+        </View>
+        <View style={styles.infoWrapper}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={styles.investmentName}>{item.investment_name}</Text>
+            {/* </View> */}
+
+            <Text style={styles.statusBadge}>
+              {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+            </Text>
+          </View>
+          {/* </View> */}
+
+          {/* Middle Row */}
+          <View style={styles.metaRow}>
+            <View style={{ flexDirection: "row", alignItems: "center" }} >
+              <Ionicons name="time-outline" size={13} color={Colors.secondary} />
+              <Text style={styles.metaText}>Paid : {item.paid_date}</Text>
+            </View>
+            <Text style={styles.metaText}>
+              Type:{" "}
+              {item.payout_type.charAt(0).toUpperCase() +
+                item.payout_type.slice(1)}
+            </Text>
           </View>
 
-          <Text style={[styles.statusBadge, { backgroundColor: statusColor }]}>
-            {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-          </Text>
-        </View>
-
-        {/* Middle Row */}
-        <View style={styles.metaRow}>
-          <Text style={styles.metaText}>
-            Type:{" "}
-            {item.payout_type.charAt(0).toUpperCase() +
-              item.payout_type.slice(1)}
-          </Text>
-          <Text style={styles.metaText}>Paid : {item.paid_date}</Text>
-        </View>
-
-        {/* Bottom Row */}
-        <View style={styles.amountRow}>
-          <Text style={styles.amountLabel}>Amount</Text>
-          <Text style={styles.amountValue}>{formatCurrency(item.amount)}</Text>
+          {/* Bottom Row */}
+          <View style={styles.amountRow}>
+            <View style={{ flexDirection: "row", alignItems: "center" }} >
+              <Ionicons name="cash-outline" size={13} color={Colors.secondary} />
+              <Text style={styles.amountLabel}>Amount</Text>
+            </View>
+            <Text style={styles.amountValue}>{formatCurrency(item.amount)}</Text>
+          </View>
         </View>
       </TouchableOpacity>
     );
@@ -93,7 +100,7 @@ export const RecentPayouts = ({ navigation }: Props) => {
         contentContainerStyle={styles.listContainer}
         ListEmptyComponent={
           <View style={styles.emptyState}>
-            <Feather name="inbox" size={48} color={Colors.gray} />
+            <Image source={require('../../../../../assets/images/noRecentActivity.png')} style={{ width: 150, height: 150, alignSelf: 'center', marginTop: 80 }} />
             <Text style={styles.emptyText}>No recent payouts found.</Text>
           </View>
         }
@@ -117,41 +124,44 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     paddingBottom: 80,
   },
-  emptyState: { justifyContent: "center", alignItems: "center", padding: 20 },
+  emptyState: { justifyContent: "center", alignItems: "center", paddingTop: 20, marginTop: 100 },
   listContainer: {
     paddingBottom: 24,
   },
   card: {
-    backgroundColor: Colors.secondary,
+    backgroundColor: Colors.white,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  headerRow: {
+    borderColor: "#E6EDFF",
+    borderWidth: 1,
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 6,
+    alignItems: 'center'
   },
-  leftRow: {
-    flexDirection: "row",
+  iconWrapper: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: Colors.lightGray, // 20% opacity
+    justifyContent: "center",
     alignItems: "center",
+    marginRight: 12,
   },
   icon: {
-    marginRight: 10,
+    // marginRight: 10,
+  },
+  infoWrapper: {
+    flex: 1,
   },
   investmentName: {
-    fontSize: 16,
-    color: Colors.white,
+    color: Colors.secondary,
+    fontSize: 15,
     fontFamily: "Inter_700Bold",
-    fontWeight: "700",
+    marginBottom: 2,
   },
   statusBadge: {
-    color: Colors.white,
+    backgroundColor: Colors.statusbg,
+    color: Colors.statusText,
     fontSize: 12,
     fontFamily: "Inter_500Medium",
     paddingHorizontal: 10,
@@ -163,36 +173,42 @@ const styles = StyleSheet.create({
   metaRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 4,
-    marginBottom: 6,
+    // marginTop: 4,
+    // marginBottom: 6,
   },
   metaText: {
-    fontSize: 13,
     color: Colors.gray,
+    fontSize: 12,
     fontFamily: "Inter_400Regular",
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 4,
   },
   amountRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 8,
+    // marginTop: 8,
   },
   amountLabel: {
-    fontSize: 14,
     color: Colors.gray,
-    fontFamily: "Inter_500Medium",
+    fontSize: 12,
+    fontFamily: "Inter_400Regular",
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 4,
   },
   amountValue: {
-    fontSize: 18,
-    color: Colors.white,
+    fontSize: 15,
     fontFamily: "Inter_700Bold",
-    fontWeight: "700",
+    marginBottom: 2,
+    color: Colors.secondary
   },
   emptyText: {
-    textAlign: "center",
     color: Colors.gray,
     fontSize: 15,
     fontFamily: "Inter_400Regular",
-    marginTop: 40,
+    textAlign: "center",
+    paddingVertical: 16,
   },
 });
 

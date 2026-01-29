@@ -167,31 +167,6 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
               </View>)
             }
           </View>
-
-          {/* {payouts.status.toLowerCase() !== "paid" && payouts.status.toLowerCase() !== "cancelled" && (<View style={styles.footer}>
-            <Button
-              title="Cancel Payout"
-              icon={<Ionicons name="trash" size={20} color={Colors.white} />}
-              onPress={() => {
-                Alert.alert(
-                  "Confirm Cancellation",
-                  "Are you sure you want to cancel this payout?",
-                  [
-                    { text: "No", style: "cancel" },
-                    {
-                      text: "Yes",
-                      style: "destructive",
-                      onPress: () => delPayout()
-                    },
-                  ]
-                );
-              }
-              }
-              style={styles.cancelButton}
-              textStyle={styles.footerButtonText}
-              variant="primary"
-            />
-          </View>)} */}
         </View>
       </ScrollView>
     </View>

@@ -126,6 +126,9 @@ export const AppTabNavigator: React.FC = () => {
   // const isAuthenticated = useAppSelector(selectIsAuthenticated);
   // const isLoading = useAppSelector(selectIsLoading);
   const userRole = useAppSelector((state) => state.auth.user?.roles?.[0]); // e.g. 'user' or 'admin
+  if (!userRole) {
+    return null;
+  }
   return (
     <Tab.Navigator
       initialRouteName="Dashboard"

@@ -171,7 +171,7 @@ export const MyInvestments = ({ navigation }: Props) => {
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 24 }}
+        contentContainerStyle={{ paddingBottom: 75 }}
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.5}
         refreshing={isLoading}
@@ -245,10 +245,11 @@ export const MyInvestments = ({ navigation }: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    // backgroundColor: Colors.background,
-    paddingHorizontal: 16,
-    marginBottom: 50,
+    // flex: 1,
+    // // backgroundColor: Colors.background,
+    paddingHorizontal: 12,
+    // marginBottom: 50,
+    flex: 1, backgroundColor: Colors.background
   },
   searchContainer: {
     flexDirection: "row",

@@ -166,20 +166,12 @@ export const PayoutsScreen: React.FC = () => {
           />
         ) : (
           <View
-            style={[
-              styles.statusBadge,
-              {
-                backgroundColor: isScheduled
-                  ? Colors.statusbg
-                  : "rgba(156,163,175,0.15)",
-              },
-            ]}
+            style={
+              styles.statusBadge}
           >
             <Text
-              style={[
-                styles.statusText,
-                { color: isScheduled ? Colors.statusText : Colors.gray },
-              ]}
+              style={
+                styles.statusText}
             >
               {item.status}
             </Text>
@@ -311,7 +303,7 @@ export const PayoutsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background },
   scrollContent: {
-     paddingBottom: 80,
+    paddingBottom: 80,
     backgroundColor: Colors.background
   },
   card: {
@@ -444,15 +436,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
+    backgroundColor: Colors.statusbg
   },
 
   statusText: {
     fontSize: 13,
     fontFamily: "Inter_600SemiBold",
+    color: Colors.statusText
   },
-
-  statusCancelled: { color: Colors.gray },
-  statusScheduled: { color: Colors.green },
 
   // ✅ Bulk action styles
   bulkHeader: {

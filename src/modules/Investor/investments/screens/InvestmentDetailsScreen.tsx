@@ -270,7 +270,7 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
                 style={styles.deleteButton}
                 onPress={() => handleDelete()}
               >
-                <Ionicons name="trash-outline" size={20} color="#C50003" />
+                <Ionicons name="trash" size={20} color="#C50003" />
               </TouchableOpacity>
             </View>
           )}
@@ -509,10 +509,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   deleteButton: {
-    width: 52,
-    height: 52,
+    width: 48,
+    height: 48,
     justifyContent: 'center',
-    borderRadius: 26,
+    borderRadius: 24,
     alignItems: "center",
     marginBottom: 24,
     backgroundColor: "#0120730D", // Red

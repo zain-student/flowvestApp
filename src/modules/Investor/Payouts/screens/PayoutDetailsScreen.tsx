@@ -14,22 +14,10 @@ import {
   StyleSheet,
   Text,
   ToastAndroid,
+  TouchableOpacity,
   View
 } from "react-native";
 import { MarkAsPaidModal } from "../components/MarkAsPaidModal";
-const mockPayout = {
-  id: 1,
-  date: "2024-07-15",
-  amount: 1200,
-  status: "Upcoming",
-  recipient: "You",
-  method: "Bank Transfer",
-  timeline: [
-    { id: 1, label: "Requested", date: "2024-07-01" },
-    { id: 2, label: "Scheduled", date: "2024-07-10" },
-    { id: 3, label: "Processing", date: "2024-07-14" },
-  ],
-};
 type Props = NativeStackScreenProps<PayoutStackParamList, "PayoutDetails">;
 type RouteProps = RouteProp<PayoutStackParamList, "PayoutDetails">;
 export const PayoutDetailsScreen = ({ navigation }: Props) => {
@@ -81,25 +69,25 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
       >
         <Text style={styles.title}>{payouts.investment_title}</Text>
         <View style={styles.summaryCard}>
-          <Text style={styles.label}>Amount</Text>
-          <Text style={styles.value}>
-            {formatCurrency(payouts.amount)}
-          </Text>
-          <Text style={styles.label}>Status</Text>
-          <Text
-            style={[
-              styles.status,
-              payouts.status === "scheduled"
-                ? styles.statusScheduled
-                : styles.statusCompleted,
-            ]}
-          >
-            {payouts.status.charAt(0).toUpperCase() + payouts.status.slice(1)}
-          </Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+
+            <View>
+              <Text style={styles.label}>Amount</Text>
+              <Text style={styles.value}>
+                {formatCurrency(payouts.amount)}
+              </Text>
+            </View>
+            <View>
+              <Text style={styles.label}>Investment ROI</Text>
+              <Text style={styles.valueRoi}>{Number(payouts.investment_roi).toFixed(1)}%</Text>
+            </View>
+          </View>
+          <View style={styles.statusBadge}>
+            <Text style={styles.statusText}> {payouts.status.charAt(0).toUpperCase() + payouts.status.slice(1)}</Text>
+          </View>
           <Text style={styles.label}>Participant</Text>
           <Text style={styles.value}>{payouts.participant_name}({payouts.participant_email})</Text>
-          <Text style={styles.label}>Investment ROI</Text>
-          <Text style={styles.value}>{Number(payouts.investment_roi).toFixed(1)}%</Text>
+
           {payouts.status.toLowerCase() === "cancelled" && (
             <>
               <Text style={styles.label}>Notes</Text>
@@ -109,48 +97,78 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
           }
           {payouts.status.toLowerCase() === "paid" && (
             <>
-              <Text style={styles.label}>Payout Method</Text>
-              <Text style={styles.value}>{payouts.payment_method ?? "Not Paid Yet"}</Text>
-              <Text style={styles.label}>Reference No</Text>
-              <Text style={styles.value}>{payouts.reference_number || "N/A"}</Text>
-              <Text style={styles.label}>Paid Date</Text>
-              <Text style={styles.value}>{payouts.paid_date}</Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <View>
+                  <Text style={styles.label}>Payout Method</Text>
+                  <Text style={styles.value}>{payouts.payment_method ?? "Not Paid Yet"}</Text>
+                </View>
+                <View>
+                  <Text style={styles.label}>Reference No</Text>
+                  <Text style={styles.value}>{payouts.reference_number || "N/A"}</Text>
+                </View>
+              </View>
+              <Divider />
+              <View style={{ flexDirection: 'row', justifyContent: "space-between" }}>
+                <Text style={styles.labelDate}>Paid Date</Text>
+                <Text style={styles.valueDate}>{payouts.paid_date}</Text>
+              </View>
             </>
           )
           }
-          <Text style={styles.label}>Scheduled Date</Text>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Text style={styles.value}>{payouts.scheduled_date}</Text>
+          <Divider />
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text style={styles.labelDate}>Scheduled Date</Text>
+            <Text style={styles.valueDate}>{payouts.scheduled_date}</Text>
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'flex-end', }}>
             {/* pay payout button */}
-            {payouts.status.toLowerCase() !== "paid" && payouts.status.toLowerCase() !== "cancelled" && (<View
-            // style={styles.footer}
-            >
-              <Button
-                title="Pay"
-                icon={<Ionicons name="send-sharp" size={20} color={Colors.white} />}
-                onPress={() => setShowPayModal(true)}
-                style={styles.payButton}
-                textStyle={styles.footerButtonText}
-                variant="primary"
-              />
+            {payouts.status.toLowerCase() !== "paid" && payouts.status.toLowerCase() !== "cancelled" && (
+              <View style={styles.footer}>
+                <Button
+                  title="Pay"
+                  icon={<Ionicons name="send-sharp" size={20} color={Colors.white} />}
+                  onPress={() => setShowPayModal(true)}
+                  style={styles.payButton}
+                  textStyle={styles.footerButtonText}
+                  variant="primary"
+                />
 
-              <MarkAsPaidModal
-                visible={showPayModal}
-                onClose={() => setShowPayModal(false)}
-                onSubmit={handleSubmitPayment}
-                payoutSummary={{
-                  investmentName: payouts.investment_title,
-                  participantName: payouts.participant_name,
-                  amount: payouts.amount,
-                  scheduledDate: payouts.scheduled_date,
-                }}
-              />
-
-            </View>)
+                <MarkAsPaidModal
+                  visible={showPayModal}
+                  onClose={() => setShowPayModal(false)}
+                  onSubmit={handleSubmitPayment}
+                  payoutSummary={{
+                    investmentName: payouts.investment_title,
+                    participantName: payouts.participant_name,
+                    amount: payouts.amount,
+                    scheduledDate: payouts.scheduled_date,
+                  }}
+                />
+                <TouchableOpacity
+                  style={styles.deleteButton}
+                  onPress={() => {
+                    Alert.alert(
+                      "Confirm Cancellation",
+                      "Are you sure you want to cancel this payout?",
+                      [
+                        { text: "No", style: "cancel" },
+                        {
+                          text: "Yes",
+                          style: "destructive",
+                          onPress: () => delPayout()
+                        },
+                      ]
+                    );
+                  }
+                  }
+                >
+                  <Ionicons name="trash" size={20} color="#C50003" />
+                </TouchableOpacity>
+              </View>)
             }
           </View>
 
-          {payouts.status.toLowerCase() !== "paid" && payouts.status.toLowerCase() !== "cancelled" && (<View style={styles.footer}>
+          {/* {payouts.status.toLowerCase() !== "paid" && payouts.status.toLowerCase() !== "cancelled" && (<View style={styles.footer}>
             <Button
               title="Cancel Payout"
               icon={<Ionicons name="trash" size={20} color={Colors.white} />}
@@ -173,13 +191,13 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
               textStyle={styles.footerButtonText}
               variant="primary"
             />
-          </View>)}
+          </View>)} */}
         </View>
       </ScrollView>
     </View>
   );
 };
-
+const Divider = () => <View style={styles.rowDivider} />;
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background, paddingBottom: 0 },
   scrollContent: { paddingHorizontal: 12, paddingBottom: 70, marginTop: 20 },
@@ -204,14 +222,32 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: Colors.secondary,
   },
-  status: { fontSize: 15, fontWeight: "600", marginTop: 2 },
-  statusScheduled: { color: Colors.green },
-  statusCompleted: { color: Colors.gray },
-  sectionTitle: {
+  valueRoi: {
     fontSize: 16,
     fontWeight: "600",
+    color: Colors.green,
+  },
+  labelDate: { fontSize: 13, color: Colors.gray, marginTop: 8, },
+  valueDate: {
+    fontSize: 16,
+    fontWeight: "600",
+    marginTop: 7,
     color: Colors.secondary,
-    marginBottom: 10,
+  },
+  statusBadge: {
+    width: "30%",
+    backgroundColor: Colors.statusbg,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+    marginRight: 8,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  statusText: {
+    fontSize: 12,
+    color: Colors.statusText,
   },
   footer: {
     flexDirection: "row",
@@ -221,41 +257,30 @@ const styles = StyleSheet.create({
     borderTopColor: Colors.gray,
     paddingTop: 12,
   },
-
-  cancelButton: {
-    flex: 1,
-    paddingVertical: 10,
-    borderRadius: 6,
+  deleteButton: {
+    width: 48,
+    height: 48,
+    justifyContent: 'center',
+    borderRadius: 24,
     alignItems: "center",
-    marginHorizontal: 5,
-    backgroundColor: "#EF4444", // Blue
+    marginBottom: 24,
+    backgroundColor: "#0120730D", // Red
   },
   payButton: {
-    flex: 1,
-    paddingVertical: 5,
-    borderRadius: 6,
+    borderRadius: 22,
     alignItems: "center",
+    justifyContent: 'center',
     marginHorizontal: 5,
-    backgroundColor: Colors.primary,
   },
   footerButtonText: {
     color: "#fff",
-    fontWeight: "bold",
+    fontWeight: "500",
+    fontSize: 12
   },
-  timelineItem: {
-    backgroundColor: Colors.secondary,
-    borderRadius: 10,
-    padding: 14,
-    marginBottom: 12,
-    shadowColor: "#000",
-    shadowOpacity: 0.02,
-    shadowRadius: 4,
-    elevation: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+  rowDivider: {
+    marginVertical: 4,
+    height: 1,
+    backgroundColor: "#EFEFEF",
   },
-  timelineLabel: { fontSize: 15, color: Colors.white, fontWeight: "600" },
-  timelineDate: { fontSize: 13, color: Colors.gray },
 });
 export default PayoutDetailsScreen;

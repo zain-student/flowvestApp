@@ -1,16 +1,16 @@
+import Colors from '@/shared/colors/Colors';
+import { Button } from '@/shared/components/ui';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import {
   Dimensions,
   Image,
-  SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 
 type RootStackParamList = {
@@ -25,62 +25,38 @@ export const OnBoardingScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
+    <View style={styles.safeArea}>
+      <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
+      <View style={styles.headerSpacer} />
+      <View style={styles.illustrationContainer}>
+        <Image
+          source={require('../../../../assets/images/OnBoardFin.png')}
+          style={styles.illustration}
+        />
+      </View>
+      <View style={styles.contentContainer}>
+        <Text style={styles.title}>Stay on top of your finance with us.</Text>
 
-      <LinearGradient
-        colors={['#4F46E5', '#1E1B4B', '#0F0F1A']} // Softer indigo → deep navy → near-black (premium fintech vibe)
-        start={{ x: 0.0, y: 0.0 }}
-        end={{ x: 0.8, y: 1.0 }}
-        style={styles.gradient}
+        <Text style={styles.subtitle}>
+          We are your new financial Advisors
+          to recommed the best investments for you.
+        </Text>
+      </View>
+      <Button
+        title="Create Account"
+        onPress={() => navigation.navigate('Register')}
+        style={styles.payButton}
+        textStyle={styles.footerButtonText}
+        variant="primary"
+      />
+      <TouchableOpacity
+        style={styles.secondaryButton}
+        activeOpacity={0.7}
+        onPress={() => navigation.navigate('Login')}
       >
-        {/* Top spacing for safe area / notch */}
-        <View style={styles.headerSpacer} />
-
-        {/* Hero Illustration / Logo Area – larger & centered */}
-        <View style={styles.illustrationContainer}>
-          <Image
-            source={require('../../../../assets/images/splash.png')}
-            style={styles.illustration}
-            resizeMode="contain" // Better for logos/illustrations – prevents stretching
-          />
-        </View>
-
-        {/* Main Content – better spacing & typography */}
-        <View style={styles.contentContainer}>
-          <Text style={styles.title}>Invstrhub</Text>
-
-          <Text style={styles.subtitle}>
-            Grow your investments smarter.{'\n'}
-            Automate payouts, track your portfolio — effortlessly.
-          </Text>
-        </View>
-
-        {/* CTA Buttons – professional, elevated styles */}
-        <View style={styles.buttonWrapper}>
-          <TouchableOpacity
-            style={styles.primaryButton}
-            activeOpacity={0.85}
-            onPress={() => navigation.navigate('Register')}
-          >
-            <Text style={styles.primaryButtonText}>Create Account</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.secondaryButton}
-            activeOpacity={0.7}
-            onPress={() => navigation.navigate('Login')}
-          >
-            <Text style={styles.secondaryButtonText}>Log In</Text>
-          </TouchableOpacity>
-
-          {/* Optional subtle trust note – common in fintech onboarding */}
-          <Text style={styles.trustText}>
-            Secure • Encrypted • Your data stays private
-          </Text>
-        </View>
-      </LinearGradient>
-    </SafeAreaView>
+        <Text style={styles.secondaryButtonText}>Log In</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
@@ -88,7 +64,7 @@ export default OnBoardingScreen;
 
 const styles = StyleSheet.create({
   safeArea: {
-    flex: 1,
+    flex: 1, backgroundColor: Colors.background, paddingHorizontal: 12
   },
   gradient: {
     flex: 1,
@@ -101,7 +77,8 @@ const styles = StyleSheet.create({
     flex: 1.1, // Gives more breathing room to illustration
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 20,
+    marginVertical: 50,
+    paddingTop: 50
   },
   illustration: {
     width: width * 0.82,
@@ -118,16 +95,18 @@ const styles = StyleSheet.create({
     marginBottom: 48,
   },
   title: {
-    fontSize: 42,
-    fontWeight: '800',
-    color: '#FFFFFF',
+    fontSize: 28,
+    fontWeight: '600',
+    color: Colors.secondary,
     letterSpacing: -0.5,
     marginBottom: 16,
+    textAlign: 'center',
+    marginHorizontal: 15
   },
   subtitle: {
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: '400',
-    color: '#D1D5FF', // Softer light purple-gray
+    color: Colors.secondary, // Softer light purple-gray
     textAlign: 'center',
     lineHeight: 28,
     opacity: 0.92,
@@ -135,39 +114,32 @@ const styles = StyleSheet.create({
   buttonWrapper: {
     width: '100%',
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: 80,
+
   },
-  primaryButton: {
-    width: '100%',
-    backgroundColor: '#6366F1', // Indigo accent – vibrant but professional
-    paddingVertical: 18,
-    borderRadius: 16,
-    alignItems: 'center',
-    marginBottom: 16,
-    // Modern shadow
-    shadowColor: '#4F46E5',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.4,
-    shadowRadius: 10,
-    elevation: 8,
+  payButton: {
+    borderRadius: 20,
+    alignItems: "center",
+    justifyContent: 'center',
+    // marginHorizontal: 5,
   },
-  primaryButtonText: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: '700',
-    letterSpacing: 0.2,
+  footerButtonText: {
+    color: "#fff",
+    fontWeight: "500",
+    fontSize: 16
   },
   secondaryButton: {
     width: '100%',
-    borderWidth: 1.5,
-    borderColor: 'rgba(255, 255, 255, 0.70)',
-    paddingVertical: 18,
-    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: "#E6EDFF",
+    paddingVertical: 12,
+    borderRadius: 20,
     alignItems: 'center',
+    marginBottom:80
   },
   secondaryButtonText: {
-    color: '#FFFFFF',
-    fontSize: 18,
+    color: Colors.primary,
+    fontSize: 16,
     fontWeight: '600',
   },
   trustText: {

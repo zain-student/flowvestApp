@@ -1,5 +1,6 @@
 import { DashboardLayout } from "@/modules/Common/components/DashboardLayout";
 import type { PartnersInvestmentDetailStackParamList } from "@/navigation/PartnerStacks/PartnersInvestmentDetailStack";
+import { Button } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import {
   fetchPartnerParticipatingInvestments,
@@ -10,16 +11,18 @@ import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import Colors from "@shared/colors/Colors";
+import { LinearGradient } from "expo-linear-gradient";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
   FlatList,
+  Image,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 export const InvestmentDetails = () => {
   const dispatch = useAppDispatch();
@@ -115,18 +118,14 @@ export const InvestmentDetails = () => {
             ]}
           >
             <Text
-              style={[
-                styles.statusText,
-                { color: isActive ? Colors.green : Colors.gray },
-              ]}
-            >
+              style={styles.statusText}>
               {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
             </Text>
           </View>
         </View>
 
         {/* Divider */}
-        <View style={styles.divider} />
+        {/* <View style={styles.divider} /> */}
 
         {/* Amounts */}
         <View style={styles.amountRow}>
@@ -184,19 +183,32 @@ export const InvestmentDetails = () => {
   return (
     <DashboardLayout>
       <View style={styles.container}>
-        <View style={styles.balanceCardDark}>
+        {/* <View style={styles.balanceCardDark}> */}
+        <LinearGradient
+          colors={[Colors.primary, "#3a84fb"]} // left → right
+          start={{ x: 0, y: 1 }}
+          end={{ x: 2, y: 0 }}
+          style={styles.balanceCardDark}
+        >
+          <Image source={require('../../../../../assets/images/upperDiv.png')}
+            style={{ position: 'absolute', width: 100, height: 110, top: -30, right: -50 }} />
           <Text style={styles.balanceLabelDark}>Total Investment</Text>
           <Text style={styles.balanceValueDark}>
             {formatCurrency(Number(summary?.total_invested ?? 0))}
           </Text>
-          <Text style={styles.balanceChange}>
-            ROI Avg:
-            <Text style={styles.balanceChangeDark}>
-              {summary?.average_roi ?? 0}%
+          <View style={styles.mirror}>
+            <Text style={styles.balanceChange}>
+              ROI Avg:
+              <Text style={styles.balanceChangeDark}>
+                {summary?.average_roi ?? 0}%
+              </Text>
             </Text>
-          </Text>
+          </View>
           {/* <View style={styles.balanceActionsRow}></View> */}
-        </View>
+          {/* </View> */}
+          <Image source={require('../../../../../assets/images/lowerDiv.png')} style={{ position: 'absolute', width: 200, height: 260, bottom: -190, left: -150, }} />
+          {/* <View style={styles.balanceActionsRow}></View> */}
+        </LinearGradient>
         <View style={styles.searchContainer}>
           <TextInput
             placeholder="Search investments..."
@@ -230,47 +242,47 @@ export const InvestmentDetails = () => {
           ListHeaderComponent={
             <View style={styles.card}>
               <Text style={styles.title}>Joined Investments Overview</Text>
-              <Text style={styles.label}>
-                Total Investments:{" "}
-                <Text style={styles.value}>{summary.total_investments}</Text>
-              </Text>
-              <Text style={styles.label}>
-                Active Investments:{" "}
-                <Text style={styles.value}>{summary.active_investments}</Text>
-              </Text>
-              <View
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 4 }}>
+                <View>
+                  <Text style={styles.label}>
+                    Total Investments:{" "}
+                  </Text>
+                  <Text style={styles.value}>{summary.total_investments}</Text>
+                </View>
+                <View>
+                  <Text style={styles.label}>
+                    Active Investments:{" "}
+                  </Text>
+                  <Text style={styles.value}>{summary.active_investments}</Text>
+                </View>
+              </View>
+              {/* <View
                 style={{
                   flexDirection: "row",
                   justifyContent: "space-between",
                 }}
-              >
-                <Text style={styles.label}>
-                  Current Value:{" "}
-                  <Text style={styles.value}>
-                    {formatCurrency(summary.current_value)}
-                  </Text>
-                </Text>
-                <TouchableOpacity
-                  style={styles.balanceActionBtnDark}
-                  // onPress={() => {
-                  //   navigation.navigate("PartnerInvestmentStack", {
-                  //     screen: "SharedInvestments",
-                  //   });
-                  // }}
-                  onPress={() => {
-                    navigation.navigate("SharedInvestments");
-                  }}
-                >
-                  <Text style={styles.balanceActionTextDark}>
-                    Shared Investments
-                  </Text>
-                </TouchableOpacity>
-              </View>
+              > */}
+              <Text style={styles.label}>
+                Current Value:{" "}
+              </Text>
+              <Text style={styles.value}>
+                {formatCurrency(summary.current_value)}
+              </Text>
+              {/* </View> */}
+              <Button
+                title="Shared Investments"
+                // icon={<Ionicons name="trash" size={20} color={Colors.white} />}
+                onPress={() => { navigation.navigate("SharedInvestments"); }
+                }
+                style={styles.balanceActionBtnDark}
+                textStyle={styles.balanceActionTextDark}
+                variant="primary"
+              />
             </View>
           }
           ListEmptyComponent={
             <View style={styles.emptyState}>
-              <Feather name="briefcase" size={48} color={Colors.gray} />
+              <Image source={require('../../../../../assets/images/noRecentActivity.png')} style={{ width: 100, height: 100, alignSelf: 'center' }} />
               <Text style={styles.emptyText}>
                 No shared investments available.
               </Text>
@@ -291,116 +303,85 @@ const styles = StyleSheet.create({
   },
   // innerContainer: { paddingHorizontal: 16 },
   balanceCardDark: {
-    backgroundColor: Colors.secondary,
-    borderBottomLeftRadius: 32,
-    borderBottomRightRadius: 32,
+    backgroundColor: Colors.primary,
+    borderRadius: 12,
+    marginHorizontal: 12,
+    marginTop: 12,
     padding: 24,
-    paddingTop: 36,
+    // paddingTop: 36,
     shadowColor: "#000",
     shadowOpacity: 0.08,
     shadowRadius: 12,
     elevation: 6,
-    marginBottom: 18,
   },
   balanceLabelDark: {
-    color: Colors.gray,
-    fontSize: 15,
-    fontFamily: "Inter_400Regular",
+    color: Colors.white,
+    fontSize: 14,
+    fontFamily: "Inter_500Regular",
   },
   balanceValueDark: {
     color: Colors.white,
-    fontSize: 36,
+    fontSize: 20,
     fontFamily: "Inter_700Bold",
-    fontWeight: "700",
+    fontWeight: "600",
     marginVertical: 2,
   },
+  mirror: { backgroundColor: Colors.mirror, width: '47%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 18, paddingVertical: 6, borderWidth: 0.3, borderColor: Colors.white, opacity: 0.7 },
   balanceChange: {
-    color: Colors.gray,
-    fontSize: 14,
+    color: Colors.yellow,
+    fontSize: 12,
+    fontFamily: "Inter_500Medium",
   },
   balanceChangeDark: {
-    color: Colors.green,
-    fontSize: 14,
-    fontFamily: "Inter_600SemiBold",
+    color: Colors.yellow,
+    fontSize: 12,
+    fontFamily: "Inter_500Medium",
   },
   balanceActionsRow: { flexDirection: "row", marginTop: 10 },
   balanceActionBtnDark: {
-    width: "50%",
+    width: "100%",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    alignSelf: "flex-end",
     backgroundColor: Colors.darkButton,
-    borderRadius: 18,
-    padding: 10,
+    borderRadius: 22,
+    paddingHorizontal: 10,
+    paddingVertical: 12,
+    marginTop: 8,
   },
   balanceActionTextDark: {
     color: Colors.white,
-    fontSize: 15,
+    fontSize: 16,
     fontFamily: "Inter_600SemiBold",
     marginLeft: 7,
   },
   card: {
     backgroundColor: Colors.white,
-    padding: 16,
-    borderRadius: 8,
+    paddingTop: 16,
+    borderRadius: 22,
     paddingHorizontal: 16,
     marginHorizontal: 12,
-    marginBottom: 16,
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowRadius: 6,
-    elevation: 2,
+    marginBottom: 6,
+    borderWidth: 1,
+    borderColor: "#E6EDFF"
   },
   title: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: Colors.secondary,
+    fontSize: 13,
+    fontWeight: "500",
+    color: Colors.gray,
     marginBottom: 8,
   },
-  label: { fontSize: 14, color: Colors.gray, marginBottom: 4 },
-  value: { color: Colors.secondary, fontWeight: "600" },
-  filterContainer: {
-    paddingHorizontal: 12,
-    paddingBottom: 8,
-    backgroundColor: Colors.background,
-  },
-  filterRow: {
-    flexDirection: "row",
-    backgroundColor: Colors.white,
-    borderRadius: 20,
-    padding: 4,
-    justifyContent: "space-around",
-    alignItems: "center",
-    height: 44, // ✅ fixed height prevents jump
-    elevation: 2,
-  },
-  filterBtn: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    backgroundColor: Colors.white,
-    height: 36, // 🔑 fixed height
-    justifyContent: "center", // 🔑 vertically center
-    alignItems: "center",
-  },
-  filterBtnActive: { backgroundColor: Colors.secondary },
-  filterText: {
-    color: "#6B7280",
-    fontWeight: "500",
-    fontSize: 14, // optional but keeps text stable
-    lineHeight: 20, // ensure same lineHeight
-  },
-  filterTextActive: { color: Colors.white },
+  label: { fontSize: 12, fontWeight: '500', lineHeight: 18, color: Colors.gray, marginBottom: 4 },
+  value: { color: Colors.secondary, fontWeight: "600", fontSize: 14 },
   cardContainer: {
-    backgroundColor: Colors.secondary,
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 14,
     marginHorizontal: 12,
-    shadowColor: "#000",
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 4,
+    backgroundColor: Colors.white,
+    borderRadius: 14,
+    padding: 12,
+    marginVertical: 2,
+    borderWidth: 1,
+    borderColor: "#E6EDFF",
   },
 
   cardHeader: {
@@ -410,15 +391,18 @@ const styles = StyleSheet.create({
   },
 
   investmentName: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: Colors.white,
+    color: Colors.secondary,
+    fontSize: 15,
+    fontFamily: "Inter_700Bold",
+    marginBottom: 2,
   },
 
   investmentType: {
-    fontSize: 13,
-    color: Colors.gray,
-    marginTop: 2,
+    color: Colors.secondary,
+    fontSize: 12,
+    fontFamily: "Inter_400Regular",
+    flexDirection: "row",
+    alignItems: "center",
   },
 
   statusBadge: {
@@ -428,7 +412,7 @@ const styles = StyleSheet.create({
   },
 
   statusActive: {
-    backgroundColor: "rgba(16,185,129,0.15)",
+    backgroundColor: Colors.statusbg,
   },
 
   statusClosed: {
@@ -438,6 +422,7 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 12,
     fontWeight: "600",
+    color: Colors.statusText,
   },
 
   divider: {
@@ -452,21 +437,21 @@ const styles = StyleSheet.create({
   },
 
   amountLabel: {
-    fontSize: 13,
-    color: Colors.gray,
+    fontSize: 12, fontWeight: '500', color: Colors.gray, marginTop: 10
   },
 
   amountValue: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: Colors.white,
-    marginTop: 2,
+    color: Colors.secondary,
+    fontSize: 14,
+    fontFamily: "Inter_400Regular",
+    flexDirection: "row",
+    alignItems: "center",
   },
 
   metaRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 12,
+    marginTop: 2,
   },
 
   metaText: {
@@ -497,40 +482,30 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 6,
   },
-  middleRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 4,
-  },
-  bottomRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  // statusBadge: { color: Colors.white, fontSize: 12, fontFamily: 'Inter_500Medium', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 20, overflow: 'hidden', textTransform: 'capitalize' },
-
-  // statusActive: { color: Colors.green },
-  // statusClosed: { color: "#6B7280" },
-  investmentDate: { fontSize: 13, color: Colors.gray },
-  investmentParticipants: { fontSize: 13, color: Colors.gray },
   emptyState: { justifyContent: "center", alignItems: "center", padding: 20 },
-  emptyText: { fontSize: 16, color: "#6B7280" },
+  emptyText: {
+    color: Colors.gray,
+    fontSize: 15,
+    fontFamily: "Inter_400Regular",
+    textAlign: "center",
+    paddingVertical: 16,
+  },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: Colors.white,
-    borderRadius: 10,
+    borderRadius: 28,
     marginHorizontal: 12,
-    marginBottom: 12,
+    marginVertical: 6,
     paddingHorizontal: 8,
-    elevation: 2,
+    borderColor: "#E6EDFF",
+    borderWidth: 1,
   },
   searchInput: {
     flex: 1,
-    paddingVertical: 10,
+    // paddingVertical: 10,
     paddingHorizontal: 12,
-    fontSize: 16,
+    fontSize: 14,
     color: Colors.secondary,
   },
   searchBtn: {

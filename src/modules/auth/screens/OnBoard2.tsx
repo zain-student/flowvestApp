@@ -76,8 +76,8 @@ const styles = StyleSheet.create({
         paddingTop: 50
     },
     illustration: {
-        width: width * 0.70,
-        height: height * 0.32,
+        width: "90%",
+        height: "100%",
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 12 },
         shadowOpacity: 0.35,

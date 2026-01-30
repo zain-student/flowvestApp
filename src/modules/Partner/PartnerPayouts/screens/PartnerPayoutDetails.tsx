@@ -4,16 +4,14 @@ import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { fetchPayoutsById } from "@/shared/store/slices/partner/payout/PartnerPayoutSlice";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
-import { Ionicons } from "@expo/vector-icons";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useEffect } from "react";
 import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View
 } from "react-native";
 const mockPayout = {
   id: 1,
@@ -59,35 +57,28 @@ export const PartnerPayoutDetails = ({ navigation }: Props) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.closeBtn}
-        onPress={() => navigation.goBack()}
-      >
-        <Ionicons name="close" size={27} />
-      </TouchableOpacity>
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
         <Text style={styles.title}>{payouts.investment_title}</Text>
         <View style={styles.summaryCard}>
-          <Text style={styles.label}>Amount</Text>
-          <Text style={styles.value}>{formatCurrency(payouts.amount)}</Text>
-          <Text style={styles.label}>Status</Text>
-          <Text
-            style={[
-              styles.status,
-              payouts.status === "scheduled"
-                ? styles.statusScheduled
-                : styles.statusCompleted,
-            ]}
-          >
-            {payouts.status.charAt(0).toUpperCase() + payouts.status.slice(1)}
-          </Text>
-          <Text style={styles.label}>ROI%</Text>
-          <Text style={styles.value}>
-            {Number(payouts.investment_roi).toFixed(1)}%
-          </Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View>
+              <Text style={styles.label}>Amount</Text>
+              <Text style={styles.value}>{formatCurrency(payouts.amount)}</Text>
+            </View>
+            <View>
+              <Text style={styles.label}>ROI%</Text>
+              <Text style={styles.valueRoi}>
+                {Number(payouts.investment_roi).toFixed(1)}%
+              </Text>
+            </View>
+          </View>
+          <View style={styles.statusBadge}>
+            <Text style={styles.statusText}> {payouts.status.charAt(0).toUpperCase() + payouts.status.slice(1)}</Text>
+          </View>
+
           <Text style={styles.label}>Type</Text>
           <Text style={styles.value}>
             {payouts.payout_type.charAt(0).toUpperCase() +
@@ -95,64 +86,74 @@ export const PartnerPayoutDetails = ({ navigation }: Props) => {
           </Text>
           <Text style={styles.label}>Notes</Text>
           <Text style={styles.value}>{payouts.notes ?? "N/A"}</Text>
-          <Text style={styles.label}>Scheduled Date</Text>
-          <Text style={styles.value}>{payouts.scheduled_date}</Text>
-          <Text style={styles.label}>Paid Date</Text>
-          <Text style={styles.value}>
-            {payouts.paid_date ?? "Not Paid Yet"}
-          </Text>
+          <Divider />
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text style={styles.label}>Scheduled Date</Text>
+            <Text style={styles.value}>{payouts.scheduled_date}</Text>
+          </View>
+          <Divider />
+          <View style={{ flexDirection: 'row', justifyContent: "space-between" }}>
+            <Text style={styles.labelDate}>Paid Date</Text>
+            <Text style={styles.valueDate}>
+              {payouts.paid_date ?? "Not Paid Yet"}
+            </Text>
+          </View>
         </View>
       </ScrollView>
     </View>
   );
 };
-
+const Divider = () => <View style={styles.rowDivider} />;
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Colors.background },
-  closeBtn: {
-    position: "absolute",
-    top: 32,
-    right: 24,
-    zIndex: 10,
-    backgroundColor: Colors.white,
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    elevation: 4,
-  },
-  closeText: { fontSize: 22, fontWeight: "bold", color: Colors.secondary },
-  scrollContent: { padding: 24, paddingTop: 60, paddingBottom: 40 },
+  container: { flex: 1, backgroundColor: Colors.background, paddingBottom: 0 },
+  scrollContent: { paddingHorizontal: 12, paddingBottom: 70, marginTop: 20 },
   title: {
-    fontSize: 24,
-    fontWeight: "700",
+    fontSize: 18,
+    fontWeight: "500",
     color: Colors.secondary,
-    marginBottom: 16,
+    marginTop: 16,
+    marginBottom: 14,
   },
   summaryCard: {
-    backgroundColor: Colors.secondary,
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 24,
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowRadius: 6,
-    elevation: 3,
+    backgroundColor: Colors.white,
+    borderRadius: 18,
+    padding: 16,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: "#E6EDFF",
   },
-  label: { fontSize: 13, color: Colors.gray, marginTop: 8 },
-  value: { fontSize: 16, color: Colors.white, fontWeight: "600" },
-  status: { fontSize: 15, fontWeight: "600", marginTop: 2 },
-  statusScheduled: { color: Colors.green },
-  statusCompleted: { color: Colors.gray },
-  sectionTitle: {
+  label: { fontSize: 13, color: Colors.gray, marginTop: 8, },
+  value: {
     fontSize: 16,
     fontWeight: "600",
     color: Colors.secondary,
-    marginBottom: 10,
+  },
+  valueRoi: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: Colors.green,
+  },
+  labelDate: { fontSize: 13, color: Colors.gray, marginTop: 8, },
+  valueDate: {
+    fontSize: 16,
+    fontWeight: "600",
+    marginTop: 7,
+    color: Colors.secondary,
+  },
+  statusBadge: {
+    width: "30%",
+    backgroundColor: Colors.statusbg,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+    marginRight: 8,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  statusText: {
+    fontSize: 12,
+    color: Colors.statusText,
   },
   footer: {
     flexDirection: "row",
@@ -190,5 +191,10 @@ const styles = StyleSheet.create({
   },
   timelineLabel: { fontSize: 15, color: Colors.white, fontWeight: "600" },
   timelineDate: { fontSize: 13, color: Colors.gray },
+  rowDivider: {
+    marginVertical: 4,
+    height: 1,
+    backgroundColor: "#EFEFEF",
+  },
 });
 export default PartnerPayoutDetails;

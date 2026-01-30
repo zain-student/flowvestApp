@@ -213,7 +213,7 @@ export const PartnerPayoutScreen: React.FC = () => {
           contentContainerStyle={styles.scrollContent}
           ListEmptyComponent={
             <View style={styles.emptyState}>
-              <Feather name="inbox" size={48} color={Colors.gray} />
+              <Image source={require('../../../../../assets/images/noInvestment.png')} style={{ width: 100, height: 100, }} />
               <Text style={styles.emptyText}>No Payouts available.</Text>
             </View>
           }
@@ -359,7 +359,14 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_600SemiBold",
     color: Colors.statusText
   },
-  emptyState: { justifyContent: "center", alignItems: "center", padding: 20 },
-  emptyText: { fontSize: 16, color: "#6B7280" },
+  emptyState: { justifyContent: "center", alignItems: "center", padding: 0, marginTop: 70 },
+  emptyText: {
+    color: Colors.gray,
+    fontSize: 18,
+    fontFamily: "Inter_400Regular",
+    textAlign: "center",
+    marginTop: 30
+    // paddingVertical: 16,
+  },
 });
 export default PartnerPayoutScreen;

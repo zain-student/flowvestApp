@@ -34,11 +34,6 @@ export const InvestmentDetails = () => {
   const FILTERS = ["All", "Active", "Paused", "Completed"];
   const [filter, setFilter] = useState("All");
   const [search, setSearch] = useState("");
-  // useEffect(() => {
-  //   if (search === '') {
-  //     dispatch(fetchPartnerParticipatingInvestments({ page: 1 }));
-  //   }
-  // }, [search, dispatch]);
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
@@ -95,12 +90,6 @@ export const InvestmentDetails = () => {
       <TouchableOpacity
         style={styles.cardContainer}
         activeOpacity={0.85}
-        // onPress={() => {
-        //   navigation.navigate("PartnerInvestmentStack", {
-        //     screen: "JoinedInvestmentDetail",
-        //     params: { id: item.id },
-        //   });
-        // }}
         onPress={() =>
           navigation.navigate("JoinedInvestmentDetail", { id: item.id })
         }
@@ -124,8 +113,6 @@ export const InvestmentDetails = () => {
           </View>
         </View>
 
-        {/* Divider */}
-        {/* <View style={styles.divider} /> */}
 
         {/* Amounts */}
         <View style={styles.amountRow}>
@@ -183,7 +170,6 @@ export const InvestmentDetails = () => {
   return (
     <DashboardLayout>
       <View style={styles.container}>
-        {/* <View style={styles.balanceCardDark}> */}
         <LinearGradient
           colors={[Colors.primary, "#3a84fb"]} // left → right
           start={{ x: 0, y: 1 }}
@@ -204,10 +190,7 @@ export const InvestmentDetails = () => {
               </Text>
             </Text>
           </View>
-          {/* <View style={styles.balanceActionsRow}></View> */}
-          {/* </View> */}
           <Image source={require('../../../../../assets/images/lowerDiv.png')} style={{ position: 'absolute', width: 200, height: 260, bottom: -190, left: -150, }} />
-          {/* <View style={styles.balanceActionsRow}></View> */}
         </LinearGradient>
         <View style={styles.searchContainer}>
           <TextInput
@@ -256,12 +239,6 @@ export const InvestmentDetails = () => {
                   <Text style={styles.value}>{summary.active_investments}</Text>
                 </View>
               </View>
-              {/* <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              > */}
               <Text style={styles.label}>
                 Current Value:{" "}
               </Text>
@@ -271,7 +248,6 @@ export const InvestmentDetails = () => {
               {/* </View> */}
               <Button
                 title="Shared Investments"
-                // icon={<Ionicons name="trash" size={20} color={Colors.white} />}
                 onPress={() => { navigation.navigate("SharedInvestments"); }
                 }
                 style={styles.balanceActionBtnDark}

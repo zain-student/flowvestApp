@@ -6,17 +6,19 @@ import {
   fetchPayoutStatistics,
 } from "@/shared/store/slices/partner/payout/PartnerPayoutSlice";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
-import { Feather } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
+  Image,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { DashboardLayout } from "../../../Common/components/DashboardLayout";
 const FILTERS = ["All", "Cancelled", "Scheduled", "Paid"];
@@ -91,35 +93,29 @@ export const PartnerPayoutScreen: React.FC = () => {
         }}
       >
         {/* Left: Amount + Participant */}
-        <View style={{ flex: 1 }}>
-          <Text style={styles.payoutAmount}>{formatCurrency(item.amount)}</Text>
-          <Text style={styles.payoutTitle}>{item.title}</Text>
-          <Text style={styles.payoutMeta}>{item.participant}</Text>
-          <Text style={styles.payoutMeta}>Scheduled: {item.due_date}</Text>
+        <View style={styles.payoutLeft}>
+          <View style={styles.payoutIconWrapper}>
+            <Feather name="dollar-sign" size={22} color={Colors.primary} />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.payoutAmount}>{formatCurrency(item.amount)}</Text>
+            <Text style={styles.payoutTitle}>{item.title}</Text>
+            <View style={{ flexDirection: "row", alignItems: "center" }} >
+              <Ionicons name="calendar-outline" size={13} color={Colors.secondary} />
+              <Text style={styles.payoutMeta}>Scheduled: {item.due_date}</Text>
+            </View>
+          </View>
         </View>
+
 
         {/* Right: Status */}
         <View
-          style={[
-            styles.statusBadge,
-            isScheduled
-              ? styles.statusScheduled
-              : isPaid
-                ? styles.statusPaid
-                : styles.statusCancelled,
-          ]}
+          style={
+            styles.statusBadge}
         >
           <Text
-            style={[
-              styles.statusText,
-              {
-                color: isScheduled
-                  ? Colors.green
-                  : isPaid
-                    ? Colors.green
-                    : Colors.gray,
-              },
-            ]}
+            style={
+              styles.statusText}
           >
             {item.status}
           </Text>
@@ -131,7 +127,14 @@ export const PartnerPayoutScreen: React.FC = () => {
   return (
     <DashboardLayout>
       <View style={styles.container}>
-        <View style={styles.card}>
+        {/* <View style={styles.card}> */}
+        <LinearGradient
+          colors={[Colors.primary, "#3a84fb"]} // left → right
+          start={{ x: 0, y: 1 }}
+          end={{ x: 2, y: 0 }}
+          style={styles.card}
+        >
+          <Image source={require('../../../../../assets/images/upperDiv.png')} style={{ position: 'absolute', width: 100, height: 110, top: -30, right: -50 }} />
           <Text style={styles.cardTitle}>Total Payouts Amount</Text>
           <Text style={styles.cardValue}>
             {formatCurrency(
@@ -141,23 +144,40 @@ export const PartnerPayoutScreen: React.FC = () => {
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
-            <Text style={{ color: Colors.gray, fontSize: 14 }}>
-              Paid Amount:{" "}
-              <Text style={styles.cardSubtitle}>
-                {formatCurrency(
-                  Number(payoutStatistics?.paid_amount.toFixed(2) ?? 0),
-                )}
+            <View style={styles.mirror}>
+              <Text style={{
+                color: Colors.white,
+                fontWeight: "400",
+                fontFamily: "Inter_400Regular",
+                fontSize: 12,
+              }}>
+                Paid Amount:{" "}
+                <Text style={styles.cardSubtitle}>
+                  {formatCurrency(
+                    Number(payoutStatistics?.paid_amount.toFixed(2) ?? 0),
+                  )}
+                </Text>
               </Text>
-            </Text>
-            <Text style={{ color: Colors.gray, fontSize: 14 }}>
-              Total Payouts:{" "}
-              <Text style={styles.cardSubtitle}>
-                {payoutStatistics?.total_payouts ?? 0}
+            </View>
+            <View style={styles.mirror}>
+              <Text style={{
+                color: Colors.white,
+                fontWeight: "400",
+                fontFamily: "Inter_400Regular",
+                fontSize: 12,
+              }}>
+                Total Payouts:{" "}
+                <Text style={styles.cardSubtitle}>
+                  {payoutStatistics?.total_payouts ?? 0}
+                </Text>
               </Text>
-            </Text>
+            </View>
           </View>
+          <Image source={require('../../../../../assets/images/lowerDiv.png')} style={{ position: 'absolute', width: 200, height: 260, bottom: -190, left: -150, }} />
           {/* <View style={styles.balanceActionsRow}></View> */}
-        </View>
+        </LinearGradient>
+        {/* <View style={styles.balanceActionsRow}></View> */}
+        {/* </View> */}
         <View style={styles.filterRow}>
           {FILTERS.map((f) => (
             <TouchableOpacity
@@ -210,40 +230,49 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   card: {
-    backgroundColor: Colors.secondary,
-    borderBottomLeftRadius: 32,
-    borderBottomRightRadius: 32,
+    backgroundColor: Colors.primary,
+    borderRadius: 12,
+    marginHorizontal: 12,
+    marginBottom: 6,
+    marginTop: 12,
     padding: 24,
-    paddingTop: 36,
-    // marginBottom: 18,
+    // paddingTop: 36,
     shadowColor: "#000",
     shadowOpacity: 0.08,
     shadowRadius: 12,
     elevation: 6,
   },
-  cardTitle: { fontSize: 15, color: Colors.gray, marginBottom: 6 },
-  cardValue: {
-    fontSize: 36,
-    fontWeight: "bold",
+  cardTitle: {
     color: Colors.white,
-    marginBottom: 4,
-  },
-  cardSubtitle: {
     fontSize: 14,
-    color: Colors.green,
+    fontFamily: "Inter_500Regular",
+  },
+  cardValue: {
+    color: Colors.white,
+    fontSize: 20,
+    fontFamily: "Inter_700Bold",
+    fontWeight: "600",
+    marginVertical: 2,
+  },
+  mirror: { backgroundColor: Colors.mirror, width: '50%', justifyContent: 'center', alignItems: 'center', borderRadius: 18, paddingVertical: 4, paddingHorizontal: 6, borderWidth: 0.3, borderColor: Colors.white, opacity: 0.7, marginTop: 4, marginHorizontal: 2 },
+  cardSubtitle: {
+    color: Colors.white,
+    fontSize: 14,
     fontFamily: "Inter_600SemiBold",
   },
   balanceActionsRow: { flexDirection: "row", marginTop: 10 },
   filterRow: {
     flexDirection: "row",
-    marginTop: 10,
-    marginBottom: 16,
-    gap: 10,
+    marginBottom: 4,
+    // marginTop: 10,
+    gap: 1,
     marginHorizontal: 12,
     backgroundColor: Colors.white,
     borderRadius: 20,
     padding: 4,
     justifyContent: "space-around",
+    borderColor: "#E6EDFF",
+    borderWidth: 1
   },
   filterBtn: {
     paddingHorizontal: 16,
@@ -251,8 +280,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: Colors.white,
   },
-  filterBtnActive: { backgroundColor: Colors.secondary },
-  filterText: { color: "#6B7280", fontWeight: "500" },
+  filterBtnActive: { backgroundColor: Colors.primary },
+  filterText: { color: Colors.gray, fontWeight: "400", fontSize: 16 },
   filterTextActive: { color: Colors.white },
   sectionTitle: {
     fontSize: 16,
@@ -265,48 +294,60 @@ const styles = StyleSheet.create({
   notFound: { fontSize: 16, color: Colors.secondary },
 
   payoutCardContainer: {
-    backgroundColor: Colors.secondary,
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 14,
+    backgroundColor: Colors.white,
+    borderRadius: 14,
+    padding: 12,
+    marginVertical: 2,
     marginHorizontal: 12,
-    shadowColor: "#000",
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 4,
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#E6EDFF",
+  },
+  payoutLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
   },
 
-  payoutSelected: {
-    borderWidth: 2,
-    borderColor: Colors.green,
+  payoutIconWrapper: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: Colors.lightGray, // 20% opacity
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 12,
   },
 
   payoutAmount: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: Colors.white,
+    color: Colors.secondary,
+    fontSize: 15,
+    fontFamily: "Inter_700Bold",
     marginBottom: 2,
   },
 
   payoutTitle: {
     fontSize: 14,
-    fontWeight: "600",
-    color: Colors.white,
+    fontFamily: "Inter_600SemiBold",
+    color: Colors.secondary,
+    marginTop: 2,
   },
 
   payoutMeta: {
-    fontSize: 12,
     color: Colors.gray,
-    marginTop: 2,
+    fontSize: 12,
+    fontFamily: "Inter_400Regular",
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 4,
   },
 
   statusBadge: {
     paddingHorizontal: 10,
     paddingVertical: 4,
-    borderRadius: 20,
+    borderRadius: 12,
+    backgroundColor: Colors.statusbg
   },
 
   statusScheduled: { backgroundColor: "rgba(251,191,36,0.15)" }, // orange
@@ -314,8 +355,9 @@ const styles = StyleSheet.create({
   statusCancelled: { backgroundColor: "rgba(107,114,128,0.15)" }, // gray
 
   statusText: {
-    fontSize: 12,
-    fontWeight: "600",
+    fontSize: 13,
+    fontFamily: "Inter_600SemiBold",
+    color: Colors.statusText
   },
   emptyState: { justifyContent: "center", alignItems: "center", padding: 20 },
   emptyText: { fontSize: 16, color: "#6B7280" },

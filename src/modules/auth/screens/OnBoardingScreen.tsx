@@ -30,7 +30,7 @@ export const OnBoardingScreen = () => {
       <View style={styles.headerSpacer} />
       <View style={styles.illustrationContainer}>
         <Image
-          source={require('../../../../assets/images/OnBoardFin.png')}
+          source={require('../../../../assets/images/onBoard3.png')}
           style={styles.illustration}
         />
       </View>
@@ -81,8 +81,10 @@ const styles = StyleSheet.create({
     paddingTop: 50
   },
   illustration: {
-    width: width * 0.82,
-    height: height * 0.38,
+    // width: width * 0.82,
+    // height: height * 0.38,
+    width:"90%",
+    height:"100%",
     // Optional: add subtle shadow for depth
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 12 },
@@ -135,7 +137,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 20,
     alignItems: 'center',
-    marginBottom:80
+    marginBottom: 80
   },
   secondaryButtonText: {
     color: Colors.primary,

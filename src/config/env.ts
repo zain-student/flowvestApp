@@ -48,8 +48,12 @@ export const API_ENDPOINTS = {
 
   // Authentication
   AUTH: {
-    LOGIN: "/v1/auth/login",
+    CHECK_EMAIL: "/v1/auth/check-email",
+    SEND_VERIFICATION_CODE: "/v1/auth/send-verification-code",
+    VERIFY_CODE: "/v1/auth/verify-code",
     REGISTER: "/v1/auth/register",
+    LOGIN: "/v1/auth/login",
+    // REGISTER: "/v1/auth/register",
     LOGOUT: "/v1/auth/logout",
     REFRESH: "/v1/auth/refresh",
     ME: "/v1/auth/me",

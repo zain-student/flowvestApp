@@ -91,7 +91,7 @@ export const loginUser = createAsyncThunk(
       password: string;
       remember?: boolean;
     },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const response = await api.post(API_ENDPOINTS.AUTH.LOGIN, credentials);
@@ -101,7 +101,7 @@ export const loginUser = createAsyncThunk(
       console.log("Login response:", JSON.stringify(response.data));
       if (!token || !user || !session) {
         return rejectWithValue(
-          "Login failed: No token or user data or session returned"
+          "Login failed: No token or user data or session returned",
         );
       }
       // Save token and user data to storage
@@ -135,7 +135,7 @@ export const loginUser = createAsyncThunk(
       console.log("❌ Login error:", errMsg);
       return rejectWithValue(errMsg);
     }
-  }
+  },
 );
 
 export const registerUser = createAsyncThunk(
@@ -144,7 +144,7 @@ export const registerUser = createAsyncThunk(
     try {
       const response = await api.post(
         API_ENDPOINTS.AUTH.REGISTER,
-        registrationData
+        registrationData,
       );
       const token = response.data?.data?.token;
       const user = response.data?.data?.user;
@@ -152,7 +152,7 @@ export const registerUser = createAsyncThunk(
       console.log("Registration response:", response.data);
       if (!token || !user) {
         return rejectWithValue(
-          "Registration failed: No token or user data returned"
+          "Registration failed: No token or user data returned",
         );
       }
       // Save token and user data to storage
@@ -189,14 +189,14 @@ export const registerUser = createAsyncThunk(
       console.error("❌ Registration error:", errMsg);
       return rejectWithValue(errMsg);
     }
-  }
+  },
 );
 
 export const logoutUser = createAsyncThunk("/v1/auth/logout", async () => {
   // This will be implemented with actual API call
   const response = await api.post(
     API_ENDPOINTS.AUTH.LOGOUT,
-    {} // No body needed for logout
+    {}, // No body needed for logout
   );
   // Clear storage
   console.log("Logout response:", JSON.stringify(response.data));
@@ -225,7 +225,7 @@ export const refreshToken = createAsyncThunk("/v1/auth/refresh", async () => {
       headers: {
         Authorization: `Bearer ${await storage.getItem(StorageKeys.AUTH_TOKEN)}`,
       },
-    }
+    },
   );
   console.log("Refresh token response:", JSON.stringify(response.data));
   if (!response.data?.data?.token) {
@@ -405,7 +405,7 @@ const authSlice = createSlice({
           // Optionally: don't clear all state unless absolutely needed
           state.isAuthenticated = false;
           state.user = null;
-        }
+        },
       );
 
     // .addCase(getCurrentUser.rejected, (state) => {

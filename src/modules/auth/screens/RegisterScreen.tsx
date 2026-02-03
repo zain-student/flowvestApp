@@ -515,21 +515,34 @@
 //   footerLink: { fontSize: 14, color: Colors.primary, fontWeight: "600" },
 // });
 
+import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { Button } from "@components/ui/Button";
 import { Input } from "@components/ui/Input";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import Colors from "@shared/colors/Colors";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
+  checkEmailAndSendCode,
+  registerUser,
+  setEmail as setReduxEmail,
+  setRole as setReduxRole,
+  setStep as setReduxStep,
+  setTermsAccepted as setReduxTerms,
+  verifyEmailCode
+} from "../store/registerSlice";
+
+import {
+  Alert,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   StyleSheet,
   Text,
+  ToastAndroid,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -541,17 +554,25 @@ type RegisterScreenNavigationProp = NativeStackNavigationProp<
 const TOTAL_STEPS = 3;
 
 export const RegisterScreen = () => {
-  const [step, setStep] = useState(1);
+  // const [step, setStep] = useState(1);
 
   // UI State
-  const [email, setEmail] = useState("");
+  // const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [termsAccepted, setTermsAccepted] = useState(false);
+  // const [termsAccepted, setTermsAccepted] = useState(false);
   const [accountTypeOpen, setAccountTypeOpen] = useState(false);
-  const [accountType, setAccountType] = useState<"user" | "admin" | null>(null);
+  // const [accountType, setAccountType] = useState<"user" | "admin" | null>(null);
   const navigation = useNavigation<RegisterScreenNavigationProp>();
+
+  const dispatch = useAppDispatch();
+  const { step, email: reduxEmail, role: reduxRole, verificationCode: reduxCode, termsAccepted: reduxTerms, loading, error } = useAppSelector(state => state.register);
+  const [selectedRole, setSelectedRole] = useState<"user" | "admin" | null>(reduxRole);
+  useEffect(() => {
+    setSelectedRole(reduxRole);
+  }, [reduxRole]);
+
   type AccountTypeItem = {
     label: string;
     value: "user" | "admin";
@@ -638,8 +659,9 @@ export const RegisterScreen = () => {
         label="Email Address"
         placeholder="your.email@example.com"
         type="email"
-        value={email}
-        onChangeText={setEmail}
+        value={reduxEmail}
+        // onChangeText={setEmail}
+        onChangeText={(text) => dispatch(setReduxEmail(text))}
         required
       />
       <View style={{ zIndex: 1000, marginBottom: 16 }}>
@@ -649,42 +671,34 @@ export const RegisterScreen = () => {
 
         <DropDownPicker
           open={accountTypeOpen}
-          value={accountType}
+          value={selectedRole}
+          setValue={(callback) => {
+            const newVal = typeof callback === "function" ? callback(selectedRole) : callback;
+            setSelectedRole(newVal as "user" | "admin");
+            dispatch(setReduxRole(newVal as "user" | "admin"));
+            console.log("Selected role (picker):", newVal);
+          }}
           items={accountTypeItems}
           setOpen={setAccountTypeOpen}
-          setValue={setAccountType}
           setItems={setAccountTypeItems}
           placeholder="Select account type"
           listMode="SCROLLVIEW"
-          style={styles.dropdown}
-          dropDownContainerStyle={styles.dropdownContainer}
-          textStyle={styles.dropdownText}
-          placeholderStyle={styles.placeholder}
-          selectedItemContainerStyle={styles.selectedItem}
-          renderListItem={(props) => {
-            const { item } = props;
-            return (
-              <View style={styles.itemContainer}>
-                <Text style={styles.itemLabel}>{item.label}</Text>
-                {/* <Text style={styles.itemDescription}>{item.description}</Text> */}
-              </View>
-            );
-          }}
-
         />
+
       </View>
 
       <TouchableOpacity
         style={styles.termsContainer}
-        onPress={() => setTermsAccepted(!termsAccepted)}
+        // onPress={() => setTermsAccepted(!termsAccepted)}
+        onPress={() => dispatch(setReduxTerms(!reduxTerms))}
       >
         <View
           style={[
             styles.checkbox,
-            termsAccepted && styles.checkboxChecked,
+            reduxTerms && styles.checkboxChecked,
           ]}
         >
-          {termsAccepted && (
+          {reduxTerms && (
             <Ionicons name="checkmark" size={16} color="#fff" />
           )}
         </View>
@@ -692,12 +706,33 @@ export const RegisterScreen = () => {
           I agree to the Terms of Service and Privacy Policy
         </Text>
       </TouchableOpacity>
-
       <Button
         title="Continue"
         fullWidth
-        onPress={() => setStep(2)}
+        onPress={async () => {
+          if (!reduxEmail || !reduxRole) {
+            return ToastAndroid.show("Please enter email and select account type", ToastAndroid.SHORT);
+          }
+          if (!reduxTerms) return ToastAndroid.show("Please accept terms", ToastAndroid.SHORT);
+          const payload = { email: reduxEmail, role: reduxRole as "user" | "admin" };
+          console.log("Dispatching checkEmailAndSendCode with payload:", payload);
+          try {
+            await dispatch(checkEmailAndSendCode(payload)).unwrap();
+            ToastAndroid.show("Verification code sent! Check your email.", ToastAndroid.SHORT);
+            // now we can move to step 2 when verified
+            dispatch(setReduxStep(2));
+          } catch (err: any) {
+            console.log("Error sending code:", err);
+            ToastAndroid.show(err, ToastAndroid.SHORT);
+          }
+        }}
       />
+
+      {/* <Button
+        title="Continue"
+        fullWidth
+        onPress={() => setStep(2)}
+      /> */}
     </View>
   );
 
@@ -706,7 +741,7 @@ export const RegisterScreen = () => {
       <Text style={styles.title}>Verify Your Email</Text>
       <Text style={styles.subtitle}>
         Enter the 6-digit code sent to{" "}
-        <Text style={styles.emailHighlight}>{email}</Text>
+        <Text style={styles.emailHighlight}>{reduxEmail}</Text>
       </Text>
 
       <Input
@@ -723,11 +758,25 @@ export const RegisterScreen = () => {
         <Text style={styles.resendText}>Resend code</Text>
       </TouchableOpacity>
 
-      <Button
+      {/* <Button
         title="Verify"
         fullWidth
         onPress={() => setStep(3)}
+      /> */}
+      <Button
+        title="Verify"
+        fullWidth
+        onPress={async () => {
+          if (!reduxCode) return Alert.alert("Enter verification code");
+          try {
+            await dispatch(verifyEmailCode({ email: reduxEmail, code: reduxCode })).unwrap();
+            dispatch(setReduxStep(3)); // move to password step
+          } catch (err: any) {
+            Alert.alert(err);
+          }
+        }}
       />
+
     </View>
   );
 
@@ -755,12 +804,35 @@ export const RegisterScreen = () => {
         onChangeText={setConfirmPassword}
         required
       />
-
       <Button
         title="Create Account"
         fullWidth
-        onPress={() => { }}
+        onPress={async () => {
+          if (!password || !confirmPassword) return Alert.alert("Enter passwords");
+          if (password !== confirmPassword) return Alert.alert("Passwords do not match");
+
+          try {
+            await dispatch(registerUser({
+              email: reduxEmail,
+              code: reduxCode,
+              password,
+              role: reduxRole,
+              termsAccepted: reduxTerms,
+            })).unwrap();
+
+            Alert.alert("Account created!");
+            navigation.navigate("Login"); // or wherever
+          } catch (err: any) {
+            Alert.alert(err);
+          }
+        }}
       />
+
+      {/* <Button
+        title="Create Account"
+        fullWidth
+        onPress={() => { }}
+      /> */}
     </View>
   );
 

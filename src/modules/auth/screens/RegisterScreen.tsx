@@ -526,15 +526,16 @@ import React, { useEffect, useState } from "react";
 import {
   checkEmailAndSendCode,
   registerUser,
+  resetRegister,
   setEmail as setReduxEmail,
   setRole as setReduxRole,
   setStep as setReduxStep,
   setTermsAccepted as setReduxTerms,
-  verifyEmailCode
+  setVerificationCode,
+  verifyEmailCode,
 } from "../store/registerSlice";
 
 import {
-  Alert,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -542,7 +543,7 @@ import {
   Text,
   ToastAndroid,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -558,6 +559,10 @@ export const RegisterScreen = () => {
 
   // UI State
   // const [email, setEmail] = useState("");
+  const RESEND_TIME = 60;
+
+  const [resendTimer, setResendTimer] = useState(RESEND_TIME);
+  const [canResend, setCanResend] = useState(false);
   const [code, setCode] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -565,20 +570,59 @@ export const RegisterScreen = () => {
   const [accountTypeOpen, setAccountTypeOpen] = useState(false);
   // const [accountType, setAccountType] = useState<"user" | "admin" | null>(null);
   const navigation = useNavigation<RegisterScreenNavigationProp>();
+  const startResendTimer = () => {
+    setResendTimer(RESEND_TIME);
+    setCanResend(false);
+
+    const interval = setInterval(() => {
+      setResendTimer((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          setCanResend(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return interval;
+  };
 
   const dispatch = useAppDispatch();
-  const { step, email: reduxEmail, role: reduxRole, verificationCode: reduxCode, termsAccepted: reduxTerms, loading, error } = useAppSelector(state => state.register);
-  const [selectedRole, setSelectedRole] = useState<"user" | "admin" | null>(reduxRole);
+  const {
+    step,
+    email: reduxEmail,
+    role: reduxRole,
+    verificationCode: reduxCode,
+    termsAccepted: reduxTerms,
+    loading,
+    error,
+  } = useAppSelector((state) => state.register);
+  const [selectedRole, setSelectedRole] = useState<"user" | "admin" | null>(
+    reduxRole,
+  );
+  const verificationCode = useAppSelector(
+    (state) => state.register.verificationCode,
+  );
+
+  const isCodeValid = verificationCode.length === 6;
+
   useEffect(() => {
     setSelectedRole(reduxRole);
   }, [reduxRole]);
+  useEffect(() => {
+    if (step !== 2) return;
+
+    const interval = startResendTimer();
+
+    return () => clearInterval(interval);
+  }, [step]);
 
   type AccountTypeItem = {
     label: string;
     value: "user" | "admin";
     // description: string;
   };
-
 
   const [accountTypeItems, setAccountTypeItems] = useState<AccountTypeItem[]>([
     {
@@ -618,27 +662,19 @@ export const RegisterScreen = () => {
                 ]}
               >
                 <Text
-                  style={[
-                    styles.stepNumber,
-                    completed && { color: "#fff" },
-                  ]}
+                  style={[styles.stepNumber, completed && { color: "#fff" }]}
                 >
                   {s.id}
                 </Text>
               </View>
 
               <Text
-                style={[
-                  styles.stepLabel,
-                  active && styles.stepLabelActive,
-                ]}
+                style={[styles.stepLabel, active && styles.stepLabelActive]}
               >
                 {s.label}
               </Text>
 
-              {index !== steps.length - 1 && (
-                <View style={styles.stepLine} />
-              )}
+              {index !== steps.length - 1 && <View style={styles.stepLine} />}
             </View>
           );
         })}
@@ -673,7 +709,10 @@ export const RegisterScreen = () => {
           open={accountTypeOpen}
           value={selectedRole}
           setValue={(callback) => {
-            const newVal = typeof callback === "function" ? callback(selectedRole) : callback;
+            const newVal =
+              typeof callback === "function"
+                ? callback(selectedRole)
+                : callback;
             setSelectedRole(newVal as "user" | "admin");
             dispatch(setReduxRole(newVal as "user" | "admin"));
             console.log("Selected role (picker):", newVal);
@@ -684,7 +723,6 @@ export const RegisterScreen = () => {
           placeholder="Select account type"
           listMode="SCROLLVIEW"
         />
-
       </View>
 
       <TouchableOpacity
@@ -692,15 +730,8 @@ export const RegisterScreen = () => {
         // onPress={() => setTermsAccepted(!termsAccepted)}
         onPress={() => dispatch(setReduxTerms(!reduxTerms))}
       >
-        <View
-          style={[
-            styles.checkbox,
-            reduxTerms && styles.checkboxChecked,
-          ]}
-        >
-          {reduxTerms && (
-            <Ionicons name="checkmark" size={16} color="#fff" />
-          )}
+        <View style={[styles.checkbox, reduxTerms && styles.checkboxChecked]}>
+          {reduxTerms && <Ionicons name="checkmark" size={16} color="#fff" />}
         </View>
         <Text style={styles.termsText}>
           I agree to the Terms of Service and Privacy Policy
@@ -711,15 +742,28 @@ export const RegisterScreen = () => {
         fullWidth
         onPress={async () => {
           if (!reduxEmail || !reduxRole) {
-            return ToastAndroid.show("Please enter email and select account type", ToastAndroid.SHORT);
+            return ToastAndroid.show(
+              "Please enter email and select account type",
+              ToastAndroid.SHORT,
+            );
           }
-          if (!reduxTerms) return ToastAndroid.show("Please accept terms", ToastAndroid.SHORT);
-          const payload = { email: reduxEmail, role: reduxRole as "user" | "admin" };
-          console.log("Dispatching checkEmailAndSendCode with payload:", payload);
+          if (!reduxTerms)
+            return ToastAndroid.show("Please accept terms", ToastAndroid.SHORT);
+          const payload = {
+            email: reduxEmail,
+            role: reduxRole as "user" | "admin",
+          };
+          console.log(
+            "Dispatching checkEmailAndSendCode with payload:",
+            payload,
+          );
           try {
             await dispatch(checkEmailAndSendCode(payload)).unwrap();
-            ToastAndroid.show("Verification code sent! Check your email.", ToastAndroid.SHORT);
-            // now we can move to step 2 when verified
+            ToastAndroid.show(
+              "Verification code sent! Check your email.",
+              ToastAndroid.SHORT,
+            );
+            //move to step 2 when verified
             dispatch(setReduxStep(2));
           } catch (err: any) {
             console.log("Error sending code:", err);
@@ -727,12 +771,6 @@ export const RegisterScreen = () => {
           }
         }}
       />
-
-      {/* <Button
-        title="Continue"
-        fullWidth
-        onPress={() => setStep(2)}
-      /> */}
     </View>
   );
 
@@ -749,34 +787,53 @@ export const RegisterScreen = () => {
         placeholder="123456"
         keyboardType="numeric"
         maxLength={6}
-        value={code}
-        onChangeText={setCode}
+        value={reduxCode}
+        onChangeText={(text) => dispatch(setVerificationCode(text))}
         required
       />
+      <TouchableOpacity
+        style={styles.resendContainer}
+        disabled={!canResend}
+        onPress={async () => {
+          try {
+            await dispatch(
+              checkEmailAndSendCode({
+                email: reduxEmail,
+                role: reduxRole!,
+              }),
+            ).unwrap();
 
-      <TouchableOpacity style={styles.resendContainer}>
-        <Text style={styles.resendText}>Resend code</Text>
+            ToastAndroid.show("Verification code resent", ToastAndroid.SHORT);
+            startResendTimer();
+          } catch (err: any) {
+            ToastAndroid.show(err, ToastAndroid.SHORT);
+          }
+        }}
+      >
+        <Text style={[styles.resendText, !canResend && { color: Colors.gray }]}>
+          {canResend ? "Resend code" : `Resend code in ${resendTimer}s`}
+        </Text>
       </TouchableOpacity>
-
-      {/* <Button
-        title="Verify"
-        fullWidth
-        onPress={() => setStep(3)}
-      /> */}
       <Button
         title="Verify"
         fullWidth
+        disabled={!isCodeValid || loading}
         onPress={async () => {
-          if (!reduxCode) return Alert.alert("Enter verification code");
+          if (!reduxCode)
+            return ToastAndroid.show(
+              "Enter verification code",
+              ToastAndroid.SHORT,
+            );
           try {
-            await dispatch(verifyEmailCode({ email: reduxEmail, code: reduxCode })).unwrap();
+            await dispatch(
+              verifyEmailCode({ email: reduxEmail, code: reduxCode }),
+            ).unwrap();
             dispatch(setReduxStep(3)); // move to password step
           } catch (err: any) {
-            Alert.alert(err);
+            ToastAndroid.show(err, ToastAndroid.SHORT);
           }
         }}
       />
-
     </View>
   );
 
@@ -805,25 +862,33 @@ export const RegisterScreen = () => {
         required
       />
       <Button
-        title="Create Account"
+        title={loading ? "Creating Account..." : "Create Account"}
         fullWidth
+        disabled={loading}
         onPress={async () => {
-          if (!password || !confirmPassword) return Alert.alert("Enter passwords");
-          if (password !== confirmPassword) return Alert.alert("Passwords do not match");
+          if (!password || !confirmPassword)
+            return ToastAndroid.show("Enter passwords", ToastAndroid.SHORT);
+          if (password !== confirmPassword)
+            return ToastAndroid.show(
+              "Passwords do not match",
+              ToastAndroid.SHORT,
+            );
 
           try {
-            await dispatch(registerUser({
-              email: reduxEmail,
-              code: reduxCode,
-              password,
-              role: reduxRole,
-              termsAccepted: reduxTerms,
-            })).unwrap();
-
-            Alert.alert("Account created!");
+            await dispatch(
+              registerUser({
+                email: reduxEmail,
+                code: reduxCode,
+                password,
+                role: reduxRole,
+                termsAccepted: reduxTerms,
+              }),
+            ).unwrap();
+            dispatch(resetRegister());
+            // Alert.alert("Account created!");
             navigation.navigate("Login"); // or wherever
           } catch (err: any) {
-            Alert.alert(err);
+            ToastAndroid.show(err, ToastAndroid.SHORT);
           }
         }}
       />
@@ -857,11 +922,7 @@ export const RegisterScreen = () => {
           {/* Header */}
           <View style={styles.header}>
             <View style={styles.logo}>
-              <Ionicons
-                name="trending-up"
-                size={22}
-                color="#fff"
-              />
+              <Ionicons name="trending-up" size={22} color="#fff" />
             </View>
             <Text style={styles.headerTitle}>Create Your Account</Text>
           </View>
@@ -874,9 +935,7 @@ export const RegisterScreen = () => {
 
           {/* Footer */}
           <View style={styles.footer}>
-            <Text style={styles.footerText}>
-              Already have an account?{" "}
-            </Text>
+            <Text style={styles.footerText}>Already have an account? </Text>
             <TouchableOpacity onPress={navigateToLogin}>
               <Text style={styles.footerLink}>Sign in</Text>
             </TouchableOpacity>

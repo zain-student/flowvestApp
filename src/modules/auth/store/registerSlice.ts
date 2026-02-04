@@ -53,10 +53,8 @@ export const checkEmailAndSendCode = createAsyncThunk<
       );
       console.log("Verification code Res:", codeRes.data);
     } catch (error: any) {
-      console.log("Error in thunk:", error?.response?.data || error);
-      return rejectWithValue(
-        error?.response?.data?.message || "Something went wrong",
-      );
+      console.log("Error in thunk:", error.message || error);
+      return rejectWithValue(error.message || "Something went wrong");
     }
   },
 );
@@ -69,16 +67,17 @@ export const verifyEmailCode = createAsyncThunk<
   { email: string; code: string },
   { rejectValue: string }
 >("register/verifyEmailCode", async ({ email, code }, { rejectWithValue }) => {
+  console.log("Thunk called with:", { email, code });
   try {
-    await api.post(API_ENDPOINTS.AUTH.VERIFY_CODE, {
+    const checkRes = await api.post(API_ENDPOINTS.AUTH.VERIFY_CODE, {
       email,
       code,
       type: "registration",
     });
+    console.log("Check Res", checkRes.data);
   } catch (error: any) {
-    return rejectWithValue(
-      error?.response?.data?.message || "Invalid verification code",
-    );
+    console.log("Verify code error :", error.message);
+    return rejectWithValue(error.message || "Invalid verification code");
   }
 });
 
@@ -96,6 +95,7 @@ export const registerUser = createAsyncThunk<
   },
   { rejectValue: string }
 >("register/registerUser", async (payload, { rejectWithValue }) => {
+  console.log("Called thunk with:", payload);
   try {
     const res = await api.post(API_ENDPOINTS.AUTH.REGISTER, {
       email: payload.email,
@@ -105,18 +105,14 @@ export const registerUser = createAsyncThunk<
       verification_code: payload.code,
       terms_accepted: payload.termsAccepted,
     });
-
+    console.log("Register response:", res.data);
     return res.data;
   } catch (error: any) {
-    return rejectWithValue(
-      error?.response?.data?.message || "Registration failed",
-    );
+    console.log("Register error:", error.message);
+    // ToastAndroid.show(error.message,ToastAndroid.SHORT);
+    return rejectWithValue(error.message || "Registration failed");
   }
 });
-
-/* -------------------------------------------------------------------------- */
-/*                                   SLICE                                    */
-/* -------------------------------------------------------------------------- */
 
 const registerSlice = createSlice({
   name: "register",
@@ -137,9 +133,10 @@ const registerSlice = createSlice({
     setStep(state, action: PayloadAction<RegisterStep>) {
       state.step = action.payload;
     },
-    resetRegister(state) {
-      Object.assign(state, initialState);
-    },
+    // resetRegister(state) {
+    //   Object.assign(state, initialState);
+    // },
+    resetRegister: () => initialState,
   },
   extraReducers: (builder) => {
     builder
@@ -186,10 +183,6 @@ const registerSlice = createSlice({
       });
   },
 });
-
-/* -------------------------------------------------------------------------- */
-/*                                   EXPORTS                                  */
-/* -------------------------------------------------------------------------- */
 
 export const {
   setEmail,

@@ -1,7 +1,10 @@
-import { selectAuthInitialized, selectIsAuthenticated } from '@modules/auth/store/authSlice';
-import { useAppDispatch, useAppSelector } from '@store/index';
-import { useEffect } from 'react';
-import { setupAutoTokenRefresh } from '../components/setupAutoTokenRefresh';
+import {
+  selectAuthInitialized,
+  selectIsAuthenticated,
+} from "@modules/auth/store/authSlice";
+import { useAppDispatch, useAppSelector } from "@store/index";
+import { useEffect } from "react";
+import { setupAutoTokenRefresh } from "../components/setupAutoTokenRefresh";
 
 export const AutoTokenRefresh = () => {
   const dispatch = useAppDispatch();

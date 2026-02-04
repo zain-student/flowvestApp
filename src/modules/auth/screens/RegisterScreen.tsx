@@ -519,10 +519,10 @@ import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { Button } from "@components/ui/Button";
 import { Input } from "@components/ui/Input";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import Colors from "@shared/colors/Colors";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   checkEmailAndSendCode,
   registerUser,
@@ -617,6 +617,13 @@ export const RegisterScreen = () => {
 
     return () => clearInterval(interval);
   }, [step]);
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        dispatch(resetRegister());
+      };
+    }, [dispatch]),
+  );
 
   type AccountTypeItem = {
     label: string;

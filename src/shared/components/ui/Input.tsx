@@ -3,9 +3,9 @@
  * Reusable text input with validation states and different types
  */
 
-import Colors from '@/shared/colors/Colors';
-import { Ionicons } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import Colors from "@/shared/colors/Colors";
+import { Ionicons } from "@expo/vector-icons";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -14,13 +14,13 @@ import {
   TouchableOpacity,
   View,
   ViewStyle,
-} from 'react-native';
+} from "react-native";
 
-interface InputProps extends Omit<TextInputProps, 'style'> {
+interface InputProps extends Omit<TextInputProps, "style"> {
   label?: string;
-  error?: string ;
+  error?: string;
   hint?: string;
-  type?: 'text' | 'email' | 'password' | 'phone' | 'number';
+  type?: "text" | "email" | "password" | "phone" | "number";
   required?: boolean;
   disabled?: boolean;
   style?: ViewStyle;
@@ -32,7 +32,7 @@ export const Input: React.FC<InputProps> = ({
   label,
   error,
   hint,
-  type = 'text',
+  type = "text",
   required = false,
   disabled = false,
   style,
@@ -44,40 +44,37 @@ export const Input: React.FC<InputProps> = ({
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const hasError = !!error;
-  const isPassword = type === 'password';
+  const isPassword = type === "password";
 
   // Configure text input props based on type
   const getInputProps = (): Partial<TextInputProps> => {
     switch (type) {
-      case 'email':
+      case "email":
         return {
-          keyboardType: 'email-address',
-          autoCapitalize: 'none',
+          keyboardType: "email-address",
+          autoCapitalize: "none",
           autoCorrect: false,
         };
-      case 'password':
+      case "password":
         return {
           secureTextEntry: !isPasswordVisible,
-          autoCapitalize: 'none',
+          autoCapitalize: "none",
           autoCorrect: false,
         };
-      case 'phone':
+      case "phone":
         return {
-          keyboardType: 'phone-pad',
+          keyboardType: "phone-pad",
         };
-      case 'number':
+      case "number":
         return {
-          keyboardType: 'numeric',
+          keyboardType: "numeric",
         };
       default:
         return {};
     }
   };
 
-  const containerStyle = [
-    styles.container,
-    style,
-  ];
+  const containerStyle = [styles.container, style];
 
   const inputContainerStyle = [
     styles.inputContainer,
@@ -89,7 +86,7 @@ export const Input: React.FC<InputProps> = ({
   const inputStyle = [
     styles.input,
     leftIcon ? styles.inputWithLeftIcon : null,
-    (rightIcon || isPassword) ? styles.inputWithRightIcon : null,
+    rightIcon || isPassword ? styles.inputWithRightIcon : null,
     disabled ? styles.inputDisabled : null,
   ].filter(Boolean);
 
@@ -101,15 +98,12 @@ export const Input: React.FC<InputProps> = ({
           {required && <Text style={styles.required}> *</Text>}
         </Text>
       )}
-      
+
       <View style={inputContainerStyle}>
-        {leftIcon && (
-          <View style={styles.leftIconContainer}>
-            {leftIcon}
-          </View>
-        )}
-        
+        {leftIcon && <View style={styles.leftIconContainer}>{leftIcon}</View>}
+
         <TextInput
+          key={isPassword ? (isPasswordVisible ? "visible" : "hidden") : "text"}
           style={inputStyle}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
@@ -117,17 +111,20 @@ export const Input: React.FC<InputProps> = ({
           {...getInputProps()}
           {...textInputProps}
         />
-        
+
         {(rightIcon || isPassword) && (
-          <View style={styles.rightIconContainer} > 
+          <View style={styles.rightIconContainer}>
             {isPassword ? (
               <TouchableOpacity
                 onPress={() => setIsPasswordVisible(!isPasswordVisible)}
                 style={styles.passwordToggle}
               >
                 <Text style={styles.passwordToggleText}>
-                
-                  {isPasswordVisible ?<Ionicons name='eye-outline' size={20}/>: <Ionicons name='eye-off-outline' size={20}/>}
+                  {isPasswordVisible ? (
+                    <Ionicons name="eye-outline" size={20} />
+                  ) : (
+                    <Ionicons name="eye-off-outline" size={20} />
+                  )}
                 </Text>
               </TouchableOpacity>
             ) : (
@@ -136,14 +133,10 @@ export const Input: React.FC<InputProps> = ({
           </View>
         )}
       </View>
-      
-      {error && (
-        <Text style={styles.error}>{error}</Text>
-      )}
-      
-      {hint && !error && (
-        <Text style={styles.hint}>{hint}</Text>
-      )}
+
+      {error && <Text style={styles.error}>{error}</Text>}
+
+      {hint && !error && <Text style={styles.hint}>{hint}</Text>}
     </View>
   );
 };
@@ -152,47 +145,47 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: 16,
   },
-  
+
   label: {
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: "500",
     color: Colors.gray,
     marginBottom: 6,
   },
-  
+
   required: {
-    color: '#EF4444',
+    color: "#EF4444",
   },
-  
+
   inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     borderWidth: 1,
-    borderColor: '#D1D5DB',
+    borderColor: "#D1D5DB",
     borderRadius: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF",
     minHeight: 44,
   },
-  
+
   inputContainerFocused: {
     // borderColor: '#2563EB',
-    borderColor:"#18181B"
+    borderColor: "#18181B",
     // shadowColor: '#2563EB',
     // shadowOffset: { width: 0, height: 0 },
     // shadowOpacity: 0.1,
     // shadowRadius: 4,
     // elevation: 2,
   },
-  
+
   inputContainerError: {
-    borderColor: '#EF4444',
+    borderColor: "#EF4444",
   },
-  
+
   inputContainerDisabled: {
-    backgroundColor: '#F9FAFB',
-    borderColor: '#E5E7EB',
+    backgroundColor: "#F9FAFB",
+    borderColor: "#E5E7EB",
   },
-  
+
   input: {
     flex: 1,
     fontSize: 16,
@@ -200,49 +193,49 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 12,
   },
-  
+
   inputWithLeftIcon: {
     paddingLeft: 0,
   },
-  
+
   inputWithRightIcon: {
     paddingRight: 0,
   },
-  
+
   inputDisabled: {
     // color: '#9CA3AF',
     color: Colors.primary,
   },
-  
+
   leftIconContainer: {
     paddingLeft: 12,
     paddingRight: 8,
   },
-  
+
   rightIconContainer: {
     paddingRight: 12,
     paddingLeft: 8,
   },
-  
+
   passwordToggle: {
     padding: 4,
   },
-  
+
   passwordToggleText: {
     fontSize: 16,
   },
-  
+
   error: {
     fontSize: 12,
-    color: '#EF4444',
+    color: "#EF4444",
     marginTop: 4,
     marginLeft: 4,
   },
-  
+
   hint: {
     fontSize: 12,
-    color: '#6B7280',
+    color: "#6B7280",
     marginTop: 4,
     marginLeft: 4,
   },
-}); 
+});

@@ -617,6 +617,13 @@ export const RegisterScreen = () => {
 
     return () => clearInterval(interval);
   }, [step]);
+  useEffect(() => {
+    if (step !== 3) {
+      setPassword("");
+      setConfirmPassword("");
+    }
+  }, [step]);
+
   useFocusEffect(
     useCallback(() => {
       return () => {
@@ -893,7 +900,7 @@ export const RegisterScreen = () => {
             ).unwrap();
             dispatch(resetRegister());
             // Alert.alert("Account created!");
-            navigation.navigate("Login"); // or wherever
+            // navigation.navigate("Login"); // or wherever
           } catch (err: any) {
             ToastAndroid.show(err, ToastAndroid.SHORT);
           }

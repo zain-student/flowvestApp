@@ -19,7 +19,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AuthStackParamList } from "../../../navigation/AuthStack";
@@ -54,7 +54,7 @@ export const ForgotPasswordScreen: React.FC = () => {
   // Handle input changes
   const handleInputChange = (
     field: keyof ForgotPasswordFormData,
-    value: string
+    value: string,
   ) => {
     setFormData((prev: ForgotPasswordFormData) => ({
       ...prev,
@@ -95,7 +95,7 @@ export const ForgotPasswordScreen: React.FC = () => {
       Alert.alert(
         "Email Sent",
         "If an account with that email exists, we've sent you a password reset link.",
-        [{ text: "OK" }]
+        [{ text: "OK" }],
       );
     } catch (error) {
       console.error("Forgot password error:", error);
@@ -182,7 +182,7 @@ export const ForgotPasswordScreen: React.FC = () => {
         >
           <StatusBar
             barStyle="dark-content" // or "dark-content"
-          // backgroundColor="#000" // set to match your theme
+            // backgroundColor="#000" // set to match your theme
           />
           <View>
             {/* Header */}
@@ -195,28 +195,28 @@ export const ForgotPasswordScreen: React.FC = () => {
             </View>
 
             {/* Form */}
-            <View style={styles.form}>
-              <Input
-                label="Email Address"
-                type="email"
-                placeholder="john123@gmail.com"
-                value={formData.email}
-                onChangeText={(value) => handleInputChange("email", value)}
-                error={errors.email}
-                required
-                // autoFocus
-              />
+            {/* <View style={styles.form}> */}
+            <Input
+              label="Email Address"
+              type="email"
+              placeholder="john123@gmail.com"
+              value={formData.email}
+              onChangeText={(value) => handleInputChange("email", value)}
+              error={errors.email}
+              required
+              // autoFocus
+            />
 
-              {/* Submit Button */}
-              <Button
-                title="Send Reset Link"
-                onPress={handleSubmit}
-                loading={isLoading}
-                fullWidth
-                style={styles.submitButton}
-              />
-            </View>
+            {/* Submit Button */}
+            <Button
+              title="Send Reset Link"
+              onPress={handleSubmit}
+              loading={isLoading}
+              fullWidth
+              style={styles.submitButton}
+            />
           </View>
+          {/* </View> */}
           <View>
             {/* Footer */}
             <View style={styles.footer}>
@@ -248,7 +248,13 @@ const styles = StyleSheet.create({
     borderBottomColor: Colors.lightGray,
   },
   headerBackButton: { marginRight: 16 },
-  headerTitle: { fontSize: 20, fontWeight: "bold", color: Colors.secondary, flex: 1, textAlign: "center" },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: Colors.secondary,
+    flex: 1,
+    textAlign: "center",
+  },
 
   keyboardAvoid: {
     flex: 1,
@@ -287,11 +293,11 @@ const styles = StyleSheet.create({
 
   form: {
     // flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
     borderRadius: 20,
     padding: 28,
     marginBottom: 32,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.08,
     shadowRadius: 10,

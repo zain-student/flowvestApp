@@ -45,7 +45,7 @@ export const sendResetCode = createAsyncThunk<
       type: "password_reset",
     });
     console.log("Send reset code response:", res.data);
-    ToastAndroid.show("Code sent to mail", ToastAndroid.SHORT);
+    ToastAndroid.show(res.data.message, ToastAndroid.SHORT);
   } catch (error: any) {
     console.log("Send reset code error", error.message);
     return rejectWithValue(
@@ -61,18 +61,22 @@ export const verifyResetCode = createAsyncThunk<
 >(
   "forgotPassword/verifyResetCode",
   async ({ email, code }, { rejectWithValue }) => {
+    console.log("Called verify code");
     try {
-      const response = await api.post("/api/v1/auth/verify-code", {
+      const response = await api.post(API_ENDPOINTS.AUTH.VERIFY_CODE, {
         email,
         code,
         type: "password_reset",
       });
-
+      console.log("Verify code res", response.data);
+      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       return {
         token: response.data.data.token,
         expiresAt: response.data.data.expires_at,
       };
     } catch (error: any) {
+      ToastAndroid.show(error.message, ToastAndroid.SHORT);
+      console.log("Error verify code", error.message);
       return rejectWithValue(
         error?.response?.data?.message || "Invalid verification code",
       );

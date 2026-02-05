@@ -1,12 +1,9 @@
-/**
- * Step 2: Verify 6-digit code
- */
-
 import Colors from "@/shared/colors/Colors";
+import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { Button } from "@components/ui/Button";
 import { Input } from "@components/ui/Input";
 import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     ScrollView,
     StyleSheet,
@@ -15,17 +12,48 @@ import {
     View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { verifyResetCode } from "../store/forgotPasswordSlice";
+
 export const VerifyResetCodeScreen = ({ route, navigation }: any) => {
   const { email } = route.params;
+
+  const dispatch = useAppDispatch();
+  const { loading, error, verificationToken } = useAppSelector(
+    (state) => state.forgotPassword,
+  );
+
   const [code, setCode] = useState("");
+
+  // Navigate only after successful verification
+  useEffect(() => {
+    if (verificationToken) {
+      navigation.navigate("ResetPassword", {
+        email,
+        token: verificationToken,
+      });
+    }
+  }, [verificationToken]);
+
+  const handleVerifyCode = async () => {
+    await dispatch(
+      verifyResetCode({
+        email,
+        code,
+      }),
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity
+          disabled={loading}
+          onPress={() => navigation.goBack()}
+        >
           <Ionicons name="arrow-back" size={24} color={Colors.secondary} />
         </TouchableOpacity>
       </View>
+
       <ScrollView
         contentContainerStyle={styles.content}
         style={styles.scrollView}
@@ -39,6 +67,7 @@ export const VerifyResetCodeScreen = ({ route, navigation }: any) => {
               <Text style={styles.highlight}>{email}</Text>
             </Text>
           </View>
+
           <Input
             label="Verification Code"
             placeholder="123456"
@@ -47,16 +76,16 @@ export const VerifyResetCodeScreen = ({ route, navigation }: any) => {
             value={code}
             onChangeText={setCode}
             required
+            editable={!loading}
           />
+
+          {error && <Text style={styles.errorText}>{error}</Text>}
 
           <Button
             title="Verify Code"
-            onPress={() =>
-              navigation.navigate("ResetPassword", {
-                email,
-                token: "TEMP_TOKEN_FROM_API",
-              })
-            }
+            onPress={handleVerifyCode}
+            loading={loading}
+            disabled={code.length !== 6 || loading}
             fullWidth
             style={{ marginTop: 24 }}
           />
@@ -71,7 +100,6 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    // justifyContent: "center",
     paddingHorizontal: 16,
     paddingVertical: 12,
     backgroundColor: Colors.background,
@@ -84,9 +112,7 @@ const styles = StyleSheet.create({
     paddingBottom: 80,
     justifyContent: "center",
   },
-  scrollView: {
-    flex: 1,
-  },
+  scrollView: { flex: 1 },
   content2: {
     alignItems: "center",
     marginTop: 40,
@@ -105,4 +131,9 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   highlight: { fontWeight: "600", color: Colors.secondary },
+  errorText: {
+    marginTop: 8,
+    color: "red",
+    fontSize: 14,
+  },
 });

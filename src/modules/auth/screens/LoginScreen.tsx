@@ -3,14 +3,14 @@
  * User authentication login form with validation
  */
 
-import Colors from '@/shared/colors/Colors';
-import { Button } from '@components/ui/Button';
-import { Input } from '@components/ui/Input';
-import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useAppDispatch, useAppSelector } from '@store/index';
-import React, { useEffect, useState } from 'react';
+import Colors from "@/shared/colors/Colors";
+import { Button } from "@components/ui/Button";
+import { Input } from "@components/ui/Input";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useAppDispatch, useAppSelector } from "@store/index";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
   KeyboardAvoidingView,
@@ -20,14 +20,26 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { AuthStackParamList } from '../../../navigation/AuthStack';
-import { clearError, loginUser, selectAuthError, selectIsLoading } from '../store/authSlice';
-import { LoginFormData, loginSchema, validateFormData } from '../utils/authValidation';
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { AuthStackParamList } from "../../../navigation/AuthStack";
+import {
+  clearError,
+  loginUser,
+  selectAuthError,
+  selectIsLoading,
+} from "../store/authSlice";
+import {
+  LoginFormData,
+  loginSchema,
+  validateFormData,
+} from "../utils/authValidation";
 
-type LoginScreenNavigationProp = NativeStackNavigationProp<AuthStackParamList, 'Login'>;
+type LoginScreenNavigationProp = NativeStackNavigationProp<
+  AuthStackParamList,
+  "Login"
+>;
 
 export const LoginScreen: React.FC = () => {
   const navigation = useNavigation<LoginScreenNavigationProp>();
@@ -37,10 +49,10 @@ export const LoginScreen: React.FC = () => {
 
   // Form state
   const [formData, setFormData] = useState<LoginFormData>({
-    email: '',
+    email: "",
     // 'zainma4989@gmail.com',
     // 'abc123@gmail.com',
-    password: '',
+    password: "",
     // 'Zain,4321',
     // 'Zainmalik,4989',
     remember: false,
@@ -50,12 +62,18 @@ export const LoginScreen: React.FC = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   // Handle input changes
-  const handleInputChange = (field: keyof LoginFormData, value: string | boolean) => {
+  const handleInputChange = (
+    field: keyof LoginFormData,
+    value: string | boolean,
+  ) => {
     setFormData((prev: LoginFormData) => ({ ...prev, [field]: value }));
 
     // Clear specific field error when user starts typing
     if (errors[field as string]) {
-      setErrors((prev: Record<string, string>) => ({ ...prev, [field as string]: '' }));
+      setErrors((prev: Record<string, string>) => ({
+        ...prev,
+        [field as string]: "",
+      }));
     }
 
     // Clear auth error when user makes changes
@@ -63,9 +81,7 @@ export const LoginScreen: React.FC = () => {
       dispatch(clearError());
     }
   };
-  useEffect(() => {
-
-  })
+  useEffect(() => {});
   // Handle form submission
   const handleSubmit = async () => {
     // Validate form data
@@ -84,10 +100,10 @@ export const LoginScreen: React.FC = () => {
 
       if (loginUser.fulfilled.match(result)) {
         // Login successful - navigation will be handled by RootNavigator
-        console.log('Login successful');
+        console.log("Login successful");
       } else if (loginUser.rejected.match(result)) {
         // Login failed - error will be shown via authError
-        console.log('Login failed:', result.error.message);
+        console.log("Login failed:", result.error.message);
         // ToastAndroid.show(
         //   `Login failed: ${result.payload || result.error.message}`,
         //   ToastAndroid.LONG
@@ -95,25 +111,25 @@ export const LoginScreen: React.FC = () => {
       }
     } catch (error) {
       // console.error('Login error:', error);
-      Alert.alert('Error', 'An unexpected error occurred. Please try again.');
+      Alert.alert("Error", "An unexpected error occurred. Please try again.");
     }
   };
 
   // Navigate to register screen
   const navigateToRegister = () => {
-    navigation.navigate('Register');
+    navigation.navigate("Register");
   };
 
   // Navigate to forgot password screen
   const navigateToForgotPassword = () => {
-    navigation.navigate('ForgotPassword');
+    navigation.navigate("ForgotPasswordEmail");
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
         style={styles.keyboardAvoid}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <ScrollView
           style={styles.scrollView}
@@ -122,13 +138,15 @@ export const LoginScreen: React.FC = () => {
         >
           <StatusBar
             barStyle="dark-content" // or "dark-content"
-          // backgroundColor="#000" // set to match your theme
+            // backgroundColor="#000" // set to match your theme
           />
           <View>
             {/* Header */}
             <View style={styles.header}>
               <Text style={styles.title}>Welcome back</Text>
-             <Text style={styles.subtitle}>Your journey to financial freedom continues here.</Text>
+              <Text style={styles.subtitle}>
+                Your journey to financial freedom continues here.
+              </Text>
             </View>
           </View>
           {/* Form */}
@@ -138,12 +156,20 @@ export const LoginScreen: React.FC = () => {
               type="email"
               placeholder="ulfa123@gmail.com"
               value={formData.email}
-              onChangeText={(value) => handleInputChange('email', value)}
+              onChangeText={(value) => handleInputChange("email", value)}
               error={errors.email}
-              leftIcon={<Ionicons name="mail-outline" size={20} color={Colors.gray} />}
-              rightIcon={<Ionicons name="checkmark-circle-outline" size={20} color={Colors.primary} />}
+              leftIcon={
+                <Ionicons name="mail-outline" size={20} color={Colors.gray} />
+              }
+              rightIcon={
+                <Ionicons
+                  name="checkmark-circle-outline"
+                  size={20}
+                  color={Colors.primary}
+                />
+              }
               // required
-            // autoFocus
+              // autoFocus
             />
 
             <Input
@@ -151,23 +177,48 @@ export const LoginScreen: React.FC = () => {
               type="password"
               placeholder="********"
               value={formData.password}
-              onChangeText={(value) => handleInputChange('password', value)}
+              onChangeText={(value) => handleInputChange("password", value)}
               error={errors.password}
-              leftIcon={<Ionicons name="lock-closed-outline" size={20} color={Colors.gray} />}
+              leftIcon={
+                <Ionicons
+                  name="lock-closed-outline"
+                  size={20}
+                  color={Colors.gray}
+                />
+              }
               // required
             />
 
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, marginTop: 8 }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: 24,
+                marginTop: 8,
+              }}
+            >
               {/* Remember Me - Simple implementation */}
               <TouchableOpacity
                 style={styles.rememberContainer}
-                onPress={() => handleInputChange('remember', !formData.remember)}
+                onPress={() =>
+                  handleInputChange("remember", !formData.remember)
+                }
               >
-                <View style={[styles.checkbox, formData.remember && styles.checkboxActive]}>
-                  {formData.remember &&
+                <View
+                  style={[
+                    styles.checkbox,
+                    formData.remember && styles.checkboxActive,
+                  ]}
+                >
+                  {formData.remember && (
                     //  <Text style={styles.checkmark}>✓</Text>
-                    <Ionicons name='checkmark' size={16} color={Colors.primary} />
-                  }
+                    <Ionicons
+                      name="checkmark"
+                      size={16}
+                      color={Colors.primary}
+                    />
+                  )}
                 </View>
                 <Text style={styles.rememberText}>Keep Login</Text>
               </TouchableOpacity>
@@ -180,7 +231,6 @@ export const LoginScreen: React.FC = () => {
               </TouchableOpacity>
             </View>
 
-
             {/* Submit Button */}
             <Button
               title="Login"
@@ -189,7 +239,6 @@ export const LoginScreen: React.FC = () => {
               fullWidth
               style={styles.submitButton}
             />
-
           </View>
 
           {/* Footer */}
@@ -201,7 +250,6 @@ export const LoginScreen: React.FC = () => {
               </TouchableOpacity>
             </View>
           </View>
-
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -226,7 +274,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingHorizontal: 20,
     paddingBottom: 10,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
 
   header: {
@@ -237,14 +285,14 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 32,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: Colors.secondary,
     marginBottom: 8,
   },
 
   subtitle: {
     fontSize: 16,
-    fontWeight: '400',
+    fontWeight: "400",
     marginBottom: 24,
     color: Colors.gray,
     // textAlign: 'center',
@@ -255,8 +303,8 @@ const styles = StyleSheet.create({
   },
 
   rememberContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     // marginBottom: 24,
   },
   checkbox: {
@@ -266,25 +314,25 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: Colors.primary,
     marginRight: 10,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   checkboxActive: {
     // backgroundColor: Colors.primary,
     borderColor: Colors.primary,
   },
   errorBanner: {
-    backgroundColor: '#fef2f2',
+    backgroundColor: "#fef2f2",
     borderRadius: 10,
     padding: 14,
     marginBottom: 24,
-    alignItems: 'center',
+    alignItems: "center",
   },
   errorBannerText: {
-    color: '#dc2626',
+    color: "#dc2626",
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: "500",
   },
   checkboxChecked: {
     // borderColor: Colors.secondary,
@@ -295,7 +343,7 @@ const styles = StyleSheet.create({
   checkmark: {
     color: Colors.white,
     fontSize: 12,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 
   rememberText: {
@@ -304,18 +352,18 @@ const styles = StyleSheet.create({
   },
 
   errorContainer: {
-    backgroundColor: '#FEF2F2',
+    backgroundColor: "#FEF2F2",
     borderWidth: 1,
-    borderColor: '#FECACA',
+    borderColor: "#FECACA",
     borderRadius: 8,
     padding: 12,
     marginBottom: 16,
   },
 
   errorText: {
-    color: '#DC2626',
+    color: "#DC2626",
     fontSize: 14,
-    textAlign: 'center',
+    textAlign: "center",
   },
 
   submitButton: {
@@ -323,19 +371,19 @@ const styles = StyleSheet.create({
   },
 
   forgotPasswordContainer: {
-    alignItems: 'flex-end',
+    alignItems: "flex-end",
     // marginBottom: 32,
   },
 
   forgotPasswordText: {
     fontSize: 14,
     color: Colors.primary,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 
   footer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
     // alignItems: 'center',
     // paddingTop: 20,
     // borderTopWidth: 1,
@@ -351,6 +399,6 @@ const styles = StyleSheet.create({
   footerLink: {
     fontSize: 14,
     color: Colors.primary,
-    fontWeight: '600',
+    fontWeight: "600",
   },
-}); 
+});

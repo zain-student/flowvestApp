@@ -3,14 +3,16 @@
  * Handles navigation between auth screens (login, register, forgot password)
  */
 
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React from 'react';
-import { ForgotPasswordScreen } from '../modules/auth/screens/ForgotPasswordScreen';
-import { LoginScreen } from '../modules/auth/screens/LoginScreen';
+import { ForgotPasswordEmailScreen } from "@/modules/auth/screens/ForgotPasswordEmailScreen";
+import { ResetPasswordScreen } from "@/modules/auth/screens/ResetPasswordScreen";
+import { VerifyResetCodeScreen } from "@/modules/auth/screens/VerifyResetCodeScreen";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React from "react";
+import { LoginScreen } from "../modules/auth/screens/LoginScreen";
 import { OnBoard1 } from "../modules/auth/screens/OnBoard1";
 import { OnBoard2 } from "../modules/auth/screens/OnBoard2";
 import { OnBoardingScreen } from "../modules/auth/screens/OnBoardingScreen";
-import { RegisterScreen } from '../modules/auth/screens/RegisterScreen';
+import { RegisterScreen } from "../modules/auth/screens/RegisterScreen";
 
 // Auth navigation types
 export type AuthStackParamList = {
@@ -19,7 +21,9 @@ export type AuthStackParamList = {
   onBoard2: undefined;
   Login: undefined;
   Register: undefined;
-  ForgotPassword: undefined;
+  ForgotPasswordEmail: undefined;
+  VerifyResetCode: { email: string };
+  ResetPassword: { email: string; token: string };
 };
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();
@@ -31,7 +35,7 @@ export const AuthStack: React.FC = () => {
       initialRouteName="onBoard1"
       screenOptions={{
         headerShown: false,
-        animation: 'slide_from_right',
+        animation: "slide_from_right",
       }}
     >
       <Stack.Screen
@@ -62,14 +66,13 @@ export const AuthStack: React.FC = () => {
           gestureEnabled: false,
         }}
       />
+      <Stack.Screen name="Register" component={RegisterScreen} />
       <Stack.Screen
-        name="Register"
-        component={RegisterScreen}
+        name="ForgotPasswordEmail"
+        component={ForgotPasswordEmailScreen}
       />
-      <Stack.Screen
-        name="ForgotPassword"
-        component={ForgotPasswordScreen}
-      />
+      <Stack.Screen name="VerifyResetCode" component={VerifyResetCodeScreen} />
+      <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
     </Stack.Navigator>
   );
-}; 
+};

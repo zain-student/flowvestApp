@@ -91,13 +91,18 @@ export const resetPassword = createAsyncThunk<
 >(
   "forgotPassword/resetPassword",
   async ({ token, password, confirmPassword }, { rejectWithValue }) => {
+    console.log("Called verify code");
     try {
-      await api.post("/api/v1/auth/reset-password", {
+      const response = await api.post(API_ENDPOINTS.AUTH.FORGOT_PASSWORD, {
         token,
         new_password: password,
         new_password_confirmation: confirmPassword,
       });
+      console.log("Verify code res", response.data);
+      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
     } catch (error: any) {
+      ToastAndroid.show(error.message, ToastAndroid.SHORT);
+      console.log("Error verify code", error.message);
       return rejectWithValue(
         error?.response?.data?.message || "Failed to reset password",
       );

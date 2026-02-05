@@ -9,7 +9,7 @@ import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export const ResetPasswordScreen = () => {
+export const ResetPasswordScreen = ({ navigation }: any) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 

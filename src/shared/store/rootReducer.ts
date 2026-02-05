@@ -9,6 +9,7 @@ import { combineReducers } from "@reduxjs/toolkit";
 import adminDashboardSlice from "@/shared/store/slices/investor/dashboard/adminDashboardSlice";
 import investmentSlice from "@/shared/store/slices/investor/investments/investmentSlice";
 import authSlice from "../../modules/auth/store/authSlice";
+import forgotPasswordSlice from "../../modules/auth/store/forgotPasswordSlice";
 import registerSlice from "../../modules/auth/store/registerSlice";
 import addPartnerSlice from "./slices/investor/dashboard/addPartnerSlice";
 import payoutSlice from "./slices/investor/payouts/payoutSlice";
@@ -30,6 +31,7 @@ export const rootReducer = combineReducers({
   // Authentication
   auth: authSlice,
   register: registerSlice,
+  forgotPassword: forgotPasswordSlice,
   partner: addPartnerSlice,
   investments: investmentSlice,
   // Module reducers (will be uncommented as we create them)

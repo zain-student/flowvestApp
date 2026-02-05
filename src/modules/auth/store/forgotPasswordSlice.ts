@@ -48,6 +48,7 @@ export const sendResetCode = createAsyncThunk<
     ToastAndroid.show(res.data.message, ToastAndroid.SHORT);
   } catch (error: any) {
     console.log("Send reset code error", error.message);
+    ToastAndroid.show(error.message, ToastAndroid.SHORT);
     return rejectWithValue(
       error?.response?.data?.message || "Failed to send verification code",
     );

@@ -75,10 +75,6 @@ export const ResetPasswordScreen = ({ route, navigation }: any) => {
           editable={!loading}
         />
 
-        {(localError || error) && (
-          <Text style={styles.errorText}>{localError || error}</Text>
-        )}
-
         <Button
           title="Reset Password"
           onPress={handleResetPassword}
@@ -116,10 +112,5 @@ const styles = StyleSheet.create({
     color: Colors.gray,
     textAlign: "center",
     lineHeight: 24,
-  },
-  errorText: {
-    marginTop: 8,
-    color: "red",
-    fontSize: 14,
   },
 });

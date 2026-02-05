@@ -89,19 +89,19 @@ import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
 import {
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AuthStackParamList } from "../../../navigation/AuthStack";
 import {
-    sendResetCode,
-    setEmail as setForgotEmail,
+  sendResetCode,
+  setEmail as setForgotEmail,
 } from "../store/forgotPasswordSlice";
 
 type NavProp = NativeStackNavigationProp<
@@ -170,8 +170,6 @@ export const ForgotPasswordEmailScreen = () => {
               editable={!loading}
             />
 
-            {error && <Text style={styles.errorText}>{error}</Text>}
-
             <Button
               title="Send Code"
               onPress={handleSendCode}
@@ -206,9 +204,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 40,
     marginBottom: 40,
-  },
-  errorText: {
-    color: "red",
   },
   content: {
     flexGrow: 1,

@@ -5,14 +5,14 @@ import { Input } from "@components/ui/Input";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { verifyResetCode } from "../store/forgotPasswordSlice";
+import { sendResetCode, verifyResetCode } from "../store/forgotPasswordSlice";
 
 export const VerifyResetCodeScreen = ({ route, navigation }: any) => {
   const { email } = route.params;
@@ -21,6 +21,10 @@ export const VerifyResetCodeScreen = ({ route, navigation }: any) => {
   const { loading, error, verificationToken } = useAppSelector(
     (state) => state.forgotPassword,
   );
+  const RESEND_SECONDS = 60;
+
+  const [resendTimer, setResendTimer] = useState(RESEND_SECONDS);
+  const timerRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
 
   const [code, setCode] = useState("");
 
@@ -33,6 +37,41 @@ export const VerifyResetCodeScreen = ({ route, navigation }: any) => {
       });
     }
   }, [verificationToken]);
+  useEffect(() => {
+    startResendTimer();
+
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, []);
+  const startResendTimer = () => {
+    setResendTimer(RESEND_SECONDS);
+
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+
+    timerRef.current = setInterval(() => {
+      setResendTimer((prev) => {
+        if (prev <= 1) {
+          if (timerRef.current) {
+            clearInterval(timerRef.current);
+            timerRef.current = null;
+          }
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+  const handleResendCode = async () => {
+    if (resendTimer > 0) return;
+
+    await dispatch(sendResetCode({ email }));
+    startResendTimer();
+  };
 
   const handleVerifyCode = async () => {
     await dispatch(
@@ -78,8 +117,17 @@ export const VerifyResetCodeScreen = ({ route, navigation }: any) => {
             required
             editable={!loading}
           />
-
-          {error && <Text style={styles.errorText}>{error}</Text>}
+          <View style={styles.resendContainer}>
+            {resendTimer > 0 ? (
+              <Text style={styles.timerText}>
+                Resend code in {resendTimer}s
+              </Text>
+            ) : (
+              <TouchableOpacity onPress={handleResendCode} disabled={loading}>
+                <Text style={styles.resendText}>Resend Code</Text>
+              </TouchableOpacity>
+            )}
+          </View>
 
           <Button
             title="Verify Code"
@@ -131,9 +179,17 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   highlight: { fontWeight: "600", color: Colors.secondary },
-  errorText: {
-    marginTop: 8,
-    color: "red",
+  resendContainer: {
+    marginTop: 16,
+    alignItems: "center",
+  },
+  timerText: {
+    color: Colors.gray,
     fontSize: 14,
+  },
+  resendText: {
+    color: Colors.secondary,
+    fontSize: 14,
+    fontWeight: "600",
   },
 });

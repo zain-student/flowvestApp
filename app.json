@@ -7,21 +7,19 @@
     "icon": "./assets/images/splash-icon.png",
     "scheme": "flowvestapp",
     "userInterfaceStyle": "automatic",
-
     "newArchEnabled": false,
-
     "splash": {
       "image": "./assets/images/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-
-    "assetBundlePatterns": ["**/*"],
-
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.FlowvestApp"
     },
-
     "android": {
       "package": "com.anonymous.FlowvestApp",
       "adaptiveIcon": {
@@ -29,7 +27,6 @@
         "backgroundColor": "#ffffff"
       }
     },
-
     "plugins": [
       "expo-router",
       "expo-font",
@@ -38,22 +35,21 @@
         {
           "android": {
             "ndkVersion": "23.1.7779620",
-            "architectures": ["arm64-v8a"]
+            "architectures": [
+              "arm64-v8a"
+            ]
           }
         }
       ]
     ],
-
     "experiments": {
       "typedRoutes": true
     },
-
     "extra": {
       "eas": {
         "projectId": "238a3418-aa1a-4b4c-b056-995c010a33f8"
       }
     },
-
     "owner": "zaindeveloper"
   }
 }

@@ -1,6 +1,7 @@
 import { API_ENDPOINTS } from "@/config/env";
 import { api } from "@/shared/services/api";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { loginUser } from "./authSlice";
 export type RegisterStep = 1 | 2 | 3;
 
 interface RegisterState {
@@ -94,7 +95,7 @@ export const registerUser = createAsyncThunk<
     termsAccepted: boolean;
   },
   { rejectValue: string }
->("register/registerUser", async (payload, { rejectWithValue }) => {
+>("register/registerUser", async (payload, { rejectWithValue, dispatch }) => {
   console.log("Called thunk with:", payload);
   try {
     const res = await api.post(API_ENDPOINTS.AUTH.REGISTER, {
@@ -106,6 +107,13 @@ export const registerUser = createAsyncThunk<
       terms_accepted: payload.termsAccepted,
     });
     console.log("Register response:", res.data);
+
+    // Auto login after registration
+    await dispatch(
+      loginUser({ email: payload.email, password: payload.password }),
+    ).unwrap();
+    // console.log("Creds: ", payload.email, payload.password);
+
     return res.data;
   } catch (error: any) {
     console.log("Register error:", error.message);
@@ -176,6 +184,7 @@ const registerSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state) => {
         state.loading = false;
+        // ToastAndroid.show("Registration Successful!", ToastAndroid.SHORT);
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;

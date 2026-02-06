@@ -138,60 +138,6 @@ export const loginUser = createAsyncThunk(
   },
 );
 
-export const registerUser = createAsyncThunk(
-  "/v1/auth/register",
-  async (registrationData: any, { rejectWithValue }) => {
-    try {
-      const response = await api.post(
-        API_ENDPOINTS.AUTH.REGISTER,
-        registrationData,
-      );
-      const token = response.data?.data?.token;
-      const user = response.data?.data?.user;
-      const session = response.data?.data?.session; // Assuming session is returned
-      console.log("Registration response:", response.data);
-      if (!token || !user) {
-        return rejectWithValue(
-          "Registration failed: No token or user data returned",
-        );
-      }
-      // Save token and user data to storage
-      await storage.multiSet([
-        [StorageKeys.AUTH_TOKEN, token?.access_token],
-        [StorageKeys.USER_DATA, JSON.stringify(user)],
-        [StorageKeys.EXPIRES_AT, token?.expires_at],
-        // Uncomment when session is available
-        [StorageKeys.SESSION, JSON.stringify(session)],
-        // [StorageKeys.REFRESH_TOKEN, token?.refresh_token],
-      ]);
-      // ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
-      console.log("✅ User registered successfully:", response.data.message);
-      // return { user, token, session };
-      return {
-        user,
-        token: {
-          access_token: token.access_token,
-          token_type: token.token_type,
-          expires_in: token.expires_in,
-          expires_at: token.expires_at,
-        },
-        session: {
-          issued_at: session?.issued_at,
-          refresh_available_until: session?.refresh_available_until,
-        },
-      };
-    } catch (error: any) {
-      const errMsg =
-        error?.response?.data?.message ||
-        error?.message ||
-        "Registration failed";
-      ToastAndroid.show(errMsg, ToastAndroid.SHORT);
-      console.error("❌ Registration error:", errMsg);
-      return rejectWithValue(errMsg);
-    }
-  },
-);
-
 export const logoutUser = createAsyncThunk("/v1/auth/logout", async () => {
   // This will be implemented with actual API call
   const response = await api.post(
@@ -334,36 +280,6 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.isAuthenticated = false;
         state.error = action.error.message || "Login failed";
-      })
-
-      // Register
-      .addCase(registerUser.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-      })
-      .addCase(registerUser.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isAuthenticated = true;
-        state.user = action.payload.user;
-        // state.token = action.payload.token;
-        state.token = {
-          access_token: action.payload.token.access_token,
-          token_type: action.payload.token.token_type,
-          expires_in: action.payload.token.expires_in,
-          expires_at: action.payload.token.expires_at,
-        };
-        // state.session = action.payload.session;
-        state.session = {
-          issued_at: action.payload.session.issued_at,
-          refresh_available_until:
-            action.payload.session.refresh_available_until,
-        };
-        state.error = null;
-      })
-      .addCase(registerUser.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isAuthenticated = false;
-        state.error = action.error.message || "Registration failed";
       })
       // Logout
       .addCase(logoutUser.pending, (state) => {

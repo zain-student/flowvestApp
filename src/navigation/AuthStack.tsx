@@ -9,16 +9,14 @@ import { VerifyResetCodeScreen } from "@/modules/auth/screens/VerifyResetCodeScr
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import { LoginScreen } from "../modules/auth/screens/LoginScreen";
-import { OnBoard1 } from "../modules/auth/screens/OnBoard1";
-import { OnBoard2 } from "../modules/auth/screens/OnBoard2";
+import { OnBoardingFinal } from "../modules/auth/screens/OnBoardingFinal";
 import { OnBoardingScreen } from "../modules/auth/screens/OnBoardingScreen";
 import { RegisterScreen } from "../modules/auth/screens/RegisterScreen";
 
 // Auth navigation types
 export type AuthStackParamList = {
   onBoarding: undefined;
-  onBoard1: undefined;
-  onBoard2: undefined;
+  OnBoardingFinal: undefined;
   Login: undefined;
   Register: undefined;
   ForgotPasswordEmail: undefined;
@@ -31,27 +29,27 @@ const Stack = createNativeStackNavigator<AuthStackParamList>();
 export const AuthStack: React.FC = () => {
   return (
     <Stack.Navigator
-      // initialRouteName="onBoarding"
-      initialRouteName="onBoard1"
+      initialRouteName="onBoarding"
+      // initialRouteName="onBoard1"
       screenOptions={{
         headerShown: false,
         animation: "slide_from_right",
       }}
     >
       <Stack.Screen
-        name="onBoard1"
-        component={OnBoard1}
+        name="OnBoardingFinal"
+        component={OnBoardingFinal}
         options={{
           gestureEnabled: false,
         }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="onBoard2"
         component={OnBoard2}
         options={{
           gestureEnabled: false,
         }}
-      />
+      /> */}
       <Stack.Screen
         name="onBoarding"
         component={OnBoardingScreen}

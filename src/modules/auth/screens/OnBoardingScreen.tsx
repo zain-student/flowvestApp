@@ -1,154 +1,132 @@
-import Colors from '@/shared/colors/Colors';
-import { Button } from '@/shared/components/ui';
-import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React from 'react';
+import Colors from "@/shared/colors/Colors";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Dimensions,
-  Image,
+  FlatList,
   StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
-} from 'react-native';
+  View,
+} from "react-native";
+import { onboardingData } from "../components/onboardingData";
+import { OnboardingItem } from "./OnboardingItem";
+
+const { width } = Dimensions.get("window");
 
 type RootStackParamList = {
-  OnBoarding: undefined;
+  OnBoardingFinal: undefined;
   Register: undefined;
   Login: undefined;
 };
 
-const { width, height } = Dimensions.get('window');
-
 export const OnBoardingScreen = () => {
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const slidesRef = useRef<FlatList>(null);
+
+  // Auto-slide every 3 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const nextIndex =
+        currentIndex + 1 < onboardingData.length ? currentIndex + 1 : 0;
+      setCurrentIndex(nextIndex);
+      slidesRef.current?.scrollToIndex({ index: nextIndex, animated: true });
+    }, 3000);
+
+    return () => clearInterval(timer);
+  }, [currentIndex]);
+
+  const handleNext = () => {
+    if (currentIndex < onboardingData.length - 1) {
+      slidesRef.current?.scrollToIndex({ index: currentIndex + 1 });
+      setCurrentIndex(currentIndex + 1);
+    } else {
+      navigation.replace("OnBoardingFinal");
+    }
+  };
+
+  const handleSkip = () => {
+    navigation.replace("OnBoardingFinal");
+  };
+
+  const updateCurrentIndex = (e: any) => {
+    const contentOffsetX = e.nativeEvent.contentOffset.x;
+    const index = Math.round(contentOffsetX / width);
+    setCurrentIndex(index);
+  };
 
   return (
-    <View style={styles.safeArea}>
-      <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
-      <View style={styles.headerSpacer} />
-      <View style={styles.illustrationContainer}>
-        <Image
-          source={require('../../../../assets/images/onBoard3.png')}
-          style={styles.illustration}
-        />
-      </View>
-      <View style={styles.contentContainer}>
-        <Text style={styles.title}>Stay on top of your finance with us.</Text>
-
-        <Text style={styles.subtitle}>
-          We are your new financial Advisors
-          to recommed the best investments for you.
-        </Text>
-      </View>
-      <Button
-        title="Create Account"
-        onPress={() => navigation.navigate('Register')}
-        style={styles.payButton}
-        textStyle={styles.footerButtonText}
-        variant="primary"
+    <View style={styles.container}>
+      <StatusBar
+        barStyle="dark-content" // or "dark-content"
+        // backgroundColor="#000" // set to match your theme
       />
-      <TouchableOpacity
-        style={styles.secondaryButton}
-        activeOpacity={0.7}
-        onPress={() => navigation.navigate('Login')}
-      >
-        <Text style={styles.secondaryButtonText}>Log In</Text>
-      </TouchableOpacity>
+      <FlatList
+        data={onboardingData}
+        renderItem={({ item }) => <OnboardingItem item={item} />}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        pagingEnabled
+        bounces={false}
+        onMomentumScrollEnd={updateCurrentIndex}
+        ref={slidesRef}
+      />
+
+      {/* Pagination & buttons */}
+      <View style={styles.footer}>
+        <TouchableOpacity onPress={handleSkip}>
+          <Text style={styles.skipText}>Skip</Text>
+        </TouchableOpacity>
+
+        <View style={styles.pagination}>
+          {onboardingData.map((_: any, index: any) => (
+            <View
+              key={index.toString()}
+              style={[
+                styles.dot,
+                currentIndex === index && { backgroundColor: Colors.primary },
+              ]}
+            />
+          ))}
+        </View>
+
+        <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
+          <Ionicons name="chevron-forward" size={24} color={Colors.white} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
-export default OnBoardingScreen;
-
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1, backgroundColor: Colors.background, paddingHorizontal: 12
-  },
-  gradient: {
-    flex: 1,
-    paddingHorizontal: 24,
-  },
-  headerSpacer: {
-    height: StatusBar.currentHeight || 44, // Handles notch / status bar
-  },
-  illustrationContainer: {
-    flex: 1.1, // Gives more breathing room to illustration
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginVertical: 50,
-    paddingTop: 50
-  },
-  illustration: {
-    // width: width * 0.82,
-    // height: height * 0.38,
-    width:"90%",
-    height:"100%",
-    // Optional: add subtle shadow for depth
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 12 },
-    shadowOpacity: 0.35,
-    shadowRadius: 16,
-    elevation: 12,
-  },
-  contentContainer: {
-    alignItems: 'center',
-    marginBottom: 48,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '600',
-    color: Colors.secondary,
-    letterSpacing: -0.5,
-    marginBottom: 16,
-    textAlign: 'center',
-    marginHorizontal: 15
-  },
-  subtitle: {
-    fontSize: 17,
-    fontWeight: '400',
-    color: Colors.secondary, // Softer light purple-gray
-    textAlign: 'center',
-    lineHeight: 28,
-    opacity: 0.92,
-  },
-  buttonWrapper: {
-    width: '100%',
-    alignItems: 'center',
-    marginBottom: 80,
-
-  },
-  payButton: {
-    borderRadius: 20,
+  container: { flex: 1, backgroundColor: Colors.background },
+  footer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    justifyContent: 'center',
-    // marginHorizontal: 5,
+    paddingHorizontal: 24,
+    paddingBottom: 30,
+    marginTop: 10,
   },
-  footerButtonText: {
-    color: "#fff",
-    fontWeight: "500",
-    fontSize: 16
+  skipText: { fontSize: 16, color: Colors.primary, fontWeight: "bold" },
+  nextButton: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: Colors.primary,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  secondaryButton: {
-    width: '100%',
-    borderWidth: 1,
-    borderColor: "#E6EDFF",
-    paddingVertical: 12,
-    borderRadius: 20,
-    alignItems: 'center',
-    marginBottom: 80
-  },
-  secondaryButtonText: {
-    color: Colors.primary,
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  trustText: {
-    marginTop: 24,
-    fontSize: 13,
-    color: '#A0AEC0',
-    textAlign: 'center',
-    opacity: 0.8,
+  pagination: { flexDirection: "row", alignItems: "center", gap: 6 },
+  dot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: "#ccc",
   },
 });

@@ -13,9 +13,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.anonymous.FlowvestApp"
@@ -23,7 +21,7 @@
     "android": {
       "package": "com.anonymous.FlowvestApp",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/splash-icon.png",
         "backgroundColor": "#ffffff"
       }
     },
@@ -35,9 +33,7 @@
         {
           "android": {
             "ndkVersion": "23.1.7779620",
-            "architectures": [
-              "arm64-v8a"
-            ]
+            "architectures": ["arm64-v8a"]
           }
         }
       ]

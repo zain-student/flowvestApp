@@ -125,6 +125,11 @@ export const LoginScreen: React.FC = () => {
     navigation.navigate("ForgotPasswordEmail");
   };
 
+  const isEmailValid = () => {
+    const result = loginSchema.shape.email.safeParse(formData.email);
+    return result.success;
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -162,11 +167,19 @@ export const LoginScreen: React.FC = () => {
                 <Ionicons name="mail-outline" size={20} color={Colors.gray} />
               }
               rightIcon={
-                <Ionicons
-                  name="checkmark-circle-outline"
-                  size={20}
-                  color={Colors.primary}
-                />
+                formData.email.length > 0 && isEmailValid() ? (
+                  <Ionicons
+                    name="checkmark-circle-outline"
+                    size={20}
+                    color={Colors.secondary}
+                  />
+                ) : (
+                  <Ionicons
+                    name="close-circle-outline"
+                    size={20}
+                    color={Colors.secondary}
+                  />
+                )
               }
               // required
               // autoFocus

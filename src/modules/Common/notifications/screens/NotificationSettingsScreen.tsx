@@ -1,33 +1,32 @@
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import {
-    fetchNotificationSettings,
-    updateNotificationSettings,
+  fetchNotificationSettings,
+  updateNotificationSettings,
 } from "@/shared/store/slices/profile/notificationSlice";
 import React, { useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    ScrollView,
-    StyleSheet,
-    Switch,
-    Text,
-    TextInput,
-    ToastAndroid,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Switch,
+  Text,
+  TextInput,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 export const NotificationSettingsScreen: React.FC = () => {
   const dispatch = useAppDispatch();
   const { settings, isLoading, error } = useAppSelector(
-    (state) => state.notificationSettings
+    (state) => state.notificationSettings,
   );
 
   const [localSettings, setLocalSettings] = useState(settings);
   const [isSaving, setIsSaving] = useState(false);
 
-  const isChanged =
-    JSON.stringify(localSettings) !== JSON.stringify(settings);
+  const isChanged = JSON.stringify(localSettings) !== JSON.stringify(settings);
 
   useEffect(() => {
     dispatch(fetchNotificationSettings());
@@ -105,9 +104,7 @@ export const NotificationSettingsScreen: React.FC = () => {
         <ToggleRow
           label="System alerts"
           value={localSettings.email_notifications.system_alerts}
-          onToggle={() =>
-            handleToggle("email_notifications", "system_alerts")
-          }
+          onToggle={() => handleToggle("email_notifications", "system_alerts")}
         />
       </Section>
 
@@ -115,16 +112,12 @@ export const NotificationSettingsScreen: React.FC = () => {
         <ToggleRow
           label="Payout reminders"
           value={localSettings.sms_notifications.payout_reminders}
-          onToggle={() =>
-            handleToggle("sms_notifications", "payout_reminders")
-          }
+          onToggle={() => handleToggle("sms_notifications", "payout_reminders")}
         />
         <ToggleRow
           label="Urgent alerts"
           value={localSettings.sms_notifications.urgent_alerts}
-          onToggle={() =>
-            handleToggle("sms_notifications", "urgent_alerts")
-          }
+          onToggle={() => handleToggle("sms_notifications", "urgent_alerts")}
         />
       </Section>
 
@@ -149,7 +142,9 @@ export const NotificationSettingsScreen: React.FC = () => {
         <Label>Payout reminder days</Label>
         <TextInput
           style={styles.input}
-          value={localSettings.reminder_settings.payout_reminder_days.join(", ")}
+          value={localSettings.reminder_settings.payout_reminder_days.join(
+            ", ",
+          )}
           onChangeText={(text) => {
             const days = text
               .split(",")
@@ -183,14 +178,9 @@ export const NotificationSettingsScreen: React.FC = () => {
 
         <ToggleRow
           label="Investment milestone alerts"
-          value={
-            localSettings.reminder_settings.investment_milestone_alerts
-          }
+          value={localSettings.reminder_settings.investment_milestone_alerts}
           onToggle={() =>
-            handleToggle(
-              "reminder_settings",
-              "investment_milestone_alerts"
-            )
+            handleToggle("reminder_settings", "investment_milestone_alerts")
           }
         />
       </Section>
@@ -255,7 +245,7 @@ const Label = ({
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
+    padding: 12,
     paddingBottom: 100,
     backgroundColor: Colors.background,
   },
@@ -276,7 +266,8 @@ const styles = StyleSheet.create({
   section: {
     backgroundColor: Colors.white,
     borderRadius: 16,
-    padding: 16,
+    paddingVertical: 16,
+    paddingHorizontal: 4,
     marginBottom: 16,
   },
   sectionTitle: {

@@ -107,11 +107,11 @@ export const fetchPortfolio = createAsyncThunk<
   try {
     const response = await api.get(API_ENDPOINTS.PORTFOLIO.INDEX);
     ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
-    console.log("Portfolio api response:",response.data.data);
+    console.log("Portfolio api response data:", response.data.data);
     return response.data;
   } catch (error: any) {
     return thunkAPI.rejectWithValue(
-      error.response?.data?.message || "Failed to fetch portfolio"
+      error.response?.data?.message || "Failed to fetch portfolio",
     );
   }
 });

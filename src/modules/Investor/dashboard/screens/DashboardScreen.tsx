@@ -113,16 +113,19 @@ export const DashboardScreen: React.FC = () => {
         {/* Middle: Title & Dates */}
         <View style={styles.infoWrapper}>
           <Text style={styles.activityTitle}>{item.title}</Text>
-          <View style={{ flexDirection: "row", alignItems: "center" }} >
-            <Ionicons name="calendar-outline" size={13} color={Colors.secondary} />
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Ionicons
+              name="calendar-outline"
+              size={13}
+              color={Colors.secondary}
+            />
             <Text style={styles.createdDate}>
               Created: {formatDate(item.created_at ?? "N/A")}
             </Text>
           </View>
-          <View style={{ flexDirection: "row", alignItems: "center" }} >
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Ionicons name="time-outline" size={13} color={Colors.secondary} />
-            <Text style={styles.activitySubText}>
-              {item.time}</Text>
+            <Text style={styles.activitySubText}>{item.time}</Text>
           </View>
         </View>
 
@@ -156,15 +159,23 @@ export const DashboardScreen: React.FC = () => {
           end={{ x: 2, y: 0 }}
           style={styles.balanceCardDark}
         >
-          <Image source={require('../../../../../assets/images/upperDiv.png')}
-            style={{ position: 'absolute', width: 100, height: 110, top: -30, right: -50 }} />
+          <Image
+            source={require("../../../../../assets/images/upperDiv.png")}
+            style={{
+              position: "absolute",
+              width: 100,
+              height: 110,
+              top: -30,
+              right: -50,
+            }}
+          />
           <Text style={styles.balanceLabelDark}>Total Managed Portfolio</Text>
           <Text style={styles.balanceValueDark}>
             {stats?.total_managed_portfolio
               ? formatCurrency(stats.total_managed_portfolio)
               : "--"}
           </Text>
-          <View style={styles.mirror}  >
+          <View style={styles.mirror}>
             {/* <Text style={styles.balanceChangeDark}> */}
 
             <Text
@@ -179,7 +190,16 @@ export const DashboardScreen: React.FC = () => {
               {/* </Text> */}
             </Text>
           </View>
-          <Image source={require('../../../../../assets/images/lowerDiv.png')} style={{ position: 'absolute', width: 200, height: 260, bottom: -190, left: -150, }} />
+          <Image
+            source={require("../../../../../assets/images/lowerDiv.png")}
+            style={{
+              position: "absolute",
+              width: 200,
+              height: 260,
+              bottom: -190,
+              left: -150,
+            }}
+          />
           {/* <View style={styles.balanceActionsRow}></View> */}
         </LinearGradient>
         {/* </View> */}
@@ -215,15 +235,22 @@ export const DashboardScreen: React.FC = () => {
                     name={card.icon as any}
                     size={22}
                     color={Colors.primary}
-                    style={{ backgroundColor: Colors.lightGray, width: 44, height: 44, borderRadius: 22, justifyContent: 'center', alignItems: 'center', padding: 10 }}
+                    style={{
+                      backgroundColor: Colors.lightGray,
+                      width: 44,
+                      height: 44,
+                      borderRadius: 22,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      padding: 10,
+                    }}
                   />
                   {/* </View> */}
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }} >
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <Text style={styles.statLabelLarge}>{card.label}: </Text>
                     <Text style={styles.statValueLarge}>{card.value}</Text>
                   </View>
                 </View>
-
               </View>
             ))}
           </View>
@@ -233,8 +260,13 @@ export const DashboardScreen: React.FC = () => {
               <Text style={styles.emptyText}>Loading...</Text>
             ) : recent_activities?.length === 0 ? (
               <>
-                <Image source={require('../../../../../assets/images/noRecentActivity.png')} style={{ width: 100, height: 100, alignSelf: 'center' }} />
-                <Text style={styles.emptyText}>No recent activities availible</Text>
+                <Image
+                  source={require("../../../../../assets/images/noRecentActivity.png")}
+                  style={{ width: 100, height: 100, alignSelf: "center" }}
+                />
+                <Text style={styles.emptyText}>
+                  No recent activities availible
+                </Text>
               </>
             ) : (
               <FlatList
@@ -244,16 +276,16 @@ export const DashboardScreen: React.FC = () => {
                 renderItem={renderActivityItem}
                 showsVerticalScrollIndicator={false}
                 scrollEnabled={false}
-              // ListEmptyComponent={
-              //   !isLoading && (
-              //     <View style={styles.emptyState}>
-              //       <Feather name="inbox" size={48} color={Colors.gray} />
-              //       <Text style={styles.emptyText}>
-              //         No recent activities found
-              //       </Text>
-              //     </View>
-              //   )
-              // }
+                // ListEmptyComponent={
+                //   !isLoading && (
+                //     <View style={styles.emptyState}>
+                //       <Feather name="inbox" size={48} color={Colors.gray} />
+                //       <Text style={styles.emptyText}>
+                //         No recent activities found
+                //       </Text>
+                //     </View>
+                //   )
+                // }
               />
             )}
           </View>
@@ -336,7 +368,19 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginVertical: 2,
   },
-  mirror: { backgroundColor: Colors.mirror, width: '70%', justifyContent: 'center', alignItems: 'center', borderRadius: 18, paddingVertical: 4, paddingHorizontal: 12, borderWidth: 0.3, borderColor: Colors.white, opacity: 0.7, marginTop: 4 },
+  mirror: {
+    backgroundColor: Colors.mirror,
+    width: "70%",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 18,
+    paddingVertical: 4,
+    paddingHorizontal: 12,
+    borderWidth: 0.3,
+    borderColor: Colors.white,
+    opacity: 0.7,
+    marginTop: 4,
+  },
   statCardGrid: {
     flexDirection: "row",
     flexWrap: "wrap",

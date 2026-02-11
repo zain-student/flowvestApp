@@ -149,7 +149,11 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
               style={styles.menuBtn}
               onPress={() => setShowMenu((prev) => !prev)}
             >
-              <Ionicons name="ellipsis-vertical" size={20} color={Colors.secondary} />
+              <Ionicons
+                name="ellipsis-vertical"
+                size={20}
+                color={Colors.secondary}
+              />
             </TouchableOpacity>
           )}
           {/* Simple Dropdown */}
@@ -184,38 +188,51 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
 
           <View style={styles.badgeRow}>
             <View style={styles.statusBadge}>
-              <Text style={styles.statusText}>{currentInvestment.status.charAt(0).toUpperCase() +
-                currentInvestment.status.slice(1)}</Text>
+              <Text style={styles.statusText}>
+                {currentInvestment.status.charAt(0).toUpperCase() +
+                  currentInvestment.status.slice(1)}
+              </Text>
             </View>
             <View style={styles.sharedBadge}>
-              <Text style={styles.sharedText}> {currentInvestment.type.charAt(0).toUpperCase() +
-                currentInvestment.type.slice(1)}</Text>
+              <Text style={styles.sharedText}>
+                {" "}
+                {currentInvestment.type.charAt(0).toUpperCase() +
+                  currentInvestment.type.slice(1)}
+              </Text>
             </View>
           </View>
           {currentInvestment.type === "shared" && (
-            <View style={{ flexDirection: 'row', justifyContent: "space-between" }}>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
               <View>
-                <Text style={styles.label}>
-                  Min:{" "}
-                </Text>
+                <Text style={styles.label}>Min: </Text>
                 <Text style={styles.value}>
-                  {formatCurrency(Number(currentInvestment.min_investment_amount))}{" "}
+                  {formatCurrency(
+                    Number(currentInvestment.min_investment_amount),
+                  )}{" "}
                 </Text>
               </View>
               <View>
-                <Text style={styles.label}>Max:{" "}</Text>
+                <Text style={styles.label}>Max: </Text>
                 <Text style={styles.value}>
-                  {formatCurrency(Number(currentInvestment.max_investment_amount))}
+                  {formatCurrency(
+                    Number(currentInvestment.max_investment_amount),
+                  )}
                 </Text>
               </View>
             </View>
           )}
-          <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
             <View>
               <Text style={styles.label}>Returns</Text>
               <Text style={styles.returns}>
                 {currentInvestment.expected_return_rate != null
-                  ? parseFloat(currentInvestment.expected_return_rate).toFixed(1)
+                  ? parseFloat(currentInvestment.expected_return_rate).toFixed(
+                      1,
+                    )
                   : "--"}
                 %
               </Text>
@@ -229,7 +246,9 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
             </View>
           </View>
           <Divider />
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
             <View>
               <Text style={styles.label}>Start Date</Text>
               <Text style={styles.value}>{currentInvestment.start_date}</Text>
@@ -328,7 +347,7 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
               }}
               // error={errors.email}
               required
-            // autoFocus
+              // autoFocus
             />
             {/* {errors.amount && <Text style={styles.error}>{errors.amount.message}</Text>} */}
 
@@ -338,9 +357,9 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
               placeholder="Any notes for your investment"
               value={notes}
               onChangeText={setNotes}
-            // error={errors.email}
-            // required
-            // autoFocus
+              // error={errors.email}
+              // required
+              // autoFocus
             />
             {formError ? <Text style={styles.error}>{formError}</Text> : null}
 
@@ -365,7 +384,9 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
 const Divider = () => <View style={styles.rowDivider} />;
 const styles = StyleSheet.create({
   container: {
-    flex: 1, backgroundColor: Colors.background, paddingBottom: 0
+    flex: 1,
+    backgroundColor: Colors.background,
+    paddingBottom: 0,
   },
   scrollContent: { paddingHorizontal: 12, paddingBottom: 70, marginTop: 20 },
   menuBtn: {
@@ -374,8 +395,8 @@ const styles = StyleSheet.create({
     right: 20,
     padding: 12,
     zIndex: 20,
-    backgroundColor: '#0120730D',
-    borderRadius: 25
+    backgroundColor: "#0120730D",
+    borderRadius: 25,
   },
   overlay: {
     position: "absolute",
@@ -424,7 +445,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#E6EDFF",
   },
-  label: { fontSize: 13, color: Colors.gray, marginTop: 8, },
+  label: { fontSize: 13, color: Colors.gray, marginTop: 8 },
   value: {
     fontSize: 16,
     fontWeight: "600",
@@ -433,7 +454,7 @@ const styles = StyleSheet.create({
   badgeRow: {
     flexDirection: "row",
     // marginBottom: 12,
-    marginVertical: 12
+    marginVertical: 12,
   },
 
   statusBadge: {
@@ -475,20 +496,19 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   txCard: {
-    backgroundColor: Colors.secondary,
-    borderRadius: 10,
-    padding: 14,
+    backgroundColor: Colors.white,
+    borderRadius: 16,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
     marginBottom: 12,
-    shadowColor: "#000",
-    shadowOpacity: 0.02,
-    shadowRadius: 4,
-    elevation: 1,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#E6EDFF",
   },
-  txType: { fontSize: 15, color: Colors.white, fontWeight: "600" },
-  txAmount: { fontSize: 15, color: Colors.white, fontWeight: "500" },
+  txType: { fontSize: 14, fontWeight: "500", color: Colors.secondary },
+  txAmount: { fontSize: 14, fontWeight: "500", color: Colors.secondary },
   txDate: { fontSize: 13, color: Colors.gray },
   footer: {
     flexDirection: "row",
@@ -505,13 +525,13 @@ const styles = StyleSheet.create({
     // flex: 1,
     borderRadius: 22,
     alignItems: "center",
-    justifyContent: 'center',
+    justifyContent: "center",
     marginHorizontal: 5,
   },
   deleteButton: {
     width: 48,
     height: 48,
-    justifyContent: 'center',
+    justifyContent: "center",
     borderRadius: 24,
     alignItems: "center",
     marginBottom: 24,
@@ -520,7 +540,7 @@ const styles = StyleSheet.create({
   footerButtonText: {
     color: "#fff",
     fontWeight: "500",
-    fontSize: 12
+    fontSize: 12,
   },
   rowDivider: {
     marginTop: 4,

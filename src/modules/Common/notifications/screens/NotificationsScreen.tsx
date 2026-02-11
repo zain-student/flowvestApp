@@ -12,7 +12,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
 import Animated, { FadeInUp } from "react-native-reanimated";
@@ -160,10 +160,21 @@ export const NotificationsScreen = () => {
   if (!isLoading && notifications.length === 0) {
     return (
       <View style={styles.center}>
-        <Image source={require('../../../../../assets/images/noNotification.png')} style={{ width: 220, height: 215, alignSelf: 'center' }} />
+        <Image
+          source={require("../../../../../assets/images/noNotification.png")}
+          style={{ width: 220, height: 215, alignSelf: "center" }}
+        />
         <Text style={styles.emptyText}>No Notifications Yet</Text>
-        <View style={{ width: "73%", justifyContent: 'center', alignItems: 'center' }}>
-          <Text style={styles.text}>When you get notifications, they’ll show up here</Text>
+        <View
+          style={{
+            width: "73%",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style={styles.text}>
+            When you get notifications, they’ll show up here
+          </Text>
         </View>
       </View>
     );
@@ -202,17 +213,17 @@ const styles = StyleSheet.create({
   section: {
     fontSize: 14,
     fontWeight: "700",
-    marginHorizontal: 16,
+    marginHorizontal: 12,
     marginVertical: 10,
     color: Colors.gray,
   },
   card: {
     flexDirection: "row",
     backgroundColor: "#fff",
-    marginHorizontal: 16,
+    marginHorizontal: 12,
     marginBottom: 12,
     borderRadius: 16,
-    padding: 14,
+    padding: 10,
     shadowColor: "#000",
     shadowOpacity: 0.06,
     shadowRadius: 8,
@@ -253,6 +264,18 @@ const styles = StyleSheet.create({
   textDark: { color: "#F8FAFC" },
   subTextDark: { color: "#94A3B8" },
   center: { flex: 1, alignItems: "center", paddingTop: "50%" },
-  emptyText: { fontSize: 24, marginTop: 8, color: Colors.secondary, fontWeight: '700' },
-  text: { fontSize: 16, marginTop: 8, color: Colors.gray, fontWeight: '500', paddingHorizontal: 5, textAlign: 'center' },
+  emptyText: {
+    fontSize: 24,
+    marginTop: 8,
+    color: Colors.secondary,
+    fontWeight: "700",
+  },
+  text: {
+    fontSize: 16,
+    marginTop: 8,
+    color: Colors.gray,
+    fontWeight: "500",
+    paddingHorizontal: 5,
+    textAlign: "center",
+  },
 });

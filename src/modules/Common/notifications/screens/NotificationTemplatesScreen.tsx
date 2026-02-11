@@ -16,10 +16,12 @@ import {
   View,
 } from "react-native";
 
-export const NotificationTemplatesScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
+export const NotificationTemplatesScreen: React.FC<{ navigation: any }> = ({
+  navigation,
+}) => {
   const dispatch = useAppDispatch();
   const { templates, isLoading, error } = useAppSelector(
-    (state) => state.notifications
+    (state) => state.notifications,
   );
 
   const [search, setSearch] = useState("");
@@ -33,21 +35,19 @@ export const NotificationTemplatesScreen: React.FC<{ navigation: any }> = ({ nav
   }, [dispatch]);
 
   const filteredTemplates = templates.filter((t) =>
-    t.name.toLowerCase().includes(search.toLowerCase())
+    t.name.toLowerCase().includes(search.toLowerCase()),
   );
 
-  const renderItem = ({ item }:{item:any}) => (
+  const renderItem = ({ item }: { item: any }) => (
     <TouchableOpacity
       style={styles.card}
-      onPress={() =>
-        navigation.navigate("TemplateDetail", { template: item })
-      }
+      onPress={() => navigation.navigate("TemplateDetail", { template: item })}
     >
       <Text style={styles.name}>{item.name}</Text>
       <Text style={styles.description}>{item.description}</Text>
 
       <View style={styles.channelRow}>
-        {item.channels.map((ch:any) => (
+        {item.channels.map((ch: any) => (
           <View key={ch} style={styles.badge}>
             <Text style={styles.badgeText}>{ch}</Text>
           </View>
@@ -66,7 +66,12 @@ export const NotificationTemplatesScreen: React.FC<{ navigation: any }> = ({ nav
           onChangeText={setSearch}
           style={styles.searchInput}
         />
-        <Feather name="search" size={20} color={Colors.primary} style={styles.searchIcon} />
+        <Feather
+          name="search"
+          size={20}
+          color={Colors.primary}
+          style={styles.searchIcon}
+        />
       </View>
 
       {isLoading ? (
@@ -93,7 +98,7 @@ export const NotificationTemplatesScreen: React.FC<{ navigation: any }> = ({ nav
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Colors.background, padding: 16 },
+  container: { flex: 1, backgroundColor: Colors.background, padding: 12 },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -110,7 +115,8 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: Colors.white,
-    padding: 15,
+    paddingVertical: 15,
+    paddingHorizontal: 4,
     borderRadius: 12,
     marginBottom: 10,
     shadowColor: "#000",

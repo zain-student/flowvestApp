@@ -47,7 +47,7 @@ export const TemplateDetailScreen = () => {
         <View style={styles.card}>
           {template.variables.map((v: string) => (
             <Text key={v} style={styles.variable}>
-            {v}
+              {v}
             </Text>
           ))}
         </View>
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background || "#F9FAFB",
   },
   contentContainer: {
-    padding: 20,
+    padding: 12,
     paddingBottom: 40,
   },
   header: {

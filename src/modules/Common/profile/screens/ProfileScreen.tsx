@@ -378,7 +378,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     padding: 20,
     backgroundColor: Colors.background,
-    paddingBottom: 100,
+    paddingBottom: 80,
   },
   avatarImage: {
     width: AVATAR_SIZE,
@@ -415,7 +415,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   fullscreenImage: { width: "95%", height: "95%", borderRadius: 10 },
-  profileHeader: { alignItems: "center", paddingVertical: 30 },
+  profileHeader: { alignItems: "center", paddingVertical: 4 },
   avatarWrapper: {
     width: AVATAR_SIZE,
     height: AVATAR_SIZE,

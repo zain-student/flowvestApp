@@ -55,6 +55,10 @@ export const ProfileScreen: React.FC = () => {
   const { currencies, isCurrenciesLoading } = useAppSelector(
     (state) => state.profile,
   );
+  const capitalizeFirstLetter = (value?: string) => {
+    if (!value) return "";
+    return value.charAt(0).toUpperCase() + value.slice(1);
+  };
   const pullToRefresh = () => {
     dispatch(getCurrentUser());
   };
@@ -113,7 +117,7 @@ export const ProfileScreen: React.FC = () => {
 
   const getInitials = (name?: string) =>
     name ? name.charAt(0).toUpperCase() : "U";
- const handleSignOut = () => {
+  const handleSignOut = () => {
     const signOut = async () => {
       try {
         await dispatch(logoutUser());
@@ -134,7 +138,6 @@ export const ProfileScreen: React.FC = () => {
         style: "destructive",
       },
     ]);
-
   };
   //  Conditional states
   const showLoader = isLoading || (!user && !imageLoading);
@@ -229,7 +232,9 @@ export const ProfileScreen: React.FC = () => {
           </View>
 
           <Text style={styles.profileName}>{user?.name}</Text>
-          <Text style={styles.profileRole}>{user?.roles?.[0]}</Text>
+          <Text style={styles.profileRole}>
+            {capitalizeFirstLetter(user?.roles?.[0])}
+          </Text>
         </View>
 
         {/*  Account Info */}
@@ -323,7 +328,7 @@ export const ProfileScreen: React.FC = () => {
           <SettingsButton
             icon="log-out-outline"
             label="Logout"
-             onPress={handleSignOut}
+            onPress={handleSignOut}
           />
         </View>
 

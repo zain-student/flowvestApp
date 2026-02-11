@@ -159,7 +159,7 @@ export const LoginScreen: React.FC = () => {
             <Input
               label="Email"
               type="email"
-              placeholder="ulfa123@gmail.com"
+              placeholder="your.email@example.com"
               value={formData.email}
               onChangeText={(value) => handleInputChange("email", value)}
               error={errors.email}

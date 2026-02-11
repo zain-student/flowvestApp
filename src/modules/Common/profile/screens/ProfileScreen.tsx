@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   Alert,
   Dimensions,
+  FlatList,
   Image,
   Modal,
   RefreshControl,
@@ -279,21 +280,23 @@ export const ProfileScreen: React.FC = () => {
                 onPress={() => {}}
               >
                 <Text style={styles.modalTitle}>Select Currency</Text>
-
-                <ScrollView showsVerticalScrollIndicator={false}>
-                  {currencies.map((c) => (
+                <FlatList
+                  data={currencies}
+                  keyExtractor={(item: any) => item.code}
+                  showsVerticalScrollIndicator={false}
+                  contentContainerStyle={{ paddingBottom: 20 }}
+                  renderItem={({ item }: any) => (
                     <TouchableOpacity
-                      key={c.code}
                       style={styles.currencyItem}
-                      onPress={() => handleCurrencySelect(c)}
+                      onPress={() => handleCurrencySelect(item)}
                     >
                       <Text style={styles.currencyText}>
-                        {c.icon} {c.name}
+                        {item.icon} {item.name}
                       </Text>
-                      <Text style={styles.currencyCode}>{c.code}</Text>
+                      <Text style={styles.currencyCode}>{item.code}</Text>
                     </TouchableOpacity>
-                  ))}
-                </ScrollView>
+                  )}
+                />
               </TouchableOpacity>
             </TouchableOpacity>
           </Modal>
@@ -467,16 +470,16 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.35)",
+    // backgroundColor: "rgba(0,0,0,0.35)",
     justifyContent: "flex-end",
   },
   modalSheet: {
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.lightGray,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     paddingTop: 16,
     paddingHorizontal: 20,
-    paddingBottom: 30,
+    paddingBottom: 20,
     maxHeight: "70%",
   },
   modalTitle: {

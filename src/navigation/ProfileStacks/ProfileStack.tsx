@@ -1,12 +1,12 @@
-import { NotificationTemplate } from '@/shared/store/slices/profile/notifications/notificationTemplateSlice';
-import { Ionicons } from '@expo/vector-icons';
+import { NotificationTemplate } from "@/shared/store/slices/profile/notifications/notificationTemplateSlice";
+import { Ionicons } from "@expo/vector-icons";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import { TouchableOpacity } from "react-native";
 import { NotificationButtons } from "../../modules/Common/notifications/screens/NotificationButtons";
 import { NotificationSettingsScreen } from "../../modules/Common/notifications/screens/NotificationSettingsScreen";
 import { NotificationTemplatesScreen } from "../../modules/Common/notifications/screens/NotificationTemplatesScreen";
-import { TemplateDetailScreen } from '../../modules/Common/notifications/screens/TemplateDetailScreen';
+import { TemplateDetailScreen } from "../../modules/Common/notifications/screens/TemplateDetailScreen";
 import { ChangePasswordScreen } from "../../modules/Common/profile/screens/ChangePasswordScreen";
 import { CompanyInfoScreen } from "../../modules/Common/profile/screens/CompanyInfoScreen";
 import { EditCompanyScreen } from "../../modules/Common/profile/screens/EditCompanyScreen";
@@ -42,8 +42,8 @@ export const ProfileStack = () => {
         component={ChangePasswordScreen}
         options={({ navigation }) => ({
           // gestureEnabled: false,
-          title: 'Change Password',
-          headerTitleAlign: 'center',
+          title: "Change Password",
+          headerTitleAlign: "center",
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => navigation.goBack()}
@@ -69,9 +69,8 @@ export const ProfileStack = () => {
         name="UpdateProfile"
         component={UpdateProfile}
         options={({ navigation }) => ({
-          // gestureEnabled: false,
-          title: 'Update Profile',
-          headerTitleAlign: 'center',
+          title: "Update Profile",
+          headerTitleAlign: "center",
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => navigation.goBack()}
@@ -98,8 +97,8 @@ export const ProfileStack = () => {
         component={CompanyInfoScreen}
         options={({ navigation }) => ({
           // gestureEnabled: false,
-          title: 'Company Info',
-          headerTitleAlign: 'center',
+          title: "Company Info",
+          headerTitleAlign: "center",
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => navigation.goBack()}
@@ -126,8 +125,8 @@ export const ProfileStack = () => {
         component={EditCompanyScreen}
         options={({ navigation }) => ({
           // gestureEnabled: false,
-          title: 'Edit Company',
-          headerTitleAlign: 'center',
+          title: "Edit Company",
+          headerTitleAlign: "center",
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => navigation.goBack()}
@@ -154,8 +153,8 @@ export const ProfileStack = () => {
         component={NotificationButtons}
         options={({ navigation }) => ({
           // gestureEnabled: false,
-          title: 'Notifications Center',
-          headerTitleAlign: 'center',
+          title: "Notifications Center",
+          headerTitleAlign: "center",
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => navigation.goBack()}
@@ -182,8 +181,8 @@ export const ProfileStack = () => {
         component={NotificationSettingsScreen}
         options={({ navigation }) => ({
           // gestureEnabled: false,
-          title: 'Notification Settings',
-          headerTitleAlign: 'center',
+          title: "Notification Settings",
+          headerTitleAlign: "center",
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => navigation.goBack()}
@@ -210,8 +209,8 @@ export const ProfileStack = () => {
         component={NotificationTemplatesScreen}
         options={({ navigation }) => ({
           // gestureEnabled: false,
-          title: 'Notification Templates',
-          headerTitleAlign: 'center',
+          title: "Notification Templates",
+          headerTitleAlign: "center",
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => navigation.goBack()}
@@ -238,8 +237,8 @@ export const ProfileStack = () => {
         component={TemplateDetailScreen}
         options={({ navigation }) => ({
           // gestureEnabled: false,
-          title: 'Templates Detail',
-          headerTitleAlign: 'center',
+          title: "Templates Detail",
+          headerTitleAlign: "center",
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => navigation.goBack()}

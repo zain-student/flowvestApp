@@ -30,6 +30,11 @@ export interface Investment {
   performance: InvestmentPerformance;
   created_at: string;
   updated_at: string;
+  currency: {
+    code: string;
+    symbol: string;
+    name: string;
+  };
   recent_payouts: {
     map: any;
     id: number;
@@ -149,14 +154,14 @@ export const addInvestments = createAsyncThunk(
     try {
       const response = await api.post(
         API_ENDPOINTS.INVESTMENTS.CREATE,
-        newInvestment
+        newInvestment,
       );
       console.log("📦 Investment Created:", response.data);
       return response.data.data;
     } catch (error: any) {
       return rejectWithValue(error || "Create failed");
     }
-  }
+  },
 );
 
 // Fetch Investments with Pagination
@@ -165,7 +170,7 @@ export const fetchInvestments = createAsyncThunk(
   "/v1/investments",
   async (
     { page = 1, search = "" }: { page?: number; search?: string },
-    { signal, rejectWithValue }
+    { signal, rejectWithValue },
   ) => {
     try {
       const controller = new AbortController();
@@ -173,7 +178,7 @@ export const fetchInvestments = createAsyncThunk(
 
       const response = await api.get(
         `${API_ENDPOINTS.INVESTMENTS.LIST}?scope=owned&page=${page}&search=${encodeURIComponent(search)}`,
-        { signal: controller.signal }
+        { signal: controller.signal },
       );
 
       const investments = response.data?.data || [];
@@ -195,7 +200,7 @@ export const fetchInvestments = createAsyncThunk(
       if (cached) return cached;
       return rejectWithValue(error?.response?.data?.message || "Fetch failed");
     }
-  }
+  },
 );
 
 // Fetch investment partners (for modal)
@@ -210,23 +215,23 @@ export const fetchInvestmentPartners = createAsyncThunk(
   "investments/fetchPartners",
   async (
     { investmentId, status, invitation_status, search }: FetchPartnersParams,
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const response = await api.get(
         API_ENDPOINTS.INVESTMENTS.INVESTMENT_PARTNERS(investmentId),
         {
           params: { status, invitation_status, search },
-        }
+        },
       );
       console.log("✅ Investment partners:", response.data);
       return response.data.data as InvestmentPartner[];
     } catch (error: any) {
       return rejectWithValue(
-        error?.response?.data?.message || "Failed to fetch partners"
+        error?.response?.data?.message || "Failed to fetch partners",
       );
     }
-  }
+  },
 );
 
 // Invite/Add Partner to an Investment
@@ -234,30 +239,30 @@ export const addInvestmentPartner = createAsyncThunk(
   "investments/addPartner",
   async (
     { investmentId, partnerData }: { investmentId: number; partnerData: any },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const response = await api.post(
         API_ENDPOINTS.INVESTMENTS.ADD_PARTNER(investmentId),
-        partnerData
+        partnerData,
       );
 
       console.log("✅ Partner invited:", response.data);
 
       ToastAndroid.show(
         response.data.message || "Partner invited successfully",
-        ToastAndroid.SHORT
+        ToastAndroid.SHORT,
       );
 
       return response.data.data;
     } catch (error: any) {
       ToastAndroid.show(
         error?.response?.data?.message || "Failed to invite partner",
-        ToastAndroid.SHORT
+        ToastAndroid.SHORT,
       );
       return rejectWithValue(error?.response?.data?.message || "Invite failed");
     }
-  }
+  },
 );
 
 // Reset partners when modal closes
@@ -272,7 +277,7 @@ export const fetchInvestmentsById = createAsyncThunk(
     const response = await api.get(API_ENDPOINTS.INVESTMENTS.DETAIL(id));
     console.log("Investment detail is :", response.data);
     return response.data.data;
-  }
+  },
 );
 // Duplicate Investment
 export const duplicateInvestment = createAsyncThunk(
@@ -281,7 +286,7 @@ export const duplicateInvestment = createAsyncThunk(
     try {
       console.log("Duplicate called for ID:", investmentId);
       const response = await api.post(
-        API_ENDPOINTS.INVESTMENTS.DUPLICATE(investmentId)
+        API_ENDPOINTS.INVESTMENTS.DUPLICATE(investmentId),
       );
       console.log("Investment Duplicated:", response.data);
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
@@ -289,24 +294,24 @@ export const duplicateInvestment = createAsyncThunk(
     } catch (error: any) {
       ToastAndroid.show(
         error.message || "Duplication failed",
-        ToastAndroid.SHORT
+        ToastAndroid.SHORT,
       );
       return rejectWithValue(error || "Duplication failed");
     }
-  }
+  },
 );
 // Update Investment
 export const updateInvestment = createAsyncThunk(
   "v1/investments/update",
   async (
     { id, updatedData }: { id: number; updatedData: Partial<Investment> },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       console.log("Update called");
       const response = await api.put(
         API_ENDPOINTS.INVESTMENTS.UPDATE(id),
-        updatedData
+        updatedData,
       );
       console.log("📦 Investment Updated:", response.data);
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
@@ -314,7 +319,7 @@ export const updateInvestment = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error || "Update failed");
     }
-  }
+  },
 );
 // Delete Investment
 export const deleteInvestment = createAsyncThunk(
@@ -322,7 +327,7 @@ export const deleteInvestment = createAsyncThunk(
   async ({ investmentId }: { investmentId: number }, { rejectWithValue }) => {
     try {
       const response = await api.delete(
-        API_ENDPOINTS.INVESTMENTS.DELETE(investmentId)
+        API_ENDPOINTS.INVESTMENTS.DELETE(investmentId),
       );
       console.log("Investment deleted successfully:", response.data);
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
@@ -333,35 +338,34 @@ export const deleteInvestment = createAsyncThunk(
 
       return rejectWithValue(error || "Delete failed");
     }
-  }
+  },
 );
 // Approve Partner Participation
 export const approveInvestmentPartner = createAsyncThunk(
   "investments/approvePartner",
   async (
     { investmentId, partnerId }: { investmentId: number; partnerId: number },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const response = await api.post(
-        API_ENDPOINTS.INVESTMENTS.APPROVE_PARTNER(investmentId, partnerId)
+        API_ENDPOINTS.INVESTMENTS.APPROVE_PARTNER(investmentId, partnerId),
       );
 
       console.log("✅ Partner participation approved:", response.data);
 
       ToastAndroid.show(
         response.data?.message || "Partner participation approved",
-        ToastAndroid.SHORT
+        ToastAndroid.SHORT,
       );
 
       return response.data.data.participant;
     } catch (error: any) {
-      const message =
-        error.message || "Failed to approve partner";
+      const message = error.message || "Failed to approve partner";
       ToastAndroid.show(message, ToastAndroid.SHORT);
       return rejectWithValue(message);
     }
-  }
+  },
 );
 // Remove Partner from Investment
 export const removeInvestmentPartner = createAsyncThunk(
@@ -372,31 +376,30 @@ export const removeInvestmentPartner = createAsyncThunk(
       partnerId,
       reason = "Partner requested withdrawal",
     }: { investmentId: number; partnerId: number; reason?: string },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const response = await api.delete(
         API_ENDPOINTS.INVESTMENTS.REMOVE_PARTNER(investmentId, partnerId),
         {
-          data: { reason }, 
-        }
+          data: { reason },
+        },
       );
 
       console.log("✅ Partner removed successfully:", response.data);
 
       ToastAndroid.show(
         response.data?.message || "Partner removed successfully",
-        ToastAndroid.SHORT
+        ToastAndroid.SHORT,
       );
 
       return { partnerId };
     } catch (error: any) {
-      const message =
-        error.message || "Failed to remove partner";
+      const message = error.message || "Failed to remove partner";
       ToastAndroid.show(message, ToastAndroid.SHORT);
       return rejectWithValue(message);
     }
-  }
+  },
 );
 
 // Update Investment
@@ -463,7 +466,7 @@ const investmentSlice = createSlice({
           // Remove duplicates by id
           const existingIds = new Set(state.investments.map((p) => p.id));
           const newInvestments = investments.filter(
-            (p: { id: number }) => !existingIds.has(p.id)
+            (p: { id: number }) => !existingIds.has(p.id),
           );
           // Append to existing data
           state.investments = [...state.investments, ...newInvestments];
@@ -559,7 +562,7 @@ const investmentSlice = createSlice({
       .addCase(updateInvestment.fulfilled, (state, action) => {
         state.isLoading = false;
         state.investments = state.investments.map((inv) =>
-          inv.id === action.payload.id ? { ...inv, ...action.payload } : inv
+          inv.id === action.payload.id ? { ...inv, ...action.payload } : inv,
         );
 
         if (state.currentInvestment?.id === action.payload.id) {
@@ -583,7 +586,7 @@ const investmentSlice = createSlice({
         // Remove the deleted investment from the list
         const deletedId = action.payload;
         state.investments = state.investments.filter(
-          (inv) => inv.id !== Number(deletedId)
+          (inv) => inv.id !== Number(deletedId),
         );
         // Clear current investment if deleted one was open
         if (state.currentInvestment?.id === Number(deletedId)) {
@@ -611,7 +614,7 @@ const investmentSlice = createSlice({
         state.partners.data = state.partners.data.map((partner) =>
           partner.id === approvedPartner.id
             ? { ...partner, ...approvedPartner }
-            : partner
+            : partner,
         );
       })
       .addCase(approveInvestmentPartner.rejected, (state, action) => {
@@ -630,7 +633,7 @@ const investmentSlice = createSlice({
 
         // Remove partner from state
         state.partners.data = state.partners.data.filter(
-          (partner) => partner.id !== partnerId
+          (partner) => partner.id !== partnerId,
         );
       })
       .addCase(removeInvestmentPartner.rejected, (state, action) => {

@@ -177,13 +177,14 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
 
           <Text style={styles.label}>Amount Invested</Text>
           <Text style={styles.value}>
-            {formatCurrency(
-              Number(
-                currentInvestment.type.toLowerCase() === "shared"
-                  ? currentInvestment.current_total_invested
-                  : currentInvestment.initial_amount,
-              ),
+            {/* {formatCurrency( */}
+            {currentInvestment.currency.name}{" "}
+            {Number(
+              currentInvestment.type.toLowerCase() === "shared"
+                ? currentInvestment.current_total_invested
+                : currentInvestment.initial_amount,
             )}
+            {/* )} */}
           </Text>
 
           <View style={styles.badgeRow}>
@@ -208,17 +209,15 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
               <View>
                 <Text style={styles.label}>Min: </Text>
                 <Text style={styles.value}>
-                  {formatCurrency(
-                    Number(currentInvestment.min_investment_amount),
-                  )}{" "}
+                  {currentInvestment.currency.symbol}{" "}
+                  {Number(currentInvestment.min_investment_amount)}
                 </Text>
               </View>
               <View>
                 <Text style={styles.label}>Max: </Text>
                 <Text style={styles.value}>
-                  {formatCurrency(
-                    Number(currentInvestment.max_investment_amount),
-                  )}
+                  {currentInvestment.currency.symbol}{" "}
+                  {Number(currentInvestment.max_investment_amount)}
                 </Text>
               </View>
             </View>
@@ -305,7 +304,8 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
                       tx.payout_type.slice(1)}
                   </Text>
                   <Text style={styles.txAmount}>
-                    {formatCurrency(tx.amount.toLocaleString())}
+                    {currentInvestment.currency.symbol}{" "}
+                    {tx.amount.toLocaleString()}
                   </Text>
                   <Text style={styles.txDate}>Due: {tx.due_date}</Text>
                 </View>

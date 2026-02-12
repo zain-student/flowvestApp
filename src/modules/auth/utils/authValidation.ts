@@ -163,6 +163,9 @@ export const soloInvestmentSchema = z.object({
   name: z.string().min(1, "Name is required"),
   description: z.string().min(1, "Description is required"),
   type: z.literal("solo"), // ✅ use type
+  currency_id: z.number({
+    required_error: "Currency is required",
+  }),
   // is_shared: z.literal(false),
   return_type: z.enum(["percentage", "fixed", "custom"]),
   frequency: z.enum(["monthly", "quarterly", "annual", "manual"]),
@@ -187,6 +190,9 @@ export const sharedInvestmentSchema = z.object({
   name: z.string().min(1, "Name is required"),
   description: z.string().min(1, "Description is required"),
   type: z.literal("shared"), // ✅ use type
+  currency_id: z.number({
+    required_error: "Currency is required",
+  }),
   // is_shared: z.literal(true),
   return_type: z.enum(["percentage", "fixed", "custom"]),
   frequency: z.enum(["monthly", "quarterly", "annual", "manual"]),

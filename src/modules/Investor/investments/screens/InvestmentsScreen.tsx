@@ -16,7 +16,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { DashboardLayout } from "../../../Common/components/DashboardLayout";
 import InvestmentPartnersModal from "../components/InvestmentPartnersModal";
@@ -60,6 +60,7 @@ export const InvestmentsScreen: React.FC = () => {
     status: inv.status.charAt(0).toUpperCase() + inv.status.slice(1),
     returns: inv.expected_return_rate,
     date: inv.start_date,
+    currency: inv.currency.symbol,
   }));
 
   const filtered =
@@ -135,21 +136,26 @@ export const InvestmentsScreen: React.FC = () => {
 
       {/* Amount */}
       <View style={styles.amountRow}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Ionicons name="wallet-outline" size={13} color={Colors.secondary} />
           <Text style={styles.amountLabel}>Invested Amount</Text>
         </View>
         <Text style={styles.amountValue}>
-          {formatCurrency(
-            item.type === "shared" ? item.shared_amount : item.amount,
-          )}
+          {/* {formatCurrency( */}
+          {item.currency}{" "}
+          {item.type === "shared" ? item.shared_amount : item.amount}
+          {/* )} */}
         </Text>
       </View>
 
       {/* Footer */}
       <View style={styles.footerRow}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Ionicons name="calendar-outline" size={13} color={Colors.secondary} />
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Ionicons
+            name="calendar-outline"
+            size={13}
+            color={Colors.secondary}
+          />
           <Text style={styles.startDate}>Started: {item.date}</Text>
         </View>
         {item.type === "shared" &&
@@ -205,7 +211,16 @@ export const InvestmentsScreen: React.FC = () => {
           end={{ x: 2, y: 0 }}
           style={styles.card}
         >
-          <Image source={require('../../../../../assets/images/upperDiv.png')} style={{ position: 'absolute', width: 100, height: 110, top: -30, right: -50 }} />
+          <Image
+            source={require("../../../../../assets/images/upperDiv.png")}
+            style={{
+              position: "absolute",
+              width: 100,
+              height: 110,
+              top: -30,
+              right: -50,
+            }}
+          />
           {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}> */}
           <Text style={styles.cardTitle}>Total Invested Amount</Text>
           {/* <View style={{ alignSelf: 'flex-end', backgroundColor: '#0AFF5C47', borderRadius: 8, height: 29, width: 71, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
@@ -238,7 +253,16 @@ export const InvestmentsScreen: React.FC = () => {
           </View>
 
           {/* </View> */}
-          <Image source={require('../../../../../assets/images/lowerDiv.png')} style={{ position: 'absolute', width: 200, height: 260, bottom: -190, left: -150, }} />
+          <Image
+            source={require("../../../../../assets/images/lowerDiv.png")}
+            style={{
+              position: "absolute",
+              width: 200,
+              height: 260,
+              bottom: -190,
+              left: -150,
+            }}
+          />
           {/* <View style={styles.balanceActionsRow}></View> */}
         </LinearGradient>
         <View style={styles.searchContainer}>
@@ -290,7 +314,10 @@ export const InvestmentsScreen: React.FC = () => {
           }
           ListEmptyComponent={
             <View style={styles.emptyState}>
-              <Image source={require('../../../../../assets/images/noInvestment.png')} style={{ width: 100, height: 100, alignSelf: 'center' }} />
+              <Image
+                source={require("../../../../../assets/images/noInvestment.png")}
+                style={{ width: 100, height: 100, alignSelf: "center" }}
+              />
               <Text style={styles.emptyText}>No investments available.</Text>
             </View>
           }
@@ -343,7 +370,19 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginVertical: 2,
   },
-  mirror: { backgroundColor: Colors.mirror, width: '50%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 18, paddingVertical: 6, paddingHorizontal: 6, borderWidth: 0.3, borderColor: Colors.white, opacity: 0.7, },
+  mirror: {
+    backgroundColor: Colors.mirror,
+    width: "50%",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 18,
+    paddingVertical: 6,
+    paddingHorizontal: 6,
+    borderWidth: 0.3,
+    borderColor: Colors.white,
+    opacity: 0.7,
+  },
   cardSubtitle: {
     color: Colors.white,
     fontSize: 14,
@@ -354,7 +393,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "Inter_500SemiBold",
   },
-  balanceActionsRow: { flexDirection: "row", },
+  balanceActionsRow: { flexDirection: "row" },
   balanceActionTextDark: {
     color: Colors.yellow,
     fontSize: 13,
@@ -440,14 +479,13 @@ const styles = StyleSheet.create({
     padding: 4,
     justifyContent: "space-around",
     borderColor: "#E6EDFF",
-    borderWidth: 1
+    borderWidth: 1,
   },
   filterBtn: {
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
     backgroundColor: Colors.white,
-
   },
   cardContainer: {
     marginHorizontal: 12,
@@ -511,7 +549,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 6
+    marginTop: 6,
   },
 
   amountLabel: {

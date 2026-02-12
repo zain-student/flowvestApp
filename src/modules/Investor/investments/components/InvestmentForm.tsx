@@ -1,22 +1,27 @@
 import Colors from "@/shared/colors/Colors";
 import { Button, Input } from "@/shared/components/ui";
 import { DatePicker } from "@/shared/components/ui/DatePicker";
+import { useAppDispatch, useAppSelector } from "@/shared/store";
+import { getCurrencies } from "@/shared/store/slices/profile/profileSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-    sharedInvestmentSchema,
-    soloInvestmentSchema,
+  sharedInvestmentSchema,
+  soloInvestmentSchema,
 } from "@modules/auth/utils/authValidation";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  FlatList,
+  Modal,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
+
 type InvestmentFormProps = {
   defaultValues?: any;
   mode: "add" | "edit";
@@ -30,14 +35,16 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
   isLoading,
   onSubmit,
 }) => {
+  const dispatch = useAppDispatch();
+  const { currencies } = useAppSelector((state) => state.profile);
+  const [currencyDropdownOpen, setCurrencyDropdownOpen] = useState(false);
   const [isShared, setIsShared] = useState(
     defaultValues?.type === "shared" ? true : false,
   );
   const [investmentType, setInvestmentType] = useState<"solo" | "shared">(
     defaultValues?.type ?? "solo",
   );
-
-  const { control, handleSubmit, reset, setValue } = useForm({
+  const { control, handleSubmit, reset, setValue, watch } = useForm({
     resolver: zodResolver(
       isShared ? sharedInvestmentSchema : soloInvestmentSchema,
     ),
@@ -57,15 +64,20 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
       max_investment_amount: "",
       start_date: "",
       end_date: "",
+      currency_id: null,
     },
   });
-
+  const selectedCurrencyId = watch("currency_id");
+  const selectedCurrency = currencies.find(
+    (c: any) => c.id === selectedCurrencyId,
+  );
   useEffect(() => {
+    dispatch(getCurrencies());
     if (defaultValues) {
       reset(defaultValues);
       setIsShared(defaultValues.type === "shared");
     }
-  }, [defaultValues, reset]);
+  }, [defaultValues, reset, dispatch]);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -130,6 +142,111 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
                 />
               )}
             />
+          )}
+        />
+        {/* Currency */}
+        <Controller
+          control={control}
+          name="currency_id"
+          render={({ field, fieldState }) => (
+            <>
+              <TouchableOpacity
+                style={{
+                  borderWidth: 1,
+                  borderColor: fieldState.error ? "red" : "#ccc",
+                  padding: 14,
+                  borderRadius: 8,
+                  marginBottom: 10,
+                  backgroundColor: "#fff",
+                }}
+                onPress={() => setCurrencyDropdownOpen(true)}
+              >
+                {/* <Text style={{ fontWeight: "500", marginBottom: 4 }}>
+                  Currency *
+                </Text> */}
+
+                <Text>
+                  {selectedCurrency
+                    ? `${selectedCurrency.icon} ${selectedCurrency.code}`
+                    : "Select Currency"}
+                </Text>
+              </TouchableOpacity>
+
+              {fieldState.error?.message && (
+                <Text style={{ color: "red", marginBottom: 10 }}>
+                  {fieldState.error.message}
+                </Text>
+              )}
+
+              <Modal
+                visible={currencyDropdownOpen}
+                animationType="slide"
+                transparent
+                onRequestClose={() => setCurrencyDropdownOpen(false)}
+              >
+                <TouchableOpacity
+                  activeOpacity={1}
+                  style={{
+                    flex: 1,
+                    // backgroundColor: "rgba(0,0,0,0.3)",
+                    justifyContent: "flex-end",
+                  }}
+                  onPress={() => setCurrencyDropdownOpen(false)}
+                >
+                  <TouchableOpacity
+                    activeOpacity={1}
+                    style={{
+                      // backgroundColor: "#fff",
+                      padding: 20,
+                      borderTopLeftRadius: 24,
+                      borderTopRightRadius: 24,
+                      maxHeight: "70%",
+
+                      backgroundColor: Colors.lightGray,
+                      paddingTop: 16,
+                      paddingHorizontal: 20,
+                      paddingBottom: 20,
+                    }}
+                    onPress={() => {}}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        fontWeight: "600",
+                        marginBottom: 15,
+                      }}
+                    >
+                      Select Currency
+                    </Text>
+
+                    <FlatList
+                      data={currencies}
+                      keyExtractor={(item: any) => item.id.toString()}
+                      renderItem={({ item }: any) => (
+                        <TouchableOpacity
+                          style={{
+                            paddingVertical: 12,
+                            borderBottomWidth: 0.5,
+                            borderColor: "#eee",
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                          }}
+                          onPress={() => {
+                            field.onChange(item.id); // 🔥 important
+                            setCurrencyDropdownOpen(false);
+                          }}
+                        >
+                          <Text>
+                            {item.icon} {item.name}
+                          </Text>
+                          <Text>{item.code}</Text>
+                        </TouchableOpacity>
+                      )}
+                    />
+                  </TouchableOpacity>
+                </TouchableOpacity>
+              </Modal>
+            </>
           )}
         />
 
@@ -411,12 +528,12 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
+    flex: 1,
     backgroundColor: Colors.background,
     paddingHorizontal: 20,
-    // paddingBottom: 80,
+    paddingBottom: 80,
     paddingTop: 10,
-    marginBottom: 70,
+    // marginBottom: 70,
   },
   innerContainer: {},
   title: {

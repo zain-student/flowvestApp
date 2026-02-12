@@ -18,7 +18,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import ExportReportModal from "../components/ExportReportModal";
@@ -42,7 +42,7 @@ export const PortfolioScreen: React.FC = () => {
     dispatch(getCurrentUser());
   }, [dispatch]);
   const assets =
-    data?.own_investments?.map((inv) => ({
+    data?.own_investments?.map((inv: any) => ({
       id: inv.id,
       name: inv.name,
       value: parseFloat(inv.current_total_invested || inv.initial_amount),
@@ -62,12 +62,24 @@ export const PortfolioScreen: React.FC = () => {
 
           <View>
             <Text style={styles.assetName}>{item.name}</Text>
-            <View style={{ flexDirection: "row", alignItems: "center", marginTop: 2 }}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginTop: 2,
+              }}
+            >
               <Ionicons name="wallet-outline" size={12} color={Colors.gray} />
-              <Text style={styles.assetValue}>{formatCurrency(item.value)}</Text>
+              <Text style={styles.assetValue}>
+                {formatCurrency(item.value)}
+              </Text>
             </View>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Ionicons name="calendar-outline" size={12} color={Colors.secondary} />
+              <Ionicons
+                name="calendar-outline"
+                size={12}
+                color={Colors.secondary}
+              />
               <Text style={styles.assetMeta}>Start: {item.start}</Text>
             </View>
           </View>
@@ -122,17 +134,27 @@ export const PortfolioScreen: React.FC = () => {
         end={{ x: 2, y: 0 }}
         style={styles.balanceCardDark}
       >
-        <Image source={require('../../../../../assets/images/upperDiv.png')} style={{ position: 'absolute', width: 100, height: 110, top: -30, right: -50  }} />
+        <Image
+          source={require("../../../../../assets/images/upperDiv.png")}
+          style={{
+            position: "absolute",
+            width: 100,
+            height: 110,
+            top: -30,
+            right: -50,
+          }}
+        />
         <Text style={styles.cardTitle}>Total Earned</Text>
         <Text style={styles.cardValue}>
           {formatCurrency(Number(data?.summary.total_earned)) ?? 0}
+          {/* {formatCurrency(data?.summary.total_earned ?? 0)} */}
         </Text>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <View style={styles.mirror}>
             <Text style={styles.cardSubtitle}>
               Total Investments:
               <Text style={styles.balanceChangeDark}>
-                {data?.summary.total_investments}
+                {data?.summary.total_investments ?? 0}
               </Text>
             </Text>
           </View>
@@ -140,12 +162,21 @@ export const PortfolioScreen: React.FC = () => {
             <Text style={styles.cardSubtitle}>
               Active Investments:
               <Text style={styles.balanceChangeDark}>
-                {data?.summary.active_investments}
+                {data?.summary.active_investments ?? 0}
               </Text>
             </Text>
           </View>
         </View>
-        <Image source={require('../../../../../assets/images/lowerDiv.png')} style={{ position: 'absolute', width: 200, height: 260, bottom: -190, left: -150, }} />
+        <Image
+          source={require("../../../../../assets/images/lowerDiv.png")}
+          style={{
+            position: "absolute",
+            width: 200,
+            height: 260,
+            bottom: -190,
+            left: -150,
+          }}
+        />
       </LinearGradient>
       {/* </View> */}
       <ScrollView
@@ -257,7 +288,10 @@ export const PortfolioScreen: React.FC = () => {
           }
           ListEmptyComponent={
             <View style={styles.emptyState}>
-              <Image source={require('../../../../../assets/images/noInvestment.png')} style={{ width: 100, height: 100, alignSelf: 'center' }} />
+              <Image
+                source={require("../../../../../assets/images/noInvestment.png")}
+                style={{ width: 100, height: 100, alignSelf: "center" }}
+              />
               <Text style={styles.emptyText}>No investments assets found</Text>
             </View>
           }
@@ -356,7 +390,19 @@ const styles = StyleSheet.create({
     marginVertical: 2,
   },
   chart: { borderRadius: 12, marginVertical: 8 },
-  mirror: { backgroundColor: Colors.mirror, width: '47%', justifyContent: 'center', alignItems: 'center', borderRadius: 18, paddingVertical: 4, paddingHorizontal: 12, borderWidth: 0.3, borderColor: Colors.white, opacity: 0.7, marginTop: 4, },
+  mirror: {
+    backgroundColor: Colors.mirror,
+    width: "47%",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 18,
+    paddingVertical: 4,
+    paddingHorizontal: 12,
+    borderWidth: 0.3,
+    borderColor: Colors.white,
+    opacity: 0.7,
+    marginTop: 4,
+  },
   cardSubtitle: {
     color: Colors.white,
     fontWeight: "400",
@@ -452,7 +498,6 @@ const styles = StyleSheet.create({
     color: Colors.green,
   },
   fab: {
-
     position: "absolute",
     right: 24,
     bottom: 80,

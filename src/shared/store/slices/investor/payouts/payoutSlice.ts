@@ -85,7 +85,7 @@ export const fetchPayouts = createAsyncThunk<
 >("v1/payouts/managed", async (page = 1, { rejectWithValue }) => {
   try {
     const response = await api.get(
-      `${API_ENDPOINTS.PAYOUTS.LIST}?page=${page}`
+      `${API_ENDPOINTS.PAYOUTS.LIST}?page=${page}`,
     );
     console.log("Payouts API response:", response.data);
     const payouts = response.data?.data?.payouts || [];
@@ -106,7 +106,7 @@ export const fetchPayouts = createAsyncThunk<
     const cached = await storage.getItem(StorageKeys.PAYOUTS_CACHE);
     if (cached) return cached;
     return rejectWithValue(
-      error.response?.data?.message || "Failed to fetch payouts"
+      error.response?.data?.message || "Failed to fetch payouts",
     );
   }
 });
@@ -118,7 +118,7 @@ export const fetchPayoutsById = createAsyncThunk(
     const response = await api.get(API_ENDPOINTS.PAYOUTS.DETAIL(id));
     console.log("Payout details is :", response.data);
     return response.data.data;
-  }
+  },
 );
 // Mark Payout as Paid
 export const markPayoutAsPaid = createAsyncThunk(
@@ -131,34 +131,39 @@ export const markPayoutAsPaid = createAsyncThunk(
     } catch (error: any) {
       ToastAndroid.show(error.message, ToastAndroid.SHORT);
       return rejectWithValue(
-        error.response?.data.message || "Failed to mark payout as paid"
+        error.response?.data.message || "Failed to mark payout as paid",
       );
     }
-  }
+  },
 );
 // Bulk Update Payouts
 export const bulkUpdatePayouts = createAsyncThunk(
   "payouts/bulkUpdatePayouts",
-  async (payload: {
-    payout_ids: number[];
-    status: string;
-    payment_method: string;
-    reference_number: string;
-    notes?: string;
-  }, { rejectWithValue }) => {
+  async (
+    payload: {
+      payout_ids: number[];
+      status: string;
+      payment_method: string;
+      reference_number: string;
+      notes?: string;
+    },
+    { rejectWithValue },
+  ) => {
     try {
       const response = await api.post(
         API_ENDPOINTS.PAYOUTS.BULK_MARK_PAID,
-        payload
+        payload,
       );
       console.log("Bulk Update Payouts response:", response.data);
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       return response.data;
     } catch (error: any) {
       console.error("Bulk Update Payouts error:", error);
-      return rejectWithValue(error.response?.data.message || "Failed to bulk update payouts");
+      return rejectWithValue(
+        error.response?.data.message || "Failed to bulk update payouts",
+      );
     }
-  }
+  },
 );
 
 // Cancel Payout
@@ -173,7 +178,7 @@ export const cancelPayout = createAsyncThunk<
 
     if (!response.data?.success) {
       return rejectWithValue(
-        response.data?.message || "Failed to cancel payout"
+        response.data?.message || "Failed to cancel payout",
       );
     }
 
@@ -181,7 +186,7 @@ export const cancelPayout = createAsyncThunk<
     return { id: payoutId };
   } catch (error: any) {
     return rejectWithValue(
-      error.response?.data?.message || "Failed to cancel payout"
+      error.response?.data?.message || "Failed to cancel payout",
     );
   }
 });
@@ -216,7 +221,7 @@ const payoutSlice = createSlice({
         }
         state.totalPayoutAmount = state.payouts.reduce(
           (sum: number, payout: Payout) => sum + payout.amount,
-          0
+          0,
         );
         state.isLoading = false;
         state.isLoadingMore = false;
@@ -289,11 +294,11 @@ const payoutSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(bulkUpdatePayouts.fulfilled, (state, action) => {
-        const updatedIds= action.meta.arg.payout_ids;
+        const updatedIds = action.meta.arg.payout_ids;
         state.payouts = state.payouts.map((payout) =>
           updatedIds.includes(payout.id)
             ? { ...payout, status: "paid" }
-            : payout
+            : payout,
         );
         state.isLoading = false;
       })
@@ -301,7 +306,6 @@ const payoutSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload as string;
       });
-      
   },
 });
 

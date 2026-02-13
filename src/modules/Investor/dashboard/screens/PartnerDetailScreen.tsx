@@ -8,21 +8,34 @@ import { Ionicons } from "@expo/vector-icons";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useEffect } from "react";
-import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 type PartnerDetailParams = {
   PartnerDetailScreen: { id: number };
 };
-type Props = NativeStackNavigationProp<InvestorDashboardStackParamList, "AddPartner">;
+type Props = NativeStackNavigationProp<
+  InvestorDashboardStackParamList,
+  "AddPartner"
+>;
 export const PartnerDetailScreen = () => {
-  const route = useRoute<RouteProp<PartnerDetailParams, "PartnerDetailScreen">>();
+  const route =
+    useRoute<RouteProp<PartnerDetailParams, "PartnerDetailScreen">>();
   const navigation = useNavigation<Props>();
   const { id } = route.params;
   const dispatch = useAppDispatch();
   const { formatCurrency } = useCurrencyFormatter();
-  const { selectedPartner, isLoading, error } = useAppSelector((state) => state.partner);
+  const { selectedPartner, isLoading, error } = useAppSelector(
+    (state) => state.partner,
+  );
   useEffect(() => {
     dispatch(fetchPartnerDetail(id));
-  }, [dispatch, id])
+  }, [dispatch, id]);
   if (isLoading) {
     return <ActivityIndicator size="large" color="#131314ff" />;
   }
@@ -41,10 +54,16 @@ export const PartnerDetailScreen = () => {
       {/* Header Card */}
       <View style={styles.card}>
         <Text style={styles.name}>{partner.name}</Text>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <Text style={styles.email}>Email: {partner.email}</Text>
-          <Text style={[styles.status, partner.status === "active" ? styles.active : styles.inactive]}>
-            {partner.status?.charAt(0).toUpperCase()}{partner.status?.slice(1)}
+          <Text
+            style={[
+              styles.status,
+              partner.status === "active" ? styles.active : styles.inactive,
+            ]}
+          >
+            {partner.status?.charAt(0).toUpperCase()}
+            {partner.status?.slice(1)}
           </Text>
         </View>
         <Text style={styles.email}>Phone: {partner.phone || "N/A"}</Text>
@@ -55,34 +74,62 @@ export const PartnerDetailScreen = () => {
         <Text style={styles.sectionTitle}>Company Information</Text>
         <Text style={styles.detail}>Name: {partner.company?.name}</Text>
         {/* <Text style={styles.detail}>📂 {partner.company.type}</Text> */}
-        <Text style={styles.detail}>Address: {partner.company?.address || "N/A"}</Text>
+        <Text style={styles.detail}>
+          Address: {partner.company?.address || "N/A"}
+        </Text>
       </View>
 
       {/* Financials */}
       <View style={styles.card}>
         <Text style={styles.sectionTitle}>Financial Overview</Text>
-        <Text style={styles.detail}>Total Investments: {formatCurrency(partner.total_invested ?? 0)}</Text>
-        <Text style={styles.detail}>Active Investments: {partner.active_investments}</Text>
-        <Text style={styles.detail}>Total Earned: {formatCurrency(partner.total_earned ?? 0)}</Text>
-        <Text style={styles.detail}>ROI %: {partner.roi_percentage?.toFixed(1)}</Text>
-        <View style={{
-          flexDirection: 'row',
-          justifyContent: "space-between", marginBottom: 4
-        }}>
-          <TouchableOpacity style={styles.investmentButton} onPress={() => navigation.navigate("PartnerInvestment", { id: partner.id })}>
+        <Text style={styles.detail}>
+          Total Investments: {formatCurrency(partner.total_invested ?? 0)}
+        </Text>
+        <Text style={styles.detail}>
+          Active Investments: {partner.active_investments}
+        </Text>
+        <Text style={styles.detail}>
+          Total Earned: {formatCurrency(partner.total_earned ?? 0)}
+        </Text>
+        <Text style={styles.detail}>
+          ROI %: {partner.roi_percentage?.toFixed(1)}
+        </Text>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginBottom: 4,
+          }}
+        >
+          <TouchableOpacity
+            style={styles.investmentButton}
+            onPress={() =>
+              navigation.navigate("PartnerInvestment", { id: partner.id })
+            }
+          >
             <Ionicons name="eye-outline" size={23} />
             <Text style={{ marginLeft: 5, fontSize: 16, fontWeight: "500" }}>
               Investments
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.payoutButton} onPress={() => navigation.navigate("PartnerPayout", { id: partner.id })}>
+          <TouchableOpacity
+            style={styles.payoutButton}
+            onPress={() =>
+              navigation.navigate("PartnerPayout", { id: partner.id })
+            }
+          >
             <Ionicons name="eye-outline" size={23} />
             <Text style={{ marginLeft: 5, fontSize: 16, fontWeight: "500" }}>
               Payouts
             </Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.performanceButton} onPress={() => navigation.navigate("PartnerPerformance", { id: partner.id })}>
+        <TouchableOpacity
+          style={styles.performanceButton}
+          onPress={() =>
+            navigation.navigate("PartnerPerformance", { id: partner.id })
+          }
+        >
           <Ionicons name="stats-chart-outline" size={20} />
           <Text style={{ marginLeft: 5, fontSize: 16, fontWeight: "500" }}>
             Performance
@@ -94,14 +141,11 @@ export const PartnerDetailScreen = () => {
       <Button
         title="Edit Partner"
         loading={isLoading}
-        onPress={() =>
-          navigation.navigate("AddPartner", { partner })
-        }
+        onPress={() => navigation.navigate("AddPartner", { partner })}
       />
-
     </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background, padding: 12 },
@@ -118,20 +162,41 @@ const styles = StyleSheet.create({
   },
   name: { fontSize: 20, fontWeight: "700", color: Colors.secondary },
   email: { fontSize: 14, color: Colors.gray, marginVertical: 4 },
-  status: { fontWeight: "600", paddingVertical: 4, paddingHorizontal: 8, borderRadius: 8, alignSelf: "flex-start" },
-  active: { backgroundColor: Colors.activeStatusBg, color: Colors.activeStatus },
-  inactive: { backgroundColor: Colors.inActiveStatusBg, color: Colors.inActiveStatus },
-  sectionTitle: { fontSize: 16, fontWeight: "600", marginBottom: 8, color: Colors.secondary },
+  status: {
+    fontWeight: "600",
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 8,
+    alignSelf: "flex-start",
+  },
+  active: {
+    backgroundColor: Colors.activeStatusBg,
+    color: Colors.activeStatus,
+  },
+  inactive: {
+    backgroundColor: Colors.inActiveStatusBg,
+    color: Colors.inActiveStatus,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    marginBottom: 8,
+    color: Colors.secondary,
+  },
   detail: { fontSize: 14, color: Colors.secondary, marginBottom: 4 },
-  activityRow: { flexDirection: "row", justifyContent: "space-between", marginBottom: 6 },
+  activityRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 6,
+  },
   activityText: { fontSize: 14, color: Colors.secondary },
   investmentButton: {
-    flexDirection: 'row',
+    flexDirection: "row",
     backgroundColor: Colors.background,
     width: "46%",
     height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 12,
     shadowColor: "#000",
     shadowOpacity: 0.05,
@@ -140,12 +205,12 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   payoutButton: {
-    flexDirection: 'row',
+    flexDirection: "row",
     backgroundColor: Colors.background,
     width: "46%",
     height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 12,
     shadowColor: "#000",
     shadowOpacity: 0.05,
@@ -154,13 +219,13 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   performanceButton: {
-    flexDirection: 'row',
+    flexDirection: "row",
     alignSelf: "center",
     backgroundColor: Colors.background,
     width: "46%",
     height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 3,
     borderRadius: 12,
     shadowColor: "#000",
@@ -168,7 +233,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
     elevation: 2,
-
   },
   button: {
     backgroundColor: "#007bff",

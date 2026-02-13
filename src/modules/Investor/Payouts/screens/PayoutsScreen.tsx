@@ -19,7 +19,7 @@ import {
   Text,
   ToastAndroid,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { DashboardLayout } from "../../../Common/components/DashboardLayout";
 import { MarkAsPaidModal } from "../components/MarkAsPaidModal";
@@ -146,12 +146,20 @@ export const PayoutsScreen: React.FC = () => {
               {formatCurrency(item.amount)}
             </Text>
             <Text style={styles.payoutTitle}>{item.title}</Text>
-            <View style={{ flexDirection: "row", alignItems: "center" }} >
-              <Ionicons name="mail-outline" size={13} color={Colors.secondary} />
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Ionicons
+                name="mail-outline"
+                size={13}
+                color={Colors.secondary}
+              />
               <Text style={styles.payoutMeta}>{item.email}</Text>
             </View>
-            <View style={{ flexDirection: "row", alignItems: "center" }} >
-              <Ionicons name="calendar-outline" size={13} color={Colors.secondary} />
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Ionicons
+                name="calendar-outline"
+                size={13}
+                color={Colors.secondary}
+              />
               <Text style={styles.payoutMeta}>Scheduled: {item.due_date}</Text>
             </View>
           </View>
@@ -165,16 +173,8 @@ export const PayoutsScreen: React.FC = () => {
             color={isSelected ? Colors.green : Colors.gray}
           />
         ) : (
-          <View
-            style={
-              styles.statusBadge}
-          >
-            <Text
-              style={
-                styles.statusText}
-            >
-              {item.status}
-            </Text>
+          <View style={styles.statusBadge}>
+            <Text style={styles.statusText}>{item.status}</Text>
           </View>
         )}
       </TouchableOpacity>
@@ -191,7 +191,16 @@ export const PayoutsScreen: React.FC = () => {
           end={{ x: 2, y: 0 }}
           style={styles.card}
         >
-          <Image source={require('../../../../../assets/images/upperDiv.png')} style={{ position: 'absolute', width: 100, height: 110, top: -30, right: -50 }} />
+          <Image
+            source={require("../../../../../assets/images/upperDiv.png")}
+            style={{
+              position: "absolute",
+              width: 100,
+              height: 110,
+              top: -30,
+              right: -50,
+            }}
+          />
           {/* <View style={styles.card}> */}
 
           <Text style={styles.cardTitle}>Total Payouts amount</Text>
@@ -199,12 +208,14 @@ export const PayoutsScreen: React.FC = () => {
             {formatCurrency(Number(totalPayoutAmount.toFixed(1) ?? "--"))}
           </Text>
           <View style={styles.mirror}>
-            <Text style={{
-              color: Colors.white,
-              fontWeight: "400",
-              fontFamily: "Inter_400Regular",
-              fontSize: 12,
-            }}>
+            <Text
+              style={{
+                color: Colors.white,
+                fontWeight: "400",
+                fontFamily: "Inter_400Regular",
+                fontSize: 12,
+              }}
+            >
               Total payouts:{" "}
               <Text style={styles.cardSubtitle}>
                 {/* July 15, 2024 */}
@@ -214,7 +225,16 @@ export const PayoutsScreen: React.FC = () => {
           </View>
           {/* <View style={styles.balanceActionsRow}></View> */}
           {/* </View> */}
-          <Image source={require('../../../../../assets/images/lowerDiv.png')} style={{ position: 'absolute', width: 200, height: 260, bottom: -190, left: -150, }} />
+          <Image
+            source={require("../../../../../assets/images/lowerDiv.png")}
+            style={{
+              position: "absolute",
+              width: 200,
+              height: 260,
+              bottom: -190,
+              left: -150,
+            }}
+          />
           {/* <View style={styles.balanceActionsRow}></View> */}
         </LinearGradient>
         {/* Filters */}
@@ -289,7 +309,10 @@ export const PayoutsScreen: React.FC = () => {
           }
           ListEmptyComponent={
             <View style={styles.emptyState}>
-              <Image source={require('../../../../../assets/images/noInvestment.png')} style={{ width: 100, height: 100, }} />
+              <Image
+                source={require("../../../../../assets/images/noInvestment.png")}
+                style={{ width: 100, height: 100 }}
+              />
               <Text style={styles.emptyText}>No payouts available.</Text>
             </View>
           }
@@ -304,7 +327,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background },
   scrollContent: {
     paddingBottom: 80,
-    backgroundColor: Colors.background
+    backgroundColor: Colors.background,
   },
   card: {
     backgroundColor: Colors.primary,
@@ -324,7 +347,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "Inter_500Regular",
   },
-  mirror: { backgroundColor: Colors.mirror, width: '50%', justifyContent: 'center', alignItems: 'center', borderRadius: 18, paddingVertical: 4, paddingHorizontal: 12, borderWidth: 0.3, borderColor: Colors.white, opacity: 0.7, marginTop: 4 },
+  mirror: {
+    backgroundColor: Colors.mirror,
+    width: "50%",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 18,
+    paddingVertical: 4,
+    paddingHorizontal: 12,
+    borderWidth: 0.3,
+    borderColor: Colors.white,
+    opacity: 0.7,
+    marginTop: 4,
+  },
   cardValue: {
     color: Colors.white,
     fontSize: 20,
@@ -349,15 +384,20 @@ const styles = StyleSheet.create({
     padding: 4,
     justifyContent: "space-around",
     borderColor: "#E6EDFF",
-    borderWidth: 1
+    borderWidth: 1,
   },
-  emptyState: { justifyContent: "center", alignItems: "center", padding: 0, marginTop: 70 },
+  emptyState: {
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 0,
+    marginTop: 70,
+  },
   emptyText: {
     color: Colors.gray,
     fontSize: 18,
     fontFamily: "Inter_400Regular",
     textAlign: "center",
-    marginTop: 30
+    marginTop: 30,
     // paddingVertical: 16,
   },
   filterBtn: {
@@ -436,13 +476,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
-    backgroundColor: Colors.statusbg
+    backgroundColor: Colors.statusbg,
   },
 
   statusText: {
     fontSize: 13,
     fontFamily: "Inter_600SemiBold",
-    color: Colors.statusText
+    color: Colors.statusText,
   },
 
   // ✅ Bulk action styles

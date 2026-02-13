@@ -227,7 +227,7 @@ export const addPartnerSchema = z
     email: z.string().email("Enter a valid email"),
     phone: z
       .string()
-      .regex(/^\d{10,15}$/, "Enter Phone number between 10–15 digits"),
+      .regex(/^\d{7,15}$/, "Enter Phone number between 7–15 digits"),
     status: z.enum(["active", "inactive"]),
     company_name: z.string().min(2, "Company name is required"),
     company_type: z.enum(["individual", "private", "silent", "holding"]),

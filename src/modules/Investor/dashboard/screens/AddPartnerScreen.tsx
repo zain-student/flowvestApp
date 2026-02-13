@@ -114,12 +114,16 @@ export const AddPartnerScreen = () => {
         .then(() => {
           // ToastAndroid.show("Partner created successfully", ToastAndroid.SHORT);
           console.log("Adding partner Data:", data);
+          reset();
+          setCustomPassword("");
+          setIsAutoPassword(true);
+          setIsEmailEnabled(false);
           setModalVisible(false);
         })
         .catch((error: any) => {
           // ToastAndroid.show(`Error: ${error}`, ToastAndroid.LONG);
           ToastAndroid.show(
-            "Failed: " + (error.message || "Unknown error"),
+            "Failed: " + (error?.message || "Unknown error"),
             ToastAndroid.LONG,
           );
         });
@@ -208,6 +212,7 @@ export const AddPartnerScreen = () => {
                         placeholder="Enter email"
                         value={field.value}
                         onChangeText={field.onChange}
+                        autoCapitalize="none"
                         error={errors.email?.message as string | undefined}
                         required
                       />
@@ -379,20 +384,6 @@ export const AddPartnerScreen = () => {
                       />
                     )}
                   />
-                  {/* <Controller
-                    control={control}
-                    name="initial_investment"
-                    render={({ field }) => (
-                      <Input
-                        label="Initial Investment"
-                        placeholder="Enter initial investment"
-                        value={field.value}
-                        onChangeText={field.onChange}
-                        error={errors.initial_investment?.message as string | undefined}
-                        required
-                      />
-                    )}
-                  /> */}
                   <Controller
                     control={control}
                     name="notes"
@@ -570,9 +561,18 @@ export const AddPartnerScreen = () => {
                     </View>
                   )}
                   {/* --- End Account Credentials Section --- */}
-
+                  <Text
+                    style={{
+                      color: "red",
+                      marginBottom: 8,
+                      textAlign: "center",
+                    }}
+                  >
+                    {error}
+                  </Text>
                   <Button
                     title={editingPartner ? "Update" : "Add"}
+                    disabled={isLoading}
                     onPress={handleSubmit(onSubmit)}
                     style={{ marginTop: 0, backgroundColor: Colors.secondary }}
                   />

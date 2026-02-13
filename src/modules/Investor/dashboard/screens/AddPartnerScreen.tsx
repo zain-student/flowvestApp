@@ -9,6 +9,7 @@ import {
   Partner,
   updatePartner,
 } from "@/shared/store/slices/investor/dashboard/addPartnerSlice";
+import { Ionicons } from "@expo/vector-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -584,7 +585,7 @@ export const AddPartnerScreen = () => {
       </ScrollView>
 
       {/* Floating Button to open modal */}
-      <Button
+      {/* <Button
         title="+ Add New Partner"
         onPress={() => setModalVisible(true)}
         style={{
@@ -593,7 +594,13 @@ export const AddPartnerScreen = () => {
           alignItems: "center",
           alignSelf: "center",
         }}
-      />
+      /> */}
+      <TouchableOpacity
+        onPress={() => setModalVisible(true)}
+        style={styles.fab}
+      >
+        <Ionicons name="add" size={24} color={"white"} />
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -654,5 +661,20 @@ const styles = StyleSheet.create({
   picker: {
     height: 51,
     width: "100%",
+  },
+  fab: {
+    position: "absolute",
+    right: 24,
+    bottom: 80,
+    backgroundColor: Colors.primary,
+    borderRadius: 25,
+    width: 50,
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 4,
   },
 });

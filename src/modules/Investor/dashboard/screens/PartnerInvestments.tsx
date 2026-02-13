@@ -4,13 +4,19 @@ import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { fetchPartnerInvestments } from "@/shared/store/slices/investor/dashboard/addPartnerSlice";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import React, { useEffect } from "react";
-import { ActivityIndicator, FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 export const PartnerInvestments = ({ route }: any) => {
   const { id } = route.params;
   const { formatCurrency } = useCurrencyFormatter();
   const dispatch = useAppDispatch();
   const { isLoading, investments, investmentSummary, error } = useAppSelector(
-    (state) => state.partner
+    (state) => state.partner,
   );
 
   useEffect(() => {
@@ -35,11 +41,15 @@ export const PartnerInvestments = ({ route }: any) => {
       {/* Amounts */}
       <View style={styles.amountRow}>
         <Text style={styles.amountLabel}>Invested</Text>
-        <Text style={styles.amountValue}>{formatCurrency(item.amount_invested)}</Text>
+        <Text style={styles.amountValue}>
+          {formatCurrency(item.amount_invested)}
+        </Text>
       </View>
       <View style={styles.amountRow}>
         <Text style={styles.amountLabel}>Current Value</Text>
-        <Text style={styles.amountValue}>{formatCurrency(item.current_value)}</Text>
+        <Text style={styles.amountValue}>
+          {formatCurrency(item.current_value)}
+        </Text>
       </View>
 
       {/* ROI + Date */}
@@ -128,7 +138,7 @@ const styles = StyleSheet.create({
   },
 
   summaryCard: {
-    backgroundColor: Colors.secondary,
+    backgroundColor: Colors.primary,
     padding: 18,
     borderRadius: 14,
     marginBottom: 20,

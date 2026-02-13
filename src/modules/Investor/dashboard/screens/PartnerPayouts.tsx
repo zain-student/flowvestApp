@@ -4,17 +4,24 @@ import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { fetchPartnerPayouts } from "@/shared/store/slices/investor/dashboard/addPartnerSlice";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import React, { useEffect } from "react";
-import { ActivityIndicator, FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 export const PartnerPayouts = ({ route }: any) => {
   const { id } = route.params;
   const dispatch = useAppDispatch();
-  const { isLoading, error, payouts, payoutSummary } = useAppSelector((state) => state.partner);
-const {formatCurrency}=useCurrencyFormatter();
+  const { isLoading, error, payouts, payoutSummary } = useAppSelector(
+    (state) => state.partner,
+  );
+  const { formatCurrency } = useCurrencyFormatter();
   useEffect(() => {
     dispatch(fetchPartnerPayouts(id));
-  }, [id])
+  }, [id]);
   const renderPayout = ({ item }: any) => (
-
     <View style={styles.card}>
       {/* Amount + Status */}
       <View style={styles.cardHeader}>
@@ -32,7 +39,9 @@ const {formatCurrency}=useCurrencyFormatter();
       {/* Method + Date */}
       <View style={styles.cardFooter}>
         <Text style={styles.amount}>{formatCurrency(item.amount)}</Text>
-        <Text style={styles.date}>{new Date(item.paid_date).toDateString()}</Text>
+        <Text style={styles.date}>
+          {new Date(item.paid_date).toDateString()}
+        </Text>
       </View>
     </View>
   );
@@ -52,20 +61,25 @@ const {formatCurrency}=useCurrencyFormatter();
         <View style={styles.summaryRow}>
           <View style={styles.summaryItem}>
             <Text style={styles.summaryLabel}>Total Paid</Text>
-            <Text style={styles.summaryValue}>{formatCurrency(payoutSummary?.total_paid ?? 0)}</Text>
+            <Text style={styles.summaryValue}>
+              {formatCurrency(payoutSummary?.total_paid ?? 0)}
+            </Text>
           </View>
           <View style={styles.summaryItem}>
             <Text style={styles.summaryLabel}>Pending</Text>
-            <Text style={styles.summaryValue}>{formatCurrency(payoutSummary?.pending_amount ?? 0)}</Text>
+            <Text style={styles.summaryValue}>
+              {formatCurrency(payoutSummary?.pending_amount ?? 0)}
+            </Text>
           </View>
           <View style={styles.summaryItem}>
             <Text style={styles.summaryLabel}>Payouts</Text>
-            <Text style={styles.summaryValue}>{payoutSummary?.total_payouts}</Text>
+            <Text style={styles.summaryValue}>
+              {payoutSummary?.total_payouts}
+            </Text>
           </View>
         </View>
       </View>
 
-     
       {payouts && payouts.length > 0 ? (
         <FlatList
           data={payouts}
@@ -106,7 +120,7 @@ const styles = StyleSheet.create({
   },
 
   summaryCard: {
-    backgroundColor: Colors.secondary,
+    backgroundColor: Colors.primary,
     padding: 18,
     borderRadius: 14,
     marginBottom: 20,

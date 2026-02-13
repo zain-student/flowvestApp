@@ -129,8 +129,7 @@ export const loginUser = createAsyncThunk(
         },
       };
     } catch (error: any) {
-      const errMsg =
-        error?.response?.data?.message || error?.message || "Login failed";
+      const errMsg = error.message || "Login failed";
       ToastAndroid.show(errMsg, ToastAndroid.SHORT);
       console.log("❌ Login error:", errMsg);
       return rejectWithValue(errMsg);
@@ -213,12 +212,9 @@ export const getCurrentUser = createAsyncThunk<
     console.log("✅ Get current user response:", JSON.stringify(response.data));
     return user;
   } catch (error: any) {
-    const errMsg =
-      error?.response?.data?.message ||
-      error?.message ||
-      "Failed to get user profile";
-    const code = error?.response?.data?.code || "SERVER_ERROR";
-    const status = error?.response?.status || 500;
+    const errMsg = error.message || "Failed to get user profile";
+    const code = error.code || "SERVER_ERROR";
+    const status = error.status || 500;
 
     ToastAndroid.show(errMsg, ToastAndroid.SHORT);
     console.error("❌ Get current user error:", errMsg);

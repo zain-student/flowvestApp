@@ -431,12 +431,12 @@ export const RegisterScreen = () => {
           {renderContent()}
 
           {/* Footer */}
-          <View style={styles.footer}>
+          {/* <View style={styles.footer}>
             <Text style={styles.footerText}>Already have an account? </Text>
             <TouchableOpacity onPress={navigateToLogin}>
               <Text style={styles.footerLink}>Sign in</Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
 
           {/* <Text style={styles.securityText}>
             🔒 Your data is protected with bank-level security

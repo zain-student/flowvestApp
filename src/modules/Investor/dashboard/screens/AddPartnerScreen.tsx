@@ -119,7 +119,7 @@ export const AddPartnerScreen = () => {
         .catch((error: any) => {
           // ToastAndroid.show(`Error: ${error}`, ToastAndroid.LONG);
           ToastAndroid.show(
-            "Failed: " + (error?.message || "Unknown error"),
+            "Failed: " + (error.message || "Unknown error"),
             ToastAndroid.LONG,
           );
         });

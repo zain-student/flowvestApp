@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   secondaryButton: {
     width: "100%",
     borderWidth: 1,
-    borderColor: "#E6EDFF",
+    borderColor: Colors.primary,
     paddingVertical: 12,
     borderRadius: 20,
     alignItems: "center",

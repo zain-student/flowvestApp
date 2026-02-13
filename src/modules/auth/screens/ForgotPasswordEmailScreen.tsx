@@ -91,6 +91,7 @@ export const ForgotPasswordEmailScreen = () => {
               required
               editable={!loading}
             />
+            <Text style={{ color: Colors.error }}>{error}</Text>
 
             <Button
               title="Send Code"
@@ -98,7 +99,7 @@ export const ForgotPasswordEmailScreen = () => {
               loading={loading}
               disabled={!email || loading}
               fullWidth
-              style={{ marginTop: 24 }}
+              style={{ marginTop: 2 }}
             />
           </View>
         </ScrollView>
@@ -125,13 +126,14 @@ const styles = StyleSheet.create({
   header2: {
     alignItems: "center",
     marginTop: 40,
-    marginBottom: 40,
+    marginBottom: 60,
   },
   content: {
     flexGrow: 1,
     paddingHorizontal: 24,
     paddingBottom: 80,
-    justifyContent: "center",
+    marginTop: 20,
+    // justifyContent: "center",
   },
   scrollView: {
     flex: 1,

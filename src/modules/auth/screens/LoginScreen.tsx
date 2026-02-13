@@ -167,19 +167,22 @@ export const LoginScreen: React.FC = () => {
                 <Ionicons name="mail-outline" size={20} color={Colors.gray} />
               }
               rightIcon={
-                formData.email.length > 0 && isEmailValid() ? (
+                formData.email.length > 0 &&
+                isEmailValid() && (
+                  // ? (
+                  //   <Ionicons
+                  // name="close-circle-outline"
+                  //     size={20}
+                  //     color={Colors.secondary}
+                  //   />
+                  // ) : (
                   <Ionicons
                     name="checkmark-circle-outline"
                     size={20}
                     color={Colors.secondary}
                   />
-                ) : (
-                  <Ionicons
-                    name="close-circle-outline"
-                    size={20}
-                    color={Colors.secondary}
-                  />
                 )
+                // )
               }
               // required
               // autoFocus
@@ -204,37 +207,13 @@ export const LoginScreen: React.FC = () => {
 
             <View
               style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
+                // flexDirection: "row",
+                // justifyContent: "space-between",
+                alignItems: "flex-end",
                 marginBottom: 24,
                 marginTop: 8,
               }}
             >
-              {/* Remember Me - Simple implementation */}
-              <TouchableOpacity
-                style={styles.rememberContainer}
-                onPress={() =>
-                  handleInputChange("remember", !formData.remember)
-                }
-              >
-                <View
-                  style={[
-                    styles.checkbox,
-                    formData.remember && styles.checkboxActive,
-                  ]}
-                >
-                  {formData.remember && (
-                    //  <Text style={styles.checkmark}>✓</Text>
-                    <Ionicons
-                      name="checkmark"
-                      size={16}
-                      color={Colors.primary}
-                    />
-                  )}
-                </View>
-                <Text style={styles.rememberText}>Keep Login</Text>
-              </TouchableOpacity>
               {/* Forgot Password Link */}
               <TouchableOpacity
                 style={styles.forgotPasswordContainer}
@@ -255,14 +234,14 @@ export const LoginScreen: React.FC = () => {
           </View>
 
           {/* Footer */}
-          <View>
+          {/* <View>
             <View style={styles.footer}>
               <Text style={styles.footerText}>Don't have an account? </Text>
               <TouchableOpacity onPress={navigateToRegister}>
                 <Text style={styles.footerLink}>Register</Text>
               </TouchableOpacity>
             </View>
-          </View>
+          </View> */}
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -384,7 +363,8 @@ const styles = StyleSheet.create({
   },
 
   forgotPasswordContainer: {
-    alignItems: "flex-end",
+    // alignItems: "flex-end",
+    justifyContent: "flex-end",
     // marginBottom: 32,
   },
 

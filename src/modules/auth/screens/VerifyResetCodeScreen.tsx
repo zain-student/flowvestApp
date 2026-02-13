@@ -158,13 +158,13 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingHorizontal: 12,
     paddingBottom: 80,
-    justifyContent: "center",
+    // justifyContent: "center",
   },
   scrollView: { flex: 1 },
   content2: {
     alignItems: "center",
     marginTop: 40,
-    marginBottom: 40,
+    marginBottom: 60,
   },
   title: {
     fontSize: 28,

@@ -23,10 +23,10 @@ export const ResetPasswordScreen = ({ route, navigation }: any) => {
   const handleResetPassword = async () => {
     setLocalError(null);
 
-    if (password !== confirmPassword) {
-      setLocalError("Passwords do not match");
-      return;
-    }
+    // if (password !== confirmPassword) {
+    //   setLocalError("Passwords do not match");
+    //   return;
+    // }
 
     const result = await dispatch(
       resetPassword({
@@ -44,7 +44,6 @@ export const ResetPasswordScreen = ({ route, navigation }: any) => {
       });
     }
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
@@ -74,7 +73,7 @@ export const ResetPasswordScreen = ({ route, navigation }: any) => {
           required
           editable={!loading}
         />
-
+        <Text style={{ color: Colors.error }}>{localError || error}</Text>
         <Button
           title="Reset Password"
           onPress={handleResetPassword}
@@ -94,7 +93,8 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingHorizontal: 12,
     paddingBottom: 80,
-    justifyContent: "center",
+    marginTop: 40,
+    // justifyContent: "center",
   },
   content2: {
     alignItems: "center",

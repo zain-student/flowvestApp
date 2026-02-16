@@ -72,11 +72,67 @@ export const PartnerDetailScreen = () => {
       {/* Company Info */}
       <View style={styles.card}>
         <Text style={styles.sectionTitle}>Company Information</Text>
-        <Text style={styles.detail}>Name: {partner.company?.name}</Text>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginBottom: 4,
+          }}
+        >
+          <Text style={styles.detailLabel}>Name:</Text>
+          <Text style={styles.detail}>{partner.company?.name}</Text>
+        </View>
         {/* <Text style={styles.detail}>📂 {partner.company.type}</Text> */}
-        <Text style={styles.detail}>
-          Address: {partner.company?.address || "N/A"}
-        </Text>
+        <Text style={styles.sectionTitle}>Address:</Text>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginBottom: 4,
+          }}
+        >
+          <Text style={styles.detailLabel}>Country:</Text>
+          <Text style={styles.detail}>
+            {partner.company?.address?.country || "N/A"}
+          </Text>
+        </View>
+
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginBottom: 4,
+          }}
+        >
+          <Text style={styles.detailLabel}>City:</Text>
+          <Text style={styles.detail}>
+            {partner.company?.address?.city || "N/A"}
+          </Text>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginBottom: 4,
+          }}
+        >
+          <Text style={styles.detailLabel}>Street:</Text>
+          <Text style={styles.detail}>
+            {partner.company?.address?.street || "N/A"}
+          </Text>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginBottom: 4,
+          }}
+        >
+          <Text style={styles.detailLabel}>Zip:</Text>
+          <Text style={styles.detail}>
+            {partner.company?.address?.zip || "N/A"}
+          </Text>
+        </View>
       </View>
 
       {/* Financials */}
@@ -183,6 +239,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     color: Colors.secondary,
   },
+  detailLabel: { fontSize: 14, color: Colors.gray, marginBottom: 4 },
   detail: { fontSize: 14, color: Colors.secondary, marginBottom: 4 },
   activityRow: {
     flexDirection: "row",

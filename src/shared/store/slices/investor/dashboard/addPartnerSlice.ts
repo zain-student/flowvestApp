@@ -21,12 +21,19 @@ export interface CreatePartnerPayload {
   generate_password?: boolean;
   password?: string;
 }
+export type Address = {
+  zip?: string;
+  city?: string;
+  state?: string;
+  street?: string;
+  country?: string;
+};
 
 export interface Company {
   id: number;
   name: string;
   phone?: string | null;
-  address?: string | null;
+  address?: Address | null;
   description?: string | null;
   settings: Record<string, any>;
 }

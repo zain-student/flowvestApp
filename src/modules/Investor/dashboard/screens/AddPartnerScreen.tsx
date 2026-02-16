@@ -62,11 +62,7 @@ export const AddPartnerScreen = () => {
       email: editingPartner?.email || "",
       phone: editingPartner?.phone || "",
       status: editingPartner?.status || "active",
-      company_name: editingPartner?.company_name || "",
-      company_type: editingPartner?.company_type || "private",
-      address: editingPartner?.company?.address || "",
       description: editingPartner?.description || "",
-      // initial_investment: editingPartner?.total_invested || "",
       notes: editingPartner?.notes || "",
     },
   });
@@ -77,11 +73,7 @@ export const AddPartnerScreen = () => {
         email: editingPartner.email,
         phone: editingPartner.phone,
         status: editingPartner.status,
-        company_name: editingPartner.company?.name,
-        company_type: editingPartner.company_type,
-        address: editingPartner.company?.address,
         description: editingPartner.description,
-        // initial_investment: editingPartner.total_invested,
         notes: editingPartner.notes,
       });
       setModalVisible(true); // ✅ open modal automatically
@@ -285,90 +277,6 @@ export const AddPartnerScreen = () => {
                     }}
                   />
 
-                  <Controller
-                    control={control}
-                    name="company_name"
-                    render={({ field }) => (
-                      <Input
-                        label="Company Name"
-                        placeholder="Enter company name"
-                        value={field.value}
-                        onChangeText={field.onChange}
-                        error={
-                          errors.company_name?.message as string | undefined
-                        }
-                        required
-                      />
-                    )}
-                  />
-                  {/* Company Type */}
-                  <Controller
-                    control={control}
-                    name="company_type"
-                    render={({ field, fieldState }) => {
-                      const [open, setOpen] = React.useState(false);
-                      const [items, setItems] = React.useState([
-                        { label: "Private", value: "private" },
-                        { label: "Individual", value: "individual" },
-                        { label: "Silent", value: "silent" },
-                        { label: "Holding", value: "holding" },
-                      ]);
-
-                      return (
-                        <View style={{ marginBottom: 16, zIndex: 2000 }}>
-                          <Text
-                            style={{
-                              marginBottom: 4,
-                              fontWeight: "500",
-                              color: Colors.secondary,
-                            }}
-                          >
-                            Company Type *
-                          </Text>
-                          <DropDownPicker
-                            open={open}
-                            value={field.value}
-                            items={items}
-                            setOpen={setOpen}
-                            setValue={(callback) =>
-                              field.onChange(callback(field.value))
-                            }
-                            setItems={setItems}
-                            placeholder="Select Company Type"
-                            listMode="SCROLLVIEW"
-                            dropDownDirection="BOTTOM"
-                            style={{
-                              borderColor: fieldState.error ? "red" : "#ccc",
-                              borderRadius: 8,
-                            }}
-                            dropDownContainerStyle={{
-                              borderColor: "#ccc",
-                            }}
-                          />
-                          {fieldState.error?.message && (
-                            <Text style={{ color: "red", marginTop: 4 }}>
-                              {fieldState.error.message}
-                            </Text>
-                          )}
-                        </View>
-                      );
-                    }}
-                  />
-
-                  <Controller
-                    control={control}
-                    name="address"
-                    render={({ field }) => (
-                      <Input
-                        label="Company Address"
-                        placeholder="Enter Company Address"
-                        value={field.value}
-                        onChangeText={field.onChange}
-                        error={errors.address?.message as string | undefined}
-                        required
-                      />
-                    )}
-                  />
                   <Controller
                     control={control}
                     name="description"

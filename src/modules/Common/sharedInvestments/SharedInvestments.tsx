@@ -10,12 +10,11 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
-  RefreshControl,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 export const SharedInvestments: React.FC = ({ navigation }: any) => {
   const dispatch = useAppDispatch();
@@ -72,12 +71,12 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
     }
   };
 
-  if (isLoading && list.length === 0)
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color={Colors.secondary} />
-      </View>
-    );
+  // if (isLoading && list.length === 0)
+  //   return (
+  //     <View style={styles.centered}>
+  //       <ActivityIndicator size="large" color={Colors.secondary} />
+  //     </View>
+  //   );
 
   const renderSummary = () => (
     <View style={styles.summaryRow}>
@@ -184,7 +183,13 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
 
         <Button
           title="Join Investment"
-          icon={<Ionicons name="add-circle-outline" size={20} color={Colors.white} />}
+          icon={
+            <Ionicons
+              name="add-circle-outline"
+              size={20}
+              color={Colors.white}
+            />
+          }
           // onPress={() => { navigation.navigate("SharedInvestments"); }
           // }
           onPress={() =>
@@ -197,7 +202,6 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
           textStyle={styles.joinText}
           variant="primary"
         />
-
       </TouchableOpacity>
     );
   };
@@ -226,16 +230,18 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
         ListHeaderComponent={renderSummary}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={handleRefresh}
-            tintColor={Colors.secondary}
-          />
-        }
+        // refreshControl={
+        //   <RefreshControl
+        //     refreshing={refreshing}
+        //     onRefresh={handleRefresh}
+        //     tintColor={Colors.secondary}
+        //   />
+        // }
+        refreshing={isLoading}
+        onRefresh={handleRefresh}
         onEndReachedThreshold={0.5}
         onEndReached={handleLoadMore}
-        onMomentumScrollBegin={() => { }}
+        onMomentumScrollBegin={() => {}}
         ListFooterComponent={
           pagination?.has_more_pages ? (
             <ActivityIndicator
@@ -248,7 +254,10 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
         ListEmptyComponent={
           <View style={styles.centered}>
             {/* <Feather name="briefcase" size={48} color={Colors.gray} /> */}
-            <Image source={require('../../../../assets/images/noInvestment.png')} style={{ width: 100, height: 100, alignSelf: 'center' }} />
+            <Image
+              source={require("../../../../assets/images/noInvestment.png")}
+              style={{ width: 100, height: 100, alignSelf: "center" }}
+            />
             <Text style={styles.emptyText}>No shared programs available.</Text>
           </View>
         }
@@ -316,7 +325,7 @@ const styles = StyleSheet.create({
     width: "48%",
     marginBottom: 6,
     borderWidth: 1,
-    borderColor: "#E6EDFF"
+    borderColor: "#E6EDFF",
     // elevation: 2,
   },
   summaryValue: {
@@ -389,7 +398,10 @@ const styles = StyleSheet.create({
   },
 
   amountLabel: {
-    fontSize: 12, fontWeight: '500', color: Colors.gray, marginTop: 10
+    fontSize: 12,
+    fontWeight: "500",
+    color: Colors.gray,
+    marginTop: 10,
   },
 
   amountValue: {

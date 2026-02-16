@@ -11,7 +11,6 @@ import {
 } from "@shared/store/slices/shared/investments/partnerInvestmentSlice";
 import React, { useCallback, useEffect, useState } from "react";
 import {
-  ActivityIndicator,
   Alert,
   FlatList,
   Image,
@@ -111,7 +110,9 @@ export const MyInvestments = ({ navigation }: Props) => {
 
       {/* Meta */}
       <View style={styles.metaRow}>
-        <Text style={styles.metaText}>Joined: {formatDate(item.joined_at)}</Text>
+        <Text style={styles.metaText}>
+          Joined: {formatDate(item.joined_at)}
+        </Text>
         <Text style={styles.metaText}>
           Participants: {item.total_participants}
         </Text>
@@ -144,7 +145,11 @@ export const MyInvestments = ({ navigation }: Props) => {
   const formatDate = (d?: string | null) => {
     if (!d) return "N/A";
     const date = new Date(d);
-    return date.toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" });
+    return date.toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
   };
   return (
     <View style={styles.container}>
@@ -177,54 +182,57 @@ export const MyInvestments = ({ navigation }: Props) => {
         refreshing={isLoading}
         // scrollEnabled={false}
         onRefresh={handleRefresh}
-        ListFooterComponent={
-          isLoadingMore ? (
-            <ActivityIndicator size="small" color={Colors.green} />
-          ) : null
-        }
+        // ListFooterComponent={
+        //   isLoadingMore ? (
+        //     <ActivityIndicator size="small" color={Colors.green} />
+        //   ) : null
+        // }
         ListHeaderComponent={
           <View style={styles.card}>
             <Text style={styles.title}>Joined Investments Overview</Text>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 4 }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                padding: 4,
+              }}
+            >
               <View>
-                <Text style={styles.label}>
-                  Invested:{" "}
-                </Text>
+                <Text style={styles.label}>Invested: </Text>
                 <Text style={styles.value}>
                   {formatCurrency(summary.total_invested)}
                 </Text>
               </View>
 
-              <View >
-                <Text style={styles.label}>
-                  Total:{" "}
-                </Text>
+              <View>
+                <Text style={styles.label}>Total: </Text>
                 <Text style={styles.value}>{summary.total_investments}</Text>
               </View>
-
             </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 4 }}>
-              <View >
-                <Text style={styles.label}>
-                  Avg. ROI:{" "}
-                </Text>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                padding: 4,
+              }}
+            >
+              <View>
+                <Text style={styles.label}>Avg. ROI: </Text>
                 <Text style={styles.value}>{summary.average_roi}%</Text>
               </View>
 
-
               {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}> */}
               <View>
-                <Text style={styles.label}>
-                  Active:{" "}
-                </Text>
+                <Text style={styles.label}>Active: </Text>
                 <Text style={styles.value}>{summary.active_investments}</Text>
               </View>
             </View>
             <Button
               title="Browse Investment"
               // icon={<Ionicons name="trash" size={20} color={Colors.white} />}
-              onPress={() => { navigation.navigate("SharedInvestments"); }
-              }
+              onPress={() => {
+                navigation.navigate("SharedInvestments");
+              }}
               style={styles.balanceActionBtnDark}
               textStyle={styles.balanceActionTextDark}
               variant="primary"
@@ -234,8 +242,13 @@ export const MyInvestments = ({ navigation }: Props) => {
         }
         ListEmptyComponent={
           <View style={styles.emptyState}>
-            <Image source={require('../../../../../assets/images/noInvestment.png')} style={{ width: 100, height: 100, alignSelf: 'center' }} />
-            <Text style={styles.emptyText}>No joined investments available.</Text>
+            <Image
+              source={require("../../../../../assets/images/noInvestment.png")}
+              style={{ width: 100, height: 100, alignSelf: "center" }}
+            />
+            <Text style={styles.emptyText}>
+              No joined investments available.
+            </Text>
           </View>
         }
       />
@@ -249,7 +262,8 @@ const styles = StyleSheet.create({
     // // backgroundColor: Colors.background,
     paddingHorizontal: 12,
     // marginBottom: 50,
-    flex: 1, backgroundColor: Colors.background
+    flex: 1,
+    backgroundColor: Colors.background,
   },
   searchContainer: {
     flexDirection: "row",
@@ -287,8 +301,7 @@ const styles = StyleSheet.create({
     // marginHorizontal: 12,
     marginBottom: 6,
     borderWidth: 1,
-    borderColor: "#E6EDFF"
-
+    borderColor: "#E6EDFF",
   },
   title: {
     fontSize: 13,
@@ -296,7 +309,13 @@ const styles = StyleSheet.create({
     color: Colors.gray,
     marginBottom: 8,
   },
-  label: { fontSize: 12, fontWeight: '500', lineHeight: 18, color: Colors.gray, marginBottom: 4 },
+  label: {
+    fontSize: 12,
+    fontWeight: "500",
+    lineHeight: 18,
+    color: Colors.gray,
+    marginBottom: 4,
+  },
   value: { color: Colors.secondary, fontWeight: "600", fontSize: 14 },
   balanceActionBtnDark: {
     width: "100%",
@@ -371,7 +390,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   amountLabel: {
-    fontSize: 12, fontWeight: '500', color: Colors.gray, marginTop: 10
+    fontSize: 12,
+    fontWeight: "500",
+    color: Colors.gray,
+    marginTop: 10,
   },
   amountValue: {
     color: Colors.secondary,

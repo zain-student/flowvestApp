@@ -123,17 +123,32 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({
 
 export const AppTabNavigator: React.FC = () => {
   const dispatch = useAppDispatch();
-  // const isAuthenticated = useAppSelector(selectIsAuthenticated);
-  // const isLoading = useAppSelector(selectIsLoading);
-  const userRole = useAppSelector((state) => state.auth.user?.roles?.[0]); // e.g. 'user' or 'admin
+  const userRole = useAppSelector((state) => state.auth.user?.roles?.[0]); // e.g. 'user' or 'admin'
+  const [showTabBar, setShowTabBar] = React.useState(true);
+
   if (!userRole) {
     return null;
   }
+
   return (
     <Tab.Navigator
       initialRouteName="Dashboard"
-      tabBar={(props) => <CustomTabBar {...props} />}
-      screenOptions={{ headerShown: false }}
+      tabBar={(props) => (showTabBar ? <CustomTabBar {...props} /> : null)}
+      screenOptions={{
+        headerShown: false,
+      }}
+      screenListeners={({ navigation }: any) => ({
+        // Listen to state changes to determine if we should show the tab bar
+        state: () => {
+          const state = navigation.getState();
+          // Hide tab bar if any tab has more than 1 route (meaning we're in a nested screen)
+          const hasNestedNavigation = state.routes.some(
+            (route: any) =>
+              route.state?.routes && route.state.routes.length > 1,
+          );
+          setShowTabBar(!hasNestedNavigation);
+        },
+      })}
     >
       {userRole === "admin" && (
         <>
@@ -148,7 +163,10 @@ export const AppTabNavigator: React.FC = () => {
         <>
           <Tab.Screen name="Dashboard" component={PartnerDashboardStack} />
           {/* <Tab.Screen name="InvestmentDetails" component={InvestmentDetails} /> */}
-          <Tab.Screen name="InvestmentDetails" component={PartnersInvestmentDetailStack} />
+          <Tab.Screen
+            name="InvestmentDetails"
+            component={PartnersInvestmentDetailStack}
+          />
           <Tab.Screen name="PartnerPayouts" component={PartnersPayoutStack} />
           <Tab.Screen name="Portfolio" component={PortfolioScreen} />
           <Tab.Screen name="Profile" component={ProfileStack} />

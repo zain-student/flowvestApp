@@ -154,7 +154,7 @@ export const AddPartnerScreen = () => {
         <View style={styles.modal}>
           <Modal
             visible={modalVisible}
-            animationType="slide"
+            animationType="fade"
             transparent
             onRequestClose={() => setModalVisible(false)}
             statusBarTranslucent={true}
@@ -585,16 +585,6 @@ export const AddPartnerScreen = () => {
       </ScrollView>
 
       {/* Floating Button to open modal */}
-      {/* <Button
-        title="+ Add New Partner"
-        onPress={() => setModalVisible(true)}
-        style={{
-          marginBottom: 80,
-          justifyContent: "center",
-          alignItems: "center",
-          alignSelf: "center",
-        }}
-      /> */}
       <TouchableOpacity
         onPress={() => setModalVisible(true)}
         style={styles.fab}
@@ -649,7 +639,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     borderRadius: 20,
     padding: 16,
-    maxHeight: "80%",
+    maxHeight: "83%",
   },
   pickerView: {
     borderWidth: 1,
@@ -665,7 +655,7 @@ const styles = StyleSheet.create({
   fab: {
     position: "absolute",
     right: 24,
-    bottom: 80,
+    bottom: 60,
     backgroundColor: Colors.primary,
     borderRadius: 25,
     width: 50,

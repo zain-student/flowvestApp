@@ -1,4 +1,5 @@
 import Colors from "@/shared/colors/Colors";
+import { storage, StorageKeys } from "@/shared/services/storage";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -22,7 +23,6 @@ type RootStackParamList = {
   Register: undefined;
   Login: undefined;
 };
-
 export const OnBoardingScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -41,16 +41,18 @@ export const OnBoardingScreen = () => {
     return () => clearInterval(timer);
   }, [currentIndex]);
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentIndex < onboardingData.length - 1) {
       slidesRef.current?.scrollToIndex({ index: currentIndex + 1 });
       setCurrentIndex(currentIndex + 1);
     } else {
+      await storage.setItem(StorageKeys.ONBOARDING_COMPLETED, true);
       navigation.replace("OnBoardingFinal");
     }
   };
 
-  const handleSkip = () => {
+  const handleSkip = async () => {
+    await storage.setItem(StorageKeys.ONBOARDING_COMPLETED, true);
     navigation.replace("OnBoardingFinal");
   };
 

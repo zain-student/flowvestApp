@@ -6,8 +6,9 @@
 import { ForgotPasswordEmailScreen } from "@/modules/auth/screens/ForgotPasswordEmailScreen";
 import { ResetPasswordScreen } from "@/modules/auth/screens/ResetPasswordScreen";
 import { VerifyResetCodeScreen } from "@/modules/auth/screens/VerifyResetCodeScreen";
+import { storage, StorageKeys } from "@/shared/services/storage";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { LoginScreen } from "../modules/auth/screens/LoginScreen";
 import { OnBoardingFinal } from "../modules/auth/screens/OnBoardingFinal";
 import { OnBoardingScreen } from "../modules/auth/screens/OnBoardingScreen";
@@ -27,9 +28,26 @@ export type AuthStackParamList = {
 const Stack = createNativeStackNavigator<AuthStackParamList>();
 
 export const AuthStack: React.FC = () => {
+  const [initialRoute, setInitialRoute] = useState<
+    keyof AuthStackParamList | null
+  >(null);
+  useEffect(() => {
+    const checkOnboarding = async () => {
+      const completed = await storage.getItem(StorageKeys.ONBOARDING_COMPLETED);
+      if (completed) {
+        setInitialRoute("OnBoardingFinal");
+      } else {
+        setInitialRoute("onBoarding");
+      }
+    };
+    checkOnboarding();
+  }, []);
+  if (!initialRoute) {
+    return null; // or a loading spinner
+  }
   return (
     <Stack.Navigator
-      initialRouteName="onBoarding"
+      initialRouteName={initialRoute}
       // initialRouteName="onBoard1"
       screenOptions={{
         headerShown: false,
@@ -43,13 +61,6 @@ export const AuthStack: React.FC = () => {
           gestureEnabled: false,
         }}
       />
-      {/* <Stack.Screen
-        name="onBoard2"
-        component={OnBoard2}
-        options={{
-          gestureEnabled: false,
-        }}
-      /> */}
       <Stack.Screen
         name="onBoarding"
         component={OnBoardingScreen}

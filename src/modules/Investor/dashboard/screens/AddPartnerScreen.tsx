@@ -63,7 +63,7 @@ export const AddPartnerScreen = () => {
       phone: editingPartner?.phone || "",
       status: editingPartner?.status || "active",
       description: editingPartner?.description || "",
-      notes: editingPartner?.notes || "",
+      // notes: editingPartner?.notes || "",
     },
   });
   useEffect(() => {
@@ -74,7 +74,7 @@ export const AddPartnerScreen = () => {
         phone: editingPartner.phone,
         status: editingPartner.status,
         description: editingPartner.description,
-        notes: editingPartner.notes,
+        // notes: editingPartner.notes,
       });
       setModalVisible(true); // ✅ open modal automatically
     }
@@ -221,7 +221,6 @@ export const AddPartnerScreen = () => {
                         value={field.value}
                         onChangeText={field.onChange}
                         error={errors.phone?.message as string | undefined}
-                        required
                       />
                     )}
                   />
@@ -293,7 +292,7 @@ export const AddPartnerScreen = () => {
                       />
                     )}
                   />
-                  <Controller
+                  {/* <Controller
                     control={control}
                     name="notes"
                     render={({ field }) => (
@@ -306,7 +305,7 @@ export const AddPartnerScreen = () => {
                         multiline
                       />
                     )}
-                  />
+                  /> */}
 
                   {/* --- Account Credentials Section --- */}
                   {!editingPartner && (

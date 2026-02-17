@@ -458,6 +458,7 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
                   onChangeText={field.onChange}
                   error={fieldState.error?.message}
                   multiline
+                  numberOfLines={3}
                 />
               )}
             />
@@ -511,7 +512,6 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
             />
           </>
         )}
-
         {/* Submit */}
         <Button
           title={mode === "edit" ? "Update Investment" : "Add Investment"}

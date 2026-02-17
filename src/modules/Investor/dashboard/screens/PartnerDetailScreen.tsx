@@ -82,6 +82,16 @@ export const PartnerDetailScreen = () => {
           <Text style={styles.detailLabel}>Name:</Text>
           <Text style={styles.detail}>{partner.company?.name}</Text>
         </View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginBottom: 4,
+          }}
+        >
+          <Text style={styles.detailLabel}>Phone:</Text>
+          <Text style={styles.detail}>{partner.company?.phone || "N/A"}</Text>
+        </View>
         {/* <Text style={styles.detail}>📂 {partner.company.type}</Text> */}
         <Text style={styles.sectionTitle}>Address:</Text>
         <View

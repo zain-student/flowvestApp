@@ -104,7 +104,7 @@ export const Input: React.FC<InputProps> = ({
 
         <TextInput
           key={isPassword ? (isPasswordVisible ? "visible" : "hidden") : "text"}
-          style={inputStyle}
+          style={[inputStyle, error && { borderColor: Colors.error }]}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           editable={!disabled}

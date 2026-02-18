@@ -304,7 +304,7 @@ export const PayoutsScreen: React.FC = () => {
           }
           ListFooterComponent={
             isLoadingMore ? (
-              <ActivityIndicator size="small" color={Colors.green} />
+              <ActivityIndicator size="small" color={Colors.primary} />
             ) : null
           }
           ListEmptyComponent={

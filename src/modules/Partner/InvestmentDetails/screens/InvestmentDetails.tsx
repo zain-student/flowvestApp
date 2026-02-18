@@ -22,14 +22,16 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 export const InvestmentDetails = () => {
   const dispatch = useAppDispatch();
   const { investments, summary, isLoading, error, meta, isLoadingMore } =
     useAppSelector((state) => state.userInvestments);
   const navigation =
-    useNavigation<NativeStackNavigationProp<PartnersInvestmentDetailStackParamList>>();
+    useNavigation<
+      NativeStackNavigationProp<PartnersInvestmentDetailStackParamList>
+    >();
   const { formatCurrency } = useCurrencyFormatter();
   const FILTERS = ["All", "Active", "Paused", "Completed"];
   const [filter, setFilter] = useState("All");
@@ -106,13 +108,11 @@ export const InvestmentDetails = () => {
               isActive ? styles.statusActive : styles.statusClosed,
             ]}
           >
-            <Text
-              style={styles.statusText}>
+            <Text style={styles.statusText}>
               {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
             </Text>
           </View>
         </View>
-
 
         {/* Amounts */}
         <View style={styles.amountRow}>
@@ -176,8 +176,16 @@ export const InvestmentDetails = () => {
           end={{ x: 2, y: 0 }}
           style={styles.balanceCardDark}
         >
-          <Image source={require('../../../../../assets/images/upperDiv.png')}
-            style={{ position: 'absolute', width: 100, height: 110, top: -30, right: -50 }} />
+          <Image
+            source={require("../../../../../assets/images/upperDiv.png")}
+            style={{
+              position: "absolute",
+              width: 100,
+              height: 110,
+              top: -30,
+              right: -50,
+            }}
+          />
           <Text style={styles.balanceLabelDark}>Total Investment</Text>
           <Text style={styles.balanceValueDark}>
             {formatCurrency(Number(summary?.total_invested ?? 0))}
@@ -190,7 +198,16 @@ export const InvestmentDetails = () => {
               </Text>
             </Text>
           </View>
-          <Image source={require('../../../../../assets/images/lowerDiv.png')} style={{ position: 'absolute', width: 200, height: 260, bottom: -190, left: -150, }} />
+          <Image
+            source={require("../../../../../assets/images/lowerDiv.png")}
+            style={{
+              position: "absolute",
+              width: 200,
+              height: 260,
+              bottom: -190,
+              left: -150,
+            }}
+          />
         </LinearGradient>
         <View style={styles.searchContainer}>
           <TextInput
@@ -218,38 +235,39 @@ export const InvestmentDetails = () => {
           showsVerticalScrollIndicator={false}
           ListFooterComponent={
             isLoadingMore ? (
-              <ActivityIndicator size="small" color={Colors.green} />
+              <ActivityIndicator size="small" color={Colors.primary} />
             ) : null
           }
           contentContainerStyle={{ paddingBottom: 80 }}
           ListHeaderComponent={
             <View style={styles.card}>
               <Text style={styles.title}>Joined Investments Overview</Text>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 4 }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  padding: 4,
+                }}
+              >
                 <View>
-                  <Text style={styles.label}>
-                    Total Investments:{" "}
-                  </Text>
+                  <Text style={styles.label}>Total Investments: </Text>
                   <Text style={styles.value}>{summary.total_investments}</Text>
                 </View>
                 <View>
-                  <Text style={styles.label}>
-                    Active Investments:{" "}
-                  </Text>
+                  <Text style={styles.label}>Active Investments: </Text>
                   <Text style={styles.value}>{summary.active_investments}</Text>
                 </View>
               </View>
-              <Text style={styles.label}>
-                Current Value:{" "}
-              </Text>
+              <Text style={styles.label}>Current Value: </Text>
               <Text style={styles.value}>
                 {formatCurrency(summary.current_value)}
               </Text>
               {/* </View> */}
               <Button
                 title="Shared Investments"
-                onPress={() => { navigation.navigate("SharedInvestments"); }
-                }
+                onPress={() => {
+                  navigation.navigate("SharedInvestments");
+                }}
                 style={styles.balanceActionBtnDark}
                 textStyle={styles.balanceActionTextDark}
                 variant="primary"
@@ -258,7 +276,10 @@ export const InvestmentDetails = () => {
           }
           ListEmptyComponent={
             <View style={styles.emptyState}>
-              <Image source={require('../../../../../assets/images/noRecentActivity.png')} style={{ width: 100, height: 100, alignSelf: 'center' }} />
+              <Image
+                source={require("../../../../../assets/images/noRecentActivity.png")}
+                style={{ width: 100, height: 100, alignSelf: "center" }}
+              />
               <Text style={styles.emptyText}>
                 No shared investments available.
               </Text>
@@ -302,7 +323,18 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginVertical: 2,
   },
-  mirror: { backgroundColor: Colors.mirror, width: '47%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 18, paddingVertical: 6, borderWidth: 0.3, borderColor: Colors.white, opacity: 0.7 },
+  mirror: {
+    backgroundColor: Colors.mirror,
+    width: "47%",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 18,
+    paddingVertical: 6,
+    borderWidth: 0.3,
+    borderColor: Colors.white,
+    opacity: 0.7,
+  },
   balanceChange: {
     color: Colors.yellow,
     fontSize: 12,
@@ -340,7 +372,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
     marginBottom: 6,
     borderWidth: 1,
-    borderColor: "#E6EDFF"
+    borderColor: "#E6EDFF",
   },
   title: {
     fontSize: 13,
@@ -348,7 +380,13 @@ const styles = StyleSheet.create({
     color: Colors.gray,
     marginBottom: 8,
   },
-  label: { fontSize: 12, fontWeight: '500', lineHeight: 18, color: Colors.gray, marginBottom: 4 },
+  label: {
+    fontSize: 12,
+    fontWeight: "500",
+    lineHeight: 18,
+    color: Colors.gray,
+    marginBottom: 4,
+  },
   value: { color: Colors.secondary, fontWeight: "600", fontSize: 14 },
   cardContainer: {
     marginHorizontal: 12,
@@ -413,7 +451,10 @@ const styles = StyleSheet.create({
   },
 
   amountLabel: {
-    fontSize: 12, fontWeight: '500', color: Colors.gray, marginTop: 10
+    fontSize: 12,
+    fontWeight: "500",
+    color: Colors.gray,
+    marginTop: 10,
   },
 
   amountValue: {

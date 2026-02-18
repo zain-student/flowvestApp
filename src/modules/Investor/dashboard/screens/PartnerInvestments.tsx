@@ -65,7 +65,7 @@ export const PartnerInvestments = ({ route }: any) => {
   if (isLoading) {
     return (
       <View style={styles.center}>
-        <ActivityIndicator size="large" color={Colors.secondary} />
+        <ActivityIndicator size="large" color={Colors.primary} />
       </View>
     );
   }

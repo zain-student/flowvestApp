@@ -19,7 +19,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 type Props = NativeStackScreenProps<InvestmentStackParamList, "MyInvestments">;
 export const MyInvestments = ({ navigation }: Props) => {
@@ -154,8 +154,8 @@ export const MyInvestments = ({ navigation }: Props) => {
   return (
     <View style={styles.container}>
       <StatusBar
-        barStyle="light-content" // or "dark-content"
-        backgroundColor="#000" // set to match your theme
+        barStyle="dark-content" // or "dark-content"
+        // backgroundColor="#000" // set to match your theme
       />
       <View style={styles.searchContainer}>
         <TextInput

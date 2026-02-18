@@ -10,7 +10,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  View
+  View,
 } from "react-native";
 
 type Props = NativeStackScreenProps<
@@ -18,20 +18,25 @@ type Props = NativeStackScreenProps<
   "JoinedInvestmentDetail"
 >;
 
-export const JoinedInvestmentDetail: React.FC<Props> = ({ route, navigation }) => {
+export const JoinedInvestmentDetail: React.FC<Props> = ({
+  route,
+  navigation,
+}) => {
   const { id } = route.params;
   const { formatCurrency } = useCurrencyFormatter();
-  const { investments, isLoading } = useAppSelector((state) => state.userInvestments);
+  const { investments, isLoading } = useAppSelector(
+    (state) => state.userInvestments,
+  );
 
   const currentInvestment = useMemo(
     () => investments.find((inv) => inv.id === id),
-    [investments, id]
+    [investments, id],
   );
 
   if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color={Colors.secondary} />
+        <ActivityIndicator size="large" color={Colors.primary} />
       </View>
     );
   }
@@ -55,17 +60,24 @@ export const JoinedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
         <View style={styles.investmentCard}>
           {/* <View> */}
           <Text style={styles.investmentAmount}>
-            {formatCurrency(Number(currentInvestment.current_total_invested ?? 0))}
+            {formatCurrency(
+              Number(currentInvestment.current_total_invested ?? 0),
+            )}
           </Text>
           <Text style={styles.subText}>Current Total Invested</Text>
           <View style={styles.badgeRow}>
             <View style={styles.statusBadge}>
-              <Text style={styles.statusText}>{currentInvestment.status.charAt(0).toUpperCase() +
-                currentInvestment.status.slice(1)}</Text>
+              <Text style={styles.statusText}>
+                {currentInvestment.status.charAt(0).toUpperCase() +
+                  currentInvestment.status.slice(1)}
+              </Text>
             </View>
             <View style={styles.sharedBadge}>
-              <Text style={styles.sharedText}> {currentInvestment.type.charAt(0).toUpperCase() +
-                currentInvestment.type.slice(1)}</Text>
+              <Text style={styles.sharedText}>
+                {" "}
+                {currentInvestment.type.charAt(0).toUpperCase() +
+                  currentInvestment.type.slice(1)}
+              </Text>
             </View>
           </View>
 
@@ -87,10 +99,14 @@ export const JoinedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
             )}
           </View>
           <Divider />
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
-            <Text style={styles.label}>
-              Joined Date
-            </Text>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginTop: 10,
+            }}
+          >
+            <Text style={styles.label}>Joined Date</Text>
             <Text style={styles.metaValue}>
               {formatDate(currentInvestment.joined_at)}
             </Text>
@@ -102,12 +118,16 @@ export const JoinedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
           <PerformanceCard
             icon="cash"
             label="Total Paid Out"
-            value={formatCurrency(currentInvestment.performance?.total_paid_out ?? 0)}
+            value={formatCurrency(
+              currentInvestment.performance?.total_paid_out ?? 0,
+            )}
           />
           <PerformanceCard
             icon="time-outline"
             label="Pending Payouts"
-            value={formatCurrency(currentInvestment.performance?.pending_payouts ?? 0)}
+            value={formatCurrency(
+              currentInvestment.performance?.pending_payouts ?? 0,
+            )}
             highlight
           />
           {currentInvestment.performance.next_payout_date && (
@@ -132,7 +152,9 @@ const PerformanceCard = ({ icon, label, subLabel, value, highlight }: any) => (
       <Text style={styles.performanceLabel}>{label}</Text>
       {/* <Text style={styles.performanceSub}>{subLabel}</Text> */}
     </View>
-    <Text style={[styles.performanceValue, highlight && { color: Colors.green }]}>
+    <Text
+      style={[styles.performanceValue, highlight && { color: Colors.green }]}
+    >
       {value}
     </Text>
   </View>
@@ -146,11 +168,16 @@ const MetaItem = ({ label, value, positive }: any) => (
     </Text>
   </View>
 );
-const capitalize = (s: string) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : "");
+const capitalize = (s: string) =>
+  s ? s.charAt(0).toUpperCase() + s.slice(1) : "";
 const formatDate = (d?: string | null) => {
   if (!d) return "N/A";
   const date = new Date(d);
-  return date.toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" });
+  return date.toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
 };
 
 /* --- Styles --- */
@@ -225,14 +252,17 @@ const styles = StyleSheet.create({
   metaRow: {
     flexDirection: "row",
     marginBottom: 10,
-    justifyContent: 'space-between'
+    justifyContent: "space-between",
   },
   dateRow: {
     flexDirection: "row",
-    justifyContent: 'space-between'
+    justifyContent: "space-between",
   },
   sectionTitle: {
-    fontSize: 16, fontWeight: "500", color: Colors.secondary, marginBottom: 5
+    fontSize: 16,
+    fontWeight: "500",
+    color: Colors.secondary,
+    marginBottom: 5,
   },
   performanceContainer: { marginBottom: 2 },
   performanceRow: {
@@ -245,7 +275,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: '#E6EDFF'
+    borderColor: "#E6EDFF",
   },
 
   iconWrapper: {

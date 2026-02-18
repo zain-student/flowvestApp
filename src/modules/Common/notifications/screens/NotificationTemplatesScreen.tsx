@@ -75,7 +75,7 @@ export const NotificationTemplatesScreen: React.FC<{ navigation: any }> = ({
       </View>
 
       {isLoading ? (
-        <ActivityIndicator size="large" color={Colors.green} />
+        <ActivityIndicator size="large" color={Colors.primary} />
       ) : error ? (
         <Text style={styles.error}>{error}</Text>
       ) : (

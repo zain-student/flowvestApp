@@ -202,7 +202,10 @@ export const NotificationsScreen = () => {
       )}
       ListFooterComponent={
         isPaginating ? (
-          <ActivityIndicator style={{ marginVertical: 16 }} />
+          <ActivityIndicator
+            color={Colors.primary}
+            style={{ marginVertical: 16 }}
+          />
         ) : null
       }
     />

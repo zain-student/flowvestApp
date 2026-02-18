@@ -12,7 +12,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  View
+  View,
 } from "react-native";
 
 type Props = NativeStackScreenProps<
@@ -20,30 +20,33 @@ type Props = NativeStackScreenProps<
   "SharedInvestmentDetail"
 >;
 
-export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) => {
+export const SharedInvestmentDetail: React.FC<Props> = ({
+  route,
+  navigation,
+}) => {
   const dispatch = useAppDispatch();
   const { id, showJoinForm } = route.params;
   const { list, isLoading } = useAppSelector(
-    (state) => state.userInvestments.sharedPrograms
+    (state) => state.userInvestments.sharedPrograms,
   );
   const { formatCurrency } = useCurrencyFormatter();
   const { isJoining, error: joinError } = useAppSelector(
-    (state) => state.userInvestments.join
+    (state) => state.userInvestments.join,
   );
-  const [amount, setAmount] = useState('');
-  const [notes, setNotes] = useState('');
-  const [formError, setFormError] = useState('');
+  const [amount, setAmount] = useState("");
+  const [notes, setNotes] = useState("");
+  const [formError, setFormError] = useState("");
   // const [isSubmitting, setIsSubmitting] = useState(false);
   // ✅ memoize for performance
   const currentInvestment = useMemo(
     () => list.find((inv) => inv.id === id),
-    [list, id]
+    [list, id],
   );
 
   if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color={Colors.secondary} />
+        <ActivityIndicator size="large" color={Colors.primary} />
       </View>
     );
   }
@@ -56,23 +59,23 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
     );
   }
   const handleJoinInvestment = async () => {
-    if (!amount) return setFormError('Amount is required');
+    if (!amount) return setFormError("Amount is required");
     if (isNaN(Number(amount)) || Number(amount) <= 0)
-      return setFormError('Enter a valid positive amount');
+      return setFormError("Enter a valid positive amount");
 
-    setFormError('');
+    setFormError("");
     try {
       await dispatch(
         joinInvestment({
           investmentId: currentInvestment!.id,
           amount: Number(amount),
           notes: notes.trim(),
-        })
+        }),
       ).unwrap();
       navigation.goBack();
     } catch (err) {
       // Error toast already handled inside thunk
-      console.log('Join failed', err);
+      console.log("Join failed", err);
     }
   };
 
@@ -84,28 +87,42 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
       >
         <Text style={styles.title}>{currentInvestment.name}</Text>
         <View style={styles.investmentCard}>
-          <Text style={styles.investmentName}>{currentInvestment.creator.name || "N/A"}</Text>
+          <Text style={styles.investmentName}>
+            {currentInvestment.creator.name || "N/A"}
+          </Text>
           <View style={styles.badgeRow}>
             <View style={styles.statusBadge}>
-              <Text style={styles.statusText}> {currentInvestment.status.charAt(0).toUpperCase() +
-                currentInvestment.status.slice(1)}</Text>
+              <Text style={styles.statusText}>
+                {" "}
+                {currentInvestment.status.charAt(0).toUpperCase() +
+                  currentInvestment.status.slice(1)}
+              </Text>
             </View>
             <View style={styles.sharedBadge}>
-              <Text style={styles.sharedText}> {currentInvestment.type.charAt(0).toUpperCase() +
-                currentInvestment.type.slice(1)}</Text>
+              <Text style={styles.sharedText}>
+                {" "}
+                {currentInvestment.type.charAt(0).toUpperCase() +
+                  currentInvestment.type.slice(1)}
+              </Text>
             </View>
           </View>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
             <View>
               <Text style={styles.subText}>Current Total Invested</Text>
               <Text style={styles.investmentAmount}>
-                {formatCurrency(Number(currentInvestment.current_total_invested ?? 0))}
+                {formatCurrency(
+                  Number(currentInvestment.current_total_invested ?? 0),
+                )}
               </Text>
             </View>
             <View>
               <Text style={styles.subText}>Target Amount</Text>
               <Text style={styles.investmentAmount}>
-                {formatCurrency(Number(currentInvestment.total_target_amount ?? "0"))}
+                {formatCurrency(
+                  Number(currentInvestment.total_target_amount ?? "0"),
+                )}
               </Text>
             </View>
           </View>
@@ -129,19 +146,23 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
             )}
           </View>
         </View>
-        {showJoinForm ? null :
+        {showJoinForm ? null : (
           <>
             <Text style={styles.sectionTitle}>Performance</Text>
             <View style={styles.performanceContainer}>
               <PerformanceCard
                 icon="cash"
                 label="Total Paid Out"
-                value={formatCurrency(currentInvestment.performance?.total_paid_out ?? 0)}
+                value={formatCurrency(
+                  currentInvestment.performance?.total_paid_out ?? 0,
+                )}
               />
               <PerformanceCard
                 icon="time-outline"
                 label="Pending Payouts"
-                value={formatCurrency(currentInvestment.performance?.pending_payouts ?? 0)}
+                value={formatCurrency(
+                  currentInvestment.performance?.pending_payouts ?? 0,
+                )}
                 highlight
               />
               {currentInvestment.performance.next_payout_date && (
@@ -152,24 +173,29 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
                 />
               )}
             </View>
-
-
-
-          </>}
-        {showJoinForm &&
-          <View style={{
-            marginBottom: 20, marginTop: 5, width: '100%', borderWidth: 1,
-            borderColor: Colors.lightGray, borderRadius: 8, padding: 10,
-            backgroundColor: Colors.white,
-            shadowColor: "#000",
-            shadowOffset: {
-              width: 0,
-              height: 2,
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            elevation: 5,
-          }} >
+          </>
+        )}
+        {showJoinForm && (
+          <View
+            style={{
+              marginBottom: 20,
+              marginTop: 5,
+              width: "100%",
+              borderWidth: 1,
+              borderColor: Colors.lightGray,
+              borderRadius: 8,
+              padding: 10,
+              backgroundColor: Colors.white,
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+              elevation: 5,
+            }}
+          >
             <Text style={styles.sectionTitle}>Join This Investment</Text>
 
             <Input
@@ -179,11 +205,11 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
               value={amount}
               onChangeText={(v) => {
                 setAmount(v);
-                if (formError) setFormError('');
+                if (formError) setFormError("");
               }}
               // error={errors.email}
               required
-            // autoFocus
+              // autoFocus
             />
             <Input
               label="Notes (optional)"
@@ -198,10 +224,14 @@ export const SharedInvestmentDetail: React.FC<Props> = ({ route, navigation }) =
               title="Join Investment"
               onPress={handleJoinInvestment}
               disabled={isJoining}
-              style={{ marginTop: 5, backgroundColor: Colors.primary, borderColor: Colors.lightGray }}
+              style={{
+                marginTop: 5,
+                backgroundColor: Colors.primary,
+                borderColor: Colors.lightGray,
+              }}
             />
           </View>
-        }
+        )}
       </ScrollView>
     </View>
   );
@@ -215,7 +245,9 @@ const PerformanceCard = ({ icon, label, subLabel, value, highlight }: any) => (
       <Text style={styles.performanceLabel}>{label}</Text>
       {/* <Text style={styles.performanceSub}>{subLabel}</Text> */}
     </View>
-    <Text style={[styles.performanceValue, highlight && { color: Colors.green }]}>
+    <Text
+      style={[styles.performanceValue, highlight && { color: Colors.green }]}
+    >
       {value}
     </Text>
   </View>
@@ -261,7 +293,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: Colors.secondary,
-    marginBottom: 10
+    marginBottom: 10,
   },
 
   subText: {
@@ -303,14 +335,19 @@ const styles = StyleSheet.create({
   metaRow: {
     flexDirection: "row",
     marginBottom: 10,
-    justifyContent: 'space-between'
+    justifyContent: "space-between",
   },
   dateRow: {
     flexDirection: "row",
-    justifyContent: 'space-between'
+    justifyContent: "space-between",
   },
 
-  sectionTitle: { fontSize: 16, fontWeight: "500", color: Colors.secondary, marginBottom: 5 },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: "500",
+    color: Colors.secondary,
+    marginBottom: 5,
+  },
   performanceContainer: { marginBottom: 2 },
   performanceRow: {
     backgroundColor: Colors.white,
@@ -322,7 +359,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: '#E6EDFF'
+    borderColor: "#E6EDFF",
   },
 
   iconWrapper: {
@@ -365,5 +402,4 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     fontSize: 13,
   },
-
 });

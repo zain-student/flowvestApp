@@ -3,9 +3,9 @@
  * Reusable button with different variants and states
  */
 
-import Colors from '@/shared/colors/Colors';
-import { LinearGradient } from 'expo-linear-gradient';
-import React from 'react';
+import Colors from "@/shared/colors/Colors";
+import { LinearGradient } from "expo-linear-gradient";
+import React from "react";
 import {
   ActivityIndicator,
   StyleSheet,
@@ -14,33 +14,33 @@ import {
   TouchableOpacity,
   View,
   ViewStyle,
-} from 'react-native';
+} from "react-native";
 interface ButtonProps {
   title: string;
   onPress: () => void;
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
-  size?: 'small' | 'medium' | 'large';
+  variant?: "primary" | "secondary" | "outline" | "ghost";
+  size?: "small" | "medium" | "large";
   disabled?: boolean;
   loading?: boolean;
   fullWidth?: boolean;
   style?: ViewStyle;
   textStyle?: TextStyle;
   icon?: React.ReactNode; // <-- New
-  iconPosition?: 'left' | 'right';
+  iconPosition?: "left" | "right";
 }
 
 export const Button: React.FC<ButtonProps> = ({
   title,
   onPress,
-  variant = 'primary',
-  size = 'medium',
+  variant = "primary",
+  size = "medium",
   disabled = false,
   loading = false,
   fullWidth = false,
   style,
   textStyle,
   icon,
-  iconPosition = 'left',
+  iconPosition = "left",
 }) => {
   const isDisabled = disabled || loading;
 
@@ -67,9 +67,9 @@ export const Button: React.FC<ButtonProps> = ({
       activeOpacity={0.85}
       style={[fullWidth && styles.fullWidth]}
     >
-      {variant === 'primary' ? (
+      {variant === "primary" ? (
         <LinearGradient
-          colors={['#012073', '#023CD9']} // 🔥 two-color shade
+          colors={["#012073", "#023CD9"]} // 🔥 two-color shade
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={buttonStyle}
@@ -78,11 +78,11 @@ export const Button: React.FC<ButtonProps> = ({
             <ActivityIndicator size="small" color="#FFFFFF" />
           ) : (
             <View style={styles.content}>
-              {icon && iconPosition === 'left' && (
+              {icon && iconPosition === "left" && (
                 <View style={styles.iconWrapper}>{icon}</View>
               )}
               <Text style={textStyles}>{title}</Text>
-              {icon && iconPosition === 'right' && (
+              {icon && iconPosition === "right" && (
                 <View style={styles.iconWrapper}>{icon}</View>
               )}
             </View>
@@ -91,17 +91,14 @@ export const Button: React.FC<ButtonProps> = ({
       ) : (
         <View style={buttonStyle}>
           {loading ? (
-            <ActivityIndicator
-              size="small"
-              color={Colors.primary}
-            />
+            <ActivityIndicator size="small" color={Colors.primary} />
           ) : (
             <View style={styles.content}>
-              {icon && iconPosition === 'left' && (
+              {icon && iconPosition === "left" && (
                 <View style={styles.iconWrapper}>{icon}</View>
               )}
               <Text style={textStyles}>{title}</Text>
-              {icon && iconPosition === 'right' && (
+              {icon && iconPosition === "right" && (
                 <View style={styles.iconWrapper}>{icon}</View>
               )}
             </View>
@@ -110,26 +107,25 @@ export const Button: React.FC<ButtonProps> = ({
       )}
     </TouchableOpacity>
   );
-
 };
 
 const styles = StyleSheet.create({
   // Base styles
   base: {
     borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     borderWidth: 1,
   },
   baseText: {
-    fontWeight: '600',
-    textAlign: 'center',
+    fontWeight: "600",
+    textAlign: "center",
   },
   primary: {
     borderRadius: 12,
-    overflow: 'hidden',
+    overflow: "hidden",
     marginBottom: 24,
-    shadowColor: '#1e2667',
+    shadowColor: "#1e2667",
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.4,
     shadowRadius: 12,
@@ -137,31 +133,31 @@ const styles = StyleSheet.create({
     borderWidth: 0, // 🔥 gradient doesn't need border
   },
   primaryText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
   },
 
   secondary: {
-    backgroundColor: '#F3F4F6',
-    borderColor: '#F3F4F6',
+    backgroundColor: "#F3F4F6",
+    borderColor: "#F3F4F6",
   },
   secondaryText: {
-    color: '#374151',
+    color: "#374151",
   },
 
   outline: {
-    backgroundColor: 'transparent',
-    borderColor: '#D1D5DB',
+    backgroundColor: "transparent",
+    borderColor: "#D1D5DB",
   },
   outlineText: {
-    color: '#374151',
+    color: "#374151",
   },
 
   ghost: {
-    backgroundColor: 'transparent',
-    borderColor: 'transparent',
+    backgroundColor: "transparent",
+    borderColor: "transparent",
   },
   ghostText: {
-    color: '#2563EB',
+    color: "#2563EB",
   },
 
   // Sizes
@@ -192,8 +188,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   content: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   iconWrapper: {
     marginHorizontal: 6,
@@ -207,8 +203,8 @@ const styles = StyleSheet.create({
   },
 
   fullWidth: {
-    width: '100%',
+    width: "100%",
     height: 52,
     borderRadius: 22,
   },
-}); 
+});

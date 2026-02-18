@@ -194,7 +194,7 @@ export const NotificationSettingsScreen: React.FC = () => {
         disabled={!isChanged || isSaving}
       >
         {isSaving ? (
-          <ActivityIndicator color="#fff" />
+          <ActivityIndicator color={Colors.primary} />
         ) : (
           <Text style={styles.saveText}>Save Changes</Text>
         )}

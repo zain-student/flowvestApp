@@ -283,7 +283,7 @@ export const PortfolioScreen: React.FC = () => {
           scrollEnabled={false}
           ListFooterComponent={
             isLoading ? (
-              <ActivityIndicator size="small" color={Colors.green} />
+              <ActivityIndicator size="small" color={Colors.primary} />
             ) : null
           }
           ListEmptyComponent={

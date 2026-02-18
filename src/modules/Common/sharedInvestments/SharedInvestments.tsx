@@ -246,7 +246,7 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
           pagination?.has_more_pages ? (
             <ActivityIndicator
               size="small"
-              color={Colors.secondary}
+              color={Colors.primary}
               style={{ marginVertical: 16 }}
             />
           ) : null

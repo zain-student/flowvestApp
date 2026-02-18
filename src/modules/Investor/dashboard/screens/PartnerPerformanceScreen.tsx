@@ -5,12 +5,12 @@ import { fetchPartnerPerformance } from "@/shared/store/slices/investor/dashboar
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import React, { useEffect } from "react";
 import {
-    ActivityIndicator,
-    Dimensions,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
+  ActivityIndicator,
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 
@@ -39,7 +39,7 @@ export const PartnerPerformanceScreen = ({ route }: any) => {
   if (isLoading) {
     return (
       <View style={styles.center}>
-        <ActivityIndicator size="large" color={Colors.secondary} />
+        <ActivityIndicator size="large" color={Colors.primary} />
       </View>
     );
   }

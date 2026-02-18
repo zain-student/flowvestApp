@@ -18,7 +18,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { DashboardLayout } from "../../../Common/components/DashboardLayout";
 const FILTERS = ["All", "Cancelled", "Scheduled", "Paid"];
@@ -98,27 +98,24 @@ export const PartnerPayoutScreen: React.FC = () => {
             <Feather name="dollar-sign" size={22} color={Colors.primary} />
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={styles.payoutAmount}>{formatCurrency(item.amount)}</Text>
+            <Text style={styles.payoutAmount}>
+              {formatCurrency(item.amount)}
+            </Text>
             <Text style={styles.payoutTitle}>{item.title}</Text>
-            <View style={{ flexDirection: "row", alignItems: "center" }} >
-              <Ionicons name="calendar-outline" size={13} color={Colors.secondary} />
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Ionicons
+                name="calendar-outline"
+                size={13}
+                color={Colors.secondary}
+              />
               <Text style={styles.payoutMeta}>Scheduled: {item.due_date}</Text>
             </View>
           </View>
         </View>
 
-
         {/* Right: Status */}
-        <View
-          style={
-            styles.statusBadge}
-        >
-          <Text
-            style={
-              styles.statusText}
-          >
-            {item.status}
-          </Text>
+        <View style={styles.statusBadge}>
+          <Text style={styles.statusText}>{item.status}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -134,7 +131,16 @@ export const PartnerPayoutScreen: React.FC = () => {
           end={{ x: 2, y: 0 }}
           style={styles.card}
         >
-          <Image source={require('../../../../../assets/images/upperDiv.png')} style={{ position: 'absolute', width: 100, height: 110, top: -30, right: -50 }} />
+          <Image
+            source={require("../../../../../assets/images/upperDiv.png")}
+            style={{
+              position: "absolute",
+              width: 100,
+              height: 110,
+              top: -30,
+              right: -50,
+            }}
+          />
           <Text style={styles.cardTitle}>Total Payouts Amount</Text>
           <Text style={styles.cardValue}>
             {formatCurrency(
@@ -145,12 +151,14 @@ export const PartnerPayoutScreen: React.FC = () => {
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
             <View style={styles.mirror}>
-              <Text style={{
-                color: Colors.white,
-                fontWeight: "400",
-                fontFamily: "Inter_400Regular",
-                fontSize: 12,
-              }}>
+              <Text
+                style={{
+                  color: Colors.white,
+                  fontWeight: "400",
+                  fontFamily: "Inter_400Regular",
+                  fontSize: 12,
+                }}
+              >
                 Paid Amount:{" "}
                 <Text style={styles.cardSubtitle}>
                   {formatCurrency(
@@ -160,12 +168,14 @@ export const PartnerPayoutScreen: React.FC = () => {
               </Text>
             </View>
             <View style={styles.mirror}>
-              <Text style={{
-                color: Colors.white,
-                fontWeight: "400",
-                fontFamily: "Inter_400Regular",
-                fontSize: 12,
-              }}>
+              <Text
+                style={{
+                  color: Colors.white,
+                  fontWeight: "400",
+                  fontFamily: "Inter_400Regular",
+                  fontSize: 12,
+                }}
+              >
                 Total Payouts:{" "}
                 <Text style={styles.cardSubtitle}>
                   {payoutStatistics?.total_payouts ?? 0}
@@ -173,7 +183,16 @@ export const PartnerPayoutScreen: React.FC = () => {
               </Text>
             </View>
           </View>
-          <Image source={require('../../../../../assets/images/lowerDiv.png')} style={{ position: 'absolute', width: 200, height: 260, bottom: -190, left: -150, }} />
+          <Image
+            source={require("../../../../../assets/images/lowerDiv.png")}
+            style={{
+              position: "absolute",
+              width: 200,
+              height: 260,
+              bottom: -190,
+              left: -150,
+            }}
+          />
           {/* <View style={styles.balanceActionsRow}></View> */}
         </LinearGradient>
         {/* <View style={styles.balanceActionsRow}></View> */}
@@ -207,13 +226,16 @@ export const PartnerPayoutScreen: React.FC = () => {
           onRefresh={handleRefresh}
           ListFooterComponent={
             isLoadingMore ? (
-              <ActivityIndicator size="small" color={Colors.green} />
+              <ActivityIndicator size="small" color={Colors.primary} />
             ) : null
           }
           contentContainerStyle={styles.scrollContent}
           ListEmptyComponent={
             <View style={styles.emptyState}>
-              <Image source={require('../../../../../assets/images/noInvestment.png')} style={{ width: 100, height: 100, }} />
+              <Image
+                source={require("../../../../../assets/images/noInvestment.png")}
+                style={{ width: 100, height: 100 }}
+              />
               <Text style={styles.emptyText}>No Payouts available.</Text>
             </View>
           }
@@ -254,7 +276,20 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginVertical: 2,
   },
-  mirror: { backgroundColor: Colors.mirror, width: '50%', justifyContent: 'center', alignItems: 'center', borderRadius: 18, paddingVertical: 4, paddingHorizontal: 6, borderWidth: 0.3, borderColor: Colors.white, opacity: 0.7, marginTop: 4, marginHorizontal: 2 },
+  mirror: {
+    backgroundColor: Colors.mirror,
+    width: "50%",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 18,
+    paddingVertical: 4,
+    paddingHorizontal: 6,
+    borderWidth: 0.3,
+    borderColor: Colors.white,
+    opacity: 0.7,
+    marginTop: 4,
+    marginHorizontal: 2,
+  },
   cardSubtitle: {
     color: Colors.white,
     fontSize: 14,
@@ -272,7 +307,7 @@ const styles = StyleSheet.create({
     padding: 4,
     justifyContent: "space-around",
     borderColor: "#E6EDFF",
-    borderWidth: 1
+    borderWidth: 1,
   },
   filterBtn: {
     paddingHorizontal: 16,
@@ -347,7 +382,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
-    backgroundColor: Colors.statusbg
+    backgroundColor: Colors.statusbg,
   },
 
   statusScheduled: { backgroundColor: "rgba(251,191,36,0.15)" }, // orange
@@ -357,15 +392,20 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 13,
     fontFamily: "Inter_600SemiBold",
-    color: Colors.statusText
+    color: Colors.statusText,
   },
-  emptyState: { justifyContent: "center", alignItems: "center", padding: 0, marginTop: 70 },
+  emptyState: {
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 0,
+    marginTop: 70,
+  },
   emptyText: {
     color: Colors.gray,
     fontSize: 18,
     fontFamily: "Inter_400Regular",
     textAlign: "center",
-    marginTop: 30
+    marginTop: 30,
     // paddingVertical: 16,
   },
 });

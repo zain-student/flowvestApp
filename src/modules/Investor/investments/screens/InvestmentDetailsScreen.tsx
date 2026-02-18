@@ -51,7 +51,7 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
   }, [id]);
 
   if (isLoading) {
-    return <ActivityIndicator size="large" color="#131314ff" />;
+    return <ActivityIndicator size="large" color={Colors.primary} />;
   }
   if (!currentInvestment) {
     return (

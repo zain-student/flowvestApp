@@ -17,7 +17,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { RecentPaymentsLog } from "../components/RecentPaymentsLog";
 
@@ -29,7 +29,9 @@ type Props = NativeStackNavigationProp<
 export const PartnersDashboard = () => {
   const navigation = useNavigation<Props>();
   const dispatch = useAppDispatch();
-  const { stats, loading, error } = useAppSelector((state) => state.partnerDashboard);
+  const { stats, loading, error } = useAppSelector(
+    (state) => state.partnerDashboard,
+  );
   const { formatCurrency } = useCurrencyFormatter();
 
   useEffect(() => {
@@ -39,8 +41,10 @@ export const PartnersDashboard = () => {
   if (loading) {
     return (
       <DashboardLayout>
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-          <ActivityIndicator size="large" color={Colors.secondary} />
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <ActivityIndicator size="large" color={Colors.primary} />
         </View>
       </DashboardLayout>
     );
@@ -62,7 +66,7 @@ export const PartnersDashboard = () => {
       icon: "dollar-sign",
       label: "Invested",
       value: stats?.total_invested ?? "--",
-      bg: "#fff",  // pastel yellow
+      bg: "#fff", // pastel yellow
     },
     {
       icon: "percent",
@@ -75,8 +79,8 @@ export const PartnersDashboard = () => {
     },
   ];
   const pullToRefresh = () => {
-    dispatch(fetchPartnerDashboard())
-  }
+    dispatch(fetchPartnerDashboard());
+  };
   return (
     <DashboardLayout>
       <View style={styles.container}>
@@ -86,17 +90,39 @@ export const PartnersDashboard = () => {
           end={{ x: 2, y: 0 }}
           style={styles.balanceCardDark}
         >
-          <Image source={require('../../../../../assets/images/upperDiv.png')}
-            style={{ position: 'absolute', width: 100, height: 110, top: -30, right: -50 }} />
+          <Image
+            source={require("../../../../../assets/images/upperDiv.png")}
+            style={{
+              position: "absolute",
+              width: 100,
+              height: 110,
+              top: -30,
+              right: -50,
+            }}
+          />
           {/* 💰 Portfolio Summary Card */}
           {/* <View style={styles.balanceCardDark}> */}
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
             <Text style={styles.balanceLabelDark}>Portfolio Value</Text>
             {/* Total Earned */}
-            <View style={{ alignSelf: 'flex-end', backgroundColor: '#0AFF5C47', borderRadius: 8, height: 29, width: 71, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+            <View
+              style={{
+                alignSelf: "flex-end",
+                backgroundColor: "#0AFF5C47",
+                borderRadius: 8,
+                height: 29,
+                width: 71,
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "row",
+              }}
+            >
               <Ionicons name="add" size={16} color={Colors.green} />
               <Text style={styles.increment}>
-                {formatCurrency(stats?.total_earned ?? 0)}{" "}</Text>
+                {formatCurrency(stats?.total_earned ?? 0)}{" "}
+              </Text>
             </View>
           </View>
           <Text style={styles.balanceValueDark}>
@@ -106,10 +132,13 @@ export const PartnersDashboard = () => {
           <View style={styles.balanceActionsRow}>
             <TouchableOpacity
               style={styles.mirror}
-              onPress={() =>
-                navigation.navigate("RecentPayouts")}
+              onPress={() => navigation.navigate("RecentPayouts")}
             >
-              <Feather name="arrow-down-right" size={14} color={Colors.yellow} />
+              <Feather
+                name="arrow-down-right"
+                size={14}
+                color={Colors.yellow}
+              />
               <Text style={styles.balanceActionTextDark}>Recent Payouts</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -117,16 +146,23 @@ export const PartnersDashboard = () => {
                 styles.mirror,
                 // { backgroundColor: Colors.gray },
               ]}
-              onPress={() =>
-                navigation.navigate("UpcomingPayouts")
-              }
+              onPress={() => navigation.navigate("UpcomingPayouts")}
             >
               <Feather name="calendar" size={14} color={Colors.yellow} />
               <Text style={styles.balanceActionTextDark}>Upcoming Payouts</Text>
             </TouchableOpacity>
           </View>
           {/* </View> */}
-          <Image source={require('../../../../../assets/images/lowerDiv.png')} style={{ position: 'absolute', width: 200, height: 260, bottom: -190, left: -150, }} />
+          <Image
+            source={require("../../../../../assets/images/lowerDiv.png")}
+            style={{
+              position: "absolute",
+              width: 200,
+              height: 260,
+              bottom: -190,
+              left: -150,
+            }}
+          />
           {/* <View style={styles.balanceActionsRow}></View> */}
         </LinearGradient>
 
@@ -156,7 +192,6 @@ export const PartnersDashboard = () => {
                   },
                 ]}
               >
-
                 {/* <View style={styles.iconContainer}>
                   
                 </View> */}
@@ -165,9 +200,17 @@ export const PartnersDashboard = () => {
                     name={card.icon as any}
                     size={22}
                     color={Colors.primary}
-                    style={{ backgroundColor: Colors.lightGray, width: 44, height: 44, borderRadius: 22, justifyContent: 'center', alignItems: 'center', padding: 10 }}
+                    style={{
+                      backgroundColor: Colors.lightGray,
+                      width: 44,
+                      height: 44,
+                      borderRadius: 22,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      padding: 10,
+                    }}
                   />
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <Text style={styles.statLabel}>{card.label}:</Text>
                     <Text style={styles.statValue}>{card.value}</Text>
                   </View>
@@ -175,7 +218,6 @@ export const PartnersDashboard = () => {
               </View>
             ))}
           </View>
-
 
           <RecentPaymentsLog />
         </ScrollView>
@@ -231,7 +273,20 @@ const styles = StyleSheet.create({
   balanceActionsRow: {
     flexDirection: "row",
   },
-  mirror: { backgroundColor: Colors.mirror, width: '47%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 18, paddingVertical: 6, paddingHorizontal: 6, borderWidth: 0.3, borderColor: Colors.white, opacity: 0.7, marginHorizontal: 6 },
+  mirror: {
+    backgroundColor: Colors.mirror,
+    width: "47%",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 18,
+    paddingVertical: 6,
+    paddingHorizontal: 6,
+    borderWidth: 0.3,
+    borderColor: Colors.white,
+    opacity: 0.7,
+    marginHorizontal: 6,
+  },
   balanceActionTextDark: {
     color: Colors.yellow,
     fontSize: 12,
@@ -277,4 +332,3 @@ const styles = StyleSheet.create({
 });
 
 export default PartnersDashboard;
-

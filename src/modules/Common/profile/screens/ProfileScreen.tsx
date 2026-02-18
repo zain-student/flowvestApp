@@ -207,7 +207,7 @@ export const ProfileScreen: React.FC = () => {
             >
               {showLoader ? (
                 <View style={styles.avatarPlaceholder}>
-                  <ActivityIndicator size="small" color={Colors.green} />
+                  <ActivityIndicator size="small" color={Colors.primary} />
                 </View>
               ) : user?.avatar ? (
                 <Image

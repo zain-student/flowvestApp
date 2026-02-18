@@ -95,7 +95,7 @@ export default function AddInvestmentPartner() {
   if (isLoading) {
     return (
       <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color={Colors.green} />
+        <ActivityIndicator size="large" color={Colors.primary} />
       </View>
     );
   }
@@ -120,7 +120,13 @@ export default function AddInvestmentPartner() {
         ListHeaderComponent={
           <View style={styles.card}>
             <Text style={styles.cardTitle}>Investment Details</Text>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 4 }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                padding: 4,
+              }}
+            >
               <View>
                 <Text style={styles.label}>Name: </Text>
                 <Text style={styles.value}>{investment.name}</Text>
@@ -129,22 +135,32 @@ export default function AddInvestmentPartner() {
                 <Text style={styles.label}>Status: </Text>
                 <Text style={styles.value}>{investment.status}</Text>
               </View>
-
             </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 4 }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                padding: 4,
+              }}
+            >
               <View>
-                <Text style={styles.label}>Expected Return:{" "}</Text>
-                <Text style={styles.value}> {parseFloat(investment.expected_return_rate).toFixed(1)}%</Text>
+                <Text style={styles.label}>Expected Return: </Text>
+                <Text style={styles.value}>
+                  {" "}
+                  {parseFloat(investment.expected_return_rate).toFixed(1)}%
+                </Text>
               </View>
               <View>
-                <Text style={styles.label}>Total:{" "}</Text>
-                <Text style={styles.value}>{formatCurrency(
-                  Number(
-                    investment.type === "solo"
-                      ? investment.initial_amount
-                      : investment.current_total_invested,
-                  ),
-                )}</Text>
+                <Text style={styles.label}>Total: </Text>
+                <Text style={styles.value}>
+                  {formatCurrency(
+                    Number(
+                      investment.type === "solo"
+                        ? investment.initial_amount
+                        : investment.current_total_invested,
+                    ),
+                  )}
+                </Text>
               </View>
             </View>
           </View>
@@ -224,7 +240,7 @@ const styles = StyleSheet.create({
   },
   loaderContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
   list: {
-    paddingBottom: 75
+    paddingBottom: 75,
   },
   card: {
     // marginHorizontal: 12,
@@ -241,7 +257,13 @@ const styles = StyleSheet.create({
     color: Colors.gray,
     marginBottom: 8,
   },
-  label: { fontSize: 12, fontWeight: '500', lineHeight: 18, color: Colors.gray, marginBottom: 4 },
+  label: {
+    fontSize: 12,
+    fontWeight: "500",
+    lineHeight: 18,
+    color: Colors.gray,
+    marginBottom: 4,
+  },
   value: { color: Colors.secondary, fontWeight: "600", fontSize: 14 },
   detail: {
     color: Colors.secondary,
@@ -271,7 +293,7 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_400Regular",
     flexDirection: "row",
     alignItems: "center",
-    marginLeft: 4
+    marginLeft: 4,
   },
   emptyState: { justifyContent: "center", alignItems: "center", padding: 20 },
   emptyText: { fontSize: 16, color: "#6B7280" },
@@ -312,5 +334,4 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginLeft: 6,
   },
-
 });

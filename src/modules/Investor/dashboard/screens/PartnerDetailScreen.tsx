@@ -37,12 +37,19 @@ export const PartnerDetailScreen = () => {
     dispatch(fetchPartnerDetail(id));
   }, [dispatch, id]);
   if (isLoading) {
-    return <ActivityIndicator size="large" color={Colors.primary} />;
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: Colors.background,
+        }}
+      >
+        <ActivityIndicator size="large" color={Colors.primary} />
+      </View>
+    );
   }
-
-  // if (error) {
-  //   return <Text style={{ padding: 20, color: "red" }}>{error}</Text>;
-  // }
 
   if (!selectedPartner) {
     return <Text style={{ padding: 20 }}>No partner data available.</Text>;

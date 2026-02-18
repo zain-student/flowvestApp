@@ -165,7 +165,11 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
                   Currency *
                 </Text> */}
 
-                <Text>
+                <Text
+                  style={{
+                    color: selectedCurrency ? Colors.secondary : Colors.gray,
+                  }}
+                >
                   {selectedCurrency
                     ? `${selectedCurrency.icon} ${selectedCurrency.code}`
                     : "Select Currency"}
@@ -214,6 +218,7 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
                         fontSize: 18,
                         fontWeight: "600",
                         marginBottom: 15,
+                        color: Colors.gray,
                       }}
                     >
                       Select Currency
@@ -289,7 +294,13 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
 
             return (
               <View style={{ marginBottom: 16, zIndex: 3000 }}>
-                <Text style={{ marginBottom: 4, fontWeight: "500" }}>
+                <Text
+                  style={{
+                    marginBottom: 4,
+                    fontWeight: "500",
+                    color: Colors.gray,
+                  }}
+                >
                   Return Type *
                 </Text>
                 <DropDownPicker
@@ -300,6 +311,7 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
                   setValue={(callback) => field.onChange(callback(field.value))}
                   setItems={setItems}
                   placeholder="Select Return Type"
+                  placeholderStyle={{ color: Colors.gray }}
                   listMode="SCROLLVIEW"
                   dropDownDirection="BOTTOM"
                   style={{
@@ -334,7 +346,13 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
 
             return (
               <View style={{ marginBottom: 16, zIndex: 2000 }}>
-                <Text style={{ marginBottom: 4, fontWeight: "500" }}>
+                <Text
+                  style={{
+                    marginBottom: 4,
+                    fontWeight: "500",
+                    color: Colors.gray,
+                  }}
+                >
                   Frequency *
                 </Text>
                 <DropDownPicker
@@ -345,6 +363,7 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
                   setValue={(callback) => field.onChange(callback(field.value))}
                   setItems={setItems}
                   placeholder="Select Frequency"
+                  placeholderStyle={{ color: Colors.gray }}
                   listMode="SCROLLVIEW"
                   dropDownDirection="BOTTOM"
                   style={{
@@ -382,7 +401,13 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
 
             return (
               <View style={{ marginBottom: 16, zIndex: 1500 }}>
-                <Text style={{ marginBottom: 4, fontWeight: "500" }}>
+                <Text
+                  style={{
+                    marginBottom: 4,
+                    fontWeight: "500",
+                    color: Colors.gray,
+                  }}
+                >
                   Status *
                 </Text>
                 <DropDownPicker
@@ -393,6 +418,7 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
                   setValue={(callback) => field.onChange(callback(field.value))}
                   setItems={setItems}
                   placeholder="Select Status"
+                  placeholderStyle={{ color: Colors.gray }}
                   listMode="SCROLLVIEW"
                   dropDownDirection="BOTTOM"
                   style={{
@@ -545,7 +571,7 @@ const styles = StyleSheet.create({
   subTitle: {
     fontSize: 14,
     fontWeight: "500",
-    color: "#374151",
+    color: Colors.gray,
     marginBottom: 6,
   },
   typeBtn: {

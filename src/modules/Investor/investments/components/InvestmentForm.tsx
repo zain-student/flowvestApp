@@ -180,7 +180,7 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
                 <Input
                   label="Initial Amount"
                   keyboardType="numeric"
-                  placeholder="e.g 1000"
+                  placeholder="0.00"
                   placeholderTextColor={Colors.gray}
                   value={String(field.value || "")}
                   onChangeText={(v) => field.onChange(parseFloat(v) || "")}
@@ -305,7 +305,7 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
               label="Expected Return Rate (%)"
               keyboardType="numeric"
               value={String(field.value || "")}
-              placeholder="e.g: 5%"
+              placeholder="0.00"
               placeholderTextColor={Colors.gray}
               onChangeText={(v) => field.onChange(parseFloat(v) || "")}
               error={fieldState.error?.message}
@@ -323,7 +323,7 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
                 <Input
                   label="Total Target Amount"
                   keyboardType="numeric"
-                  placeholder="e.g: 10000"
+                  placeholder="0.00"
                   placeholderTextColor={Colors.gray}
                   value={String(field.value || "")}
                   onChangeText={(v) => field.onChange(parseFloat(v) || "")}
@@ -340,7 +340,7 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
                   label="Minimum Investment Amount"
                   keyboardType="numeric"
                   value={String(field.value || "")}
-                  placeholder="e.g: 500"
+                  placeholder="0.00"
                   placeholderTextColor={Colors.gray}
                   onChangeText={(v) => field.onChange(parseFloat(v) || "")}
                   error={fieldState.error?.message}
@@ -355,7 +355,7 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
                 <Input
                   label="Maximum Investment Amount"
                   keyboardType="numeric"
-                  placeholder="e.g: 5000"
+                  placeholder="0.00"
                   placeholderTextColor={Colors.gray}
                   value={String(field.value || "")}
                   onChangeText={(v) => field.onChange(parseFloat(v) || "")}

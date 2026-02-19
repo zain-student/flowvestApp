@@ -160,6 +160,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
+    paddingHorizontal: 2,
     borderWidth: 1,
     borderColor: "#D1D5DB",
     borderRadius: 8,
@@ -168,13 +169,7 @@ const styles = StyleSheet.create({
   },
 
   inputContainerFocused: {
-    // borderColor: '#2563EB',
     borderColor: "#18181B",
-    // shadowColor: '#2563EB',
-    // shadowOffset: { width: 0, height: 0 },
-    // shadowOpacity: 0.1,
-    // shadowRadius: 4,
-    // elevation: 2,
   },
 
   inputContainerError: {

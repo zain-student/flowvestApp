@@ -157,8 +157,13 @@ export const addInvestments = createAsyncThunk(
         newInvestment,
       );
       console.log("📦 Investment Created:", response.data);
+      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       return response.data.data;
     } catch (error: any) {
+      ToastAndroid.show(
+        error.message || "Failed to create investment",
+        ToastAndroid.SHORT,
+      );
       return rejectWithValue(error || "Create failed");
     }
   },

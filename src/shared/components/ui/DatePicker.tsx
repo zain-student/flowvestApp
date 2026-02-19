@@ -3,12 +3,12 @@ import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useState } from "react";
 import {
-    Alert,
-    Platform,
-    Pressable,
-    StyleSheet,
-    Text,
-    View,
+  Alert,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
 
 interface DatePickerProps {
@@ -61,23 +61,28 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   return (
     <View style={styles.container}>
       {/* Start Date */}
-      <Text style={styles.label}>Start Date</Text>
-      <Pressable style={styles.dateBtn} onPress={() => setShowPicker("start")}>
-        <Ionicons name="calendar" size={22} color="#555" />
-        <Text style={[styles.dateText, !startDate && styles.placeholder]}>
-          {startDate || "Select Start Date"}
-        </Text>
-      </Pressable>
-
+      <View>
+        <Text style={styles.label}>Start Date *</Text>
+        <Pressable
+          style={styles.dateBtn}
+          onPress={() => setShowPicker("start")}
+        >
+          <Ionicons name="calendar" size={22} color={Colors.gray} />
+          <Text style={[styles.dateText, !startDate && styles.placeholder]}>
+            {startDate || "Select Start Date"}
+          </Text>
+        </Pressable>
+      </View>
       {/* End Date */}
-      <Text style={styles.label}>End Date</Text>
-      <Pressable style={styles.dateBtn} onPress={() => setShowPicker("end")}>
-        <Ionicons name="calendar" size={22} color="#555" />
-        <Text style={[styles.dateText, !endDate && styles.placeholder]}>
-          {endDate || "Select End Date"}
-        </Text>
-      </Pressable>
-
+      <View>
+        <Text style={styles.label}>End Date *</Text>
+        <Pressable style={styles.dateBtn} onPress={() => setShowPicker("end")}>
+          <Ionicons name="calendar" size={22} color={Colors.gray} />
+          <Text style={[styles.dateText, !endDate && styles.placeholder]}>
+            {endDate || "Select End Date"}
+          </Text>
+        </Pressable>
+      </View>
       {showPicker && (
         <DateTimePicker
           value={
@@ -95,29 +100,34 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 const styles = StyleSheet.create({
   container: {
     gap: 10,
-    marginBottom: 16,
+    marginBottom: 10,
   },
   label: {
-    fontSize: 14,
+    // fontSize: 14,
+    // fontWeight: "500",
+    // color: Colors.gray,
+
+    marginBottom: 4,
     fontWeight: "500",
     color: Colors.gray,
   },
   dateBtn: {
     flexDirection: "row",
     paddingHorizontal: 12,
+    paddingVertical: 12,
     alignItems: "center",
     borderWidth: 1,
     borderColor: "#D1D5DB",
     borderRadius: 8,
     backgroundColor: "#FFFFFF",
-    minHeight: 44,
+    // minHeight: 44,
   },
   dateText: {
     marginLeft: 6,
     fontSize: 16,
-    color: "#333",
+    color: Colors.secondary,
   },
   placeholder: {
-    color: "#9CA3AF", // gray for placeholder
+    color: Colors.gray, // gray for placeholder
   },
 });

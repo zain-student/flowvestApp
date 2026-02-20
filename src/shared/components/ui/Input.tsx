@@ -1,8 +1,3 @@
-/**
- * Input Component
- * Reusable text input with validation states and different types
- */
-
 import Colors from "@/shared/colors/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
@@ -174,6 +169,7 @@ const styles = StyleSheet.create({
 
   inputContainerError: {
     borderColor: "#EF4444",
+    paddingHorizontal: 10,
   },
 
   inputContainerDisabled: {

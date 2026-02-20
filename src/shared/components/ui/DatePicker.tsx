@@ -57,32 +57,38 @@ export const DatePicker: React.FC<DatePickerProps> = ({
       onChange(startDate, formatDate(selectedDate));
     }
   };
-
   return (
     <View style={styles.container}>
-      {/* Start Date */}
-      <View>
-        <Text style={styles.label}>Start Date *</Text>
-        <Pressable
-          style={styles.dateBtn}
-          onPress={() => setShowPicker("start")}
-        >
-          <Ionicons name="calendar" size={22} color={Colors.gray} />
-          <Text style={[styles.dateText, !startDate && styles.placeholder]}>
-            {startDate || "Select Start Date"}
-          </Text>
-        </Pressable>
+      <View style={styles.row}>
+        {/* Start Date */}
+        <View style={styles.dateWrapper}>
+          <Text style={styles.label}>Start Date *</Text>
+          <Pressable
+            style={styles.dateBtn}
+            onPress={() => setShowPicker("start")}
+          >
+            <Ionicons name="calendar" size={20} color={Colors.gray} />
+            <Text style={[styles.dateText, !startDate && styles.placeholder]}>
+              {startDate || "Start Date"}
+            </Text>
+          </Pressable>
+        </View>
+
+        {/* End Date */}
+        <View style={styles.dateWrapper}>
+          <Text style={styles.label}>End Date (Optional) </Text>
+          <Pressable
+            style={styles.dateBtn}
+            onPress={() => setShowPicker("end")}
+          >
+            <Ionicons name="calendar" size={20} color={Colors.gray} />
+            <Text style={[styles.dateText, !endDate && styles.placeholder]}>
+              {endDate || "End Date"}
+            </Text>
+          </Pressable>
+        </View>
       </View>
-      {/* End Date */}
-      <View>
-        <Text style={styles.label}>End Date *</Text>
-        <Pressable style={styles.dateBtn} onPress={() => setShowPicker("end")}>
-          <Ionicons name="calendar" size={22} color={Colors.gray} />
-          <Text style={[styles.dateText, !endDate && styles.placeholder]}>
-            {endDate || "Select End Date"}
-          </Text>
-        </Pressable>
-      </View>
+
       {showPicker && (
         <DateTimePicker
           value={
@@ -99,14 +105,16 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    gap: 10,
     marginBottom: 10,
   },
+  row: {
+    flexDirection: "row",
+    gap: 10, // if gap not supported in your RN version, use marginRight
+  },
+  dateWrapper: {
+    flex: 1,
+  },
   label: {
-    // fontSize: 14,
-    // fontWeight: "500",
-    // color: Colors.gray,
-
     marginBottom: 4,
     fontWeight: "500",
     color: Colors.gray,
@@ -120,14 +128,13 @@ const styles = StyleSheet.create({
     borderColor: "#D1D5DB",
     borderRadius: 8,
     backgroundColor: "#FFFFFF",
-    // minHeight: 44,
   },
   dateText: {
     marginLeft: 6,
-    fontSize: 16,
+    fontSize: 14, // slightly smaller to fit nicely
     color: Colors.secondary,
   },
   placeholder: {
-    color: Colors.gray, // gray for placeholder
+    color: Colors.gray,
   },
 });

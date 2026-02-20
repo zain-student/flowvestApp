@@ -254,7 +254,9 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
             </View>
             <View>
               <Text style={styles.label}>End Date</Text>
-              <Text style={styles.value}>{currentInvestment.end_date}</Text>
+              <Text style={styles.value}>
+                {currentInvestment.end_date ?? "N/A"}
+              </Text>
             </View>
           </View>
           {/* <Divider /> */}

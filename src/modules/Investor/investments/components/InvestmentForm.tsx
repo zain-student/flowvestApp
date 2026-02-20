@@ -44,6 +44,23 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
   const [investmentType, setInvestmentType] = useState<"solo" | "shared">(
     defaultValues?.type ?? "solo",
   );
+  const [frequencyOpen, setFrequencyOpen] = useState(false);
+  const [statusOpen, setStatusOpen] = useState(false);
+
+  const frequencyItems = [
+    { label: "Monthly", value: "monthly" },
+    { label: "Quarterly", value: "quarterly" },
+    { label: "Annual", value: "annual" },
+    { label: "Manual", value: "manual" },
+  ];
+
+  const statusItems = [
+    { label: "Draft", value: "draft" },
+    { label: "Active", value: "active" },
+    { label: "Pause", value: "paused" },
+    { label: "Complete", value: "completed" },
+  ];
+
   const { control, handleSubmit, reset, setValue, watch } = useForm({
     resolver: zodResolver(
       isShared ? sharedInvestmentSchema : soloInvestmentSchema,
@@ -85,9 +102,13 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
         showsVerticalScrollIndicator={false}
       >
         <Text style={styles.title}>
-          {mode === "edit" ? "Edit Investment" : "Add Investment"}
+          {mode === "edit" ? "Edit Investment" : "New Investment"}
         </Text>
-
+        <Text style={styles.subText}>
+          {mode === "edit"
+            ? "Update the investment information and terms."
+            : "Set up the details for this new investment opportunity."}
+        </Text>
         {/* Name */}
         <Controller
           control={control}
@@ -146,30 +167,6 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
             <Text>Shared</Text>
           </TouchableOpacity>
         </View>
-
-        {/* Dates */}
-        <Controller
-          control={control}
-          name="start_date"
-          defaultValue={new Date().toISOString().split("T")[0]}
-          render={({ field: startField }) => (
-            <Controller
-              control={control}
-              name="end_date"
-              defaultValue={new Date().toISOString().split("T")[0]}
-              render={({ field: endField }) => (
-                <DatePicker
-                  startDate={startField.value}
-                  endDate={endField.value}
-                  onChange={(start, end) => {
-                    startField.onChange(start);
-                    endField.onChange(end);
-                  }}
-                />
-              )}
-            />
-          )}
-        />
 
         {!isShared && (
           <>
@@ -294,22 +291,27 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
             </>
           )}
         />
-
-        {/* Expected Return Rate */}
         <View style={{ height: 16 }} />
+        {/* Dates */}
         <Controller
           control={control}
-          name="expected_return_rate"
-          render={({ field, fieldState }) => (
-            <Input
-              label="Expected Return Rate (%)"
-              keyboardType="numeric"
-              value={String(field.value || "")}
-              placeholder="0.00"
-              placeholderTextColor={Colors.gray}
-              onChangeText={(v) => field.onChange(parseFloat(v) || "")}
-              error={fieldState.error?.message}
-              required
+          name="start_date"
+          defaultValue={new Date().toISOString().split("T")[0]}
+          render={({ field: startField }) => (
+            <Controller
+              control={control}
+              name="end_date"
+              defaultValue={new Date().toISOString().split("T")[0]}
+              render={({ field: endField }) => (
+                <DatePicker
+                  startDate={startField.value}
+                  endDate={endField.value}
+                  onChange={(start, end) => {
+                    startField.onChange(start);
+                    endField.onChange(end);
+                  }}
+                />
+              )}
             />
           )}
         />
@@ -366,6 +368,109 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
             />
           </>
         )}
+
+        <View style={{ height: 6 }} />
+        {/* Expected Return Rate */}
+
+        <Controller
+          control={control}
+          name="expected_return_rate"
+          render={({ field, fieldState }) => (
+            <Input
+              label="Expected Return Rate (%)"
+              keyboardType="numeric"
+              value={String(field.value || "")}
+              placeholder="0.00"
+              placeholderTextColor={Colors.gray}
+              onChangeText={(v) => field.onChange(parseFloat(v) || "")}
+              error={fieldState.error?.message}
+              required
+            />
+          )}
+        />
+
+        {/* Frequency & Status Row */}
+        <View style={styles.rowContainer}>
+          {/* Frequency */}
+          <View style={styles.halfWidth}>
+            <Controller
+              control={control}
+              name="frequency"
+              render={({ field, fieldState }) => (
+                <>
+                  <Text style={styles.labelText}>Frequency *</Text>
+
+                  <DropDownPicker
+                    open={frequencyOpen}
+                    value={field.value}
+                    items={frequencyItems}
+                    setOpen={(open) => {
+                      setStatusOpen(false); // close other
+                      setFrequencyOpen(open);
+                    }}
+                    setValue={(callback) =>
+                      field.onChange(callback(field.value))
+                    }
+                    placeholder="Select"
+                    listMode="SCROLLVIEW"
+                    dropDownDirection="TOP"
+                    style={[
+                      styles.textInput,
+                      fieldState.error && { borderColor: Colors.error },
+                    ]}
+                    dropDownContainerStyle={{
+                      borderColor: "#ccc",
+                    }}
+                  />
+
+                  {fieldState.error?.message && (
+                    <Text style={styles.error}>{fieldState.error.message}</Text>
+                  )}
+                </>
+              )}
+            />
+          </View>
+
+          {/* Status */}
+          <View style={styles.halfWidth}>
+            <Controller
+              control={control}
+              name="status"
+              render={({ field, fieldState }) => (
+                <>
+                  <Text style={styles.labelText}>Status *</Text>
+
+                  <DropDownPicker
+                    open={statusOpen}
+                    value={field.value}
+                    items={statusItems}
+                    setOpen={(open) => {
+                      setFrequencyOpen(false); // close other
+                      setStatusOpen(open);
+                    }}
+                    setValue={(callback) =>
+                      field.onChange(callback(field.value))
+                    }
+                    placeholder="Select"
+                    listMode="SCROLLVIEW"
+                    dropDownDirection="TOP"
+                    style={[
+                      styles.textInput,
+                      fieldState.error && { borderColor: Colors.error },
+                    ]}
+                    dropDownContainerStyle={{
+                      borderColor: "#ccc",
+                    }}
+                  />
+
+                  {fieldState.error?.message && (
+                    <Text style={styles.error}>{fieldState.error.message}</Text>
+                  )}
+                </>
+              )}
+            />
+          </View>
+        </View>
         {/* Return Type */}
         <Controller
           control={control}
@@ -391,100 +496,13 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
                   placeholder="Select Return Type"
                   placeholderStyle={{ color: Colors.gray, fontSize: 16 }}
                   listMode="SCROLLVIEW"
-                  dropDownDirection="BOTTOM"
+                  dropDownDirection="TOP"
                   style={[
                     styles.textInput,
                     fieldState.error && { borderColor: Colors.error },
                   ]}
                   dropDownContainerStyle={{
                     borderColor: "#ccc",
-                  }}
-                />
-                {fieldState.error?.message && (
-                  <Text style={styles.error}>{fieldState.error.message}</Text>
-                )}
-              </View>
-            );
-          }}
-        />
-        {/* Frequency */}
-        <Controller
-          control={control}
-          name="frequency"
-          render={({ field, fieldState }) => {
-            const [open, setOpen] = React.useState(false);
-            const [items, setItems] = React.useState([
-              { label: "Monthly", value: "monthly" },
-              { label: "Quarterly", value: "quarterly" },
-              { label: "Annual", value: "annual" },
-              { label: "Manual", value: "manual" },
-            ]);
-
-            return (
-              <View style={{ marginTop: 16, zIndex: 2000 }}>
-                <Text style={styles.labelText}>Frequency *</Text>
-                <DropDownPicker
-                  open={open}
-                  value={field.value}
-                  items={items}
-                  setOpen={setOpen}
-                  setValue={(callback) => field.onChange(callback(field.value))}
-                  setItems={setItems}
-                  placeholder="Select Frequency"
-                  placeholderStyle={{ color: Colors.gray, fontSize: 16 }}
-                  listMode="SCROLLVIEW"
-                  dropDownDirection="BOTTOM"
-                  style={[
-                    styles.textInput,
-                    fieldState.error && { borderColor: Colors.error },
-                  ]}
-                  dropDownContainerStyle={{
-                    borderColor: "#ccc",
-                    // zIndex: 1000, // Ensure it appears above other elements
-                  }}
-                />
-                {fieldState.error?.message && (
-                  <Text style={styles.error}>{fieldState.error.message}</Text>
-                )}
-              </View>
-            );
-          }}
-        />
-        {/* Status */}
-        <Controller
-          control={control}
-          name="status"
-          render={({ field, fieldState }) => {
-            const [open, setOpen] = React.useState(false);
-            const [items, setItems] = React.useState([
-              { label: "Draft", value: "draft" },
-              { label: "Active", value: "active" },
-              { label: "Pause", value: "paused" },
-              { label: "Complete", value: "completed" },
-              // { label: "Cancel", value: "cancelled" },
-            ]);
-
-            return (
-              <View style={{ marginTop: 16, zIndex: 1500 }}>
-                <Text style={styles.labelText}>Status *</Text>
-                <DropDownPicker
-                  open={open}
-                  value={field.value}
-                  items={items}
-                  setOpen={setOpen}
-                  setValue={(callback) => field.onChange(callback(field.value))}
-                  setItems={setItems}
-                  placeholder="Select Status"
-                  placeholderStyle={{ color: Colors.gray, fontSize: 16 }}
-                  listMode="SCROLLVIEW"
-                  dropDownDirection="BOTTOM"
-                  style={[
-                    styles.textInput,
-                    fieldState.error && { borderColor: Colors.error },
-                  ]}
-                  dropDownContainerStyle={{
-                    borderColor: "#ccc",
-                    // zIndex: 1000, // Ensure it appears above other elements
                   }}
                 />
                 {fieldState.error?.message && (
@@ -521,7 +539,11 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
           onPress={handleSubmit(onSubmit)}
           //   onPress={handleAdd}
           //   onPress={()=> console.log("onSubmit called with:")}
-          style={{ marginTop: 0, backgroundColor: Colors.secondary }}
+          style={{
+            // marginBottom: 110,
+            marginTop: 0,
+            backgroundColor: Colors.secondary,
+          }}
           loading={isLoading}
         />
       </ScrollView>
@@ -536,14 +558,33 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     // paddingBottom: 80,
     paddingTop: 10,
-    // marginBottom: 70,
+    // paddingBottom: 70,
   },
+  rowContainer: {
+    flexDirection: "row",
+    gap: 12, // if not supported use marginRight
+    // marginTop: 16,
+    marginBottom: 16,
+    zIndex: 2000,
+  },
+
+  halfWidth: {
+    flex: 1,
+    // zIndex: 2000,
+  },
+
   innerContainer: {},
   title: {
     fontSize: 22,
     fontWeight: "600",
-    marginBottom: 20,
+    // marginBottom: 20,
     color: Colors.secondary,
+  },
+  subText: {
+    fontSize: 14,
+    // fontWeight: "500",
+    marginBottom: 20,
+    color: Colors.gray,
   },
   subTitle: {
     fontSize: 14,

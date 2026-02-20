@@ -171,7 +171,7 @@ export const soloInvestmentSchema = z.object({
   frequency: z.enum(["monthly", "quarterly", "annual", "manual"]),
   status: z.enum(["draft", "active", "paused", "completed"]),
   start_date: z.string().min(1, "Start date required"),
-  end_date: z.string().min(1, "End date required"),
+  // end_date: z.string().min(1, "End date required"),
 
   expected_return_rate: z.preprocess(
     (val) => (val !== "" && val !== undefined ? Number(val) : undefined),
@@ -198,7 +198,7 @@ export const sharedInvestmentSchema = z.object({
   frequency: z.enum(["monthly", "quarterly", "annual", "manual"]),
   status: z.enum(["draft", "active", "paused", "completed"]),
   start_date: z.string().min(1, "Start date required"),
-  end_date: z.string().min(1, "End date required"),
+  // end_date: z.string().min(1, "End date required"),
 
   expected_return_rate: z.preprocess(
     (val) => (val !== "" && val !== undefined ? Number(val) : undefined),

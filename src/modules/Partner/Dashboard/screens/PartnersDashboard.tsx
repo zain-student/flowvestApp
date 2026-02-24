@@ -65,7 +65,7 @@ export const PartnersDashboard = () => {
     {
       icon: "dollar-sign",
       label: "Invested",
-      value: stats?.total_invested ?? "--",
+      value: formatCurrency(stats?.total_invested ?? 0),
       bg: "#fff", // pastel yellow
     },
     {
@@ -113,7 +113,7 @@ export const PartnersDashboard = () => {
                 backgroundColor: "#0AFF5C47",
                 borderRadius: 8,
                 height: 29,
-                width: 71,
+                width: 75,
                 justifyContent: "center",
                 alignItems: "center",
                 flexDirection: "row",
@@ -121,7 +121,7 @@ export const PartnersDashboard = () => {
             >
               <Ionicons name="add" size={16} color={Colors.green} />
               <Text style={styles.increment}>
-                {formatCurrency(stats?.total_earned ?? 0)}{" "}
+                {formatCurrency(stats?.total_earned ?? 0)}
               </Text>
             </View>
           </View>
@@ -260,6 +260,7 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_700Bold",
     fontWeight: "600",
     marginVertical: 2,
+    alignSelf: "flex-start",
   },
   balanceChangeDark: {
     color: Colors.green,

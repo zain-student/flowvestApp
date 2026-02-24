@@ -7,12 +7,7 @@ import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useEffect } from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  View
-} from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 const mockPayout = {
   id: 1,
   date: "2024-07-15",
@@ -63,7 +58,9 @@ export const PartnerPayoutDetails = ({ navigation }: Props) => {
       >
         <Text style={styles.title}>{payouts.investment_title}</Text>
         <View style={styles.summaryCard}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
             <View>
               <Text style={styles.label}>Amount</Text>
               <Text style={styles.value}>{formatCurrency(payouts.amount)}</Text>
@@ -76,7 +73,10 @@ export const PartnerPayoutDetails = ({ navigation }: Props) => {
             </View>
           </View>
           <View style={styles.statusBadge}>
-            <Text style={styles.statusText}> {payouts.status.charAt(0).toUpperCase() + payouts.status.slice(1)}</Text>
+            <Text style={styles.statusText}>
+              {" "}
+              {payouts.status.charAt(0).toUpperCase() + payouts.status.slice(1)}
+            </Text>
           </View>
 
           <Text style={styles.label}>Type</Text>
@@ -87,12 +87,16 @@ export const PartnerPayoutDetails = ({ navigation }: Props) => {
           <Text style={styles.label}>Notes</Text>
           <Text style={styles.value}>{payouts.notes ?? "N/A"}</Text>
           <Divider />
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
             <Text style={styles.label}>Scheduled Date</Text>
             <Text style={styles.value}>{payouts.scheduled_date}</Text>
           </View>
           <Divider />
-          <View style={{ flexDirection: 'row', justifyContent: "space-between" }}>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
             <Text style={styles.labelDate}>Paid Date</Text>
             <Text style={styles.valueDate}>
               {payouts.paid_date ?? "Not Paid Yet"}
@@ -122,7 +126,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#E6EDFF",
   },
-  label: { fontSize: 13, color: Colors.gray, marginTop: 8, },
+  label: { fontSize: 13, color: Colors.gray, marginTop: 8 },
   value: {
     fontSize: 16,
     fontWeight: "600",
@@ -133,7 +137,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: Colors.green,
   },
-  labelDate: { fontSize: 13, color: Colors.gray, marginTop: 8, },
+  labelDate: { fontSize: 13, color: Colors.gray, marginTop: 8 },
   valueDate: {
     fontSize: 16,
     fontWeight: "600",
@@ -141,14 +145,15 @@ const styles = StyleSheet.create({
     color: Colors.secondary,
   },
   statusBadge: {
-    width: "30%",
+    width: "25%",
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: Colors.statusbg,
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
     marginRight: 8,
-    justifyContent: 'center',
-    alignItems: 'center'
+    marginTop: 12,
   },
 
   statusText: {

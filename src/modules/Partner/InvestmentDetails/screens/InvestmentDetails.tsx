@@ -322,6 +322,7 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_700Bold",
     fontWeight: "600",
     marginVertical: 2,
+    alignSelf: "flex-start",
   },
   mirror: {
     backgroundColor: Colors.mirror,
@@ -387,7 +388,12 @@ const styles = StyleSheet.create({
     color: Colors.gray,
     marginBottom: 4,
   },
-  value: { color: Colors.secondary, fontWeight: "600", fontSize: 14 },
+  value: {
+    color: Colors.secondary,
+    fontWeight: "600",
+    fontSize: 14,
+    alignSelf: "flex-start",
+  },
   cardContainer: {
     marginHorizontal: 12,
     backgroundColor: Colors.white,

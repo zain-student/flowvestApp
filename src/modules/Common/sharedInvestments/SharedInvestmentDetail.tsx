@@ -294,6 +294,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: Colors.secondary,
     marginBottom: 10,
+    alignSelf: "flex-start",
   },
 
   subText: {

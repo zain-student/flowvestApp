@@ -210,6 +210,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: Colors.secondary,
+    alignSelf: "flex-start",
   },
 
   subText: {

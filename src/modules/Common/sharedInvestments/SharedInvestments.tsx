@@ -71,13 +71,6 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
     }
   };
 
-  // if (isLoading && list.length === 0)
-  //   return (
-  //     <View style={styles.centered}>
-  //       <ActivityIndicator size="large" color={Colors.secondary} />
-  //     </View>
-  //   );
-
   const renderSummary = () => (
     <View style={styles.summaryRow}>
       <SummaryCard
@@ -252,11 +245,24 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
           ) : null
         }
         ListEmptyComponent={
-          <View style={styles.centered}>
+          <View
+            style={{
+              marginTop: 40,
+              justifyContent: "center",
+              alignItems: "center",
+              // backgroundColor: Colors.gray,
+            }}
+          >
             {/* <Feather name="briefcase" size={48} color={Colors.gray} /> */}
             <Image
               source={require("../../../../assets/images/noInvestment.png")}
-              style={{ width: 100, height: 100, alignSelf: "center" }}
+              style={{
+                width: 140,
+                height: 140,
+                // marginBottom: 12,
+                margin: 20,
+                resizeMode: "contain",
+              }}
             />
             <Text style={styles.emptyText}>No shared programs available.</Text>
           </View>
@@ -283,7 +289,14 @@ const SummaryCard = ({
 );
 
 const styles = StyleSheet.create({
-  centered: { flex: 1, justifyContent: "center", alignItems: "center" },
+  centered: {
+    // flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+
+    // alignSelf: "center",
+    backgroundColor: Colors.gray,
+  },
   emptyText: { fontSize: 16, color: Colors.gray },
   searchContainer: {
     flexDirection: "row",
@@ -333,6 +346,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "Inter_500Bold",
     fontWeight: "700",
+    alignSelf: "flex-start",
   },
   summaryLabel: { fontSize: 13, color: Colors.gray },
   cardContainer: {
@@ -410,6 +424,7 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_400Regular",
     flexDirection: "row",
     alignItems: "center",
+    alignSelf: "flex-start",
   },
 
   progressSection: {

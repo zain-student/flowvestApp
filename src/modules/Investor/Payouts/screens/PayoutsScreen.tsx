@@ -366,6 +366,7 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_700Bold",
     fontWeight: "600",
     marginVertical: 2,
+    alignSelf: "flex-start",
   },
   cardSubtitle: {
     color: Colors.white,
@@ -454,6 +455,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: "Inter_700Bold",
     marginBottom: 2,
+    alignSelf: "flex-start",
   },
 
   payoutTitle: {

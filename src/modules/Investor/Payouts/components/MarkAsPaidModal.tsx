@@ -1,7 +1,15 @@
 import Colors from "@/shared/colors/Colors";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import React, { useEffect, useState } from "react";
-import { Alert, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  Modal,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 interface MarkAsPaidModalProps {
   visible: boolean;
@@ -28,15 +36,15 @@ export const MarkAsPaidModal: React.FC<MarkAsPaidModalProps> = ({
   const [notes, setNotes] = useState("");
   const [isFocus, setIsFocus] = useState(false);
   const { formatCurrency } = useCurrencyFormatter();
-// 👇 Reset form fields when modal opens/closes
-useEffect(() => {
-  if (!visible) {
-    setPaymentMethod("Bank Transfer");
-    setReferenceNumber("");
-    setNotes("");
-    setIsFocus(false);
-  }
-}, [visible]);
+  // 👇 Reset form fields when modal opens/closes
+  useEffect(() => {
+    if (!visible) {
+      setPaymentMethod("Bank Transfer");
+      setReferenceNumber("");
+      setNotes("");
+      setIsFocus(false);
+    }
+  }, [visible]);
 
   const paymentOptions = [
     { label: "Bank Transfer", value: "Bank Transfer" },
@@ -66,32 +74,39 @@ useEffect(() => {
           <Text style={styles.header}>Process Payment</Text>
 
           {/* Payout Summary */}
-          {!isBulk && payoutSummary &&(
-          <View style={styles.summaryBox}>
-            <Text style={styles.summaryTitle}>Payout Summary</Text>
-            <View style={styles.summaryRow}>
-              <Text style={styles.label}>Investment:</Text>
-              <Text style={styles.value}>{payoutSummary.investmentName}</Text>
+          {!isBulk && payoutSummary && (
+            <View style={styles.summaryBox}>
+              <Text style={styles.summaryTitle}>Payout Summary</Text>
+              <View style={styles.summaryRow}>
+                <Text style={styles.label}>Investment:</Text>
+                <Text style={styles.value}>{payoutSummary.investmentName}</Text>
+              </View>
+              <View style={styles.summaryRow}>
+                <Text style={styles.label}>Participant:</Text>
+                <Text style={styles.value}>
+                  {payoutSummary.participantName}
+                </Text>
+              </View>
+              <View style={styles.summaryRow}>
+                <Text style={styles.label}>Amount:</Text>
+                <Text style={styles.value}>
+                  {formatCurrency(payoutSummary.amount)}
+                </Text>
+              </View>
+              <View style={styles.summaryRow}>
+                <Text style={styles.label}>Scheduled Date:</Text>
+                <Text style={styles.value}>{payoutSummary.scheduledDate}</Text>
+              </View>
             </View>
-            <View style={styles.summaryRow}>
-              <Text style={styles.label}>Participant:</Text>
-              <Text style={styles.value}>{payoutSummary.participantName}</Text>
-            </View>
-            <View style={styles.summaryRow}>
-              <Text style={styles.label}>Amount:</Text>
-              <Text style={styles.value}>{formatCurrency(payoutSummary.amount)}</Text>
-            </View>
-            <View style={styles.summaryRow}>
-              <Text style={styles.label}>Scheduled Date:</Text>
-              <Text style={styles.value}>{payoutSummary.scheduledDate}</Text>
-            </View>
-          </View>
-         ) }
+          )}
 
           {/* Payment Method */}
           <Text style={styles.inputLabel}>Payment Method</Text>
           <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: Colors.primary }]}
+            style={[
+              styles.dropdown,
+              isFocus && { borderColor: Colors.primary },
+            ]}
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             data={paymentOptions}

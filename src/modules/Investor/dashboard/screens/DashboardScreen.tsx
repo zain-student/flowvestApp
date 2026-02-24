@@ -276,16 +276,6 @@ export const DashboardScreen: React.FC = () => {
                 renderItem={renderActivityItem}
                 showsVerticalScrollIndicator={false}
                 scrollEnabled={false}
-                // ListEmptyComponent={
-                //   !isLoading && (
-                //     <View style={styles.emptyState}>
-                //       <Feather name="inbox" size={48} color={Colors.gray} />
-                //       <Text style={styles.emptyText}>
-                //         No recent activities found
-                //       </Text>
-                //     </View>
-                //   )
-                // }
               />
             )}
           </View>
@@ -367,6 +357,7 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_700Bold",
     fontWeight: "600",
     marginVertical: 2,
+    alignSelf: "flex-start",
   },
   mirror: {
     backgroundColor: Colors.mirror,

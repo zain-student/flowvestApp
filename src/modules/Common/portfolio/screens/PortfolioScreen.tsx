@@ -388,6 +388,7 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_700Bold",
     fontWeight: "600",
     marginVertical: 2,
+    alignSelf: "flex-start",
   },
   chart: { borderRadius: 12, marginVertical: 8 },
   mirror: {
@@ -466,6 +467,7 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_400Regular",
     flexDirection: "row",
     alignItems: "center",
+    // alignSelf: "flex-start",
     marginLeft: 4,
   },
   assetMeta: {

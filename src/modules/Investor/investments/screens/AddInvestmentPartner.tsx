@@ -264,7 +264,12 @@ const styles = StyleSheet.create({
     color: Colors.gray,
     marginBottom: 4,
   },
-  value: { color: Colors.secondary, fontWeight: "600", fontSize: 14 },
+  value: {
+    color: Colors.secondary,
+    fontWeight: "600",
+    fontSize: 14,
+    alignSelf: "flex-start",
+  },
   detail: {
     color: Colors.secondary,
     fontSize: 12,

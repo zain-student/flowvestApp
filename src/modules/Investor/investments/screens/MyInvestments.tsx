@@ -316,7 +316,12 @@ const styles = StyleSheet.create({
     color: Colors.gray,
     marginBottom: 4,
   },
-  value: { color: Colors.secondary, fontWeight: "600", fontSize: 14 },
+  value: {
+    color: Colors.secondary,
+    fontWeight: "600",
+    fontSize: 14,
+    alignSelf: "flex-start",
+  },
   balanceActionBtnDark: {
     width: "100%",
     flexDirection: "row",
@@ -401,6 +406,7 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_400Regular",
     flexDirection: "row",
     alignItems: "center",
+    alignSelf: "flex-start",
   },
   metaRow: {
     flexDirection: "row",

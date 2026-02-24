@@ -223,11 +223,7 @@ export const InvestmentsScreen: React.FC = () => {
           />
           {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}> */}
           <Text style={styles.cardTitle}>Total Invested Amount</Text>
-          {/* <View style={{ alignSelf: 'flex-end', backgroundColor: '#0AFF5C47', borderRadius: 8, height: 29, width: 71, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
-              <Ionicons name="trending-up" size={24} color={Colors.green} />
-              <Text style={styles.increment}>
-                +8.2% </Text>
-            </View> */}
+
           {/* </View> */}
           <Text style={styles.cardValue}>
             {formatCurrency(stats.total_invested)}
@@ -369,6 +365,7 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_700Bold",
     fontWeight: "600",
     marginVertical: 2,
+    alignSelf: "flex-start",
   },
   mirror: {
     backgroundColor: Colors.mirror,

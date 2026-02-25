@@ -4,6 +4,7 @@ import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { fetchPartnerDashboard } from "@/shared/store/slices/partner/dashboard/partnerDashboardSlice";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
+import { Button } from "@components/ui/Button";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -16,7 +17,6 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from "react-native";
 import { RecentPaymentsLog } from "../components/RecentPaymentsLog";
@@ -130,7 +130,7 @@ export const PartnersDashboard = () => {
           </Text>
 
           <View style={styles.balanceActionsRow}>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={styles.mirror}
               onPress={() => navigation.navigate("RecentPayouts")}
             >
@@ -140,8 +140,24 @@ export const PartnersDashboard = () => {
                 color={Colors.yellow}
               />
               <Text style={styles.balanceActionTextDark}>Recent Payouts</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
+            </TouchableOpacity> */}
+            <Button
+              title="Recent Payouts"
+              size="small"
+              icon={
+                <Feather
+                  name="arrow-down-right"
+                  size={16}
+                  color={"#FFD700"}
+                  // style={{ marginLeft: 6 }}
+                />
+              }
+              onPress={() => navigation.navigate("RecentPayouts")}
+              variant="outline"
+              style={styles.investmentsButton}
+              textStyle={styles.investmentsButtonText}
+            />
+            {/* <TouchableOpacity
               style={[
                 styles.mirror,
                 // { backgroundColor: Colors.gray },
@@ -150,7 +166,23 @@ export const PartnersDashboard = () => {
             >
               <Feather name="calendar" size={14} color={Colors.yellow} />
               <Text style={styles.balanceActionTextDark}>Upcoming Payouts</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
+            <Button
+              title="Upcoming Payouts"
+              size="small"
+              icon={
+                <Feather
+                  name="calendar"
+                  size={16}
+                  color={"#FFD700"}
+                  // style={{ marginLeft: 6 }}
+                />
+              }
+              onPress={() => navigation.navigate("UpcomingPayouts")}
+              variant="outline"
+              style={styles.investmentsButton}
+              textStyle={styles.investmentsButtonText}
+            />
           </View>
           {/* </View> */}
           <Image
@@ -273,6 +305,20 @@ const styles = StyleSheet.create({
   },
   balanceActionsRow: {
     flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 8,
+  },
+  investmentsButton: {
+    borderRadius: 22,
+    height: 10,
+    borderColor: "#FFEC8B",
+    // opacity: 0.9,
+  },
+
+  investmentsButtonText: {
+    color: "#FFD700",
+    fontWeight: "600",
+    fontSize: 14,
   },
   mirror: {
     backgroundColor: Colors.mirror,

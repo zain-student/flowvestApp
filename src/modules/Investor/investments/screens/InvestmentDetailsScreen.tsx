@@ -269,7 +269,8 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
                   <Ionicons
                     name="create-outline"
                     size={20}
-                    color={Colors.white}
+                    color={Colors.primary}
+                    // marginRight={4}
                   />
                 }
                 onPress={() => {
@@ -282,7 +283,7 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
                 }}
                 style={styles.updateButton}
                 textStyle={styles.footerButtonText}
-                variant="primary"
+                variant="outline"
               />
               {/* </View>
               <View> */}
@@ -514,9 +515,10 @@ const styles = StyleSheet.create({
   txDate: { fontSize: 13, color: Colors.gray },
   footer: {
     flexDirection: "row",
-    alignItems: "center", // 👈 important
+    // alignItems: "center", // 👈 important
     justifyContent: "flex-end",
     paddingTop: 18,
+    gap: 10,
   },
   error: {
     color: Colors.error,
@@ -524,11 +526,15 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   updateButton: {
-    // flex: 1,
-    borderRadius: 22,
+    // height: 40,
+    width: 100,
+    // paddingHorizontal: 20,
+    borderRadius: 24,
+    borderWidth: 1.5,
+    borderColor: Colors.primary,
     alignItems: "center",
     justifyContent: "center",
-    marginHorizontal: 5,
+    // marginRight: 12,
   },
   deleteButton: {
     width: 48,
@@ -540,9 +546,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#0120730D", // Red
   },
   footerButtonText: {
-    color: "#fff",
-    fontWeight: "500",
-    fontSize: 12,
+    color: Colors.primary,
+    fontWeight: "600",
+    fontSize: 14,
   },
   rowDivider: {
     marginTop: 4,

@@ -8,7 +8,10 @@ import { NotificationDetailScreen } from "@/modules/Common/notifications/screens
 import { NotificationsScreen } from "@/modules/Common/notifications/screens/NotificationsScreen";
 import { InvestmentStack } from "@/navigation/InvestorStacks/InvestmentStack";
 import { PayoutStack } from "@/navigation/InvestorStacks/PayoutStack";
-import { getPreferences } from "@/shared/store/slices/profile/profileSlice";
+import {
+  getCurrencies,
+  getPreferences,
+} from "@/shared/store/slices/profile/profileSlice";
 import { Ionicons } from "@expo/vector-icons";
 import {
   selectIsAuthenticated,
@@ -74,11 +77,27 @@ export const RootNavigator: React.FC = () => {
 
     initializeAuth();
   }, [dispatch]);
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     dispatch(getPreferences());
+  //   }
+  // }, [dispatch, isAuthenticated]);
+
   useEffect(() => {
-    if (isAuthenticated) {
-      dispatch(getPreferences());
-    }
+    const bootstrapApp = async () => {
+      if (isAuthenticated) {
+        try {
+          await dispatch(getPreferences()).unwrap();
+          await dispatch(getCurrencies()).unwrap();
+        } catch (error) {
+          console.log("Bootstrap error:", error);
+        }
+      }
+    };
+
+    bootstrapApp();
   }, [dispatch, isAuthenticated]);
+
   // Show loading screen during initialization or auth operations
   // || isLoading
   if (isInitializing) {

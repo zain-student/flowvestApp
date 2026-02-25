@@ -3,9 +3,9 @@
  * JWT token management and authentication API calls
  */
 
-import { API_ENDPOINTS } from '../../config/env';
-import { apiClient } from './api';
-import { storage, StorageKeys } from './storage';
+import { API_ENDPOINTS } from "../../config/env";
+import { apiClient } from "./api";
+import { storage, StorageKeys } from "./storage";
 
 export interface LoginCredentials {
   email: string;
@@ -19,10 +19,10 @@ export interface RegisterData {
   email: string;
   password: string;
   password_confirmation: string;
-  role: 'admin' | 'user';
+  role: "admin" | "user";
   company_name?: string;
-  company_type?: 'individual' | 'private' | 'silent' | 'holding';
-  registration_type?: 'invited' | 'independent';
+  company_type?: "individual" | "private" | "silent" | "holding";
+  registration_type?: "invited" | "independent";
   invitation_token?: string;
   terms_accepted: boolean;
 }
@@ -72,7 +72,7 @@ class AuthService {
     try {
       const response = await apiClient.post<AuthResponse>(
         API_ENDPOINTS.AUTH.LOGIN,
-        credentials
+        credentials,
       );
 
       if (response.success && response.data) {
@@ -82,7 +82,7 @@ class AuthService {
 
       return response;
     } catch (error) {
-      console.error('Login error:', error);
+      console.error("Login error:", error);
       throw error;
     }
   }
@@ -94,7 +94,7 @@ class AuthService {
     try {
       const response = await apiClient.post<AuthResponse>(
         API_ENDPOINTS.AUTH.REGISTER,
-        data
+        data,
       );
 
       if (response.success && response.data) {
@@ -104,7 +104,7 @@ class AuthService {
 
       return response;
     } catch (error) {
-      console.error('Registration error:', error);
+      console.error("Registration error:", error);
       throw error;
     }
   }
@@ -118,7 +118,7 @@ class AuthService {
       await apiClient.post(API_ENDPOINTS.AUTH.LOGOUT);
     } catch (error) {
       // Continue with local logout even if server call fails
-      console.warn('Logout API call failed:', error);
+      console.warn("Logout API call failed:", error);
     } finally {
       // Clear local storage
       await this.clearAuthData();
@@ -132,7 +132,7 @@ class AuthService {
     try {
       const response = await apiClient.post<RefreshTokenResponse>(
         API_ENDPOINTS.AUTH.REFRESH,
-        { refresh_token: refreshToken }
+        { refresh_token: refreshToken },
       );
 
       if (response.success && response.data) {
@@ -141,9 +141,9 @@ class AuthService {
         return response.data.token;
       }
 
-      throw new Error('Failed to refresh token');
+      throw new Error("Failed to refresh token");
     } catch (error) {
-      console.error('Token refresh error:', error);
+      console.error("Token refresh error:", error);
       // Clear invalid tokens
       await this.clearAuthData();
       throw error;
@@ -156,7 +156,7 @@ class AuthService {
   async getCurrentUser(): Promise<User> {
     try {
       const response = await apiClient.get<{ success: boolean; data: User }>(
-        API_ENDPOINTS.AUTH.ME
+        API_ENDPOINTS.AUTH.ME,
       );
 
       if (response.success && response.data) {
@@ -165,9 +165,9 @@ class AuthService {
         return response.data;
       }
 
-      throw new Error('Failed to get user profile');
+      throw new Error("Failed to get user profile");
     } catch (error) {
-      console.error('Get current user error:', error);
+      console.error("Get current user error:", error);
       throw error;
     }
   }
@@ -175,16 +175,18 @@ class AuthService {
   /**
    * Send password reset email
    */
-  async forgotPassword(email: string): Promise<{ success: boolean; message: string }> {
+  async forgotPassword(
+    email: string,
+  ): Promise<{ success: boolean; message: string }> {
     try {
-      const response = await apiClient.post<{ success: boolean; message: string }>(
-        API_ENDPOINTS.AUTH.FORGOT_PASSWORD,
-        { email }
-      );
+      const response = await apiClient.post<{
+        success: boolean;
+        message: string;
+      }>(API_ENDPOINTS.AUTH.SEND_VERIFICATION_CODE, { email });
 
       return response;
     } catch (error) {
-      console.error('Forgot password error:', error);
+      console.error("Forgot password error:", error);
       throw error;
     }
   }
@@ -192,10 +194,13 @@ class AuthService {
   /**
    * Initialize authentication state from stored data
    */
-  async initializeAuth(): Promise<{ isAuthenticated: boolean; user: User | null }> {
+  async initializeAuth(): Promise<{
+    isAuthenticated: boolean;
+    user: User | null;
+  }> {
     try {
       const token = await this.getToken();
-      
+
       if (!token) {
         return { isAuthenticated: false, user: null };
       }
@@ -204,7 +209,7 @@ class AuthService {
       const user = await this.getCurrentUser();
       return { isAuthenticated: true, user };
     } catch (error) {
-      console.warn('Failed to initialize auth from stored data:', error);
+      console.warn("Failed to initialize auth from stored data:", error);
       // Clear invalid stored data
       await this.clearAuthData();
       return { isAuthenticated: false, user: null };
@@ -217,7 +222,7 @@ class AuthService {
   async isAuthenticated(): Promise<boolean> {
     try {
       const token = await storage.getItem(StorageKeys.AUTH_TOKEN);
-      
+
       if (!token) {
         return false;
       }
@@ -256,15 +261,13 @@ class AuthService {
   /**
    * Store authentication data
    */
-  private async storeAuthData(authData: AuthResponse['data']): Promise<void> {
+  private async storeAuthData(authData: AuthResponse["data"]): Promise<void> {
     await Promise.all([
       storage.setItem(StorageKeys.AUTH_TOKEN, authData.token),
       // Uncomment when refresh token is available
       // storage.setItem(StorageKeys.REFRESH_TOKEN, authData.refresh_token),
       storage.setItem(StorageKeys.USER_DATA, authData.user),
       storage.setItem(StorageKeys.EXPIRES_AT, authData.expires_at),
-
-
     ]);
   }
 
@@ -278,7 +281,6 @@ class AuthService {
       storage.removeItem(StorageKeys.USER_DATA),
       storage.removeItem(StorageKeys.EXPIRES_AT),
       storage.removeItem(StorageKeys.SESSION),
-
     ]);
   }
 
@@ -289,7 +291,7 @@ class AuthService {
     try {
       const response = await apiClient.put<{ success: boolean; data: User }>(
         API_ENDPOINTS.AUTH.UPDATE_PROFILE,
-        data
+        data,
       );
 
       if (response.success && response.data) {
@@ -298,9 +300,9 @@ class AuthService {
         return response.data;
       }
 
-      throw new Error('Failed to update profile');
+      throw new Error("Failed to update profile");
     } catch (error) {
-      console.error('Update profile error:', error);
+      console.error("Update profile error:", error);
       throw error;
     }
   }
@@ -314,14 +316,14 @@ class AuthService {
     password_confirmation: string;
   }): Promise<{ success: boolean; message: string }> {
     try {
-      const response = await apiClient.post<{ success: boolean; message: string }>(
-        API_ENDPOINTS.AUTH.CHANGE_PASSWORD,
-        data
-      );
+      const response = await apiClient.post<{
+        success: boolean;
+        message: string;
+      }>(API_ENDPOINTS.AUTH.CHANGE_PASSWORD, data);
 
       return response;
     } catch (error) {
-      console.error('Change password error:', error);
+      console.error("Change password error:", error);
       throw error;
     }
   }
@@ -348,7 +350,9 @@ class AuthService {
       return false;
     }
 
-    return user.permissions.includes(permission) || user.permissions.includes('*');
+    return (
+      user.permissions.includes(permission) || user.permissions.includes("*")
+    );
   }
 
   /**
@@ -366,16 +370,16 @@ class AuthService {
    * Check if user is admin or superadmin
    */
   isAdmin(user: User | null): boolean {
-    return this.hasRole(user, 'admin') || this.hasRole(user, 'superadmin');
+    return this.hasRole(user, "admin") || this.hasRole(user, "superadmin");
   }
 
   /**
    * Check if user is superadmin
    */
   isSuperAdmin(user: User | null): boolean {
-    return this.hasRole(user, 'superadmin');
+    return this.hasRole(user, "superadmin");
   }
 }
 
 // Export singleton instance
-export const authService = new AuthService(); 
+export const authService = new AuthService();

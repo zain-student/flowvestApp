@@ -71,7 +71,12 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
         <Text style={styles.title}>{payouts.investment_title}</Text>
         <View style={styles.summaryCard}>
           <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+              marginBottom: 18,
+            }}
           >
             <View>
               <Text style={styles.label}>Amount</Text>
@@ -83,45 +88,70 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
                 {Number(payouts.investment_roi).toFixed(1)}%
               </Text>
             </View>
-          </View>
-          <View style={styles.statusBadge}>
-            <Text style={styles.statusText}>
-              {" "}
-              {payouts.status.charAt(0).toUpperCase() + payouts.status.slice(1)}
-            </Text>
+            <View style={styles.statusBadge}>
+              <Text style={styles.statusText}>
+                {" "}
+                {payouts.status.charAt(0).toUpperCase() +
+                  payouts.status.slice(1)}
+              </Text>
+            </View>
           </View>
           <Text style={styles.label}>Participant</Text>
-          <Text style={styles.value}>
-            {payouts.participant_name}({payouts.participant_email})
-          </Text>
 
+          <Text style={styles.value}>{payouts.participant_name}</Text>
+          <Text style={[styles.label, { marginTop: 2, marginBottom: 12 }]}>
+            {payouts.participant_email}
+          </Text>
+          {/* <Text style={styles.value}>{payouts.participant_name}</Text>
+            <Text style={styles.participantEmail}>
+              {" "}
+              ({payouts.participant_email})
+            </Text> */}
           {payouts.status.toLowerCase() === "cancelled" && (
             <>
               <Text style={styles.label}>Notes</Text>
-              <Text style={styles.value}>{payouts.notes ?? "N/A"}</Text>
+              <Text style={[styles.value, { marginBottom: 12 }]}>
+                {payouts.notes ?? "N/A"}
+              </Text>
             </>
           )}
           {payouts.status.toLowerCase() === "paid" && (
             <>
+              {/* <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  // marginBottom: 12,
+                }}
+              > */}
               <View
                 style={{
                   flexDirection: "row",
                   justifyContent: "space-between",
+                  // marginBottom: 12,
+                  marginTop: 8,
                 }}
               >
-                <View>
-                  <Text style={styles.label}>Payout Method</Text>
-                  <Text style={styles.value}>
-                    {payouts.payment_method ?? "Not Paid Yet"}
-                  </Text>
-                </View>
-                <View>
-                  <Text style={styles.label}>Reference No</Text>
-                  <Text style={styles.value}>
-                    {payouts.reference_number || "N/A"}
-                  </Text>
-                </View>
+                <Text style={styles.label}>Payout Method</Text>
+                <Text style={styles.value}>
+                  {payouts.payment_method ?? "Not Paid Yet"}
+                </Text>
               </View>
+              <Divider />
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  // marginBottom: 12,
+                  marginTop: 8,
+                }}
+              >
+                <Text style={styles.label}>Reference No</Text>
+                <Text style={styles.value}>
+                  {payouts.reference_number || "N/A"}
+                </Text>
+              </View>
+              {/* </View> */}
               <Divider />
               <View
                 style={{
@@ -136,7 +166,12 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
           )}
           <Divider />
           <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              // paddingVertical: 8,
+              marginBottom: 12,
+            }}
           >
             <Text style={styles.labelDate}>Scheduled Date</Text>
             <Text style={styles.valueDate}>{payouts.scheduled_date}</Text>
@@ -146,7 +181,7 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
             {payouts.status.toLowerCase() !== "paid" &&
               payouts.status.toLowerCase() !== "cancelled" && (
                 <View style={styles.footer}>
-                  <Button
+                  {/* <Button
                     title="Pay"
                     icon={
                       <Ionicons
@@ -158,9 +193,23 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
                     onPress={() => setShowPayModal(true)}
                     style={styles.payButton}
                     textStyle={styles.footerButtonText}
-                    variant="primary"
+                    variant="outline"
+                  /> */}
+                  <Button
+                    title="Pay"
+                    icon={
+                      <Ionicons
+                        name="send-outline"
+                        size={18}
+                        color={Colors.primary}
+                        style={{ marginRight: 4 }}
+                      />
+                    }
+                    onPress={() => setShowPayModal(true)}
+                    style={styles.payButton}
+                    textStyle={styles.payButtonText}
+                    variant="outline"
                   />
-
                   <MarkAsPaidModal
                     visible={showPayModal}
                     onClose={() => setShowPayModal(false)}
@@ -218,12 +267,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#E6EDFF",
   },
-  label: { fontSize: 13, color: Colors.gray, marginTop: 8 },
+  label: { fontSize: 13, color: Colors.gray },
   value: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
     color: Colors.secondary,
     alignSelf: "flex-start",
+  },
+  participantEmail: {
+    fontSize: 12,
+    color: Colors.gray,
   },
   valueRoi: {
     fontSize: 16,
@@ -238,7 +291,8 @@ const styles = StyleSheet.create({
     color: Colors.secondary,
   },
   statusBadge: {
-    width: "30%",
+    width: "23%",
+    height: 25,
     backgroundColor: Colors.statusbg,
     paddingHorizontal: 10,
     paddingVertical: 4,
@@ -246,6 +300,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 12,
   },
 
   statusText: {
@@ -254,34 +309,52 @@ const styles = StyleSheet.create({
   },
   footer: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 16,
-    borderTopWidth: 0.2,
+    // justifyContent: "space-between",
+    marginTop: 20,
+    // borderTopWidth: 0.2,
     borderTopColor: Colors.gray,
-    paddingTop: 12,
+    paddingTop: 16,
+    justifyContent: "flex-end",
+    gap: 10,
   },
   deleteButton: {
-    width: 48,
-    height: 48,
+    width: 46,
+    height: 46,
     justifyContent: "center",
-    borderRadius: 24,
+    borderRadius: 23,
     alignItems: "center",
     marginBottom: 24,
     backgroundColor: "#0120730D", // Red
   },
+  // payButton: {
+  //   borderRadius: 22,
+  //   alignItems: "center",
+  //   justifyContent: "center",
+  //   marginHorizontal: 5,
+  // },
+  // footerButtonText: {
+  //   color: "#fff",
+  //   fontWeight: "500",
+  //   fontSize: 12,
+  // },
   payButton: {
-    borderRadius: 22,
+    height: 40,
+    width: 90,
+    // paddingHorizontal: 20,
+    borderRadius: 24,
+    borderWidth: 1.5,
+    borderColor: Colors.primary,
     alignItems: "center",
     justifyContent: "center",
-    marginHorizontal: 5,
   },
-  footerButtonText: {
-    color: "#fff",
-    fontWeight: "500",
-    fontSize: 12,
+
+  payButtonText: {
+    color: Colors.primary,
+    fontWeight: "600",
+    fontSize: 14,
   },
   rowDivider: {
-    marginVertical: 4,
+    marginTop: 12,
     height: 1,
     backgroundColor: "#EFEFEF",
   },

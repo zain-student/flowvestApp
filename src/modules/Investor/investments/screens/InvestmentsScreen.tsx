@@ -3,6 +3,7 @@ import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { fetchInvestments } from "@/shared/store/slices/investor/investments/investmentSlice";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
+import { Button } from "@components/ui/Button";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -10,6 +11,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  // Button,
   FlatList,
   Image,
   StyleSheet,
@@ -238,14 +240,22 @@ export const InvestmentsScreen: React.FC = () => {
             </Text>
 
             {/* Right: Button */}
-            <TouchableOpacity
-              style={styles.mirror}
+            <Button
+              title="My Investments"
+              size="small"
+              icon={
+                <Feather
+                  name="arrow-right"
+                  size={16}
+                  color={"#FFD700"}
+                  // style={{ marginLeft: 6 }}
+                />
+              }
               onPress={() => navigation.navigate("MyInvestments")}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.myInvestmentsText}>My Investments</Text>
-              <Feather name="arrow-right" size={14} color={Colors.yellow} />
-            </TouchableOpacity>
+              variant="outline"
+              style={styles.investmentsButton}
+              textStyle={styles.investmentsButtonText}
+            />
           </View>
 
           {/* </View> */}
@@ -367,19 +377,6 @@ const styles = StyleSheet.create({
     marginVertical: 2,
     alignSelf: "flex-start",
   },
-  mirror: {
-    backgroundColor: Colors.mirror,
-    width: "50%",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 18,
-    paddingVertical: 6,
-    paddingHorizontal: 6,
-    borderWidth: 0.3,
-    borderColor: Colors.white,
-    opacity: 0.7,
-  },
   cardSubtitle: {
     color: Colors.white,
     fontSize: 14,
@@ -414,13 +411,18 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontFamily: "Inter_600SemiBold",
   },
-
-  myInvestmentsText: {
-    color: Colors.yellow,
-    fontSize: 12,
-    fontFamily: "Inter_500Medium",
+  investmentsButton: {
+    borderRadius: 22,
+    height: 10,
+    borderColor: "#FFEC8B",
+    // opacity: 0.9,
   },
 
+  investmentsButtonText: {
+    color: "#FFD700",
+    fontWeight: "600",
+    fontSize: 14,
+  },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",

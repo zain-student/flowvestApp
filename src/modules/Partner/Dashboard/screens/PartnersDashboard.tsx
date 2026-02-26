@@ -287,6 +287,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   investmentsButton: {
+    width: "90%",
     borderRadius: 22,
     height: 10,
     borderColor: "#FFEC8B",
@@ -296,7 +297,7 @@ const styles = StyleSheet.create({
   investmentsButtonText: {
     color: "#FFD700",
     fontWeight: "600",
-    fontSize: 14,
+    fontSize: 13,
   },
   mirror: {
     backgroundColor: Colors.mirror,

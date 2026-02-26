@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
   },
   mirror: {
     backgroundColor: Colors.mirror,
-    width: "50%",
+    width: "45%",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 18,

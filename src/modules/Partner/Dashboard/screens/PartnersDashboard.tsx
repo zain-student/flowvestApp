@@ -101,7 +101,6 @@ export const PartnersDashboard = () => {
             }}
           />
           {/* 💰 Portfolio Summary Card */}
-          {/* <View style={styles.balanceCardDark}> */}
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
@@ -130,17 +129,6 @@ export const PartnersDashboard = () => {
           </Text>
 
           <View style={styles.balanceActionsRow}>
-            {/* <TouchableOpacity
-              style={styles.mirror}
-              onPress={() => navigation.navigate("RecentPayouts")}
-            >
-              <Feather
-                name="arrow-down-right"
-                size={14}
-                color={Colors.yellow}
-              />
-              <Text style={styles.balanceActionTextDark}>Recent Payouts</Text>
-            </TouchableOpacity> */}
             <Button
               title="Recent Payouts"
               size="small"
@@ -157,16 +145,6 @@ export const PartnersDashboard = () => {
               style={styles.investmentsButton}
               textStyle={styles.investmentsButtonText}
             />
-            {/* <TouchableOpacity
-              style={[
-                styles.mirror,
-                // { backgroundColor: Colors.gray },
-              ]}
-              onPress={() => navigation.navigate("UpcomingPayouts")}
-            >
-              <Feather name="calendar" size={14} color={Colors.yellow} />
-              <Text style={styles.balanceActionTextDark}>Upcoming Payouts</Text>
-            </TouchableOpacity> */}
             <Button
               title="Upcoming Payouts"
               size="small"

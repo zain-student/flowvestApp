@@ -71,12 +71,13 @@ export const PartnerPayoutDetails = ({ navigation }: Props) => {
                 {Number(payouts.investment_roi).toFixed(1)}%
               </Text>
             </View>
-          </View>
-          <View style={styles.statusBadge}>
-            <Text style={styles.statusText}>
-              {" "}
-              {payouts.status.charAt(0).toUpperCase() + payouts.status.slice(1)}
-            </Text>
+            <View style={styles.statusBadge}>
+              <Text style={styles.statusText}>
+                {" "}
+                {payouts.status.charAt(0).toUpperCase() +
+                  payouts.status.slice(1)}
+              </Text>
+            </View>
           </View>
 
           <Text style={styles.label}>Type</Text>
@@ -90,8 +91,8 @@ export const PartnerPayoutDetails = ({ navigation }: Props) => {
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
-            <Text style={styles.label}>Scheduled Date</Text>
-            <Text style={styles.value}>{payouts.scheduled_date}</Text>
+            <Text style={styles.labelDate}>Scheduled Date</Text>
+            <Text style={styles.valueDate}>{payouts.scheduled_date}</Text>
           </View>
           <Divider />
           <View
@@ -126,47 +127,40 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#E6EDFF",
   },
-  label: { fontSize: 13, color: Colors.gray, marginTop: 8 },
+  label: { fontSize: 13, color: Colors.gray },
   value: {
     fontSize: 16,
     fontWeight: "600",
     color: Colors.secondary,
+    marginBottom: 12,
   },
   valueRoi: {
     fontSize: 16,
     fontWeight: "600",
     color: Colors.green,
   },
-  labelDate: { fontSize: 13, color: Colors.gray, marginTop: 8 },
+  labelDate: { fontSize: 13, color: Colors.gray },
   valueDate: {
     fontSize: 16,
     fontWeight: "600",
-    marginTop: 7,
     color: Colors.secondary,
   },
   statusBadge: {
-    width: "25%",
-    justifyContent: "center",
-    alignItems: "center",
+    width: "23%",
+    height: 25,
     backgroundColor: Colors.statusbg,
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
     marginRight: 8,
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 12,
   },
 
   statusText: {
     fontSize: 12,
     color: Colors.statusText,
-  },
-  footer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 16,
-    borderTopWidth: 0.2,
-    borderTopColor: Colors.gray,
-    paddingTop: 12,
   },
 
   cancelButton: {
@@ -199,6 +193,7 @@ const styles = StyleSheet.create({
   rowDivider: {
     marginVertical: 4,
     height: 1,
+    marginTop: 12,
     backgroundColor: "#EFEFEF",
   },
 });

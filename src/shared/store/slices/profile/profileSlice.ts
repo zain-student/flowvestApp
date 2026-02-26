@@ -101,8 +101,9 @@ export interface RejectError {
 export interface ProfileState {
   user: User | null;
   isLoading: boolean;
+  isAvatarUploading: boolean;
   error: string | null;
-  avatar: AvatarUploadResponse | null; // ✅ optional field
+  // avatar: AvatarUploadResponse | null; // ✅ optional field
   currencies: Currency[];
   isCurrenciesLoading: boolean;
   preferences?: Preferences;
@@ -115,8 +116,9 @@ export interface ProfileState {
 const initialState: ProfileState = {
   user: null,
   isLoading: false,
+  isAvatarUploading: false,
   error: null,
-  avatar: null, // ✅ properly initialized
+  // avatar: null, // ✅ properly initialized
   currencies: [],
   isCurrenciesLoading: false,
   preferences: undefined,
@@ -178,15 +180,15 @@ export const updatePreferences = createAsyncThunk(
     try {
       const response = await api.put(
         API_ENDPOINTS.PROFILE.PREFERENCES,
-        payload
+        payload,
       );
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
-        error.response.data || "Update preferences failed"
+        error.response.data || "Update preferences failed",
       );
     }
-  }
+  },
 );
 // Get Preferences thunk
 export const getPreferences = createAsyncThunk(
@@ -198,7 +200,7 @@ export const getPreferences = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.response.data || "Get preferences failed");
     }
-  }
+  },
 );
 // Change password slice
 export const changePassword = createAsyncThunk<
@@ -264,16 +266,20 @@ export const uploadUserAvatar = createAsyncThunk(
         name: "avatar.jpg",
       } as any);
 
-      const response = await api.post("/v1/profile/avatar", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-
+      const response = await api.post(
+        API_ENDPOINTS.PROFILE.UPLOAD_AVATAR,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        },
+      );
+      console.log("Avatar res:", response.data);
       // Backend returns { data: { avatar_url: "https://..." } }
       return response.data.data.avatar_url;
     } catch (err: any) {
       return rejectWithValue(err.response?.data || "Upload failed");
     }
-  }
+  },
 );
 // ✅ Get Company Info Thunk
 export const getCompanyInfo = createAsyncThunk<
@@ -302,11 +308,14 @@ export const updateCompanyInfo = createAsyncThunk<
   { rejectValue: string }
 >("profile/updateCompanyInfo", async (payload, { rejectWithValue }) => {
   try {
-    const response = await api.put(API_ENDPOINTS.PROFILE.UPDATE_COMPANY, payload);
+    const response = await api.put(
+      API_ENDPOINTS.PROFILE.UPDATE_COMPANY,
+      payload,
+    );
 
     ToastAndroid.show(
       response.data.message || "Company updated",
-      ToastAndroid.SHORT
+      ToastAndroid.SHORT,
     );
 
     return response.data.data;
@@ -351,7 +360,7 @@ const profileSlice = createSlice({
         (state, action: PayloadAction<RejectError | undefined>) => {
           state.isLoading = false;
           state.error = action.payload?.message || "Failed to fetch profile";
-        }
+        },
       )
       // get currencies extra reducers
       .addCase(getCurrencies.pending, (state) => {
@@ -363,7 +372,7 @@ const profileSlice = createSlice({
         (state, action: PayloadAction<Currency[]>) => {
           state.currencies = action.payload;
           state.isCurrenciesLoading = false;
-        }
+        },
       )
       .addCase(getCurrencies.rejected, (state, action) => {
         state.isCurrenciesLoading = false;
@@ -411,16 +420,16 @@ const profileSlice = createSlice({
         state.error = action.payload || "Failed to update profile";
       })
       .addCase(uploadUserAvatar.pending, (state) => {
-        state.isLoading = true;
+        state.isAvatarUploading = true;
       })
       .addCase(uploadUserAvatar.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.isAvatarUploading = false;
         if (state.user) {
           state.user.avatar = action.payload; // Update avatar field
         }
       })
       .addCase(uploadUserAvatar.rejected, (state, action) => {
-        state.isLoading = false;
+        state.isAvatarUploading = false;
       })
       // Get Company Info extra reducers
       .addCase(getCompanyInfo.pending, (state) => {

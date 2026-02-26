@@ -348,11 +348,8 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
                 setAmount(v);
                 if (formError) setFormError("");
               }}
-              // error={errors.email}
               required
-              // autoFocus
             />
-            {/* {errors.amount && <Text style={styles.error}>{errors.amount.message}</Text>} */}
 
             <Input
               label="Notes (optional)"
@@ -367,7 +364,6 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
             {formError ? <Text style={styles.error}>{formError}</Text> : null}
 
             <Button
-              // title={isJoining ? "Joining..." : "Join Investment"}
               title="Join Investment"
               onPress={handleJoinInvestment}
               disabled={isJoining}
@@ -377,7 +373,6 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
                 borderColor: Colors.lightGray,
               }}
             />
-            {/* {joinError && <Text style={{ color: "red", marginTop: 6 }}>{joinError}</Text>} */}
           </View>
         )}
       </ScrollView>

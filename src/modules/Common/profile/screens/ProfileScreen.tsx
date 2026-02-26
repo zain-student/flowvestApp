@@ -46,7 +46,9 @@ type ProfileNavProp = NativeStackNavigationProp<ProfileStackParamList>;
 export const ProfileScreen: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation<ProfileNavProp>();
-  const { user, isLoading } = useAppSelector((state) => state.profile);
+  const { user, isAvatarUploading, isLoading } = useAppSelector(
+    (state) => state.profile,
+  );
   const [isImageModalVisible, setImageModalVisible] = useState(false);
   const [imageLoading, setImageLoading] = useState(false);
   const [initialLoadDone, setInitialLoadDone] = useState(false);
@@ -82,42 +84,22 @@ export const ProfileScreen: React.FC = () => {
   //  Image picker handler
   const handlePickImage = useCallback(async () => {
     try {
-      const { status } =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== "granted") {
-        return Alert.alert(
-          "Permission required",
-          "Please allow access to your photo gallery.",
-        );
-      }
-
       const result =
         await ImagePicker.launchImageLibraryAsync(IMAGE_PICKER_OPTIONS);
+
       if (result.canceled || !result.assets?.length) return;
 
-      const imageUri = result.assets[0].uri;
-      setImageLoading(true);
+      await dispatch(uploadUserAvatar(result.assets[0].uri)).unwrap();
 
-      await dispatch(uploadUserAvatar(imageUri)).unwrap();
-      await dispatch(getCurrentUser()).unwrap();
-
-      ToastAndroid.show(
-        "Your profile photo has been updated!",
-        ToastAndroid.SHORT,
-      );
+      ToastAndroid.show("Profile photo updated", ToastAndroid.SHORT);
     } catch (err) {
-      console.error("Avatar upload failed:", err);
       ToastAndroid.show(
         "Failed to upload avatar. Please try again.",
         ToastAndroid.SHORT,
       );
-    } finally {
-      setImageLoading(false);
     }
   }, [dispatch]);
 
-  const getInitials = (name?: string) =>
-    name ? name.charAt(0).toUpperCase() : "U";
   const handleSignOut = () => {
     const signOut = async () => {
       try {
@@ -141,7 +123,7 @@ export const ProfileScreen: React.FC = () => {
     ]);
   };
   //  Conditional states
-  const showLoader = isLoading || (!user && !imageLoading);
+  // const showLoader = isLoading || (!user && !imageLoading);
   const handleCurrencySelect = (currency: any) => {
     setSelectedCurrency(currency);
     setCurrencyDropdownOpen(false);
@@ -163,7 +145,39 @@ export const ProfileScreen: React.FC = () => {
         );
       });
   };
-
+  const Avatar = ({
+    uri,
+    name,
+    loading,
+    onPress,
+  }: {
+    uri?: string;
+    name?: string;
+    loading: boolean;
+    onPress?: () => void;
+  }) => {
+    return (
+      <TouchableOpacity
+        activeOpacity={uri ? 0.8 : 1}
+        onPress={onPress}
+        style={styles.avatarContainer}
+      >
+        {loading ? (
+          <ActivityIndicator size="small" color={Colors.primary} />
+        ) : uri ? (
+          <Image
+            source={{ uri }}
+            style={styles.avatarImage}
+            resizeMode="cover"
+          />
+        ) : (
+          <Text style={styles.avatarText}>
+            {name?.charAt(0).toUpperCase() ?? "U"}
+          </Text>
+        )}
+      </TouchableOpacity>
+    );
+  };
   return (
     <DashboardLayout>
       {isImageModalVisible && (
@@ -180,7 +194,8 @@ export const ProfileScreen: React.FC = () => {
               activeOpacity={1}
             >
               <Image
-                source={{ uri: `${user?.avatar}?t=${Date.now()}` }}
+                // source={{ uri: `${user?.avatar}?t=${Date.now()}` }}
+                source={{ uri: user?.avatar ?? undefined }}
                 style={styles.fullscreenImage}
                 resizeMode="contain"
               />
@@ -201,29 +216,12 @@ export const ProfileScreen: React.FC = () => {
       >
         <View style={styles.profileHeader}>
           <View style={styles.avatarWrapper}>
-            <TouchableOpacity
+            <Avatar
+              uri={user?.avatar ?? undefined}
+              name={user?.name}
+              loading={isAvatarUploading}
               onPress={() => user?.avatar && setImageModalVisible(true)}
-              activeOpacity={user?.avatar ? 0.8 : 1}
-            >
-              {showLoader ? (
-                <View style={styles.avatarPlaceholder}>
-                  <ActivityIndicator size="small" color={Colors.primary} />
-                </View>
-              ) : user?.avatar ? (
-                <Image
-                  source={{ uri: `${user.avatar}?t=${Date.now()}` }}
-                  style={styles.avatarImage}
-                  onLoadEnd={() => setImageLoading(false)}
-                />
-              ) : (
-                <View style={styles.avatarPlaceholder}>
-                  <Text style={styles.avatarText}>
-                    {getInitials(user?.name)}
-                  </Text>
-                </View>
-              )}
-            </TouchableOpacity>
-
+            />
             <TouchableOpacity
               style={styles.editAvatarBtn}
               onPress={handlePickImage}
@@ -383,26 +381,19 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     paddingBottom: 80,
   },
-  avatarImage: {
+  avatarContainer: {
     width: AVATAR_SIZE,
     height: AVATAR_SIZE,
     borderRadius: AVATAR_SIZE / 2,
-    borderWidth: 1,
-    borderColor: "#E5E7EB",
+    // backgroundColor: Colors.gray,
+    backgroundColor: "#E5E7EB",
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#000000ff",
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    elevation: 4,
+    overflow: "hidden",
   },
-  avatarPlaceholder: {
-    width: AVATAR_SIZE,
-    height: AVATAR_SIZE,
-    borderRadius: AVATAR_SIZE / 2,
-    backgroundColor: Colors.gray,
-    alignItems: "center",
-    justifyContent: "center",
+  avatarImage: {
+    width: "100%",
+    height: "100%",
   },
   avatarText: { fontSize: 40, color: "#fff" },
   modalBackground: {
@@ -423,8 +414,8 @@ const styles = StyleSheet.create({
     width: AVATAR_SIZE,
     height: AVATAR_SIZE,
     borderRadius: AVATAR_SIZE / 2,
-    alignItems: "center",
-    justifyContent: "center",
+    // alignItems: "center",
+    // justifyContent: "center",
   },
   editAvatarBtn: {
     position: "absolute",

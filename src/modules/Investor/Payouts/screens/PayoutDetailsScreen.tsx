@@ -102,11 +102,6 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
           <Text style={[styles.label, { marginTop: 2, marginBottom: 12 }]}>
             {payouts.participant_email}
           </Text>
-          {/* <Text style={styles.value}>{payouts.participant_name}</Text>
-            <Text style={styles.participantEmail}>
-              {" "}
-              ({payouts.participant_email})
-            </Text> */}
           {payouts.status.toLowerCase() === "cancelled" && (
             <>
               <Text style={styles.label}>Notes</Text>
@@ -117,13 +112,6 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
           )}
           {payouts.status.toLowerCase() === "paid" && (
             <>
-              {/* <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  // marginBottom: 12,
-                }}
-              > */}
               <View
                 style={{
                   flexDirection: "row",
@@ -151,7 +139,6 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
                   {payouts.reference_number || "N/A"}
                 </Text>
               </View>
-              {/* </View> */}
               <Divider />
               <View
                 style={{
@@ -181,20 +168,6 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
             {payouts.status.toLowerCase() !== "paid" &&
               payouts.status.toLowerCase() !== "cancelled" && (
                 <View style={styles.footer}>
-                  {/* <Button
-                    title="Pay"
-                    icon={
-                      <Ionicons
-                        name="send-sharp"
-                        size={20}
-                        color={Colors.white}
-                      />
-                    }
-                    onPress={() => setShowPayModal(true)}
-                    style={styles.payButton}
-                    textStyle={styles.footerButtonText}
-                    variant="outline"
-                  /> */}
                   <Button
                     title="Pay"
                     icon={
@@ -326,17 +299,6 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     backgroundColor: "#0120730D", // Red
   },
-  // payButton: {
-  //   borderRadius: 22,
-  //   alignItems: "center",
-  //   justifyContent: "center",
-  //   marginHorizontal: 5,
-  // },
-  // footerButtonText: {
-  //   color: "#fff",
-  //   fontWeight: "500",
-  //   fontSize: 12,
-  // },
   payButton: {
     height: 40,
     width: 90,

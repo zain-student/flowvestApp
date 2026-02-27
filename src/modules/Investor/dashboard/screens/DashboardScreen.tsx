@@ -171,9 +171,10 @@ export const DashboardScreen: React.FC = () => {
           />
           <Text style={styles.balanceLabelDark}>Total Managed Portfolio</Text>
           <Text style={styles.balanceValueDark}>
-            {stats?.total_managed_portfolio
-              ? formatCurrency(stats.total_managed_portfolio)
-              : "--"}
+            {/* {stats?.total_managed_portfolio
+              ? formatCurrency(stats.total_managed_portfolio ?? "0")
+              : "0.0"} */}
+            {formatCurrency(stats?.total_managed_portfolio ?? "0")}
           </Text>
           <View style={styles.mirror}>
             {/* <Text style={styles.balanceChangeDark}> */}

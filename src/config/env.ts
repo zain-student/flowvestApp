@@ -25,7 +25,7 @@ const ENV: EnvironmentConfig = {
   // 'http://localhost:8000/api'
 
   // App Configuration
-  APP_NAME: "FlowVest",
+  APP_NAME: "InvstrHub",
   APP_VERSION: "1.0.0",
   ENVIRONMENT: (process.env.EXPO_PUBLIC_ENVIRONMENT as any) || "development",
   DEBUG_MODE: process.env.EXPO_PUBLIC_DEBUG_MODE === "true",

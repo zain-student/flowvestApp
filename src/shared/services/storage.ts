@@ -3,7 +3,7 @@
  * Wrapper for secure storage using AsyncStorage (Expo-compatible)
  */
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const storage = {
   // Set item
@@ -12,7 +12,7 @@ export const storage = {
       const jsonValue = JSON.stringify(value);
       await AsyncStorage.setItem(key, jsonValue);
     } catch (error) {
-      console.error('Storage setItem error:', error);
+      console.error("Storage setItem error:", error);
       throw error;
     }
   },
@@ -23,7 +23,7 @@ export const storage = {
       const jsonValue = await AsyncStorage.getItem(key);
       return jsonValue ? JSON.parse(jsonValue) : null;
     } catch (error) {
-      console.error('Storage getItem error:', error);
+      console.error("Storage getItem error:", error);
       return null;
     }
   },
@@ -33,7 +33,7 @@ export const storage = {
     try {
       await AsyncStorage.removeItem(key);
     } catch (error) {
-      console.error('Storage removeItem error:', error);
+      console.error("Storage removeItem error:", error);
       throw error;
     }
   },
@@ -43,7 +43,7 @@ export const storage = {
     try {
       await AsyncStorage.clear();
     } catch (error) {
-      console.error('Storage clear error:', error);
+      console.error("Storage clear error:", error);
       throw error;
     }
   },
@@ -53,7 +53,7 @@ export const storage = {
     try {
       return [...(await AsyncStorage.getAllKeys())];
     } catch (error) {
-      console.error('Storage getAllKeys error:', error);
+      console.error("Storage getAllKeys error:", error);
       return [];
     }
   },
@@ -64,7 +64,7 @@ export const storage = {
       const keys = await AsyncStorage.getAllKeys();
       return keys.includes(key);
     } catch (error) {
-      console.error('Storage hasKey error:', error);
+      console.error("Storage hasKey error:", error);
       return false;
     }
   },
@@ -72,10 +72,13 @@ export const storage = {
   // Set multiple items
   multiSet: async (keyValuePairs: Array<[string, any]>): Promise<void> => {
     try {
-      const jsonPairs = keyValuePairs.map(([key, value]) => [key, JSON.stringify(value)]) as [string, string][];
+      const jsonPairs = keyValuePairs.map(([key, value]) => [
+        key,
+        JSON.stringify(value),
+      ]) as [string, string][];
       await AsyncStorage.multiSet(jsonPairs);
     } catch (error) {
-      console.error('Storage multiSet error:', error);
+      console.error("Storage multiSet error:", error);
       throw error;
     }
   },
@@ -86,7 +89,7 @@ export const storage = {
       const raw = await AsyncStorage.multiGet(keys);
       return raw.map(([key, value]) => [key, value ? JSON.parse(value) : null]);
     } catch (error) {
-      console.error('Storage multiGet error:', error);
+      console.error("Storage multiGet error:", error);
       return [];
     }
   },
@@ -96,7 +99,7 @@ export const storage = {
     try {
       await AsyncStorage.multiRemove(keys);
     } catch (error) {
-      console.error('Storage multiRemove error:', error);
+      console.error("Storage multiRemove error:", error);
       throw error;
     }
   },
@@ -105,23 +108,23 @@ export const storage = {
 // Storage keys constants
 export const StorageKeys = {
   // Authentication
-  AUTH_TOKEN: '@flowvest:token',
-  // REFRESH_TOKEN: '@flowvest:refresh_token',
-  EXPIRES_AT: '@flowvest:expires_at',
-  USER_DATA: '@flowvest:user_data',
-  SESSION: '@flowvest:session',
+  AUTH_TOKEN: "@invstrhub:token",
+  // REFRESH_TOKEN: '@invstrhub:refresh_token',
+  EXPIRES_AT: "@invstrhub:expires_at",
+  USER_DATA: "@invstrhub:user_data",
+  SESSION: "@invstrhub:session",
   // User preferences
-  THEME: '@flowvest:theme',
-  LANGUAGE: '@flowvest:language',
-  BIOMETRICS_ENABLED: '@flowvest:biometrics_enabled',
-  NOTIFICATIONS_ENABLED: '@flowvest:notifications_enabled',
+  THEME: "@invstrhub:theme",
+  LANGUAGE: "@invstrhub:language",
+  BIOMETRICS_ENABLED: "@invstrhub:biometrics_enabled",
+  NOTIFICATIONS_ENABLED: "@invstrhub:notifications_enabled",
 
   // App state
-  ONBOARDING_COMPLETED: '@flowvest:onboarding_completed',
-  LAST_SYNC: '@flowvest:last_sync',
+  ONBOARDING_COMPLETED: "@invstrhub:onboarding_completed",
+  LAST_SYNC: "@invstrhub:last_sync",
 
   // Cache
-  INVESTMENTS_CACHE: '@flowvest:investments_cache',
-  PORTFOLIO_CACHE: '@flowvest:portfolio_cache',
-  PAYOUTS_CACHE: '@flowvest:payouts_cache',
+  INVESTMENTS_CACHE: "@invstrhub:investments_cache",
+  PORTFOLIO_CACHE: "@invstrhub:portfolio_cache",
+  PAYOUTS_CACHE: "@invstrhub:payouts_cache",
 };

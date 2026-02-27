@@ -1,4 +1,4 @@
-package com.anonymous.FlowvestApp
+package com.anonymous.InvstrHub
 
 import android.app.Application
 import android.content.res.Configuration

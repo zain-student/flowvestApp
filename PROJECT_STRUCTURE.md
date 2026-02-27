@@ -1,9 +1,9 @@
-# FlowVest Mobile App - Project Structure & Best Practices
+# InvstrHub Mobile App - Project Structure & Best Practices
 
 ## 📁 Project Structure
 
 ```
-flowvestApp/
+invstrhubApp/
 ├── src/
 │   ├── /app
 │   │   ├── App.tsx                     # Entry point with providers and navigation
@@ -271,20 +271,21 @@ flowvestApp/
 ## 🏗️ Architecture Best Practices
 
 ### 1. **State Management - Redux Toolkit**
+
 ```typescript
 // Example: investmentSlice.ts
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchInvestments = createAsyncThunk(
-  'investments/fetchInvestments',
+  "investments/fetchInvestments",
   async (params: InvestmentFilters) => {
     const response = await investmentApi.getInvestments(params);
     return response.data;
-  }
+  },
 );
 
 const investmentSlice = createSlice({
-  name: 'investments',
+  name: "investments",
   initialState,
   reducers: {
     setSelectedInvestment: (state, action) => {
@@ -301,6 +302,7 @@ const investmentSlice = createSlice({
 ```
 
 ### 2. **Navigation - React Navigation 6**
+
 ```typescript
 // RootNavigator.tsx
 import { NavigationContainer } from '@react-navigation/native';
@@ -310,7 +312,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const RootNavigator = () => {
   const { isAuthenticated } = useAppSelector(state => state.auth);
-  
+
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -326,10 +328,11 @@ export const RootNavigator = () => {
 ```
 
 ### 3. **API Layer - Axios with Interceptors**
+
 ```typescript
 // services/api.ts
-import axios from 'axios';
-import { authService } from './authService';
+import axios from "axios";
+import { authService } from "./authService";
 
 const api = axios.create({
   baseURL: Config.API_BASE_URL,
@@ -354,26 +357,35 @@ api.interceptors.response.use(
       // Retry original request
     }
     return Promise.reject(error);
-  }
+  },
 );
 ```
 
 ### 4. **Custom Hooks Pattern**
+
 ```typescript
 // hooks/useInvestments.ts
 export const useInvestments = () => {
   const dispatch = useAppDispatch();
-  const { investments, loading, error } = useAppSelector(state => state.investments);
-  
-  const fetchInvestments = useCallback((filters?: InvestmentFilters) => {
-    dispatch(fetchInvestmentsThunk(filters));
-  }, [dispatch]);
-  
-  const createInvestment = useCallback(async (data: CreateInvestmentData) => {
-    const result = await dispatch(createInvestmentThunk(data));
-    return result;
-  }, [dispatch]);
-  
+  const { investments, loading, error } = useAppSelector(
+    (state) => state.investments,
+  );
+
+  const fetchInvestments = useCallback(
+    (filters?: InvestmentFilters) => {
+      dispatch(fetchInvestmentsThunk(filters));
+    },
+    [dispatch],
+  );
+
+  const createInvestment = useCallback(
+    async (data: CreateInvestmentData) => {
+      const result = await dispatch(createInvestmentThunk(data));
+      return result;
+    },
+    [dispatch],
+  );
+
   return {
     investments,
     loading,
@@ -385,11 +397,12 @@ export const useInvestments = () => {
 ```
 
 ### 5. **Component Patterns**
+
 ```typescript
 // components/ui/Button.tsx
 interface ButtonProps {
-  variant?: 'primary' | 'secondary' | 'outline';
-  size?: 'small' | 'medium' | 'large';
+  variant?: "primary" | "secondary" | "outline";
+  size?: "small" | "medium" | "large";
   onPress: () => void;
   children: React.ReactNode;
   disabled?: boolean;
@@ -397,8 +410,8 @@ interface ButtonProps {
 }
 
 export const Button: React.FC<ButtonProps> = ({
-  variant = 'primary',
-  size = 'medium',
+  variant = "primary",
+  size = "medium",
   onPress,
   children,
   disabled = false,
@@ -411,6 +424,7 @@ export const Button: React.FC<ButtonProps> = ({
 ## 🔧 Development Tools & Configuration
 
 ### **Essential Dependencies**
+
 ```json
 {
   "dependencies": {
@@ -436,6 +450,7 @@ export const Button: React.FC<ButtonProps> = ({
 ```
 
 ### **Code Quality & Standards**
+
 - **ESLint + Prettier**: Consistent code formatting
 - **TypeScript**: Full type safety
 - **Husky**: Pre-commit hooks
@@ -443,6 +458,7 @@ export const Button: React.FC<ButtonProps> = ({
 - **Detox**: E2E testing
 
 ### **Performance Optimizations**
+
 - **React.memo**: Prevent unnecessary re-renders
 - **useMemo/useCallback**: Memoize expensive operations
 - **FlatList optimization**: For large data sets
@@ -450,6 +466,7 @@ export const Button: React.FC<ButtonProps> = ({
 - **Bundle splitting**: Code splitting by modules
 
 ### **Security Best Practices**
+
 - **Secure token storage**: Keychain/Keystore
 - **Certificate pinning**: API security
 - **Biometric authentication**: Touch/Face ID
@@ -459,34 +476,39 @@ export const Button: React.FC<ButtonProps> = ({
 ## 🎯 Module Integration with Backend
 
 ### **Auth Module**
+
 - Integrates with `/api/v1/auth/*` endpoints
 - Handles JWT token management
 - Role-based navigation (admin vs user flows)
 - Biometric authentication support
 
 ### **Investment Module**
+
 - CRUD operations via `/api/v1/investments/*`
 - Real-time investment tracking
 - Shared investment discovery
 - Investment analytics dashboard
 
 ### **Payout Module**
+
 - Payout tracking via `/api/v1/payouts/*`
 - Calendar view for upcoming payouts
 - History and status management
 - Push notifications for due payouts
 
 ### **Portfolio Module**
+
 - Portfolio analytics via `/api/v1/portfolio/*`
 - Performance charts and metrics
 - Diversity analysis
 - Investment participation tracking
 
 This structure ensures:
+
 - ✅ **Scalability**: Feature-first modular architecture
 - ✅ **Maintainability**: Clear separation of concerns
 - ✅ **Type Safety**: Full TypeScript integration
 - ✅ **Performance**: Optimized for mobile devices
 - ✅ **Security**: Industry-standard security practices
 - ✅ **Testing**: Comprehensive testing strategy
-- ✅ **Backend Integration**: Seamless API connectivity 
+- ✅ **Backend Integration**: Seamless API connectivity

@@ -10,10 +10,10 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ToastAndroid } from "react-native";
 import { UserRole } from "../../../config/roles";
 import type { RootState } from "../../../shared/store";
-// const TOKEN_KEY = '@flowvest:token';
-// const REFRESH_TOKEN_KEY = '@flowvest:refresh_token';
-// const SESSION_KEY = '@flowvest:session';
-// const USER_KEY = '@flowvest:user';
+// const TOKEN_KEY = '@invstrhub:token';
+// const REFRESH_TOKEN_KEY = '@invstrhub:refresh_token';
+// const SESSION_KEY = '@invstrhub:session';
+// const USER_KEY = '@invstrhub:user';
 
 // Types
 export interface User {

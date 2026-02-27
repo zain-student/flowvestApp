@@ -102,12 +102,7 @@ export const LoginScreen: React.FC = () => {
         // Login successful - navigation will be handled by RootNavigator
         console.log("Login successful");
       } else if (loginUser.rejected.match(result)) {
-        // Login failed - error will be shown via authError
         console.log("Login failed:", result.error.message);
-        // ToastAndroid.show(
-        //   `Login failed: ${result.payload || result.error.message}`,
-        //   ToastAndroid.LONG
-        // );
       }
     } catch (error) {
       // console.error('Login error:', error);

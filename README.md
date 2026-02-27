@@ -1,16 +1,17 @@
-# 📱 FlowVest Mobile App
+# 📱 InvstrHub Mobile App
 
 ## 🎯 Overview
 
-**FlowVest Mobile** is the native React Native/Expo mobile application for the FlowVest Investment & Payout Management platform. This app provides a modern, intuitive interface for investment managers (Admins) and investors (Users) to access their investment portfolios, track payouts, and manage their financial data on-the-go.
+**InvstrHub Mobile** is the native React Native/Expo mobile application for the InvstrHub Investment & Payout Management platform. This app provides a modern, intuitive interface for investment managers (Admins) and investors (Users) to access their investment portfolios, track payouts, and manage their financial data on-the-go.
 
-The mobile app integrates seamlessly with the [FlowVest Laravel API backend](../flowvestBackend/) via JWT authentication and RESTful API calls.
+The mobile app integrates seamlessly with the [InvstrHub Laravel API backend](../invstrhubBackend/) via JWT authentication and RESTful API calls.
 
 ---
 
 ## 🏗️ Architecture & Technology Stack
 
 ### **Core Technologies**
+
 - **Framework**: React Native with Expo SDK 51+
 - **Language**: TypeScript 5.x
 - **Navigation**: React Navigation 7.x with Expo Router
@@ -22,6 +23,7 @@ The mobile app integrates seamlessly with the [FlowVest Laravel API backend](../
 - **UI Framework**: React Native with custom styled components
 
 ### **Project Structure**
+
 ```
 src/
 ├── app/                    # Main app configuration
@@ -48,11 +50,13 @@ src/
 ## 🔐 Authentication & User Roles
 
 ### **Supported User Roles**
+
 - **Superadmin** - Full system access (web interface only)
 - **Admin** - Investment managers and companies
 - **User** - Investors and partners receiving payouts
 
 ### **Authentication Features**
+
 - ✅ **Role-based registration** with company and invitation flows
 - ✅ **JWT token management** with automatic refresh
 - ✅ **Secure storage** using MMKV encryption
@@ -63,16 +67,19 @@ src/
 ### **Registration Flows**
 
 #### **Admin Registration** (Investment Managers)
+
 - Company name required
 - Automatic admin role assignment
 - Can invite users to join their company
 
 #### **User Registration (Invited)**
+
 - Requires invitation token from existing company
 - Links user to company automatically
 - Access to company's investment programs
 
 #### **User Registration (Independent)**
+
 - Self-managed investors
 - Create own company profile
 - Company types: Individual, Private, Silent Partnership, Holding
@@ -82,31 +89,36 @@ src/
 ## 🚀 Quick Start
 
 ### **Prerequisites**
+
 - Node.js 18+ and npm/yarn
 - Expo CLI (`npm install -g @expo/cli`)
 - iOS Simulator (Mac) or Android Emulator
-- FlowVest Backend API running on `http://localhost:8000`
+- InvstrHub Backend API running on `http://localhost:8000`
 
 ### **Installation**
 
 1. **Clone and navigate to the project**
+
    ```bash
    git clone <repository-url>
-   cd flowvestApp
+   cd invstrhubApp
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Configure environment**
+
    ```bash
    # Update src/config/env.ts with your API endpoints
    # Default: http://localhost:8000/api/v1
    ```
 
 4. **Start the development server**
+
    ```bash
    npx expo start
    ```
@@ -123,6 +135,7 @@ src/
 ### ✅ **Completed Features**
 
 #### **Core Infrastructure**
+
 - [x] Project setup with Expo SDK 51+
 - [x] TypeScript configuration with path aliases
 - [x] Redux Toolkit store with persistence
@@ -131,6 +144,7 @@ src/
 - [x] Error handling and logging
 
 #### **Authentication System**
+
 - [x] JWT token management with auto-refresh
 - [x] Secure storage with MMKV encryption
 - [x] Login form with validation
@@ -140,6 +154,7 @@ src/
 - [x] Form validation with Zod schemas
 
 #### **UI Components Library**
+
 - [x] Button component (variants: primary, secondary, outline, ghost)
 - [x] Input component (email, password, text with validation)
 - [x] Select component with modal picker
@@ -147,6 +162,7 @@ src/
 - [x] Loading states and feedback
 
 #### **API Integration**
+
 - [x] Axios HTTP client with interceptors
 - [x] Authentication service with all endpoints
 - [x] Error handling and user-friendly messages
@@ -156,6 +172,7 @@ src/
 ### 🚧 **Planned Features**
 
 #### **Core Modules** (Ready for Development)
+
 - [ ] **Dashboard** - Portfolio overview and analytics
 - [ ] **Investments** - Investment management and tracking
 - [ ] **Payouts** - Payout history and scheduling
@@ -164,6 +181,7 @@ src/
 - [ ] **Notifications** - Push notifications and alerts
 
 #### **Advanced Features**
+
 - [ ] **Biometric Authentication** - Face ID/Touch ID/Fingerprint
 - [ ] **Offline Support** - Cache critical data locally
 - [ ] **Push Notifications** - Real-time payout and investment alerts
@@ -176,41 +194,46 @@ src/
 ## 🔧 Development Guidelines
 
 ### **Code Organization**
+
 - **Feature-based modules**: Each feature has its own folder with components, services, and state
 - **Shared utilities**: Common components and services in `/shared`
 - **Type safety**: Full TypeScript implementation with strict typing
 - **State management**: Redux Toolkit with normalized state shape
 
 ### **Component Standards**
+
 ```typescript
 // Example component structure
 interface ComponentProps {
   title: string;
   onPress?: () => void;
-  variant?: 'primary' | 'secondary';
+  variant?: "primary" | "secondary";
 }
 
 export const Component: React.FC<ComponentProps> = ({
   title,
   onPress,
-  variant = 'primary'
+  variant = "primary",
 }) => {
   // Component implementation
 };
 ```
 
 ### **API Service Pattern**
+
 ```typescript
 // Service methods return typed responses
 class InvestmentService {
   async getInvestments(): Promise<Investment[]> {
-    const response = await apiClient.get<ApiResponse<Investment[]>>('/investments');
+    const response =
+      await apiClient.get<ApiResponse<Investment[]>>("/investments");
     return response.data;
   }
 }
 ```
 
 ### **Redux State Pattern**
+
 ```typescript
 // Each module has its own slice
 interface ModuleState {
@@ -221,8 +244,8 @@ interface ModuleState {
 
 // Async thunks for API calls
 export const fetchItems = createAsyncThunk(
-  'module/fetchItems',
-  async () => await service.getItems()
+  "module/fetchItems",
+  async () => await service.getItems(),
 );
 ```
 
@@ -231,13 +254,15 @@ export const fetchItems = createAsyncThunk(
 ## 🌐 API Integration
 
 ### **Backend Endpoints**
-The app integrates with the FlowVest Laravel API:
+
+The app integrates with the InvstrHub Laravel API:
 
 - **Base URL**: `http://localhost:8000/api/v1`
 - **Authentication**: Bearer JWT tokens
 - **Content-Type**: `application/json`
 
 ### **Key Endpoints**
+
 ```
 POST /auth/register         # User registration
 POST /auth/login           # User login
@@ -255,6 +280,7 @@ GET  /payouts/{id}         # Get payout details
 ```
 
 ### **Authentication Flow**
+
 1. User logs in → Receive JWT + refresh token
 2. Store tokens securely with MMKV
 3. Include Bearer token in all API requests
@@ -266,18 +292,21 @@ GET  /payouts/{id}         # Get payout details
 ## 🧪 Testing & Quality
 
 ### **Code Quality**
+
 - **TypeScript**: Strict mode enabled with zero compilation errors
 - **ESLint**: Configured with React Native and TypeScript rules
 - **Prettier**: Code formatting with consistent style
 - **Type Safety**: Full type coverage for API responses and state
 
 ### **Testing Strategy** (Planned)
+
 - **Unit Tests**: Component and utility function testing
 - **Integration Tests**: API service and Redux state testing
 - **E2E Tests**: Critical user flows with Detox
 - **Performance**: React Native performance monitoring
 
 ### **Development Commands**
+
 ```bash
 # Type checking
 npx tsc --noEmit
@@ -300,11 +329,13 @@ npm test
 ## 📱 Platform Support
 
 ### **Target Platforms**
+
 - **iOS**: 13.0+ (Expo managed workflow)
 - **Android**: API level 21+ (Android 5.0+)
 - **Development**: iOS Simulator, Android Emulator, Expo Go
 
 ### **Device Features**
+
 - **Biometric Authentication**: Face ID, Touch ID, Fingerprint
 - **Secure Storage**: Hardware-backed keystore when available
 - **Network Detection**: Online/offline status monitoring
@@ -315,6 +346,7 @@ npm test
 ## 🚀 Deployment
 
 ### **Build Process**
+
 ```bash
 # Development build
 npx expo build
@@ -328,6 +360,7 @@ eas build --profile preview
 ```
 
 ### **Environment Configuration**
+
 - **Development**: `src/config/env.ts` → localhost API
 - **Staging**: Update API endpoints for staging environment
 - **Production**: Update API endpoints for production environment
@@ -337,6 +370,7 @@ eas build --profile preview
 ## 🤝 Contributing
 
 ### **Development Workflow**
+
 1. Create feature branch from `main`
 2. Implement feature with TypeScript
 3. Add/update types and interfaces
@@ -345,6 +379,7 @@ eas build --profile preview
 6. Submit pull request with clear description
 
 ### **Commit Convention**
+
 ```
 feat: add investment dashboard screen
 fix: resolve token refresh issue
@@ -354,6 +389,7 @@ test: add authentication flow tests
 ```
 
 ### **Code Review Checklist**
+
 - [ ] TypeScript compilation passes
 - [ ] No ESLint warnings
 - [ ] Component props are properly typed
@@ -367,12 +403,14 @@ test: add authentication flow tests
 ## 📞 Support & Documentation
 
 ### **Additional Resources**
-- **Backend API**: See `../flowvestBackend/README.md`
+
+- **Backend API**: See `../invstrhubBackend/README.md`
 - **API Documentation**: `http://localhost:8000/docs` (when backend is running)
 - **Expo Documentation**: [https://docs.expo.dev](https://docs.expo.dev)
 - **React Navigation**: [https://reactnavigation.org](https://reactnavigation.org)
 
 ### **Development Team Notes**
+
 - All authentication flows are complete and tested
 - Redux store is configured with proper persistence
 - API integration is ready for all planned modules
@@ -385,4 +423,4 @@ test: add authentication flow tests
 
 ## 📄 License
 
-This project is part of the FlowVest Investment Management platform. All rights reserved.
+This project is part of the InvstrHub Investment Management platform. All rights reserved.

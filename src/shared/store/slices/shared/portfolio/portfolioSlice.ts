@@ -3,7 +3,6 @@ import { API_ENDPOINTS } from "@/config/env";
 // import { storage, StorageKeys } from "@/shared/services/storage";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "@shared/services/api"; // Adjust the path as per your structure
-import { ToastAndroid } from "react-native";
 
 export interface PortfolioSummary {
   total_investments: number;
@@ -106,7 +105,7 @@ export const fetchPortfolio = createAsyncThunk<
 >("portfolio/fetchPortfolio", async (_, thunkAPI) => {
   try {
     const response = await api.get(API_ENDPOINTS.PORTFOLIO.INDEX);
-    ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+    // ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
     console.log("Portfolio api response data:", response.data.data);
     return response.data;
   } catch (error: any) {

@@ -37,6 +37,38 @@ interface Pagination {
   per_page: number;
   total: number;
 }
+export interface PayoutStats {
+  total_payouts: number;
+  total_amount: number;
+  paid_amount: number;
+  pending_amount: number;
+  missed_amount: number;
+
+  by_status: {
+    [key: string]: {
+      status: string;
+      count: number;
+      total_amount: string;
+    };
+  };
+
+  by_type: {
+    [key: string]: {
+      payout_type: string;
+      count: number;
+      total_amount: string;
+      status: string;
+    };
+  };
+
+  monthly_trends: {
+    month: string; // "2026-02"
+    count: number;
+    total_amount: string;
+    status: string;
+    payout_type: string;
+  }[];
+}
 interface summary {
   total_payouts: number;
   total_amount: number;
@@ -54,20 +86,22 @@ export interface PayoutsResponse {
 }
 interface PayoutState {
   payouts: Payout[];
+  stats: PayoutStats | null;
   isLoading: boolean;
   isLoadingMore: boolean;
   error: string | null;
-  totalPayoutAmount: number;
+  // totalPayoutAmount: number;
   currentPayout: Payout | null;
   pagination: Pagination;
 }
 
 const initialState: PayoutState = {
   payouts: [],
+  stats: null,
   isLoading: false,
   isLoadingMore: false,
   error: null,
-  totalPayoutAmount: 0,
+  // totalPayoutAmount: 0,
   currentPayout: null,
   pagination: {
     current_page: 1,
@@ -76,7 +110,22 @@ const initialState: PayoutState = {
     total: 0,
   },
 };
-
+export const fetchPayoutStats = createAsyncThunk<
+  PayoutStats,
+  void,
+  { rejectValue: string }
+>("payouts/fetchStats", async (_, { rejectWithValue }) => {
+  try {
+    const response = await api.get(API_ENDPOINTS.PAYOUTS.STATISTICS);
+    console.log("Payouts stats: ", response.data);
+    return response.data.data;
+  } catch (error: any) {
+    console.log("Stats error:", error.message);
+    return rejectWithValue(
+      error.response?.data?.message || "Failed to fetch payout stats",
+    );
+  }
+});
 // Async thunk to fetch payouts
 export const fetchPayouts = createAsyncThunk<
   { payouts: Payout[]; pagination: Pagination; page: number },
@@ -198,6 +247,17 @@ const payoutSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(fetchPayoutStats.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchPayoutStats.fulfilled, (state, action) => {
+        state.stats = action.payload; // ✅ Direct assign
+        state.isLoading = false;
+      })
+      .addCase(fetchPayoutStats.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
       //reducers for Fetchpayouts
       .addCase(fetchPayouts.pending, (state, action) => {
         const page = typeof action.meta.arg === "number" ? action.meta.arg : 1;
@@ -219,10 +279,10 @@ const payoutSlice = createSlice({
         } else {
           state.payouts = payouts;
         }
-        state.totalPayoutAmount = state.payouts.reduce(
-          (sum: number, payout: Payout) => sum + payout.amount,
-          0,
-        );
+        // state.totalPayoutAmount = state.payouts.reduce(
+        //   (sum: number, payout: Payout) => sum + payout.amount,
+        //   0,
+        // );
         state.isLoading = false;
         state.isLoadingMore = false;
       })

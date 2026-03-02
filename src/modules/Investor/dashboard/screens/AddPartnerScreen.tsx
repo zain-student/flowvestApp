@@ -202,7 +202,7 @@ export const AddPartnerScreen = () => {
               </TouchableOpacity>
             )}
             ListEmptyComponent={
-              <Text style={styles.emptyText}>No matching partners</Text>
+              <Text style={styles.emptyText}>No Partner Available</Text>
             }
           />
         )}
@@ -596,7 +596,12 @@ const styles = StyleSheet.create({
   partnerName: { fontWeight: "600", color: Colors.secondary },
   Text: { marginLeft: 4, fontSize: 12, color: Colors.secondary },
   subText: { fontSize: 12, color: Colors.gray },
-  emptyText: { textAlign: "center", color: Colors.gray, paddingVertical: 20 },
+  emptyText: {
+    textAlign: "center",
+    color: Colors.gray,
+    paddingVertical: 20,
+    fontSize: 16,
+  },
 
   title: {
     fontSize: 22,

@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "@/shared/store";
 import {
   bulkUpdatePayouts,
   fetchPayouts,
+  fetchPayoutStats,
 } from "@/shared/store/slices/investor/payouts/payoutSlice";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather, Ionicons } from "@expo/vector-icons";
@@ -28,7 +29,7 @@ const FILTERS = ["All", "Cancelled", "Scheduled", "Paid"];
 
 export const PayoutsScreen: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { payouts, totalPayoutAmount, isLoading, isLoadingMore, pagination } =
+  const { payouts, stats, isLoading, isLoadingMore, pagination } =
     useAppSelector((state) => state.payout);
   const [filter, setFilter] = useState("All");
   const navigation =
@@ -56,17 +57,20 @@ export const PayoutsScreen: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchPayouts(1));
+    dispatch(fetchPayoutStats());
   }, []);
 
   // Pagination + Refresh
   const handleLoadMore = () => {
     if (!isLoadingMore && pagination.current_page !== pagination.last_page) {
       dispatch(fetchPayouts(pagination.current_page + 1));
+      dispatch(fetchPayoutStats());
     }
   };
 
   const handleRefresh = () => {
     dispatch(fetchPayouts(1));
+    dispatch(fetchPayoutStats());
   };
 
   // ✅ Selection logic
@@ -117,6 +121,7 @@ export const PayoutsScreen: React.FC = () => {
       setSelectionMode(false);
       setSelectedPayouts([]);
       dispatch(fetchPayouts(1)); // refresh list
+      dispatch(fetchPayoutStats());
     } catch (error: any) {
       ToastAndroid.show(
         error?.message || "Failed to mark payouts as paid.",
@@ -205,24 +210,45 @@ export const PayoutsScreen: React.FC = () => {
 
           <Text style={styles.cardTitle}>Total Payouts amount</Text>
           <Text style={styles.cardValue}>
-            {formatCurrency(Number(totalPayoutAmount.toFixed(1) ?? "--"))}
+            {formatCurrency(stats?.total_amount ?? "0")}
           </Text>
-          <View style={styles.mirror}>
-            <Text
-              style={{
-                color: Colors.white,
-                fontWeight: "400",
-                fontFamily: "Inter_400Regular",
-                fontSize: 12,
-              }}
-            >
-              Total payouts:{" "}
-              <Text style={styles.cardSubtitle}>
-                {/* July 15, 2024 */}
-                {pagination.total}
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <View style={styles.mirror}>
+              <Text
+                style={{
+                  color: Colors.white,
+                  fontWeight: "400",
+                  fontFamily: "Inter_400Regular",
+                  fontSize: 12,
+                }}
+              >
+                Total payouts:{" "}
+                <Text style={styles.cardSubtitle}>
+                  {/* July 15, 2024 */}
+                  {stats?.total_payouts}
+                </Text>
               </Text>
-            </Text>
+            </View>
+            <View style={styles.mirror}>
+              <Text
+                style={{
+                  color: Colors.white,
+                  fontWeight: "400",
+                  fontFamily: "Inter_400Regular",
+                  fontSize: 12,
+                }}
+              >
+                Paid:{" "}
+                <Text style={styles.cardSubtitle}>
+                  {/* July 15, 2024 */}
+                  {formatCurrency(stats?.paid_amount ?? "0")}
+                </Text>
+              </Text>
+            </View>
           </View>
+
           {/* <View style={styles.balanceActionsRow}></View> */}
           {/* </View> */}
           <Image
@@ -349,7 +375,7 @@ const styles = StyleSheet.create({
   },
   mirror: {
     backgroundColor: Colors.mirror,
-    width: "50%",
+    width: "47%",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 18,

@@ -41,6 +41,17 @@ export const PortfolioScreen: React.FC = () => {
     dispatch(fetchPortfolio());
     dispatch(getCurrentUser());
   }, [dispatch]);
+  const participation =
+    data?.participations?.map((inv: any) => ({
+      id: inv.investment_id,
+      name: inv.investment_name,
+      value: parseFloat(inv.invested_amount || inv.initial_amount),
+      status: inv.status,
+      earned: inv.total_earned,
+      // growth: `${inv.performance?.completion_percentage ?? 0}%`,
+      // expected_return_rate: `${Number(inv.expected_return_rate ?? 0).toFixed(2)}%`,
+      joined: inv.joined_at,
+    })) ?? [];
   const assets =
     data?.own_investments?.map((inv: any) => ({
       id: inv.id,
@@ -80,7 +91,7 @@ export const PortfolioScreen: React.FC = () => {
                 size={12}
                 color={Colors.secondary}
               />
-              <Text style={styles.assetMeta}>Start: {item.start}</Text>
+              <Text style={styles.assetMeta}>Joined: {item.joined}</Text>
             </View>
           </View>
         </View>
@@ -89,10 +100,10 @@ export const PortfolioScreen: React.FC = () => {
         <View style={styles.assetRight}>
           <View style={styles.assetBadge}>
             <Text style={styles.assetBadgeText}>
-              {item.type.charAt(0).toUpperCase() + item.type.slice(1)}
+              {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
             </Text>
           </View>
-          <Text style={styles.assetGrowth}>{item.expected_return_rate}</Text>
+          <Text style={styles.assetGrowth}>{formatCurrency(item.earned)}</Text>
         </View>
       </View>
     );
@@ -275,8 +286,30 @@ export const PortfolioScreen: React.FC = () => {
         </View>
 
         <Text style={styles.sectionTitle}>Investments Assets</Text>
-        <FlatList
+        {/* <FlatList
           data={assets}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderAssets}
+          showsVerticalScrollIndicator={false}
+          scrollEnabled={false}
+          ListFooterComponent={
+            isLoading ? (
+              <ActivityIndicator size="small" color={Colors.primary} />
+            ) : null
+          }
+          ListEmptyComponent={
+            <View style={styles.emptyState}>
+              <Image
+                source={require("../../../../../assets/images/noInvestment.png")}
+                style={{ width: 100, height: 100, alignSelf: "center" }}
+              />
+              <Text style={styles.emptyText}>No investments assets found</Text>
+            </View>
+          }
+          contentContainerStyle={styles.scrollContent}
+        /> */}
+        <FlatList
+          data={participation}
           keyExtractor={(item) => item.id.toString()}
           renderItem={renderAssets}
           showsVerticalScrollIndicator={false}
@@ -498,6 +531,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "Inter_600SemiBold",
     color: Colors.green,
+    marginTop: 5,
+    marginRight: 8,
   },
   fab: {
     position: "absolute",

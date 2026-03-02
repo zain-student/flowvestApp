@@ -340,7 +340,7 @@ export const AddPartnerScreen = () => {
                   }}
                 />
 
-                <Controller
+                {/* <Controller
                   control={control}
                   name="description"
                   render={({ field }) => (
@@ -353,7 +353,7 @@ export const AddPartnerScreen = () => {
                       multiline
                     />
                   )}
-                />
+                /> */}
 
                 {/* --- Account Credentials Section --- */}
                 {!editingPartner && (

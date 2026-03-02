@@ -14,7 +14,7 @@ export interface CreatePartnerPayload {
   company_name: string;
   company_type: "private" | "individual" | "silent" | "holding";
   address?: string;
-  description?: string;
+  // description?: string;
   // initial_investment?: string;
   notes?: string;
   send_email?: boolean;

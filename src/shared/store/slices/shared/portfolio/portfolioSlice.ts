@@ -30,7 +30,17 @@ export interface InvestmentMetadata {
   notes?: string | null;
   investment_type_id?: number;
 }
-
+export interface participations {
+  investment_id: number;
+  investment_name: string;
+  invested_amount: number;
+  participation_percentage: number;
+  total_earned: number;
+  total_pending: number;
+  roi_percentage: number;
+  status: string;
+  joined_at: string;
+}
 export interface Investment {
   id: number;
   name: string;
@@ -73,7 +83,7 @@ export interface PortfolioPerformance {
 export interface PortfolioData {
   summary: PortfolioSummary;
   own_investments: Investment[];
-  participations: any[];
+  participations: participations[];
   upcoming_payouts: any[];
   performance: PortfolioPerformance;
 }

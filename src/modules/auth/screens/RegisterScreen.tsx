@@ -183,7 +183,7 @@ export const RegisterScreen = () => {
 
   const renderStep1 = () => (
     <View style={styles.card}>
-      <Text style={styles.title}>Create Your Account</Text>
+      {/* <Text style={styles.title}>Create Your Account</Text> */}
       <Text style={styles.subtitle}>
         Join thousands of investors managing their portfolios with confidence
       </Text>

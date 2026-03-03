@@ -13,6 +13,7 @@ import { RouteProp, useRoute } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useEffect } from "react";
 import {
+  ActivityIndicator,
   Alert,
   ScrollView,
   StyleSheet,
@@ -31,6 +32,7 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
     useRoute<RouteProp<PayoutStackParamList, "PayoutDetails">>().params;
   const dispatch = useAppDispatch();
   const payouts = useAppSelector((state) => state.payout.currentPayout);
+  const isLoading = useAppSelector((state) => state.payout.isLoading);
   const [showPayModal, setShowPayModal] = React.useState(false);
   useEffect(() => {
     dispatch(fetchPayoutsById(id));
@@ -41,6 +43,9 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
         <Text>Payouts not found.</Text>
       </View>
     );
+  }
+  if (isLoading) {
+    return <ActivityIndicator size="large" color={Colors.primary} />;
   }
   const delPayout = async () => {
     try {

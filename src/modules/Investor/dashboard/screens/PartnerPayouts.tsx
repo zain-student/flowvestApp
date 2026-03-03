@@ -26,14 +26,32 @@ export const PartnerPayouts = ({ route }: any) => {
       {/* Amount + Status */}
       <View style={styles.cardHeader}>
         <Text style={styles.inveName}>{item.investment}</Text>
-        <Text
+        {/* <Text
           style={[
             styles.status,
             item.status === "paid" ? styles.paid : styles.pending,
           ]}
         >
           {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-        </Text>
+        </Text> */}
+
+        <View
+          style={[
+            styles.status,
+            item.status === "active" ? styles.paid : styles.pending,
+          ]}
+        >
+          <Text
+            style={{
+              color:
+                item.status === "active"
+                  ? Colors.activeStatus
+                  : Colors.inActiveStatus,
+            }}
+          >
+            {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+          </Text>
+        </View>
       </View>
 
       {/* Method + Date */}
@@ -181,13 +199,11 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_700Bold",
   },
   status: {
-    fontSize: 13,
-    paddingHorizontal: 12,
-    paddingVertical: 5,
-    borderRadius: 20,
-    overflow: "hidden",
-    color: "white",
-    fontFamily: "Inter_600SemiBold",
+    fontWeight: "600",
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 8,
+    alignSelf: "flex-start",
   },
   paid: {
     backgroundColor: Colors.activeStatusBg,

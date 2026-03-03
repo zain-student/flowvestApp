@@ -63,15 +63,24 @@ export const PartnerDetailScreen = () => {
         <Text style={styles.name}>{partner.name}</Text>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <Text style={styles.email}>Email: {partner.email}</Text>
-          <Text
+          <View
             style={[
               styles.status,
               partner.status === "active" ? styles.active : styles.inactive,
             ]}
           >
-            {partner.status?.charAt(0).toUpperCase()}
-            {partner.status?.slice(1)}
-          </Text>
+            <Text
+              style={{
+                color:
+                  partner.status === "active"
+                    ? Colors.activeStatus
+                    : Colors.inActiveStatus,
+              }}
+            >
+              {partner.status?.charAt(0).toUpperCase()}
+              {partner.status?.slice(1)}
+            </Text>
+          </View>
         </View>
         <Text style={styles.email}>Phone: {partner.phone || "N/A"}</Text>
       </View>

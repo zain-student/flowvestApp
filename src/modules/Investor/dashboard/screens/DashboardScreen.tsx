@@ -230,23 +230,14 @@ export const DashboardScreen: React.FC = () => {
                 ]}
               >
                 <View style={{ flex: 1 }}>
-                  {/* <View style={{ marginBottom: 6,backgroundColor:Colors.lightGray,width:'28%',height:'28%',justifyContent:'center',borderRadius:20,alignItems:'center' }} > */}
-
-                  <Feather
-                    name={card.icon as any}
-                    size={22}
-                    color={Colors.primary}
-                    style={{
-                      backgroundColor: Colors.lightGray,
-                      width: 44,
-                      height: 44,
-                      borderRadius: 22,
-                      justifyContent: "center",
-                      alignItems: "center",
-                      padding: 10,
-                    }}
-                  />
-                  {/* </View> */}
+                  <View style={styles.iconWrapper}>
+                    {/* </View> */}
+                    <Feather
+                      name={card.icon as any}
+                      size={22}
+                      color={Colors.primary}
+                    />
+                  </View>
                   <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <Text style={styles.statLabelLarge}>{card.label}: </Text>
                     <Text style={styles.statValueLarge}>{card.value}</Text>

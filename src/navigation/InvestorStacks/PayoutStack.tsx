@@ -29,14 +29,10 @@ export const PayoutStack = () => {
             <TouchableOpacity
               onPress={() => navigation.goBack()}
               style={{
-                marginRight: 16,
-                marginLeft: 10,
-                marginTop: 5,
-                marginBottom: 5,
-                backgroundColor: "#F3F4F6",
-                width: 50,
-                height: 50,
-                borderRadius: 25,
+                // marginLeft: 10, // only this
+                width: 40,
+                height: 40,
+                borderRadius: 20,
                 justifyContent: "center",
                 alignItems: "center",
               }}

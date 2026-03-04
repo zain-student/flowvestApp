@@ -1,13 +1,13 @@
-import { PartnerDetailScreen } from '@/modules/Investor/dashboard/screens/PartnerDetailScreen';
+import { PartnerDetailScreen } from "@/modules/Investor/dashboard/screens/PartnerDetailScreen";
 import { PartnerInvestments } from "@/modules/Investor/dashboard/screens/PartnerInvestments";
 import { PartnerPayouts } from "@/modules/Investor/dashboard/screens/PartnerPayouts";
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from "@expo/vector-icons";
 import { PartnerPerformanceScreen } from "@modules/Investor/dashboard/screens/PartnerPerformanceScreen";
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React from 'react';
-import { TouchableOpacity } from 'react-native';
-import { AddPartnerScreen } from '../../modules/Investor/dashboard/screens/AddPartnerScreen';
-import { DashboardScreen } from '../../modules/Investor/dashboard/screens/DashboardScreen';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React from "react";
+import { TouchableOpacity } from "react-native";
+import { AddPartnerScreen } from "../../modules/Investor/dashboard/screens/AddPartnerScreen";
+import { DashboardScreen } from "../../modules/Investor/dashboard/screens/DashboardScreen";
 export type InvestorDashboardStackParamList = {
   InvestorDashboard: undefined;
   AddPartner: { partner?: any };
@@ -15,15 +15,16 @@ export type InvestorDashboardStackParamList = {
   PartnerDetail: { id: number };
   PartnerInvestment: { id: number };
   PartnerPayout: { id: number };
-  PartnerPerformance:{id: number};
+  PartnerPerformance: { id: number };
 };
-export const Stack = createNativeStackNavigator<InvestorDashboardStackParamList>();
+export const Stack =
+  createNativeStackNavigator<InvestorDashboardStackParamList>();
 export const InvestorDashboardStack = () => {
   return (
     <Stack.Navigator
       initialRouteName="InvestorDashboard"
       screenOptions={{
-        animation: 'slide_from_right',
+        animation: "slide_from_right",
       }}
     >
       <Stack.Screen
@@ -39,20 +40,16 @@ export const InvestorDashboardStack = () => {
         component={AddPartnerScreen}
         options={({ navigation }) => ({
           // gestureEnabled: false,
-          title: 'Add Partner',
-          headerTitleAlign: 'center',
+          title: "Add Partner",
+          headerTitleAlign: "center",
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => navigation.goBack()}
               style={{
-                marginRight: 16,
-                marginLeft: 10,
-                marginTop: 5,
-                marginBottom: 5,
-                backgroundColor: "#F3F4F6",
+                // marginLeft: 10, // only this
                 width: 40,
                 height: 40,
-                borderRadius: 25,
+                borderRadius: 20,
                 justifyContent: "center",
                 alignItems: "center",
               }}
@@ -67,20 +64,16 @@ export const InvestorDashboardStack = () => {
         component={PartnerDetailScreen}
         options={({ navigation }) => ({
           // gestureEnabled: false,
-          title: 'Partner Details',
-          headerTitleAlign: 'center',
+          title: "Partner Details",
+          headerTitleAlign: "center",
           headerLeft: () => (
             <TouchableOpacity
-              onPress={() => navigation.goBack()} 
+              onPress={() => navigation.goBack()}
               style={{
-                marginRight: 16,
-                marginLeft: 10,
-                marginTop: 5,
-                marginBottom: 5,
-                backgroundColor: "#F3F4F6",
+                // marginLeft: 10, // only this
                 width: 40,
                 height: 40,
-                borderRadius: 25,
+                borderRadius: 20,
                 justifyContent: "center",
                 alignItems: "center",
               }}
@@ -95,20 +88,16 @@ export const InvestorDashboardStack = () => {
         component={PartnerInvestments}
         options={({ navigation }) => ({
           // gestureEnabled: false,
-          title: 'Partner Investments',
-          headerTitleAlign: 'center',
+          title: "Partner Investments",
+          headerTitleAlign: "center",
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => navigation.goBack()}
               style={{
-                marginRight: 16,
-                marginLeft: 10,
-                marginTop: 5,
-                marginBottom: 5,
-                backgroundColor: "#F3F4F6",
+                // marginLeft: 10, // only this
                 width: 40,
                 height: 40,
-                borderRadius: 25,
+                borderRadius: 20,
                 justifyContent: "center",
                 alignItems: "center",
               }}
@@ -123,20 +112,16 @@ export const InvestorDashboardStack = () => {
         component={PartnerPayouts}
         options={({ navigation }) => ({
           // gestureEnabled: false,
-          title: 'Partner Payouts',
-          headerTitleAlign: 'center',
+          title: "Partner Payouts",
+          headerTitleAlign: "center",
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => navigation.goBack()}
               style={{
-                marginRight: 16,
-                marginLeft: 10,
-                marginTop: 5,
-                marginBottom: 5,
-                backgroundColor: "#F3F4F6",
+                // marginLeft: 10, // only this
                 width: 40,
                 height: 40,
-                borderRadius: 25,
+                borderRadius: 20,
                 justifyContent: "center",
                 alignItems: "center",
               }}
@@ -151,20 +136,16 @@ export const InvestorDashboardStack = () => {
         component={PartnerPerformanceScreen}
         options={({ navigation }) => ({
           // gestureEnabled: false,
-          title: 'Partner Performance',
-          headerTitleAlign: 'center',
+          title: "Partner Performance",
+          headerTitleAlign: "center",
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => navigation.goBack()}
               style={{
-                marginRight: 16,
-                marginLeft: 10,
-                marginTop: 5,
-                marginBottom: 5,
-                backgroundColor: "#F3F4F6",
+                // marginLeft: 10, // only this
                 width: 40,
                 height: 40,
-                borderRadius: 25,
+                borderRadius: 20,
                 justifyContent: "center",
                 alignItems: "center",
               }}
@@ -175,8 +156,7 @@ export const InvestorDashboardStack = () => {
         })}
       />
     </Stack.Navigator>
-  )
-}
+  );
+};
 
 // export default InvestorDashboardStack
-

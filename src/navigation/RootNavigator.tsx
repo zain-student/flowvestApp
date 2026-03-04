@@ -180,14 +180,10 @@ export const RootNavigator: React.FC = () => {
                   <TouchableOpacity
                     onPress={() => navigation.goBack()}
                     style={{
-                      marginRight: 16,
-                      marginLeft: 10,
-                      marginTop: 5,
-                      marginBottom: 5,
-                      backgroundColor: "#F3F4F6",
+                      // marginLeft: 10, // only this
                       width: 40,
                       height: 40,
-                      borderRadius: 25,
+                      borderRadius: 20,
                       justifyContent: "center",
                       alignItems: "center",
                     }}
@@ -209,14 +205,10 @@ export const RootNavigator: React.FC = () => {
                   <TouchableOpacity
                     onPress={() => navigation.goBack()}
                     style={{
-                      marginRight: 16,
-                      marginLeft: 10,
-                      marginTop: 5,
-                      marginBottom: 5,
-                      backgroundColor: "#F3F4F6",
+                      // marginLeft: 10, // only this
                       width: 40,
                       height: 40,
-                      borderRadius: 25,
+                      borderRadius: 20,
                       justifyContent: "center",
                       alignItems: "center",
                     }}

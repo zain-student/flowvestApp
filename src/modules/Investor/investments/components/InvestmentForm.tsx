@@ -571,7 +571,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
-    paddingHorizontal: 20,
+    // paddingHorizontal: 20,
     // paddingBottom: 80,
     paddingTop: 10,
     // paddingBottom: 70,
@@ -580,7 +580,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 12, // if not supported use marginRight
     // marginTop: 16,
-    marginBottom: 16,
+    // marginBottom: 16,
     zIndex: 2000,
   },
 
@@ -589,7 +589,11 @@ const styles = StyleSheet.create({
     // zIndex: 2000,
   },
 
-  innerContainer: {},
+  innerContainer: {
+    paddingHorizontal: 12, // ✅ move it here
+    paddingTop: 10,
+    // paddingBottom: 40,
+  },
   title: {
     fontSize: 22,
     fontWeight: "600",

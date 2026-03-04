@@ -46,7 +46,7 @@ export const PartnerPayouts = ({ route }: any) => {
               color:
                 item.status === "active"
                   ? Colors.activeStatus
-                  : Colors.inActiveStatus,
+                  : Colors.statusText,
             }}
           >
             {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
@@ -199,18 +199,16 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_700Bold",
   },
   status: {
-    fontWeight: "600",
+    paddingHorizontal: 10,
     paddingVertical: 4,
-    paddingHorizontal: 8,
-    borderRadius: 8,
-    alignSelf: "flex-start",
+    borderRadius: 20,
   },
   paid: {
     backgroundColor: Colors.activeStatusBg,
     color: Colors.activeStatus,
   },
   pending: {
-    backgroundColor: Colors.inActiveStatusBg,
+    backgroundColor: Colors.statusbg,
     color: Colors.inActiveStatus,
   },
   cardFooter: {

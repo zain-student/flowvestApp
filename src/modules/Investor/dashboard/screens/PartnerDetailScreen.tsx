@@ -73,7 +73,7 @@ export const PartnerDetailScreen = () => {
               style={{
                 color:
                   partner.status === "active"
-                    ? Colors.activeStatus
+                    ? Colors.statusText
                     : Colors.inActiveStatus,
               }}
             >
@@ -245,14 +245,12 @@ const styles = StyleSheet.create({
   name: { fontSize: 20, fontWeight: "700", color: Colors.secondary },
   email: { fontSize: 14, color: Colors.gray, marginVertical: 4 },
   status: {
-    fontWeight: "600",
+    paddingHorizontal: 10,
     paddingVertical: 4,
-    paddingHorizontal: 8,
-    borderRadius: 8,
-    alignSelf: "flex-start",
+    borderRadius: 20,
   },
   active: {
-    backgroundColor: Colors.activeStatusBg,
+    backgroundColor: Colors.statusbg,
     color: Colors.activeStatus,
   },
   inactive: {

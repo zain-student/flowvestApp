@@ -38,7 +38,7 @@ export const PartnerInvestments = ({ route }: any) => {
             style={{
               color:
                 item.status === "active"
-                  ? Colors.activeStatus
+                  ? Colors.statusText
                   : Colors.inActiveStatus,
             }}
           >
@@ -208,14 +208,12 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_600SemiBold",
   },
   status: {
-    fontWeight: "600",
+    paddingHorizontal: 10,
     paddingVertical: 4,
-    paddingHorizontal: 8,
-    borderRadius: 8,
-    alignSelf: "flex-start",
+    borderRadius: 20,
   },
   active: {
-    backgroundColor: Colors.activeStatusBg,
+    backgroundColor: Colors.statusbg,
     color: Colors.activeStatus,
   },
   inactive: {

@@ -322,6 +322,7 @@ export const PayoutsScreen: React.FC = () => {
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.5}
           refreshing={isLoading}
+          showsVerticalScrollIndicator={false}
           onRefresh={handleRefresh}
           ListHeaderComponent={
             payouts.length === 0 ? null : (

@@ -313,6 +313,7 @@ export const InvestmentsScreen: React.FC = () => {
           onEndReachedThreshold={0.5}
           refreshing={isLoading}
           onRefresh={handleRefresh}
+          showsVerticalScrollIndicator={false}
           ListFooterComponent={
             isLoadingMore ? (
               <ActivityIndicator size="small" color={Colors.green} />

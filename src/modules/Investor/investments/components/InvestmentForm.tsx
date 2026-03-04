@@ -3,10 +3,6 @@ import { Button, Input } from "@/shared/components/ui";
 import { DatePicker } from "@/shared/components/ui/DatePicker";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { getCurrencies } from "@/shared/store/slices/profile/profileSlice";
-// import {
-//   sharedInvestmentSchema,
-//   soloInvestmentSchema,
-// } from "@modules/auth/utils/authValidation";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
@@ -298,39 +294,39 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
         />
         <View style={{ height: 16 }} />
         {/* Start Date */}
-        <View style={{ flexDirection: "row", gap: 10 }}>
-          <View style={{ flex: 1 }}>
-            <Controller
-              control={control}
-              name="start_date"
-              render={({ field, fieldState }) => (
-                <DatePicker
-                  type="start"
-                  value={field.value}
-                  onChange={field.onChange}
-                  error={fieldState.error?.message}
-                  otherDate={watch("end_date")}
-                />
-              )}
-            />
-          </View>
-          {/* End Date */}
-          <View style={{ flex: 1 }}>
-            <Controller
-              control={control}
-              name="end_date"
-              render={({ field, fieldState }) => (
-                <DatePicker
-                  type="end"
-                  value={field.value}
-                  onChange={field.onChange}
-                  error={fieldState.error?.message}
-                  otherDate={watch("start_date")}
-                />
-              )}
-            />
-          </View>
+        {/* <View style={{ flexDirection: "row", gap: 10 }}> */}
+        <View style={{ flex: 1, zIndex: 2 }}>
+          <Controller
+            control={control}
+            name="start_date"
+            render={({ field, fieldState }) => (
+              <DatePicker
+                type="start"
+                value={field.value}
+                onChange={field.onChange}
+                error={fieldState.error?.message}
+                otherDate={watch("end_date")}
+              />
+            )}
+          />
         </View>
+        {/* End Date */}
+        <View style={{ flex: 1, zIndex: 1 }}>
+          <Controller
+            control={control}
+            name="end_date"
+            render={({ field, fieldState }) => (
+              <DatePicker
+                type="end"
+                value={field.value}
+                onChange={field.onChange}
+                error={fieldState.error?.message}
+                otherDate={watch("start_date")}
+              />
+            )}
+          />
+        </View>
+        {/* </View> */}
         {/* Shared Fields */}
         {isShared && (
           <>
@@ -487,6 +483,7 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
             />
           </View>
         </View>
+        <View style={{ height: 16 }} />
         {/* Return Type */}
         <Controller
           control={control}

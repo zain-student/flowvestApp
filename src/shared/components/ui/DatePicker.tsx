@@ -11,11 +11,6 @@ import {
   View,
 } from "react-native";
 
-// interface DatePickerProps {
-//   startDate: string;
-//   endDate: string;
-//   onChange: (start: string, end: string) => void;
-// }
 interface DatePickerProps {
   type: "start" | "end";
   value: string;
@@ -23,91 +18,7 @@ interface DatePickerProps {
   onChange: (date: string) => void;
   error?: string;
 }
-// export const DatePicker: React.FC<DatePickerProps> = ({
-//   startDate,
-//   endDate,
-//   onChange,
-// }) => {
-//   const [showPicker, setShowPicker] = useState<"start" | "end" | null>(null);
 
-//   const parseDate = (dateString: string) => {
-//     if (!dateString) return new Date(); // default to today if empty
-//     const parts = dateString.split("-");
-//     return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
-//   };
-
-//   const formatDate = (date: Date) => {
-//     const y = date.getFullYear();
-//     const m = String(date.getMonth() + 1).padStart(2, "0");
-//     const d = String(date.getDate()).padStart(2, "0");
-//     return `${y}-${m}-${d}`;
-//   };
-
-//   const handleDateChange = (_: any, selectedDate?: Date) => {
-//     if (Platform.OS === "android") setShowPicker(null);
-//     if (!selectedDate) return;
-
-//     if (showPicker === "start") {
-//       // If start date > end date, reset end date
-//       if (endDate && selectedDate > parseDate(endDate)) {
-//         onChange(formatDate(selectedDate), "");
-//       } else {
-//         onChange(formatDate(selectedDate), endDate);
-//       }
-//     } else if (showPicker === "end") {
-//       // Prevent end date before start date
-//       if (startDate && selectedDate < parseDate(startDate)) {
-//         Alert.alert("Invalid Date", "End date cannot be before start date.");
-//         return;
-//       }
-//       onChange(startDate, formatDate(selectedDate));
-//     }
-//   };
-//   return (
-//     <View style={styles.container}>
-//       <View style={styles.row}>
-//         {/* Start Date */}
-//         <View style={styles.dateWrapper}>
-//           <Text style={styles.label}>Start Date *</Text>
-//           <Pressable
-//             style={styles.dateBtn}
-//             onPress={() => setShowPicker("start")}
-//           >
-//             <Ionicons name="calendar" size={20} color={Colors.gray} />
-//             <Text style={[styles.dateText, !startDate && styles.placeholder]}>
-//               {startDate || "Start Date"}
-//             </Text>
-//           </Pressable>
-//         </View>
-
-//         {/* End Date */}
-//         <View style={styles.dateWrapper}>
-//           <Text style={styles.label}>End Date (Optional) </Text>
-//           <Pressable
-//             style={styles.dateBtn}
-//             onPress={() => setShowPicker("end")}
-//           >
-//             <Ionicons name="calendar" size={20} color={Colors.gray} />
-//             <Text style={[styles.dateText, !endDate && styles.placeholder]}>
-//               {endDate || "End Date"}
-//             </Text>
-//           </Pressable>
-//         </View>
-//       </View>
-
-//       {showPicker && (
-//         <DateTimePicker
-//           value={
-//             showPicker === "start" ? parseDate(startDate) : parseDate(endDate)
-//           }
-//           mode="date"
-//           display={Platform.OS === "ios" ? "inline" : "default"}
-//           onChange={handleDateChange}
-//         />
-//       )}
-//     </View>
-//   );
-// };
 export const DatePicker: React.FC<DatePickerProps> = ({
   type,
   value,
@@ -116,11 +27,12 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   error,
 }) => {
   const [showPicker, setShowPicker] = useState(false);
+  const [tempDate, setTempDate] = useState<Date>(new Date());
 
   const parseDate = (dateString?: string) => {
     if (!dateString) return new Date();
-    const parts = dateString.split("-");
-    return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+    const [y, m, d] = dateString.split("-");
+    return new Date(Number(y), Number(m) - 1, Number(d));
   };
 
   const formatDate = (date: Date) => {
@@ -130,32 +42,43 @@ export const DatePicker: React.FC<DatePickerProps> = ({
     return `${y}-${m}-${d}`;
   };
 
-  const handleDateChange = (_: any, selectedDate?: Date) => {
-    setShowPicker(false);
-    if (!selectedDate) return;
-
+  const validateDate = (selectedDate: Date) => {
     if (type === "end" && otherDate) {
       if (selectedDate < parseDate(otherDate)) {
         Alert.alert("Invalid Date", "End date cannot be before start date.");
-        return;
+        return false;
       }
     }
+    return true;
+  };
+
+  const handleAndroidChange = (_: any, selectedDate?: Date) => {
+    setShowPicker(false);
+    if (!selectedDate) return;
+
+    if (!validateDate(selectedDate)) return;
 
     onChange(formatDate(selectedDate));
   };
 
+  const handleIOSChange = (_: any, selectedDate?: Date) => {
+    if (selectedDate) {
+      setTempDate(selectedDate);
+    }
+  };
+
   return (
-    <View style={{ marginBottom: 12 }}>
+    <View style={{ marginBottom: 16 }}>
       <Text style={styles.label}>
         {type === "start" ? "Start Date *" : "End Date (Optional)"}
       </Text>
 
       <Pressable
-        style={[
-          styles.dateBtn,
-          error && { borderColor: "red" }, // highlight on error
-        ]}
-        onPress={() => setShowPicker(true)}
+        style={[styles.dateBtn, error && { borderColor: "red" }]}
+        onPress={() => {
+          setTempDate(parseDate(value));
+          setShowPicker(true);
+        }}
       >
         <Ionicons name="calendar" size={20} color={Colors.gray} />
         <Text
@@ -163,6 +86,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
         >
           {value || (type === "start" ? "Start Date" : "End Date")}
         </Text>
+
         {value ? (
           <Pressable onPress={() => onChange("")} hitSlop={10}>
             <Ionicons
@@ -174,36 +98,53 @@ export const DatePicker: React.FC<DatePickerProps> = ({
         ) : null}
       </Pressable>
 
-      {error && (
-        <Text style={{ color: "red", marginTop: 4, fontSize: 12 }}>
-          {error}
-        </Text>
-      )}
+      {error && <Text style={styles.errorText}>{error}</Text>}
 
-      {showPicker && (
+      {/* ANDROID PICKER */}
+      {showPicker && Platform.OS === "android" && (
         <DateTimePicker
           value={parseDate(value)}
           mode="date"
-          display={Platform.OS === "ios" ? "inline" : "default"}
-          onChange={handleDateChange}
+          display="default"
+          onChange={handleAndroidChange}
         />
+      )}
+
+      {/* IOS PICKER */}
+      {showPicker && Platform.OS === "ios" && (
+        <View style={styles.iosContainer}>
+          <View style={styles.iosHeader}>
+            <Pressable onPress={() => setShowPicker(false)}>
+              <Text style={styles.cancelText}>Cancel</Text>
+            </Pressable>
+
+            <Pressable
+              onPress={() => {
+                if (!validateDate(tempDate)) return;
+                onChange(formatDate(tempDate));
+                setShowPicker(false);
+              }}
+            >
+              <Text style={styles.doneText}>Done</Text>
+            </Pressable>
+          </View>
+
+          <DateTimePicker
+            value={tempDate}
+            mode="date"
+            display="spinner"
+            onChange={handleIOSChange}
+            style={{ width: "100%" }}
+          />
+        </View>
       )}
     </View>
   );
 };
+
 const styles = StyleSheet.create({
-  container: {
-    marginBottom: 10,
-  },
-  row: {
-    flexDirection: "row",
-    gap: 10, // if gap not supported in your RN version, use marginRight
-  },
-  dateWrapper: {
-    flex: 1,
-  },
   label: {
-    marginBottom: 4,
+    marginBottom: 6,
     fontWeight: "500",
     color: Colors.gray,
   },
@@ -219,10 +160,35 @@ const styles = StyleSheet.create({
   },
   dateText: {
     marginLeft: 6,
-    fontSize: 14, // slightly smaller to fit nicely
+    fontSize: 14,
     color: Colors.secondary,
   },
   placeholder: {
     color: Colors.gray,
+  },
+  errorText: {
+    color: "red",
+    marginTop: 4,
+    fontSize: 12,
+  },
+  iosContainer: {
+    marginTop: 10,
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    paddingBottom: 10,
+  },
+  iosHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 14,
+  },
+  cancelText: {
+    color: Colors.gray,
+    fontSize: 16,
+  },
+  doneText: {
+    color: Colors.primary,
+    fontSize: 16,
+    fontWeight: "600",
   },
 });

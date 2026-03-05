@@ -60,7 +60,7 @@ const TAB_LABELS: Record<string, string> = {
   Portfolio: "Portfolio",
   Profile: "Profile",
   PartnerPayouts: "Payouts",
-  InvestmentDetails: "InvestmentDetails",
+  InvestmentDetails: "Invest",
 };
 
 const CustomTabBar: React.FC<BottomTabBarProps> = ({

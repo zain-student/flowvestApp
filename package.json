@@ -52,7 +52,8 @@
     "react-native-svg": "15.8.0",
     "react-redux": "^9.1.2",
     "redux-persist": "^6.0.0",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "expo-dev-client": "~5.0.20"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

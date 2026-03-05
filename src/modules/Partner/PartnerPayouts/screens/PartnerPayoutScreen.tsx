@@ -98,11 +98,17 @@ export const PartnerPayoutScreen: React.FC = () => {
             <Feather name="dollar-sign" size={22} color={Colors.primary} />
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={styles.payoutAmount}>
+            <Text style={styles.payoutAmount}>{item.title}</Text>
+            <Text style={styles.payoutTitle}>
               {formatCurrency(item.amount)}
             </Text>
-            <Text style={styles.payoutTitle}>{item.title}</Text>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginTop: 4,
+              }}
+            >
               <Ionicons
                 name="calendar-outline"
                 size={13}
@@ -392,8 +398,8 @@ const styles = StyleSheet.create({
   statusCancelled: { backgroundColor: "rgba(107,114,128,0.15)" }, // gray
 
   statusText: {
-    fontSize: 13,
-    fontFamily: "Inter_600SemiBold",
+    fontSize: 11,
+    // fontFamily: "Inter_600SemiBold",
     color: Colors.statusText,
   },
   emptyState: {

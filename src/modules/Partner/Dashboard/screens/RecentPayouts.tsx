@@ -13,7 +13,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 
 type Props = NativeStackScreenProps<
@@ -41,10 +41,7 @@ export const RecentPayouts = ({ navigation }: Props) => {
           : Colors.error;
 
     return (
-      <TouchableOpacity
-        style={styles.card}
-        activeOpacity={0.7}
-      >
+      <TouchableOpacity style={styles.card} activeOpacity={0.7}>
         <View style={styles.iconWrapper}>
           <Feather
             name="arrow-down-right"
@@ -54,36 +51,68 @@ export const RecentPayouts = ({ navigation }: Props) => {
           />
         </View>
         <View style={styles.infoWrapper}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
             <Text style={styles.investmentName}>{item.investment_name}</Text>
             {/* </View> */}
 
-            <Text style={styles.statusBadge}>
+            {/* <Text style={styles.statusBadge}>
               {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-            </Text>
+            </Text> */}
+            <View
+              style={[
+                styles.activityStatus,
+                item.status === "paid"
+                  ? styles.statusCompleted
+                  : styles.statusCancelled,
+              ]}
+            >
+              <Text
+                style={{
+                  fontSize: 11,
+                  color:
+                    item.status === "paid"
+                      ? Colors.statusText
+                      : Colors.inActiveStatus,
+                }}
+              >
+                {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+              </Text>
+            </View>
           </View>
           {/* </View> */}
 
           {/* Middle Row */}
           <View style={styles.metaRow}>
-            <View style={{ flexDirection: "row", alignItems: "center" }} >
-              <Ionicons name="time-outline" size={13} color={Colors.secondary} />
-              <Text style={styles.metaText}>Paid : {item.paid_date}</Text>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text style={styles.metaTextType}>
+                Type:{" "}
+                {item.payout_type.charAt(0).toUpperCase() +
+                  item.payout_type.slice(1)}
+              </Text>
             </View>
-            <Text style={styles.metaText}>
-              Type:{" "}
-              {item.payout_type.charAt(0).toUpperCase() +
-                item.payout_type.slice(1)}
-            </Text>
           </View>
 
           {/* Bottom Row */}
           <View style={styles.amountRow}>
-            <View style={{ flexDirection: "row", alignItems: "center" }} >
-              <Ionicons name="cash-outline" size={13} color={Colors.secondary} />
-              <Text style={styles.amountLabel}>Amount</Text>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              {/* <Ionicons
+                name="cash-outline"
+                size={13}
+                color={Colors.secondary}
+              /> */}
+              {/* <Text style={styles.amountLabel}>Amount:</Text> */}
+              <Ionicons
+                name="time-outline"
+                size={13}
+                color={Colors.secondary}
+              />
+              <Text style={styles.metaText}>Paid: {item.paid_date}</Text>
             </View>
-            <Text style={styles.amountValue}>{formatCurrency(item.amount)}</Text>
+            <Text style={styles.amountValue}>
+              {formatCurrency(item.amount)}
+            </Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -100,7 +129,15 @@ export const RecentPayouts = ({ navigation }: Props) => {
         contentContainerStyle={styles.listContainer}
         ListEmptyComponent={
           <View style={styles.emptyState}>
-            <Image source={require('../../../../../assets/images/noRecentActivity.png')} style={{ width: 150, height: 150, alignSelf: 'center', marginTop: 80 }} />
+            <Image
+              source={require("../../../../../assets/images/noRecentActivity.png")}
+              style={{
+                width: 150,
+                height: 150,
+                alignSelf: "center",
+                marginTop: 80,
+              }}
+            />
             <Text style={styles.emptyText}>No recent payouts found.</Text>
           </View>
         }
@@ -124,7 +161,12 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     paddingBottom: 80,
   },
-  emptyState: { justifyContent: "center", alignItems: "center", paddingTop: 20, marginTop: 100 },
+  emptyState: {
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: 20,
+    marginTop: 100,
+  },
   listContainer: {
     paddingBottom: 24,
   },
@@ -136,7 +178,7 @@ const styles = StyleSheet.create({
     borderColor: "#E6EDFF",
     borderWidth: 1,
     flexDirection: "row",
-    alignItems: 'center'
+    alignItems: "center",
   },
   iconWrapper: {
     width: 48,
@@ -170,6 +212,15 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     textTransform: "capitalize",
   },
+  activityStatus: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 20,
+    alignSelf: "flex-start",
+  },
+  statusCompleted: { backgroundColor: Colors.statusbg },
+  statusProcessing: { backgroundColor: Colors.lightGray },
+  statusCancelled: { backgroundColor: Colors.lightGray },
   metaRow: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -184,10 +235,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginLeft: 4,
   },
+  metaTextType: {
+    color: Colors.gray,
+    fontSize: 12,
+    fontFamily: "Inter_400Regular",
+    flexDirection: "row",
+    alignItems: "center",
+    // marginLeft: 4,
+  },
   amountRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    // marginTop: 8,
+    marginTop: 3,
   },
   amountLabel: {
     color: Colors.gray,
@@ -201,7 +260,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: "Inter_700Bold",
     marginBottom: 2,
-    color: Colors.secondary
+    color: Colors.secondary,
   },
   emptyText: {
     color: Colors.gray,

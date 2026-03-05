@@ -77,7 +77,7 @@ export const PortfolioScreen: React.FC = () => {
               style={{
                 flexDirection: "row",
                 alignItems: "center",
-                marginTop: 2,
+                marginTop: 4,
               }}
             >
               <Ionicons name="wallet-outline" size={12} color={Colors.gray} />
@@ -85,7 +85,13 @@ export const PortfolioScreen: React.FC = () => {
                 {formatCurrency(item.value)}
               </Text>
             </View>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginTop: 4,
+              }}
+            >
               <Ionicons
                 name="calendar-outline"
                 size={12}
@@ -286,28 +292,6 @@ export const PortfolioScreen: React.FC = () => {
         </View>
 
         <Text style={styles.sectionTitle}>Investments Assets</Text>
-        {/* <FlatList
-          data={assets}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={renderAssets}
-          showsVerticalScrollIndicator={false}
-          scrollEnabled={false}
-          ListFooterComponent={
-            isLoading ? (
-              <ActivityIndicator size="small" color={Colors.primary} />
-            ) : null
-          }
-          ListEmptyComponent={
-            <View style={styles.emptyState}>
-              <Image
-                source={require("../../../../../assets/images/noInvestment.png")}
-                style={{ width: 100, height: 100, alignSelf: "center" }}
-              />
-              <Text style={styles.emptyText}>No investments assets found</Text>
-            </View>
-          }
-          contentContainerStyle={styles.scrollContent}
-        /> */}
         <FlatList
           data={participation}
           keyExtractor={(item) => item.id.toString()}
@@ -492,7 +476,7 @@ const styles = StyleSheet.create({
     color: Colors.secondary,
     fontSize: 15,
     fontFamily: "Inter_700Bold",
-    marginBottom: 2,
+    // marginBottom: 2,
   },
   assetValue: {
     color: Colors.gray,
@@ -523,8 +507,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.statusbg,
   },
   assetBadgeText: {
-    fontSize: 12,
-    fontFamily: "Inter_600SemiBold",
+    fontSize: 11,
+    // fontFamily: "Inter_600SemiBold",
     color: Colors.statusText,
   },
   assetGrowth: {

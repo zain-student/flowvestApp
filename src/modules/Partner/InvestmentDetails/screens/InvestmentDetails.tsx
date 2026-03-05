@@ -100,7 +100,7 @@ export const InvestmentDetails = () => {
         <View style={styles.cardHeader}>
           <View>
             <Text style={styles.investmentName}>{item.name}</Text>
-            <Text style={styles.investmentType}>{item.type}</Text>
+            {/* <Text style={styles.investmentType}>{item.type}</Text> */}
           </View>
           <View
             style={[
@@ -328,6 +328,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.mirror,
     width: "32%",
     flexDirection: "row",
+    marginTop: 5,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 18,
@@ -414,7 +415,7 @@ const styles = StyleSheet.create({
     color: Colors.secondary,
     fontSize: 15,
     fontFamily: "Inter_700Bold",
-    marginBottom: 2,
+    // marginBottom: 2,
   },
 
   investmentType: {
@@ -440,8 +441,8 @@ const styles = StyleSheet.create({
   },
 
   statusText: {
-    fontSize: 12,
-    fontWeight: "600",
+    fontSize: 11,
+    // fontWeight: "600",
     color: Colors.statusText,
   },
 
@@ -474,7 +475,7 @@ const styles = StyleSheet.create({
   metaRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 2,
+    marginTop: 8,
   },
 
   metaText: {

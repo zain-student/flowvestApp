@@ -146,20 +146,15 @@ const styles = StyleSheet.create({
     color: Colors.secondary,
   },
   statusBadge: {
-    width: "23%",
-    height: 25,
-    backgroundColor: Colors.statusbg,
     paddingHorizontal: 10,
     paddingVertical: 4,
-    borderRadius: 12,
-    marginRight: 8,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 12,
+    borderRadius: 20,
+    alignSelf: "flex-start",
+    backgroundColor: Colors.statusbg,
   },
 
   statusText: {
-    fontSize: 12,
+    fontSize: 11,
     color: Colors.statusText,
   },
 

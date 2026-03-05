@@ -205,21 +205,15 @@ export const PartnersDashboard = () => {
                 {/* <View style={styles.iconContainer}>
                   
                 </View> */}
+
                 <View style={{ flex: 1 }}>
-                  <Feather
-                    name={card.icon as any}
-                    size={22}
-                    color={Colors.primary}
-                    style={{
-                      backgroundColor: Colors.lightGray,
-                      width: 44,
-                      height: 44,
-                      borderRadius: 22,
-                      justifyContent: "center",
-                      alignItems: "center",
-                      padding: 10,
-                    }}
-                  />
+                  <View style={styles.iconWrapper}>
+                    <Feather
+                      name={card.icon as any}
+                      size={22}
+                      color={Colors.primary}
+                    />
+                  </View>
                   <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <Text style={styles.statLabel}>{card.label}:</Text>
                     <Text style={styles.statValue}>{card.value}</Text>
@@ -343,6 +337,15 @@ const styles = StyleSheet.create({
     marginVertical: 3,
     borderColor: "#E6EDFF",
     borderWidth: 1,
+  },
+  iconWrapper: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: Colors.lightGray, // 20% opacity
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 12,
   },
   statLabel: {
     color: Colors.gray,

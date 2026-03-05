@@ -34,10 +34,7 @@ export const UpcomingPayouts = ({ navigation }: any) => {
           : Colors.error;
 
     return (
-      <TouchableOpacity
-        style={styles.card}
-        activeOpacity={0.7}
-      >
+      <TouchableOpacity style={styles.card} activeOpacity={0.7}>
         {/* Left Icon */}
         <View style={styles.iconWrapper}>
           <Feather
@@ -52,37 +49,72 @@ export const UpcomingPayouts = ({ navigation }: any) => {
         <View style={styles.infoContainer}>
           {/* Top Row */}
           {/* <View style={styles.topRow}> */}
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
             <Text style={styles.title}>{item.investment_name}</Text>
-            <Text
+            {/* <Text
               style={styles.statusBadge}
             >
               {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-            </Text>
+            </Text> */}
+            <View
+              style={[
+                styles.activityStatus,
+                item.status === "scheduled"
+                  ? styles.statusCompleted
+                  : styles.statusCancelled,
+              ]}
+            >
+              <Text
+                style={{
+                  fontSize: 11,
+                  color:
+                    item.status === "scheduled"
+                      ? Colors.statusText
+                      : Colors.inActiveStatus,
+                }}
+              >
+                {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+              </Text>
+            </View>
           </View>
 
           {/* Middle Row */}
           <View style={styles.middleRow}>
-            <View style={{ flexDirection: "row", alignItems: "center" }} >
-              <Ionicons name="time-outline" size={13} color={Colors.secondary} />
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Ionicons
+                name="time-outline"
+                size={13}
+                color={Colors.secondary}
+              />
               <Text style={styles.date}>
-                Due:{" "}
-                {formatDate(item.due_date)}
+                Due: {formatDate(item.due_date)}
                 {/* {new Date(item.due_date).toLocaleDateString("en-US", {
                   month: "short",
                   day: "numeric",
                 })} */}
               </Text>
             </View>
-            <Text style={styles.amount}>{formatCurrency(item.amount)}</Text>
           </View>
 
           {/* Bottom Row */}
-          <View style={{ flexDirection: "row", alignItems: "center" }} >
-            <Ionicons name="time-outline" size={13} color={Colors.secondary} />
-            <Text style={styles.daysRemaining}>
-              {item.days_until_due.toFixed()} days remaining
-            </Text>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Ionicons
+                name="time-outline"
+                size={13}
+                color={Colors.secondary}
+              />
+              <Text style={styles.daysRemaining}>
+                {item.days_until_due.toFixed()} days remaining
+              </Text>
+            </View>
+            <View>
+              <Text style={styles.amount}>{formatCurrency(item.amount)}</Text>
+            </View>
           </View>
         </View>
       </TouchableOpacity>
@@ -99,7 +131,15 @@ export const UpcomingPayouts = ({ navigation }: any) => {
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
           <View style={styles.emptyState}>
-            <Image source={require('../../../../../assets/images/noRecentActivity.png')} style={{ width: 150, height: 150, alignSelf: 'center', marginTop: 80 }} />
+            <Image
+              source={require("../../../../../assets/images/noRecentActivity.png")}
+              style={{
+                width: 150,
+                height: 150,
+                alignSelf: "center",
+                marginTop: 80,
+              }}
+            />
             <Text style={styles.emptyText}>No upcoming payouts scheduled.</Text>
           </View>
         }
@@ -134,7 +174,12 @@ const styles = StyleSheet.create({
   listContent: {
     paddingBottom: 24,
   },
-  emptyState: { justifyContent: "center", alignItems: "center", paddingTop: 20, marginTop: 100 },
+  emptyState: {
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: 20,
+    marginTop: 100,
+  },
   card: {
     backgroundColor: Colors.white,
     borderRadius: 12,
@@ -143,7 +188,7 @@ const styles = StyleSheet.create({
     borderColor: "#E6EDFF",
     borderWidth: 1,
     flexDirection: "row",
-    alignItems: 'center'
+    alignItems: "center",
   },
   iconContainer: {
     marginRight: 12,
@@ -182,19 +227,16 @@ const styles = StyleSheet.create({
     color: Colors.secondary,
     fontSize: 15,
     fontFamily: "Inter_700Bold",
-    marginBottom: 2
+    marginBottom: 2,
   },
-  statusBadge: {
-    backgroundColor: Colors.statusbg,
-    color: Colors.statusText,
-    fontSize: 12,
-    fontFamily: "Inter_500Medium",
+  activityStatus: {
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 20,
-    overflow: "hidden",
-    textTransform: "capitalize",
+    alignSelf: "flex-start",
   },
+  statusCompleted: { backgroundColor: Colors.statusbg },
+  statusCancelled: { backgroundColor: Colors.lightGray },
   date: {
     color: Colors.gray,
     fontSize: 12,
@@ -207,7 +249,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: "Inter_700Bold",
     marginBottom: 2,
-    color: Colors.secondary
+    color: Colors.secondary,
   },
   daysRemaining: {
     color: Colors.gray,

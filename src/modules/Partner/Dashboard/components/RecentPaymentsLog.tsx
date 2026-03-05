@@ -6,7 +6,9 @@ import { FlatList, Image, StyleSheet, Text, View } from "react-native";
 import Colors from "../../../../shared/colors/Colors";
 
 export const RecentPaymentsLog = () => {
-  const { recent_activities } = useAppSelector((state) => state.partnerDashboard);
+  const { recent_activities } = useAppSelector(
+    (state) => state.partnerDashboard,
+  );
   const { formatCurrency } = useCurrencyFormatter();
 
   const renderActivityItem = ({ item }: any) => (
@@ -29,11 +31,21 @@ export const RecentPaymentsLog = () => {
       {/* Middle: Title & Dates */}
       <View style={styles.infoWrapper}>
         <Text style={styles.activityTitle}>{item.title}</Text>
-        <View style={{ flexDirection: "row", alignItems: "center" }} >
-          <Ionicons name="calendar-outline" size={13} color={Colors.secondary} />
-          <Text style={styles.activitySubText}>Created: {formatDate(item.created_at)}</Text>
+        <View
+          style={{ flexDirection: "row", alignItems: "center", marginTop: 3 }}
+        >
+          <Ionicons
+            name="calendar-outline"
+            size={13}
+            color={Colors.secondary}
+          />
+          <Text style={styles.activitySubText}>
+            Created: {formatDate(item.created_at)}
+          </Text>
         </View>
-        <View style={{ flexDirection: "row", alignItems: "center" }} >
+        <View
+          style={{ flexDirection: "row", alignItems: "center", marginTop: 3 }}
+        >
           <Ionicons name="time-outline" size={13} color={Colors.secondary} />
           <Text style={styles.activitySubText}>Time: {item.time}</Text>
         </View>
@@ -41,33 +53,48 @@ export const RecentPaymentsLog = () => {
 
       {/* Right: Amount & Status */}
       <View style={styles.rightWrapper}>
-        <Text style={styles.activityAmount}>{(item.amount ?? 0)}</Text>
-        <Text
+        <View
           style={[
             styles.activityStatus,
             item.status === "completed"
               ? styles.statusCompleted
-              : item.status === "processing"
-                ? styles.statusProcessing
-                : styles.statusCancelled,
+              : styles.statusCancelled,
           ]}
         >
-          {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-        </Text>
+          <Text
+            style={{
+              fontSize: 11,
+              color:
+                item.status === "completed"
+                  ? Colors.statusText
+                  : Colors.inActiveStatus,
+            }}
+          >
+            {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+          </Text>
+        </View>
+        <Text style={styles.activityAmount}>{item.amount ?? 0}</Text>
       </View>
     </View>
   );
   const formatDate = (d?: string | null) => {
     if (!d) return "N/A";
     const date = new Date(d);
-    return date.toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" });
+    return date.toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
   };
   return (
     <View style={styles.container}>
       <Text style={styles.sectionTitle}>Recent Activities</Text>
       {recent_activities.length === 0 ? (
         <>
-          <Image source={require('../../../../../assets/images/noRecentActivity.png')} style={{ width: 100, height: 100, alignSelf: 'center' }} />
+          <Image
+            source={require("../../../../../assets/images/noRecentActivity.png")}
+            style={{ width: 100, height: 100, alignSelf: "center" }}
+          />
           <Text style={styles.emptyText}>No recent activities.</Text>
         </>
       ) : (
@@ -122,7 +149,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   rightWrapper: {
-    alignItems: "flex-end"
+    alignItems: "flex-end",
   },
   activityTitle: {
     color: Colors.secondary,
@@ -145,11 +172,16 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   activityStatus: {
-    fontSize: 13, fontFamily: "Inter_600SemiBold"
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 20,
+    marginBottom: 8,
+    alignSelf: "flex-start",
   },
-  statusCompleted: { color: Colors.green },
-  statusProcessing: { color: Colors.yellow },
-  statusCancelled: { color: Colors.gray },
+
+  statusCompleted: { backgroundColor: Colors.statusbg },
+  statusProcessing: { backgroundColor: Colors.lightGray },
+  statusCancelled: { backgroundColor: Colors.lightGray },
   emptyText: {
     color: Colors.gray,
     fontSize: 15,

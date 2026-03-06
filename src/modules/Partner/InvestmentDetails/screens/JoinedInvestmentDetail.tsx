@@ -1,7 +1,7 @@
 import type { PartnersInvestmentDetailStackParamList } from "@/navigation/PartnerStacks/PartnersInvestmentDetailStack";
 import Colors from "@/shared/colors/Colors";
 import { useAppSelector } from "@/shared/store";
-import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
+import { useInvestmentCurrencyFormatter } from "@/shared/utils/formatInvestmentCurrency";
 import { Ionicons } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useMemo } from "react";
@@ -23,7 +23,7 @@ export const JoinedInvestmentDetail: React.FC<Props> = ({
   navigation,
 }) => {
   const { id } = route.params;
-  const { formatCurrency } = useCurrencyFormatter();
+  const { formatInvestmentCurrency } = useInvestmentCurrencyFormatter();
   const { investments, isLoading } = useAppSelector(
     (state) => state.userInvestments,
   );
@@ -59,12 +59,13 @@ export const JoinedInvestmentDetail: React.FC<Props> = ({
         <Text style={styles.title}>{currentInvestment.name}</Text>
         <View style={styles.investmentCard}>
           {/* <View> */}
+          <Text style={styles.subText}>Current Total Invested</Text>
           <Text style={styles.investmentAmount}>
-            {formatCurrency(
+            {formatInvestmentCurrency(
               Number(currentInvestment.current_total_invested ?? 0),
+              currentInvestment.currency.code,
             )}
           </Text>
-          <Text style={styles.subText}>Current Total Invested</Text>
           <View style={styles.badgeRow}>
             <View style={styles.statusBadge}>
               <Text style={styles.statusText}>
@@ -118,15 +119,17 @@ export const JoinedInvestmentDetail: React.FC<Props> = ({
           <PerformanceCard
             icon="cash"
             label="Total Paid Out"
-            value={formatCurrency(
+            value={formatInvestmentCurrency(
               currentInvestment.performance?.total_paid_out ?? 0,
+              currentInvestment.currency.code,
             )}
           />
           <PerformanceCard
             icon="time-outline"
             label="Pending Payouts"
-            value={formatCurrency(
+            value={formatInvestmentCurrency(
               currentInvestment.performance?.pending_payouts ?? 0,
+              currentInvestment.currency.code,
             )}
             highlight
           />
@@ -211,18 +214,16 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: Colors.secondary,
     alignSelf: "flex-start",
+    marginBottom: 12,
   },
 
   subText: {
     fontSize: 12,
     color: Colors.gray,
-    marginBottom: 12,
   },
 
   badgeRow: {
     flexDirection: "row",
-    // marginBottom: 12,
-    // marginVertical: 12
   },
 
   statusBadge: {

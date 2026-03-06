@@ -21,6 +21,14 @@ export interface PartnerInvestment {
   min_investment_amount?: string;
   max_investment_amount?: string;
   current_total_invested?: string;
+  currency: {
+    id: number;
+    code: string;
+    symbol: string;
+    name: string;
+    locale: string;
+    decimal_places: number;
+  };
   total_participants?: number;
   creator: {
     id: number;
@@ -181,11 +189,11 @@ export const fetchPartnerParticipatingInvestments = createAsyncThunk(
   "/v1/partner/investments/participating",
   async (
     { page = 1, search = "" }: { page?: number; search?: string },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const response = await api.get(
-        `${API_ENDPOINTS.INVESTMENTS.LIST}?scope=participating&page=${page}&search=${encodeURIComponent(search)}`
+        `${API_ENDPOINTS.INVESTMENTS.LIST}?scope=participating&page=${page}&search=${encodeURIComponent(search)}`,
       );
 
       const investments = response.data?.data || [];
@@ -207,7 +215,7 @@ export const fetchPartnerParticipatingInvestments = createAsyncThunk(
       if (cached) return cached;
       return rejectWithValue(error?.response?.data?.message || "Fetch failed");
     }
-  }
+  },
 );
 
 // Fetch Available Shared Programs that partner can join
@@ -215,13 +223,13 @@ export const fetchAvailableSharedPrograms = createAsyncThunk(
   "/v1/shared-programs",
   async (
     { page = 1, search = "" }: { page?: number; search?: string },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const response = await api.get(
         `${API_ENDPOINTS.INVESTMENTS.SHARED_AVAILABLE}?page=${page}${
           search ? `&search=${encodeURIComponent(search)}` : ""
-        }`
+        }`,
       );
       // assuming API returns { success, message, data: [...] }
       console.log("Fetched shared programs:", response.data?.data);
@@ -234,23 +242,23 @@ export const fetchAvailableSharedPrograms = createAsyncThunk(
       };
     } catch (error: any) {
       return rejectWithValue(
-        error?.response?.data?.message || "Failed to fetch shared programs"
+        error?.response?.data?.message || "Failed to fetch shared programs",
       );
     }
-  }
+  },
 );
 //  Join Investment Thunk
 export const joinInvestment = createAsyncThunk(
   "/v1/investments/join",
   async (
     { investmentId, amount, notes }: JoinInvestmentPayload,
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       console.log("Joining investment:", investmentId, amount, notes);
       const response = await api.post(
         API_ENDPOINTS.INVESTMENTS.JOIN(investmentId), // ✅ clean call
-        { amount, notes }
+        { amount, notes },
       );
       const joined = response.data?.data;
       if (!joined) {
@@ -258,7 +266,7 @@ export const joinInvestment = createAsyncThunk(
       }
       ToastAndroid.show(
         response.data?.message || "Investment joined successfully",
-        ToastAndroid.SHORT
+        ToastAndroid.SHORT,
       );
       console.log("✅ Joined investment:", JSON.stringify(joined));
 
@@ -272,7 +280,7 @@ export const joinInvestment = createAsyncThunk(
       console.log("❌ Join investment error:", errMsg);
       return rejectWithValue(errMsg);
     }
-  }
+  },
 );
 export const leaveInvestment = createAsyncThunk(
   "partnerInvestments/leaveInvestment",
@@ -283,7 +291,7 @@ export const leaveInvestment = createAsyncThunk(
       const res = await api.delete(API_ENDPOINTS.INVESTMENTS.LEAVE(id));
       ToastAndroid.show(
         res.data?.message || "Successfully left the investment",
-        ToastAndroid.SHORT
+        ToastAndroid.SHORT,
       );
       console.log("✅ Left investment:", id);
       console.log("Response:", res.data);
@@ -297,7 +305,7 @@ export const leaveInvestment = createAsyncThunk(
       console.log("❌ Leave investment error:", errMsg);
       return rejectWithValue(errMsg);
     }
-  }
+  },
 );
 
 const partnerInvestmentSlice = createSlice({
@@ -323,7 +331,7 @@ const partnerInvestmentSlice = createSlice({
             state.isLoading = true;
           }
           state.error = null;
-        }
+        },
       )
       .addCase(
         fetchPartnerParticipatingInvestments.fulfilled,
@@ -335,7 +343,7 @@ const partnerInvestmentSlice = createSlice({
           if (page > 1) {
             const existingIds = new Set(state.investments.map((inv) => inv.id));
             const newInvestments = investments.filter(
-              (inv: { id: number }) => !existingIds.has(inv.id)
+              (inv: { id: number }) => !existingIds.has(inv.id),
             );
             state.investments = [...state.investments, ...newInvestments];
           } else {
@@ -352,7 +360,7 @@ const partnerInvestmentSlice = createSlice({
 
           state.isLoading = false;
           state.isLoadingMore = false;
-        }
+        },
       )
       .addCase(
         fetchPartnerParticipatingInvestments.rejected,
@@ -360,7 +368,7 @@ const partnerInvestmentSlice = createSlice({
           state.isLoading = false;
           state.isLoadingMore = false;
           state.error = action.payload as string;
-        }
+        },
       )
       // Fetch available shared programs
       .addCase(fetchAvailableSharedPrograms.pending, (state) => {
@@ -374,9 +382,11 @@ const partnerInvestmentSlice = createSlice({
         if (page > 1) {
           // ✅ Append new page to existing list
           const existingIds = new Set(
-            state.sharedPrograms.list.map((inv) => inv.id)
+            state.sharedPrograms.list.map((inv) => inv.id),
           );
-          const newPrograms = data.filter((inv:any) => !existingIds.has(inv.id));
+          const newPrograms = data.filter(
+            (inv: any) => !existingIds.has(inv.id),
+          );
           state.sharedPrograms.list = [
             ...state.sharedPrograms.list,
             ...newPrograms,
@@ -427,12 +437,12 @@ const partnerInvestmentSlice = createSlice({
 
         // 🔹 Update if already exists
         const exists = state.investments.some(
-          (inv) => inv.id === safeInvestment.id
+          (inv) => inv.id === safeInvestment.id,
         );
 
         // 🔹 Keep sharedPrograms in sync (safe merge)
         state.sharedPrograms.list = state.sharedPrograms.list.map((inv) =>
-          inv.id === safeInvestment.id ? { ...inv, ...safeInvestment } : inv
+          inv.id === safeInvestment.id ? { ...inv, ...safeInvestment } : inv,
         );
       })
 
@@ -443,7 +453,7 @@ const partnerInvestmentSlice = createSlice({
       // Leave Investment
       .addCase(leaveInvestment.fulfilled, (state, action) => {
         state.investments = state.investments.filter(
-          (inv) => inv.id !== action.payload.id
+          (inv) => inv.id !== action.payload.id,
         );
       })
       .addCase(leaveInvestment.rejected, (state, action) => {

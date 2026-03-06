@@ -2,6 +2,7 @@ import { InvestmentStackParamList } from "@/navigation/InvestorStacks/Investment
 import Colors from "@/shared/colors/Colors";
 import { Button } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
+import { useInvestmentCurrencyFormatter } from "@/shared/utils/formatInvestmentCurrency";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -28,6 +29,7 @@ export const MyInvestments = ({ navigation }: Props) => {
     useAppSelector((state) => state.userInvestments);
   const [search, setSearch] = useState("");
   const { formatCurrency } = useCurrencyFormatter();
+  const { formatInvestmentCurrency } = useInvestmentCurrencyFormatter();
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       if (search.trim() === "") {
@@ -96,14 +98,20 @@ export const MyInvestments = ({ navigation }: Props) => {
         <View>
           <Text style={styles.amountLabel}>My Investment</Text>
           <Text style={styles.amountValue}>
-            {formatCurrency(item.my_investment ?? 0)}
+            {formatInvestmentCurrency(
+              item.my_investment ?? 0,
+              item.currency.code,
+            )}
           </Text>
         </View>
 
         <View style={{ alignItems: "flex-end" }}>
           <Text style={styles.amountLabel}>Target</Text>
           <Text style={styles.amountValue}>
-            {formatCurrency(item.total_target_amount ?? 0)}
+            {formatInvestmentCurrency(
+              item.total_target_amount ?? 0,
+              item.currency.code,
+            )}
           </Text>
         </View>
       </View>

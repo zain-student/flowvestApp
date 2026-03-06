@@ -9,6 +9,7 @@ import {
   fetchInvestmentsById,
 } from "@/shared/store/slices/investor/investments/investmentSlice";
 import { joinInvestment } from "@/shared/store/slices/shared/investments/partnerInvestmentSlice";
+import { useInvestmentCurrencyFormatter } from "@/shared/utils/formatInvestmentCurrency";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Ionicons } from "@expo/vector-icons";
 import { RouteProp, useRoute } from "@react-navigation/native";
@@ -33,6 +34,7 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
   const route = useRoute<RouteProps>();
   const { showJoinForm } = route.params;
   const { formatCurrency } = useCurrencyFormatter();
+  const { formatInvestmentCurrency } = useInvestmentCurrencyFormatter();
   const { id } =
     useRoute<RouteProp<InvestmentStackParamList, "InvestmentDetails">>().params;
   const dispatch = useAppDispatch();
@@ -176,15 +178,21 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
           )}
 
           <Text style={styles.label}>Amount Invested</Text>
-          <Text style={styles.value}>
-            {/* {formatCurrency( */}
-            {currentInvestment.currency.name}{" "}
+          <Text style={styles.valueInv}>
+            {/* {currentInvestment.currency.name}{" "}
             {Number(
               currentInvestment.type.toLowerCase() === "shared"
                 ? currentInvestment.current_total_invested
                 : currentInvestment.initial_amount,
+            )} */}
+            {formatInvestmentCurrency(
+              Number(
+                currentInvestment.type.toLowerCase() === "shared"
+                  ? currentInvestment.current_total_invested
+                  : currentInvestment.initial_amount,
+              ),
+              currentInvestment.currency.code,
             )}
-            {/* )} */}
           </Text>
 
           <View style={styles.badgeRow}>
@@ -209,15 +217,23 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
               <View>
                 <Text style={styles.label}>Min: </Text>
                 <Text style={styles.value}>
-                  {currentInvestment.currency.symbol}{" "}
-                  {Number(currentInvestment.min_investment_amount)}
+                  {formatInvestmentCurrency(
+                    Number(currentInvestment.min_investment_amount),
+                    currentInvestment.currency.code,
+                  )}
+                  {/* {currentInvestment.currency.symbol}{" "}
+                  {Number(currentInvestment.min_investment_amount)} */}
                 </Text>
               </View>
               <View>
                 <Text style={styles.label}>Max: </Text>
                 <Text style={styles.value}>
-                  {currentInvestment.currency.symbol}{" "}
-                  {Number(currentInvestment.max_investment_amount)}
+                  {/* {currentInvestment.currency.symbol}{" "}
+                  {Number(currentInvestment.max_investment_amount)} */}
+                  {formatInvestmentCurrency(
+                    Number(currentInvestment.max_investment_amount),
+                    currentInvestment.currency.code,
+                  )}
                 </Text>
               </View>
             </View>
@@ -448,6 +464,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: Colors.secondary,
+  },
+  valueInv: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: Colors.secondary,
+    alignSelf: "flex-start",
   },
   badgeRow: {
     flexDirection: "row",

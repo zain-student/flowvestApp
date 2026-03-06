@@ -2,6 +2,7 @@ import { InvestmentStackParamList } from "@/navigation/InvestorStacks/Investment
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { fetchInvestments } from "@/shared/store/slices/investor/investments/investmentSlice";
+import { useInvestmentCurrencyFormatter } from "@/shared/utils/formatInvestmentCurrency";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Button } from "@components/ui/Button";
 import { Feather, Ionicons } from "@expo/vector-icons";
@@ -9,6 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useCallback, useEffect, useState } from "react";
+
 import {
   ActivityIndicator,
   // Button,
@@ -43,6 +45,7 @@ export const InvestmentsScreen: React.FC = () => {
   >(null);
   const [search, setSearch] = useState("");
   const { formatCurrency } = useCurrencyFormatter();
+  const { formatInvestmentCurrency } = useInvestmentCurrencyFormatter();
   const handleOpenPartners = (id: number) => {
     setSelectedInvestmentId(id);
     setShowPartnersModal(true);
@@ -62,7 +65,7 @@ export const InvestmentsScreen: React.FC = () => {
     status: inv.status.charAt(0).toUpperCase() + inv.status.slice(1),
     returns: inv.expected_return_rate,
     date: inv.start_date,
-    currency: inv.currency.symbol,
+    currency: inv.currency,
   }));
 
   const filtered =
@@ -144,8 +147,12 @@ export const InvestmentsScreen: React.FC = () => {
         </View>
         <Text style={styles.amountValue}>
           {/* {formatCurrency( */}
-          {item.currency}{" "}
-          {item.type === "shared" ? item.shared_amount : item.amount}
+          {/* {item.currency}{" "}
+          {item.type === "shared" ? item.shared_amount : item.amount} */}
+          {formatInvestmentCurrency(
+            item.type === "shared" ? item.shared_amount : item.amount,
+            item.currency.code,
+          )}
           {/* )} */}
         </Text>
       </View>

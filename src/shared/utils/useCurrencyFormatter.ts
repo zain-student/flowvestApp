@@ -1,20 +1,3 @@
-// import { useAppSelector } from "@shared/store";
-
-// export const useCurrencyFormatter = () => {
-//   const currency = useAppSelector(
-//     (state) => state.profile.preferences?.display?.currency || "USD",
-//   );
-
-//   const formatCurrency = (amount: number) => {
-//     return new Intl.NumberFormat("en-US", {
-//       style: "currency",
-//       currency,
-//       currencyDisplay: "symbol",
-//     }).format(amount);
-//   };
-
-//   return { currency, formatCurrency };
-// };
 import { useAppSelector } from "@shared/store";
 
 export const useCurrencyFormatter = () => {

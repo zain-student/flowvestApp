@@ -7,6 +7,7 @@ import {
   fetchPayoutsById,
   markPayoutAsPaid,
 } from "@/shared/store/slices/investor/payouts/payoutSlice";
+import { useInvestmentCurrencyFormatter } from "@/shared/utils/formatInvestmentCurrency";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Ionicons } from "@expo/vector-icons";
 import { RouteProp, useRoute } from "@react-navigation/native";
@@ -28,6 +29,7 @@ type RouteProps = RouteProp<PayoutStackParamList, "PayoutDetails">;
 export const PayoutDetailsScreen = ({ navigation }: Props) => {
   const route = useRoute<RouteProps>();
   const { formatCurrency } = useCurrencyFormatter();
+  const { formatInvestmentCurrency } = useInvestmentCurrencyFormatter();
   const { id } =
     useRoute<RouteProp<PayoutStackParamList, "PayoutDetails">>().params;
   const dispatch = useAppDispatch();
@@ -85,7 +87,12 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
           >
             <View>
               <Text style={styles.label}>Amount</Text>
-              <Text style={styles.value}>{formatCurrency(payouts.amount)}</Text>
+              <Text style={styles.value}>
+                {formatInvestmentCurrency(
+                  payouts.amount,
+                  payouts.currency.code,
+                )}
+              </Text>
             </View>
             <View>
               <Text style={styles.label}>Investment ROI</Text>
@@ -196,6 +203,7 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
                       investmentName: payouts.investment_title,
                       participantName: payouts.participant_name,
                       amount: payouts.amount,
+                      currency: payouts.currency,
                       scheduledDate: payouts.scheduled_date,
                     }}
                   />

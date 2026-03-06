@@ -6,6 +6,7 @@ import {
   fetchPayouts,
   fetchPayoutStats,
 } from "@/shared/store/slices/investor/payouts/payoutSlice";
+import { useInvestmentCurrencyFormatter } from "@/shared/utils/formatInvestmentCurrency";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -35,6 +36,7 @@ export const PayoutsScreen: React.FC = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<PayoutStackParamList>>();
   const { formatCurrency } = useCurrencyFormatter();
+  const { formatInvestmentCurrency } = useInvestmentCurrencyFormatter();
   // ✅ Selection state
   const [selectedPayouts, setSelectedPayouts] = useState<number[]>([]);
   const [selectionMode, setSelectionMode] = useState(false);
@@ -48,6 +50,7 @@ export const PayoutsScreen: React.FC = () => {
     amount: pay.amount,
     status: pay.status.charAt(0).toUpperCase() + pay.status.slice(1),
     due_date: pay.scheduled_date,
+    currency: pay.currency,
   }));
 
   const filtered =
@@ -148,7 +151,7 @@ export const PayoutsScreen: React.FC = () => {
 
           <View style={{ flex: 1 }}>
             <Text style={styles.payoutAmount}>
-              {formatCurrency(item.amount)}
+              {formatInvestmentCurrency(item.amount, item.currency.code)}
             </Text>
             <Text style={styles.payoutTitle}>{item.title}</Text>
             <View

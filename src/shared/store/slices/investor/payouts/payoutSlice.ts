@@ -18,6 +18,14 @@ export interface Payout {
   participant_name: string;
   participant_email: string;
   amount: number;
+  currency: {
+    id: number;
+    code: string;
+    symbol: string;
+    name: string;
+    locale: string;
+    decimal_places: number;
+  };
   status: "scheduled" | "paid" | "overdue" | "cancelled"; // adjust if backend has more
   payout_type: "regular" | "bonus"; // add other types if exist
   scheduled_date: string;

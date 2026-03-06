@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { getCurrentUser } from "@/shared/store/slices/profile/profileSlice";
 import { exportReport } from "@/shared/store/slices/shared/portfolio/exportReportSlice";
 import { fetchPortfolio } from "@/shared/store/slices/shared/portfolio/portfolioSlice";
+import { useInvestmentCurrencyFormatter } from "@/shared/utils/formatInvestmentCurrency";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -37,6 +38,8 @@ export const PortfolioScreen: React.FC = () => {
   const { user } = useAppSelector((state) => state.profile);
   const isAdmin = user?.roles?.includes("admin");
   const { formatCurrency } = useCurrencyFormatter();
+  const { formatInvestmentCurrency } = useInvestmentCurrencyFormatter();
+
   useEffect(() => {
     dispatch(fetchPortfolio());
     dispatch(getCurrentUser());
@@ -48,6 +51,7 @@ export const PortfolioScreen: React.FC = () => {
       value: parseFloat(inv.invested_amount || inv.initial_amount),
       status: inv.status,
       earned: inv.total_earned,
+      currency: inv.currency,
       // growth: `${inv.performance?.completion_percentage ?? 0}%`,
       // expected_return_rate: `${Number(inv.expected_return_rate ?? 0).toFixed(2)}%`,
       joined: inv.joined_at,
@@ -82,7 +86,7 @@ export const PortfolioScreen: React.FC = () => {
             >
               <Ionicons name="wallet-outline" size={12} color={Colors.gray} />
               <Text style={styles.assetValue}>
-                {formatCurrency(item.value)}
+                {formatInvestmentCurrency(item.value, item.currency.code)}
               </Text>
             </View>
             <View
@@ -109,7 +113,9 @@ export const PortfolioScreen: React.FC = () => {
               {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
             </Text>
           </View>
-          <Text style={styles.assetGrowth}>{formatCurrency(item.earned)}</Text>
+          <Text style={styles.assetGrowth}>
+            {formatInvestmentCurrency(item.earned, item.currency.code)}
+          </Text>
         </View>
       </View>
     );
@@ -164,7 +170,6 @@ export const PortfolioScreen: React.FC = () => {
         <Text style={styles.cardTitle}>Total Earned</Text>
         <Text style={styles.cardValue}>
           {formatCurrency(Number(data?.summary.total_earned || 0))}
-          {/* {formatCurrency(data?.summary.total_earned ?? 0)} */}
         </Text>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <View style={styles.mirror}>

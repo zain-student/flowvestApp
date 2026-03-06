@@ -1,4 +1,5 @@
 import Colors from "@/shared/colors/Colors";
+import { useInvestmentCurrencyFormatter } from "@/shared/utils/formatInvestmentCurrency";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import React, { useEffect, useState } from "react";
 import {
@@ -20,6 +21,7 @@ interface MarkAsPaidModalProps {
     participantName: string;
     amount: number;
     scheduledDate: string;
+    currency: any;
   };
   isBulk?: boolean;
 }
@@ -36,6 +38,8 @@ export const MarkAsPaidModal: React.FC<MarkAsPaidModalProps> = ({
   const [notes, setNotes] = useState("");
   const [isFocus, setIsFocus] = useState(false);
   const { formatCurrency } = useCurrencyFormatter();
+  const { formatInvestmentCurrency } = useInvestmentCurrencyFormatter();
+
   // 👇 Reset form fields when modal opens/closes
   useEffect(() => {
     if (!visible) {
@@ -90,7 +94,10 @@ export const MarkAsPaidModal: React.FC<MarkAsPaidModalProps> = ({
               <View style={styles.summaryRow}>
                 <Text style={styles.label}>Amount:</Text>
                 <Text style={styles.value}>
-                  {formatCurrency(payoutSummary.amount)}
+                  {formatInvestmentCurrency(
+                    payoutSummary.amount,
+                    payoutSummary.currency.code,
+                  )}
                 </Text>
               </View>
               <View style={styles.summaryRow}>

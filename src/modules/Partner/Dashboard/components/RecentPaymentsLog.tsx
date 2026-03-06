@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 20,
     marginBottom: 8,
-    alignSelf: "flex-start",
+    alignSelf: "flex-end",
   },
 
   statusCompleted: { backgroundColor: Colors.statusbg },

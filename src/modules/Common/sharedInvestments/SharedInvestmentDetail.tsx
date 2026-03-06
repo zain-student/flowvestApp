@@ -107,7 +107,11 @@ export const SharedInvestmentDetail: React.FC<Props> = ({
             </View>
           </View>
           <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginBottom: 10,
+            }}
           >
             <View>
               <Text style={styles.subText}>Current Total Invested</Text>
@@ -126,7 +130,20 @@ export const SharedInvestmentDetail: React.FC<Props> = ({
               </Text>
             </View>
           </View>
-
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <MetaItem
+              label="Min Inv"
+              value={formatCurrency(currentInvestment.min_investment_amount)}
+            />
+            {currentInvestment.end_date && (
+              <MetaItem
+                label="Max Inv"
+                value={formatCurrency(currentInvestment.max_investment_amount)}
+              />
+            )}
+          </View>
           <View style={styles.metaRow}>
             <MetaItem
               label="Total Participants"
@@ -138,6 +155,7 @@ export const SharedInvestmentDetail: React.FC<Props> = ({
               positive
             />
           </View>
+
           <Divider />
           <View style={styles.dateRow}>
             <MetaItem label="Start Date" value={currentInvestment.start_date} />
@@ -293,7 +311,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: Colors.secondary,
-    marginBottom: 10,
+    // marginBottom: 10,
     alignSelf: "flex-start",
   },
 
@@ -336,6 +354,7 @@ const styles = StyleSheet.create({
   metaRow: {
     flexDirection: "row",
     marginBottom: 10,
+    marginTop: 10,
     justifyContent: "space-between",
   },
   dateRow: {

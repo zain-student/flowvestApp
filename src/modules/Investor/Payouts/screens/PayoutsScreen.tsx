@@ -151,7 +151,13 @@ export const PayoutsScreen: React.FC = () => {
               {formatCurrency(item.amount)}
             </Text>
             <Text style={styles.payoutTitle}>{item.title}</Text>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginTop: 3,
+              }}
+            >
               <Ionicons
                 name="mail-outline"
                 size={13}
@@ -499,6 +505,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginLeft: 4,
+    marginTop: 3,
   },
 
   statusBadge: {

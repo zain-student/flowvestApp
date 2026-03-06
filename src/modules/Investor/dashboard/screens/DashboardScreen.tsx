@@ -113,7 +113,9 @@ export const DashboardScreen: React.FC = () => {
         {/* Middle: Title & Dates */}
         <View style={styles.infoWrapper}>
           <Text style={styles.activityTitle}>{item.title}</Text>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <View
+            style={{ flexDirection: "row", alignItems: "center", marginTop: 3 }}
+          >
             <Ionicons
               name="calendar-outline"
               size={13}
@@ -123,27 +125,38 @@ export const DashboardScreen: React.FC = () => {
               Created: {formatDate(item.created_at ?? "N/A")}
             </Text>
           </View>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <View
+            style={{ flexDirection: "row", alignItems: "center", marginTop: 3 }}
+          >
             <Ionicons name="time-outline" size={13} color={Colors.secondary} />
+            <Text style={styles.createdDate}>Time:</Text>
             <Text style={styles.activitySubText}>{item.time}</Text>
           </View>
         </View>
 
         {/* Right: Amount & Status */}
         <View style={styles.rightWrapper}>
-          <Text style={styles.activityAmount}>{item.amount ?? "0"}</Text>
-          <Text
+          <View
             style={[
               styles.activityStatus,
-              statusLower === "completed"
+              item.status === "completed"
                 ? styles.statusCompleted
-                : statusLower === "processing"
-                  ? styles.statusProcessing
-                  : styles.statusCancelled,
+                : styles.statusCancelled,
             ]}
           >
-            {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-          </Text>
+            <Text
+              style={{
+                fontSize: 11,
+                color:
+                  item.status === "completed"
+                    ? Colors.statusText
+                    : Colors.inActiveStatus,
+              }}
+            >
+              {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+            </Text>
+          </View>
+          <Text style={styles.activityAmount}>{item.amount ?? "0"}</Text>
         </View>
       </View>
     );
@@ -452,10 +465,17 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_700Bold",
     marginBottom: 2,
   },
-  activityStatus: { fontSize: 13, fontFamily: "Inter_600SemiBold" },
-  statusCompleted: { color: Colors.green },
-  statusProcessing: { color: Colors.yellow },
-  statusCancelled: { color: Colors.gray },
+
+  activityStatus: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 20,
+    marginBottom: 8,
+    alignSelf: "flex-end",
+  },
+  statusCompleted: { backgroundColor: Colors.statusbg },
+  statusProcessing: { backgroundColor: Colors.lightGray },
+  statusCancelled: { backgroundColor: Colors.lightGray },
   list: { paddingBottom: 20 },
   emptyText: {
     color: Colors.gray,

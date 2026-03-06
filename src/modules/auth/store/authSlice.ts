@@ -7,7 +7,7 @@ import { API_ENDPOINTS } from "@/config/env";
 import { api } from "@/shared/services/api";
 import { storage, StorageKeys } from "@/shared/services/storage";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ToastAndroid } from "react-native";
+import { Alert, ToastAndroid } from "react-native";
 import { UserRole } from "../../../config/roles";
 import type { RootState } from "../../../shared/store";
 // const TOKEN_KEY = '@invstrhub:token';
@@ -113,7 +113,7 @@ export const loginUser = createAsyncThunk(
         [StorageKeys.SESSION, JSON.stringify(session)],
         // [StorageKeys.REFRESH_TOKEN, token?.refresh_token],
       ]);
-      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+      // ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       console.log("✅ User logged in successfully:", response.data.message);
       return {
         user,
@@ -130,7 +130,8 @@ export const loginUser = createAsyncThunk(
       };
     } catch (error: any) {
       const errMsg = error.message || "Login failed";
-      ToastAndroid.show(errMsg, ToastAndroid.SHORT);
+      // ToastAndroid.show(errMsg, ToastAndroid.SHORT);
+      Alert.alert(errMsg);
       console.log("❌ Login error:", errMsg);
       return rejectWithValue(errMsg);
     }
@@ -157,7 +158,7 @@ export const logoutUser = createAsyncThunk("/v1/auth/logout", async () => {
 
   console.log("Logging out user...");
   // Show success message
-  ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+  // ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
   console.log("✅ User logged out successfully");
   return;
 });

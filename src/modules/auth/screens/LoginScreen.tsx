@@ -112,7 +112,7 @@ export const LoginScreen: React.FC = () => {
 
   // Navigate to register screen
   const navigateToRegister = () => {
-    navigation.navigate("Register");
+    navigation.replace("Register");
   };
 
   // Navigate to forgot password screen
@@ -164,20 +164,12 @@ export const LoginScreen: React.FC = () => {
               rightIcon={
                 formData.email.length > 0 &&
                 isEmailValid() && (
-                  // ? (
-                  //   <Ionicons
-                  // name="close-circle-outline"
-                  //     size={20}
-                  //     color={Colors.secondary}
-                  //   />
-                  // ) : (
                   <Ionicons
                     name="checkmark-circle-outline"
                     size={20}
                     color={Colors.secondary}
                   />
                 )
-                // )
               }
               // required
               // autoFocus
@@ -229,14 +221,14 @@ export const LoginScreen: React.FC = () => {
           </View>
 
           {/* Footer */}
-          {/* <View>
+          <View>
             <View style={styles.footer}>
               <Text style={styles.footerText}>Don't have an account? </Text>
               <TouchableOpacity onPress={navigateToRegister}>
                 <Text style={styles.footerLink}>Register</Text>
               </TouchableOpacity>
             </View>
-          </View> */}
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -258,10 +250,10 @@ const styles = StyleSheet.create({
   },
 
   scrollContent: {
-    flexGrow: 1,
+    // flexGrow: 1,
     paddingHorizontal: 20,
     paddingBottom: 10,
-    justifyContent: "space-between",
+    // justifyContent: "space-between",
   },
 
   header: {
@@ -372,11 +364,7 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: "row",
     justifyContent: "center",
-    // alignItems: 'center',
-    // paddingTop: 20,
-    // borderTopWidth: 1,
-    // borderTopColor: Colors.lightGray,
-    // marginTop: 10,
+    marginTop: 24,
   },
 
   footerText: {

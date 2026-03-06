@@ -3,6 +3,7 @@ import Colors from "@/shared/colors/Colors";
 import { Button, Input } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { joinInvestment } from "@/shared/store/slices/shared/investments/partnerInvestmentSlice";
+import { useInvestmentCurrencyFormatter } from "@/shared/utils/formatInvestmentCurrency";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Ionicons } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -30,6 +31,7 @@ export const SharedInvestmentDetail: React.FC<Props> = ({
     (state) => state.userInvestments.sharedPrograms,
   );
   const { formatCurrency } = useCurrencyFormatter();
+  const { formatInvestmentCurrency } = useInvestmentCurrencyFormatter();
   const { isJoining, error: joinError } = useAppSelector(
     (state) => state.userInvestments.join,
   );
@@ -116,16 +118,18 @@ export const SharedInvestmentDetail: React.FC<Props> = ({
             <View>
               <Text style={styles.subText}>Current Total Invested</Text>
               <Text style={styles.investmentAmount}>
-                {formatCurrency(
+                {formatInvestmentCurrency(
                   Number(currentInvestment.current_total_invested ?? 0),
+                  currentInvestment.currency.code,
                 )}
               </Text>
             </View>
             <View>
               <Text style={styles.subText}>Target Amount</Text>
               <Text style={styles.investmentAmount}>
-                {formatCurrency(
-                  Number(currentInvestment.total_target_amount ?? "0"),
+                {formatInvestmentCurrency(
+                  Number(currentInvestment.total_target_amount ?? 0),
+                  currentInvestment.currency.code,
                 )}
               </Text>
             </View>
@@ -135,14 +139,20 @@ export const SharedInvestmentDetail: React.FC<Props> = ({
           >
             <MetaItem
               label="Min Inv"
-              value={formatCurrency(currentInvestment.min_investment_amount)}
+              value={formatInvestmentCurrency(
+                currentInvestment.min_investment_amount,
+                currentInvestment.currency.code,
+              )}
             />
-            {currentInvestment.end_date && (
-              <MetaItem
-                label="Max Inv"
-                value={formatCurrency(currentInvestment.max_investment_amount)}
-              />
-            )}
+            {/* {currentInvestment.end_date && ( */}
+            <MetaItem
+              label="Max Inv"
+              value={formatInvestmentCurrency(
+                currentInvestment.max_investment_amount,
+                currentInvestment.currency.code,
+              )}
+            />
+            {/* )} */}
           </View>
           <View style={styles.metaRow}>
             <MetaItem
@@ -171,15 +181,17 @@ export const SharedInvestmentDetail: React.FC<Props> = ({
               <PerformanceCard
                 icon="cash"
                 label="Total Paid Out"
-                value={formatCurrency(
+                value={formatInvestmentCurrency(
                   currentInvestment.performance?.total_paid_out ?? 0,
+                  currentInvestment.currency.code,
                 )}
               />
               <PerformanceCard
                 icon="time-outline"
                 label="Pending Payouts"
-                value={formatCurrency(
+                value={formatInvestmentCurrency(
                   currentInvestment.performance?.pending_payouts ?? 0,
+                  currentInvestment.currency.code,
                 )}
                 highlight
               />

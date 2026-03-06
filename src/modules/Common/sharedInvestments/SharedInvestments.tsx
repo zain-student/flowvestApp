@@ -3,6 +3,7 @@ import { Button } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import type { PartnerInvestment } from "@/shared/store/slices/shared/investments/partnerInvestmentSlice";
 import { fetchAvailableSharedPrograms } from "@/shared/store/slices/shared/investments/partnerInvestmentSlice";
+import { useInvestmentCurrencyFormatter } from "@/shared/utils/formatInvestmentCurrency";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import React, { useCallback, useEffect, useState } from "react";
@@ -22,6 +23,7 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
   const [page, setPage] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
   const { formatCurrency } = useCurrencyFormatter();
+  const { formatInvestmentCurrency } = useInvestmentCurrencyFormatter();
   const {
     list,
     isLoading,
@@ -139,12 +141,22 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
         <View style={styles.amountRow}>
           <View>
             <Text style={styles.amountLabel}>Current Invested</Text>
-            <Text style={styles.amountValue}>{formatCurrency(current)}</Text>
+            <Text style={styles.amountValue}>
+              {formatInvestmentCurrency(
+                Number(item.current_total_invested ?? 0),
+                item.currency.code,
+              )}
+            </Text>
           </View>
 
           <View style={{ alignItems: "flex-end" }}>
             <Text style={styles.amountLabel}>Target</Text>
-            <Text style={styles.amountValue}>{formatCurrency(target)}</Text>
+            <Text style={styles.amountValue}>
+              {formatInvestmentCurrency(
+                Number(item.total_target_amount ?? 0),
+                item.currency.code,
+              )}
+            </Text>
           </View>
         </View>
 

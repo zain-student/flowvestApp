@@ -3,24 +3,12 @@ import Colors from "@/shared/colors/Colors";
 // import { Button } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { fetchPayoutsById } from "@/shared/store/slices/partner/payout/PartnerPayoutSlice";
+import { useInvestmentCurrencyFormatter } from "@/shared/utils/formatInvestmentCurrency";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useEffect } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-const mockPayout = {
-  id: 1,
-  date: "2024-07-15",
-  amount: 1200,
-  status: "Upcoming",
-  recipient: "You",
-  method: "Bank Transfer",
-  timeline: [
-    { id: 1, label: "Requested", date: "2024-07-01" },
-    { id: 2, label: "Scheduled", date: "2024-07-10" },
-    { id: 3, label: "Processing", date: "2024-07-14" },
-  ],
-};
 type Props = NativeStackScreenProps<
   PartnerPayoutStackParamList,
   "PartnerPayoutDetails"
@@ -32,6 +20,7 @@ type RouteProps = RouteProp<
 export const PartnerPayoutDetails = ({ navigation }: Props) => {
   const route = useRoute<RouteProps>();
   const { formatCurrency } = useCurrencyFormatter();
+  const { formatInvestmentCurrency } = useInvestmentCurrencyFormatter();
   const { id } =
     useRoute<RouteProp<PartnerPayoutStackParamList, "PartnerPayoutDetails">>()
       .params;
@@ -63,7 +52,12 @@ export const PartnerPayoutDetails = ({ navigation }: Props) => {
           >
             <View>
               <Text style={styles.label}>Amount</Text>
-              <Text style={styles.value}>{formatCurrency(payouts.amount)}</Text>
+              <Text style={styles.value}>
+                {formatInvestmentCurrency(
+                  payouts.amount,
+                  payouts.currency.code,
+                )}
+              </Text>
             </View>
             <View>
               <Text style={styles.label}>ROI%</Text>

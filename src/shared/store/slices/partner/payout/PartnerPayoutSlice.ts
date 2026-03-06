@@ -17,8 +17,17 @@ export interface Payout {
   participant_name: string;
   participant_email: string;
   amount: number;
-  status: "scheduled" | "paid" | "overdue" | "cancelled"; // adjust if backend has more
-  payout_type: "regular" | "bonus"; // add other types if exist
+  currency: {
+    id: number;
+    code: string;
+    symbol: string;
+    name: string;
+    locale: string;
+    decimal_places: number;
+  };
+
+  status: "scheduled" | "paid" | "overdue" | "cancelled";
+  payout_type: "regular" | "bonus";
   scheduled_date: string;
   paid_date: string | null;
   payment_method: string;
@@ -129,7 +138,7 @@ export const fetchPayouts = createAsyncThunk<
 >("v1/payouts/managed", async (page = 1, { rejectWithValue }) => {
   try {
     const response = await api.get(
-      `${API_ENDPOINTS.PAYOUTS.LIST}?page=${page}`
+      `${API_ENDPOINTS.PAYOUTS.LIST}?page=${page}`,
     );
     console.log("Payouts API response:", response.data);
     const payouts = response.data?.data?.payouts || [];
@@ -149,7 +158,7 @@ export const fetchPayouts = createAsyncThunk<
     const cached = await storage.getItem(StorageKeys.PAYOUTS_CACHE);
     if (cached) return cached;
     return rejectWithValue(
-      error.response?.data?.message || "Failed to fetch payouts"
+      error.response?.data?.message || "Failed to fetch payouts",
     );
   }
 });
@@ -164,10 +173,10 @@ export const fetchPayoutsById = createAsyncThunk(
       return response.data.data;
     } catch (error: any) {
       throw new Error(
-        error.response?.data?.message || "Failed to fetch payout details"
+        error.response?.data?.message || "Failed to fetch payout details",
       );
-    }   
-  }
+    }
+  },
 );
 // Payout Statistics
 export const fetchPayoutStatistics = createAsyncThunk<
@@ -181,7 +190,7 @@ export const fetchPayoutStatistics = createAsyncThunk<
     return response.data.data as PayoutStatistics;
   } catch (error: any) {
     return rejectWithValue(
-      error.response?.data?.message || "Failed to fetch payout statistics"
+      error.response?.data?.message || "Failed to fetch payout statistics",
     );
   }
 });
@@ -216,7 +225,7 @@ const partnerPayoutSlice = createSlice({
         }
         state.totalPayoutAmount = state.payouts.reduce(
           (sum: number, payout: Payout) => sum + payout.amount,
-          0
+          0,
         );
         state.isLoading = false;
         state.isLoadingMore = false;

@@ -385,16 +385,13 @@ const styles = StyleSheet.create({
   },
   mirror: {
     backgroundColor: Colors.mirror,
-    width: "47%",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 18,
-    paddingVertical: 4,
-    paddingHorizontal: 12,
     borderWidth: 0.3,
     borderColor: Colors.white,
     opacity: 0.7,
     marginTop: 4,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 20,
   },
   cardValue: {
     color: Colors.white,
@@ -406,7 +403,7 @@ const styles = StyleSheet.create({
   },
   cardSubtitle: {
     color: Colors.white,
-    fontSize: 14,
+    fontSize: 13,
     fontFamily: "Inter_600SemiBold",
   },
   balanceActionsRow: { flexDirection: "row", marginTop: 18 },

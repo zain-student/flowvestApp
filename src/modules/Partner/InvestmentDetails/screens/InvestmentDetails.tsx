@@ -6,6 +6,7 @@ import {
   fetchPartnerParticipatingInvestments,
   leaveInvestment,
 } from "@/shared/store/slices/shared/investments/partnerInvestmentSlice";
+import { useInvestmentCurrencyFormatter } from "@/shared/utils/formatInvestmentCurrency";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -33,6 +34,7 @@ export const InvestmentDetails = () => {
       NativeStackNavigationProp<PartnersInvestmentDetailStackParamList>
     >();
   const { formatCurrency } = useCurrencyFormatter();
+  const { formatInvestmentCurrency } = useInvestmentCurrencyFormatter();
   const FILTERS = ["All", "Active", "Paused", "Completed"];
   const [filter, setFilter] = useState("All");
   const [search, setSearch] = useState("");
@@ -77,6 +79,7 @@ export const InvestmentDetails = () => {
     returns: inv.expected_return_rate,
     date: inv.start_date,
     participants: inv.total_participants,
+    currency: inv.currency,
   }));
 
   const filtered =
@@ -119,7 +122,7 @@ export const InvestmentDetails = () => {
           <View>
             <Text style={styles.amountLabel}>Invested</Text>
             <Text style={styles.amountValue}>
-              {formatCurrency(item.amount)}
+              {formatInvestmentCurrency(item.amount, item.currency.code)}
             </Text>
           </View>
 
@@ -127,7 +130,10 @@ export const InvestmentDetails = () => {
             <View style={{ alignItems: "flex-end" }}>
               <Text style={styles.amountLabel}>Target</Text>
               <Text style={styles.amountValue}>
-                {formatCurrency(item.targetAmount)}
+                {formatInvestmentCurrency(
+                  item.targetAmount,
+                  item.currency.code,
+                )}
               </Text>
             </View>
           )}

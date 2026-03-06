@@ -5,6 +5,7 @@ import {
   fetchPayouts,
   fetchPayoutStatistics,
 } from "@/shared/store/slices/partner/payout/PartnerPayoutSlice";
+import { useInvestmentCurrencyFormatter } from "@/shared/utils/formatInvestmentCurrency";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -46,6 +47,7 @@ export const PartnerPayoutScreen: React.FC = () => {
     title: pay.investment_title,
     name: pay.participent_name,
     amount: pay.amount,
+    currency: pay.currency,
     status: pay.status.charAt(0).toUpperCase() + pay.status.slice(1),
     due_date: pay.scheduled_date,
   }));
@@ -55,6 +57,7 @@ export const PartnerPayoutScreen: React.FC = () => {
       ? formattedPayouts
       : formattedPayouts.filter((p) => p.status === filter);
   const { formatCurrency } = useCurrencyFormatter();
+  const { formatInvestmentCurrency } = useInvestmentCurrencyFormatter();
   useEffect(() => {
     dispatch(fetchPayouts(1));
     dispatch(fetchPayoutStatistics());
@@ -100,7 +103,7 @@ export const PartnerPayoutScreen: React.FC = () => {
           <View style={{ flex: 1 }}>
             <Text style={styles.payoutAmount}>{item.title}</Text>
             <Text style={styles.payoutTitle}>
-              {formatCurrency(item.amount)}
+              {formatInvestmentCurrency(item.amount, item.currency.code)}
             </Text>
             <View
               style={{
@@ -285,21 +288,17 @@ const styles = StyleSheet.create({
   },
   mirror: {
     backgroundColor: Colors.mirror,
-    width: "45%",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 18,
-    paddingVertical: 4,
-    paddingHorizontal: 6,
     borderWidth: 0.3,
     borderColor: Colors.white,
     opacity: 0.7,
     marginTop: 4,
-    marginHorizontal: 2,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 20,
   },
   cardSubtitle: {
     color: Colors.white,
-    fontSize: 14,
+    fontSize: 13,
     fontFamily: "Inter_600SemiBold",
   },
   balanceActionsRow: { flexDirection: "row", marginTop: 10 },

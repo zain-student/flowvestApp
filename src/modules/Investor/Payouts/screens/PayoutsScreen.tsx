@@ -512,15 +512,15 @@ const styles = StyleSheet.create({
   },
 
   statusBadge: {
+    backgroundColor: Colors.statusbg,
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
-    backgroundColor: Colors.statusbg,
   },
 
   statusText: {
-    fontSize: 13,
-    fontFamily: "Inter_600SemiBold",
+    fontSize: 11,
+    // fontFamily: "Inter_600SemiBold",
     color: Colors.statusText,
   },
 

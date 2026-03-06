@@ -486,7 +486,7 @@ const styles = StyleSheet.create({
   },
 
   statusText: {
-    fontSize: 12,
+    fontSize: 11,
     color: Colors.statusText,
   },
   sharedText: {

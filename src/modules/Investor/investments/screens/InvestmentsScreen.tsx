@@ -527,9 +527,10 @@ const styles = StyleSheet.create({
   },
 
   statusBadge: {
+    backgroundColor: Colors.statusbg,
     paddingHorizontal: 10,
     paddingVertical: 4,
-    borderRadius: 20,
+    borderRadius: 12,
   },
 
   statusActive: {
@@ -541,8 +542,8 @@ const styles = StyleSheet.create({
   },
 
   statusText: {
-    fontSize: 12,
-    fontWeight: "600",
+    fontSize: 11,
+    // fontWeight: "600",
     color: Colors.statusText,
   },
 

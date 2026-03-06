@@ -28,20 +28,8 @@ export const PartnerInvestments = ({ route }: any) => {
       {/* Title + Status */}
       <View style={styles.cardHeader}>
         <Text style={styles.investmentTitle}>{item.title}</Text>
-        <View
-          style={[
-            styles.status,
-            item.status === "active" ? styles.active : styles.inactive,
-          ]}
-        >
-          <Text
-            style={{
-              color:
-                item.status === "active"
-                  ? Colors.statusText
-                  : Colors.inActiveStatus,
-            }}
-          >
+        <View style={styles.status}>
+          <Text style={styles.active}>
             {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
           </Text>
         </View>
@@ -210,11 +198,13 @@ const styles = StyleSheet.create({
   status: {
     paddingHorizontal: 10,
     paddingVertical: 4,
-    borderRadius: 20,
+    borderRadius: 12,
+    backgroundColor: Colors.statusbg,
   },
   active: {
-    backgroundColor: Colors.statusbg,
-    color: Colors.activeStatus,
+    fontSize: 11,
+    // fontFamily: "Inter_600SemiBold",
+    color: Colors.statusText,
   },
   inactive: {
     backgroundColor: Colors.inActiveStatusBg,

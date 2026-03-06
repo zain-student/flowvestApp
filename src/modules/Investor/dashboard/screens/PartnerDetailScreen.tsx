@@ -62,21 +62,11 @@ export const PartnerDetailScreen = () => {
       <View style={styles.card}>
         <Text style={styles.name}>{partner.name}</Text>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text style={styles.email}>Email: {partner.email}</Text>
-          <View
-            style={[
-              styles.status,
-              partner.status === "active" ? styles.active : styles.inactive,
-            ]}
-          >
-            <Text
-              style={{
-                color:
-                  partner.status === "active"
-                    ? Colors.statusText
-                    : Colors.inActiveStatus,
-              }}
-            >
+          <View>
+            <Text style={styles.email}>Email: {partner.email}</Text>
+          </View>
+          <View style={styles.assetBadge}>
+            <Text style={styles.assetBadgeText}>
               {partner.status?.charAt(0).toUpperCase()}
               {partner.status?.slice(1)}
             </Text>
@@ -245,9 +235,10 @@ const styles = StyleSheet.create({
   name: { fontSize: 20, fontWeight: "700", color: Colors.secondary },
   email: { fontSize: 14, color: Colors.gray, marginVertical: 4 },
   status: {
+    // backgroundColor: Colors.statusbg,
     paddingHorizontal: 10,
     paddingVertical: 4,
-    borderRadius: 20,
+    borderRadius: 12,
   },
   active: {
     backgroundColor: Colors.statusbg,
@@ -256,6 +247,17 @@ const styles = StyleSheet.create({
   inactive: {
     backgroundColor: Colors.inActiveStatusBg,
     color: Colors.inActiveStatus,
+  },
+  assetBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 19,
+    backgroundColor: Colors.statusbg,
+  },
+  assetBadgeText: {
+    fontSize: 11,
+    // fontFamily: "Inter_600SemiBold",
+    color: Colors.statusText,
   },
   sectionTitle: {
     fontSize: 16,

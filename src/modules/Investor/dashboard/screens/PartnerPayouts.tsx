@@ -35,20 +35,8 @@ export const PartnerPayouts = ({ route }: any) => {
           {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
         </Text> */}
 
-        <View
-          style={[
-            styles.status,
-            item.status === "active" ? styles.paid : styles.pending,
-          ]}
-        >
-          <Text
-            style={{
-              color:
-                item.status === "active"
-                  ? Colors.activeStatus
-                  : Colors.statusText,
-            }}
-          >
+        <View style={styles.status}>
+          <Text style={styles.statusText}>
             {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
           </Text>
         </View>
@@ -202,10 +190,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 20,
+    backgroundColor: Colors.statusbg,
   },
-  paid: {
-    backgroundColor: Colors.activeStatusBg,
-    color: Colors.activeStatus,
+  statusText: {
+    fontSize: 11,
+    color: Colors.statusText,
   },
   pending: {
     backgroundColor: Colors.statusbg,

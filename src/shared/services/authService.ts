@@ -82,7 +82,6 @@ class AuthService {
 
       return response;
     } catch (error) {
-      console.error("Login error:", error);
       throw error;
     }
   }
@@ -104,7 +103,6 @@ class AuthService {
 
       return response;
     } catch (error) {
-      console.error("Registration error:", error);
       throw error;
     }
   }
@@ -118,7 +116,6 @@ class AuthService {
       await apiClient.post(API_ENDPOINTS.AUTH.LOGOUT);
     } catch (error) {
       // Continue with local logout even if server call fails
-      console.warn("Logout API call failed:", error);
     } finally {
       // Clear local storage
       await this.clearAuthData();
@@ -143,7 +140,6 @@ class AuthService {
 
       throw new Error("Failed to refresh token");
     } catch (error) {
-      console.error("Token refresh error:", error);
       // Clear invalid tokens
       await this.clearAuthData();
       throw error;
@@ -167,7 +163,6 @@ class AuthService {
 
       throw new Error("Failed to get user profile");
     } catch (error) {
-      console.error("Get current user error:", error);
       throw error;
     }
   }
@@ -186,7 +181,6 @@ class AuthService {
 
       return response;
     } catch (error) {
-      console.error("Forgot password error:", error);
       throw error;
     }
   }
@@ -209,7 +203,6 @@ class AuthService {
       const user = await this.getCurrentUser();
       return { isAuthenticated: true, user };
     } catch (error) {
-      console.warn("Failed to initialize auth from stored data:", error);
       // Clear invalid stored data
       await this.clearAuthData();
       return { isAuthenticated: false, user: null };
@@ -302,7 +295,6 @@ class AuthService {
 
       throw new Error("Failed to update profile");
     } catch (error) {
-      console.error("Update profile error:", error);
       throw error;
     }
   }
@@ -323,7 +315,6 @@ class AuthService {
 
       return response;
     } catch (error) {
-      console.error("Change password error:", error);
       throw error;
     }
   }

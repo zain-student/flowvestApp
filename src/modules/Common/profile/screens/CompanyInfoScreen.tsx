@@ -7,13 +7,13 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useEffect } from "react";
 import {
-    ActivityIndicator,
-    Linking,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Linking,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 type ProfileNavProp = NativeStackNavigationProp<ProfileStackParamList>;
 const InfoRow = ({ label, value }: { label: string; value: string }) => {
@@ -32,7 +32,6 @@ const InfoRow = ({ label, value }: { label: string; value: string }) => {
       // Optional: you can add Linking.canOpenURL check first
       await Linking.openURL(url);
     } catch (error) {
-      console.warn("Cannot open URL:", error);
       // You could show an alert here if you want
     }
   };

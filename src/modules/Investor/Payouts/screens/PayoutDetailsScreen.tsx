@@ -53,7 +53,6 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
     try {
       await dispatch(cancelPayout(payouts.id)).unwrap();
     } catch (err) {
-      console.error("❌ Cancel payout failed:", err);
       ToastAndroid.show("Failed to cancel payout", ToastAndroid.SHORT);
     }
   };
@@ -64,7 +63,6 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
       setShowPayModal(false);
       navigation.goBack();
     } catch (err) {
-      console.error("❌ Mark as paid failed:", err);
       ToastAndroid.show("❌ Failed to mark payout as paid", ToastAndroid.SHORT);
     }
   };

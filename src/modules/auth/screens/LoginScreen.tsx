@@ -105,7 +105,6 @@ export const LoginScreen: React.FC = () => {
         console.log("Login failed:", result.error.message);
       }
     } catch (error) {
-      // console.error('Login error:', error);
       Alert.alert("Error", "An unexpected error occurred. Please try again.");
     }
   };

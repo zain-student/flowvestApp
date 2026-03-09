@@ -5,12 +5,12 @@ import { Input } from "@components/ui/Input";
 import { updateUserProfileApi } from "@shared/store/slices/profile/profileSlice";
 import React, { useState } from "react";
 import {
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    ToastAndroid,
-    View,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  View,
 } from "react-native";
 
 export const UpdateProfile = ({ navigation }: any) => {
@@ -60,7 +60,6 @@ export const UpdateProfile = ({ navigation }: any) => {
       console.log("✅ Profile updated successfully");
       navigation.goBack(); // optional navigation
     } catch (err: any) {
-      console.error("❌ Profile update failed:", err);
       ToastAndroid.show("Failed to update profile", ToastAndroid.SHORT);
     }
   };

@@ -1,6 +1,9 @@
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { fetchInvestmentPartners, removeInvestmentPartner } from "@/shared/store/slices/investor/investments/investmentSlice";
+import {
+  fetchInvestmentPartners,
+  removeInvestmentPartner,
+} from "@/shared/store/slices/investor/investments/investmentSlice";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
@@ -10,12 +13,12 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 
-export const RemovePartnerButton = ({ item }:any) => {
+export const RemovePartnerButton = ({ item }: any) => {
   const dispatch = useAppDispatch();
-  const { partners } = useAppSelector((state:any) => state.investments);
+  const { partners } = useAppSelector((state: any) => state.investments);
   const isLoading = partners.isLoading;
 
   const [isModalVisible, setModalVisible] = useState(false);
@@ -29,14 +32,12 @@ export const RemovePartnerButton = ({ item }:any) => {
           investmentId: item.investment_id,
           partnerId: item.user.id,
           reason,
-        })
+        }),
       );
       if (removeInvestmentPartner.fulfilled.match(resultAction)) {
         dispatch(fetchInvestmentPartners({ investmentId: item.investment_id }));
       }
-    } catch (error) {
-      console.error("Failed to remove partner:", error);
-    }
+    } catch (error) {}
   };
 
   return (
@@ -51,9 +52,9 @@ export const RemovePartnerButton = ({ item }:any) => {
             <ActivityIndicator color={Colors.white} size="small" />
           ) : (
             <> */}
-              <Ionicons name="trash-outline" size={18} color={Colors.white} />
-              <Text style={styles.btnText}>Remove</Text>
-            {/* </> */}
+          <Ionicons name="trash-outline" size={18} color={Colors.white} />
+          <Text style={styles.btnText}>Remove</Text>
+          {/* </> */}
           {/* )} */}
         </TouchableOpacity>
       )}

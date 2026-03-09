@@ -26,14 +26,6 @@ export const PartnerPayouts = ({ route }: any) => {
       {/* Amount + Status */}
       <View style={styles.cardHeader}>
         <Text style={styles.inveName}>{item.investment}</Text>
-        {/* <Text
-          style={[
-            styles.status,
-            item.status === "paid" ? styles.paid : styles.pending,
-          ]}
-        >
-          {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-        </Text> */}
 
         <View style={styles.status}>
           <Text style={styles.statusText}>

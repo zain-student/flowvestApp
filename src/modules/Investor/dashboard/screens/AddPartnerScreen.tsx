@@ -134,24 +134,6 @@ export const AddPartnerScreen = () => {
   };
   return (
     <SafeAreaView style={styles.container}>
-      {/* <ScrollView contentContainerStyle={styles.content}> */}
-      {/* <Text style={styles.title}>Choose a Partner</Text> */}
-
-      {/* Partner Dropdown */}
-      {/* {isLoading && <Text>Loading partners...</Text>}
-        <PartnerDropdown
-          label="Select Partner"
-          partners={partners}
-          selectedPartner={selectedPartner}
-          onSelect={(partner) => {
-            navigation.navigate("PartnerDetail", {
-              id: partner.id,
-            });
-
-            setSelectedPartner(partner);
-          }}
-          placeholder="Choose a partner"
-        /> */}
       {/* --- Inline Partner Search + List --- */}
       <View style={styles.sectionCard}>
         <Text style={styles.sectionTitle}>Choose a Partner</Text>
@@ -339,21 +321,6 @@ export const AddPartnerScreen = () => {
                     );
                   }}
                 />
-
-                {/* <Controller
-                  control={control}
-                  name="description"
-                  render={({ field }) => (
-                    <Input
-                      label="Description"
-                      placeholder="Enter description"
-                      value={field.value}
-                      onChangeText={field.onChange}
-                      error={errors.description?.message as string | undefined}
-                      multiline
-                    />
-                  )}
-                /> */}
 
                 {/* --- Account Credentials Section --- */}
                 {!editingPartner && (

@@ -101,10 +101,10 @@ export const PartnerPayoutScreen: React.FC = () => {
             <Feather name="dollar-sign" size={22} color={Colors.primary} />
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={styles.payoutAmount}>{item.title}</Text>
             <Text style={styles.payoutTitle}>
               {formatInvestmentCurrency(item.amount, item.currency.code)}
             </Text>
+            <Text style={styles.payoutAmount}>{item.title}</Text>
             <View
               style={{
                 flexDirection: "row",
@@ -374,6 +374,7 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_600SemiBold",
     color: Colors.secondary,
     marginTop: 2,
+    alignSelf: "flex-start",
   },
 
   payoutMeta: {

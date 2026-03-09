@@ -69,7 +69,6 @@ export const RootNavigator: React.FC = () => {
           console.log("User is authenticated:", authState.user?.email);
         }
       } catch (error) {
-        console.error("Auth initialization failed:", error);
       } finally {
         setIsInitializing(false);
       }

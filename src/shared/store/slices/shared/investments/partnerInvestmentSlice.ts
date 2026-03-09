@@ -208,7 +208,7 @@ export const fetchPartnerParticipatingInvestments = createAsyncThunk(
         page,
         search,
       });
-      console.log("Fetched partner investments:", investments);
+
       return { investments, meta, summary, page, search };
     } catch (error: any) {
       const cached = await storage.getItem(StorageKeys.INVESTMENTS_CACHE);
@@ -231,8 +231,6 @@ export const fetchAvailableSharedPrograms = createAsyncThunk(
           search ? `&search=${encodeURIComponent(search)}` : ""
         }`,
       );
-      // assuming API returns { success, message, data: [...] }
-      console.log("Fetched shared programs:", response.data?.data);
       return {
         data: response.data?.data || [],
         summary: response.data?.summary || {},
@@ -255,7 +253,7 @@ export const joinInvestment = createAsyncThunk(
     { rejectWithValue },
   ) => {
     try {
-      console.log("Joining investment:", investmentId, amount, notes);
+     
       const response = await api.post(
         API_ENDPOINTS.INVESTMENTS.JOIN(investmentId), // ✅ clean call
         { amount, notes },
@@ -268,7 +266,6 @@ export const joinInvestment = createAsyncThunk(
         response.data?.message || "Investment joined successfully",
         ToastAndroid.SHORT,
       );
-      console.log("✅ Joined investment:", JSON.stringify(joined));
 
       return joined;
     } catch (error: any) {
@@ -277,7 +274,6 @@ export const joinInvestment = createAsyncThunk(
         error?.message ||
         "Failed to join investment";
       ToastAndroid.show(errMsg, ToastAndroid.SHORT);
-      console.log("❌ Join investment error:", errMsg);
       return rejectWithValue(errMsg);
     }
   },
@@ -286,15 +282,12 @@ export const leaveInvestment = createAsyncThunk(
   "partnerInvestments/leaveInvestment",
   async (id: number, { rejectWithValue }) => {
     try {
-      console.log("Leaving investment:", id);
       // Assuming the API endpoint for leaving an investment is as follows:
       const res = await api.delete(API_ENDPOINTS.INVESTMENTS.LEAVE(id));
       ToastAndroid.show(
         res.data?.message || "Successfully left the investment",
         ToastAndroid.SHORT,
       );
-      console.log("✅ Left investment:", id);
-      console.log("Response:", res.data);
       return { id, message: res.data.message };
     } catch (err: any) {
       const errMsg =
@@ -302,7 +295,6 @@ export const leaveInvestment = createAsyncThunk(
         err?.message ||
         "Failed to leave investment";
       ToastAndroid.show(errMsg, ToastAndroid.SHORT);
-      console.log("❌ Leave investment error:", errMsg);
       return rejectWithValue(errMsg);
     }
   },

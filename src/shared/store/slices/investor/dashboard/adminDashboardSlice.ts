@@ -49,7 +49,7 @@ export const fetchAdminDashboard = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await api.get(API_ENDPOINTS.DASHBOARD.ADMIN_DASHBOARD);
-      console.log("Dashboard data:" ,response.data)
+
       return response.data.data;
     } catch (error: any) {
       return rejectWithValue(

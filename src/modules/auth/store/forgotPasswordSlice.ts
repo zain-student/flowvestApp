@@ -38,16 +38,16 @@ export const sendResetCode = createAsyncThunk<
   { email: string },
   { rejectValue: string }
 >("forgotPassword/sendResetCode", async ({ email }, { rejectWithValue }) => {
-  console.log("Called send code");
+
   try {
     const res = await api.post(API_ENDPOINTS.AUTH.SEND_VERIFICATION_CODE, {
       email,
       type: "password_reset",
     });
-    console.log("Send reset code response:", res.data);
+
     ToastAndroid.show(res.data.message, ToastAndroid.SHORT);
   } catch (error: any) {
-    console.log("Send reset code error", error.message);
+
     ToastAndroid.show(error.message, ToastAndroid.SHORT);
     return rejectWithValue(error.message || "Failed to send verification code");
   }
@@ -60,14 +60,14 @@ export const verifyResetCode = createAsyncThunk<
 >(
   "forgotPassword/verifyResetCode",
   async ({ email, code }, { rejectWithValue }) => {
-    console.log("Called verify code");
+
     try {
       const response = await api.post(API_ENDPOINTS.AUTH.VERIFY_CODE, {
         email,
         code,
         type: "password_reset",
       });
-      console.log("Verify code res", response.data);
+
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       return {
         token: response.data.data.token,
@@ -75,7 +75,7 @@ export const verifyResetCode = createAsyncThunk<
       };
     } catch (error: any) {
       ToastAndroid.show(error.message, ToastAndroid.SHORT);
-      console.log("Error verify code", error.message);
+
       return rejectWithValue(error.message || "Invalid verification code");
     }
   },
@@ -88,21 +88,19 @@ export const resetPassword = createAsyncThunk<
 >(
   "forgotPassword/resetPassword",
   async ({ token, password, confirmPassword }, { rejectWithValue }) => {
-    console.log("Called reset password");
+
     try {
       const response = await api.post(API_ENDPOINTS.AUTH.RESET_PASSWORD, {
         token,
         new_password: password,
         new_password_confirmation: confirmPassword,
       });
-      console.log("Reset password res", response.data);
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
     } catch (error: any) {
       ToastAndroid.show(
         error.message || "Failed to reset password",
         ToastAndroid.SHORT,
       );
-      console.log("Error reset password", error.message);
       return rejectWithValue(error.message || "Failed to reset password");
     }
   },
@@ -164,7 +162,7 @@ const forgotPasswordSlice = createSlice({
         return initialState; // clear everything after success
       })
       .addCase(resetPassword.rejected, (state, action) => {
-        console.log("Reset password rejected:", action.payload);
+
         state.loading = false;
         state.error = action.payload || null;
       });

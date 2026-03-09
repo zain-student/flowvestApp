@@ -66,7 +66,7 @@ export const RootNavigator: React.FC = () => {
         if (authState.isAuthenticated) {
           // Update Redux state with stored auth data
           // This will be implemented when we connect the auth service to Redux
-          console.log("User is authenticated:", authState.user?.email);
+      
         }
       } catch (error) {
       } finally {
@@ -89,7 +89,7 @@ export const RootNavigator: React.FC = () => {
           await dispatch(getPreferences()).unwrap();
           await dispatch(getCurrencies()).unwrap();
         } catch (error) {
-          console.log("Bootstrap error:", error);
+
         }
       }
     };

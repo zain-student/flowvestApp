@@ -98,7 +98,7 @@ export const loginUser = createAsyncThunk(
       const token = response.data?.data?.token;
       const user = response.data?.data?.user;
       const session = response.data?.data?.session; // Assuming session is returned
-      console.log("Login response:", JSON.stringify(response.data));
+    
       if (!token || !user || !session) {
         return rejectWithValue(
           "Login failed: No token or user data or session returned",
@@ -114,7 +114,7 @@ export const loginUser = createAsyncThunk(
         // [StorageKeys.REFRESH_TOKEN, token?.refresh_token],
       ]);
       // ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
-      console.log("✅ User logged in successfully:", response.data.message);
+     
       return {
         user,
         token: {
@@ -132,7 +132,7 @@ export const loginUser = createAsyncThunk(
       const errMsg = error.message || "Login failed";
       // ToastAndroid.show(errMsg, ToastAndroid.SHORT);
       Alert.alert(errMsg);
-      console.log("❌ Login error:", errMsg);
+     
       return rejectWithValue(errMsg);
     }
   },
@@ -145,7 +145,6 @@ export const logoutUser = createAsyncThunk("/v1/auth/logout", async () => {
     {}, // No body needed for logout
   );
   // Clear storage
-  console.log("Logout response:", JSON.stringify(response.data));
   // Clear all auth-related data from storage
   await storage.multiRemove([
     StorageKeys.AUTH_TOKEN,
@@ -154,12 +153,12 @@ export const logoutUser = createAsyncThunk("/v1/auth/logout", async () => {
   ]);
 
   // Clear Redux state
-  console.log(response.data.message);
 
-  console.log("Logging out user...");
+
+
   // Show success message
   // ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
-  console.log("✅ User logged out successfully");
+
   return;
 });
 
@@ -173,7 +172,7 @@ export const refreshToken = createAsyncThunk("/v1/auth/refresh", async () => {
       },
     },
   );
-  console.log("Refresh token response:", JSON.stringify(response.data));
+
   if (!response.data?.data?.token) {
     throw new Error("Failed to refresh token");
   }
@@ -185,7 +184,7 @@ export const refreshToken = createAsyncThunk("/v1/auth/refresh", async () => {
     [StorageKeys.USER_DATA, JSON.stringify(response.data.data.user)],
     [StorageKeys.SESSION, JSON.stringify(response.data.data.session)],
   ]);
-  console.log("✅ Token refreshed successfully");
+
   // Return new token and session
   return {
     token: {
@@ -210,7 +209,6 @@ export const getCurrentUser = createAsyncThunk<
   try {
     const response = await api.get(API_ENDPOINTS.PROFILE.GET);
     const user = response?.data?.data;
-    console.log("✅ Get current user response:", JSON.stringify(response.data));
     return user;
   } catch (error: any) {
     const errMsg = error.message || "Failed to get user profile";

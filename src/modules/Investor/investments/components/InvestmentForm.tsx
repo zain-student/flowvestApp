@@ -550,8 +550,6 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
         <Button
           title={mode === "edit" ? "Update Investment" : "Add Investment"}
           onPress={handleSubmit((data) => onSubmit(data, setError))}
-          //   onPress={handleAdd}
-          //   onPress={()=> console.log("onSubmit called with:")}
           style={{
             // marginBottom: 110,
             marginTop: 0,

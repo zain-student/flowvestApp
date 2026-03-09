@@ -117,7 +117,7 @@ export const PayoutsScreen: React.FC = () => {
         payout_ids: selectedPayouts,
         ...formData, // includes status, payment_method, reference_number, notes
       };
-      console.log("Bulk Mark as Paid payload:", payload);
+
       await dispatch(bulkUpdatePayouts(payload)).unwrap();
 
       setShowMarkAsPaidModal(false);

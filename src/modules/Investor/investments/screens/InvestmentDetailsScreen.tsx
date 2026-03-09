@@ -83,7 +83,7 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
                 navigation.goBack();
               })
               .catch((error) => {
-                console.log("Failed to delete investment:", error.message);
+
                 ToastAndroid.show(
                   "Delete failed! " + error.message,
                   ToastAndroid.SHORT,
@@ -95,14 +95,14 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
     );
   };
   const handleDuplicate = () => {
-    // console.log("Duplicate investment:", currentInvestment);
+
     setShowMenu(false);
     dispatch(
       duplicateInvestment({
         investmentId: currentInvestment.id,
       }),
     ).catch((error) => {
-      console.log("Failed to duplicate investment:", error.message);
+
       ToastAndroid.show(
         "Duplication failed! " + error.message,
         ToastAndroid.SHORT,
@@ -130,8 +130,8 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
         navigation.goBack();
       }
     } catch (err) {
-      // Error toast already handled inside thunk
-      console.log("Join failed", err);
+
+
     }
   };
 
@@ -290,8 +290,6 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
                   />
                 }
                 onPress={() => {
-                  console.log("Editing investment:", currentInvestment); // full object
-                  console.log("Editing investment ID:", currentInvestment.id); // just ID
                   navigation.navigate("EditInvestments", {
                     id: currentInvestment.id,
                     mode: "edit",

@@ -33,15 +33,15 @@ export const checkEmailAndSendCode = createAsyncThunk<
 >(
   "register/checkEmailAndSendCode",
   async ({ email, role }, { rejectWithValue }) => {
-    console.log("Thunk called with:", { email, role });
+
     try {
       const checkRes = await api.post(API_ENDPOINTS.AUTH.CHECK_EMAIL, {
         email,
         role,
       });
-      console.log("Check Res", checkRes.data);
+  
       if (checkRes.data.exists && !checkRes.data.can_register) {
-        console.log("Email already registered");
+
         return rejectWithValue("Email already registered");
       }
 
@@ -52,9 +52,8 @@ export const checkEmailAndSendCode = createAsyncThunk<
           type: "registration",
         },
       );
-      console.log("Verification code Res:", codeRes.data);
+
     } catch (error: any) {
-      console.log("Error in thunk:", error.message || error);
       return rejectWithValue(error.message || "Something went wrong");
     }
   },
@@ -68,16 +67,15 @@ export const verifyEmailCode = createAsyncThunk<
   { email: string; code: string },
   { rejectValue: string }
 >("register/verifyEmailCode", async ({ email, code }, { rejectWithValue }) => {
-  console.log("Thunk called with:", { email, code });
+
   try {
     const checkRes = await api.post(API_ENDPOINTS.AUTH.VERIFY_CODE, {
       email,
       code,
       type: "registration",
     });
-    console.log("Check Res", checkRes.data);
+
   } catch (error: any) {
-    console.log("Verify code error :", error.message);
     return rejectWithValue(error.message || "Invalid verification code");
   }
 });
@@ -96,7 +94,7 @@ export const registerUser = createAsyncThunk<
   },
   { rejectValue: string }
 >("register/registerUser", async (payload, { rejectWithValue, dispatch }) => {
-  console.log("Called thunk with:", payload);
+
   try {
     const res = await api.post(API_ENDPOINTS.AUTH.REGISTER, {
       email: payload.email,
@@ -106,17 +104,17 @@ export const registerUser = createAsyncThunk<
       verification_code: payload.code,
       terms_accepted: payload.termsAccepted,
     });
-    console.log("Register response:", res.data);
+
 
     // Auto login after registration
     await dispatch(
       loginUser({ email: payload.email, password: payload.password }),
     ).unwrap();
-    // console.log("Creds: ", payload.email, payload.password);
+
 
     return res.data;
   } catch (error: any) {
-    console.log("Register error:", error.message);
+
     // ToastAndroid.show(error.message,ToastAndroid.SHORT);
     return rejectWithValue(error.message || "Registration failed");
   }

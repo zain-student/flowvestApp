@@ -77,7 +77,7 @@ export const SharedInvestmentDetail: React.FC<Props> = ({
       navigation.goBack();
     } catch (err) {
       // Error toast already handled inside thunk
-      console.log("Join failed", err);
+
     }
   };
 

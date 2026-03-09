@@ -55,7 +55,7 @@ export const UpdateProfile = ({ navigation }: any) => {
     //  Proceed with API call
     try {
       await dispatch(updateUserProfileApi(formData)).unwrap();
-      console.log("✅ Profile updated successfully");
+
       navigation.goBack(); // optional navigation
     } catch (err: any) {
       ToastAndroid.show("Failed to update profile", ToastAndroid.SHORT);

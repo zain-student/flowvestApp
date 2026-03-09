@@ -91,7 +91,7 @@ export const PartnerPayoutScreen: React.FC = () => {
         style={styles.payoutCardContainer}
         activeOpacity={0.85}
         onPress={() => {
-          console.log("Navigating to details for payout ID:", item.id);
+
           navigation.navigate("PartnerPayoutDetails", { id: item.id });
         }}
       >

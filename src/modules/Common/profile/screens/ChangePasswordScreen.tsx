@@ -25,7 +25,7 @@ export const ChangePasswordScreen: React.FC = () => {
   const { isLoading, error } = useAppSelector((state) => state.profile);
   const navigation = useNavigation();
   useEffect(() => {
-    console.log("Profile error state changed:");
+
   }, [error]);
   const [formData, setFormData] = useState({
     current_password: "",
@@ -53,7 +53,7 @@ export const ChangePasswordScreen: React.FC = () => {
     }
 
     setErrors({});
-    console.log("Password form submitted ✅", result.data);
+ 
 
     try {
       const res = await dispatch(
@@ -64,7 +64,7 @@ export const ChangePasswordScreen: React.FC = () => {
         }),
       ).unwrap();
 
-      console.log("✅ Change password API response:", res);
+
 
       // Show toast here if you want
       ToastAndroid.show(res.message, ToastAndroid.SHORT);

@@ -135,7 +135,7 @@ export const getCurrentUser = createAsyncThunk<
   try {
     const response = await api.get(API_ENDPOINTS.PROFILE.GET);
     const user = response?.data?.data;
-    console.log("✅ Get current user response:", JSON.stringify(response.data));
+ 
     await storage.setItem(StorageKeys.USER_DATA, JSON.stringify(user));
     return user;
   } catch (error: any) {
@@ -161,7 +161,7 @@ export const getCurrencies = createAsyncThunk<
     const response = await api.get(API_ENDPOINTS.PROFILE.CURRENCIES); // define in your env
     const currencies = response?.data?.data?.currencies;
     if (!currencies) throw new Error("No currencies found");
-    console.log("✅ Fetched currencies:", currencies);
+
     return currencies;
   } catch (err: any) {
     const msg =
@@ -227,7 +227,7 @@ export const updateUserProfileApi = createAsyncThunk<
 >("/v1/auth/update-profile", async (payload, { rejectWithValue }) => {
   try {
     const response = await api.put(API_ENDPOINTS.PROFILE.UPDATE, payload);
-    console.log("✅ Update profile response:", JSON.stringify(response.data));
+
 
     const updatedUser = response.data?.data;
     const message = response.data?.message || "Profile updated successfully";
@@ -269,7 +269,7 @@ export const uploadUserAvatar = createAsyncThunk(
           headers: { "Content-Type": "multipart/form-data" },
         },
       );
-      console.log("Avatar res:", response.data);
+      
       // Backend returns { data: { avatar_url: "https://..." } }
       return response.data.data.avatar_url;
     } catch (err: any) {
@@ -285,7 +285,7 @@ export const getCompanyInfo = createAsyncThunk<
 >("profile/getCompanyInfo", async (_, { rejectWithValue }) => {
   try {
     const response = await api.get(API_ENDPOINTS.PROFILE.COMPANY_INFO);
-    console.log("✅ Company info response:", response.data);
+
     return response.data.data;
   } catch (error: any) {
     const msg =

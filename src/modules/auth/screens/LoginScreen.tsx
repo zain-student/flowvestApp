@@ -100,9 +100,7 @@ export const LoginScreen: React.FC = () => {
 
       if (loginUser.fulfilled.match(result)) {
         // Login successful - navigation will be handled by RootNavigator
-        console.log("Login successful");
       } else if (loginUser.rejected.match(result)) {
-        console.log("Login failed:", result.error.message);
       }
     } catch (error) {
       Alert.alert("Error", "An unexpected error occurred. Please try again.");

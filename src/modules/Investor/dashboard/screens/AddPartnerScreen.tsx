@@ -116,7 +116,7 @@ export const AddPartnerScreen = () => {
         .unwrap()
         .then(() => {
           // ToastAndroid.show("Partner created successfully", ToastAndroid.SHORT);
-          console.log("Adding partner Data:", data);
+   
           reset();
           setCustomPassword("");
           setIsAutoPassword(true);

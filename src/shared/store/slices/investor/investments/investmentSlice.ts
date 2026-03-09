@@ -159,7 +159,7 @@ export const addInvestments = createAsyncThunk(
         API_ENDPOINTS.INVESTMENTS.CREATE,
         newInvestment,
       );
-      console.log("📦 Investment Created:", response.data);
+
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       return response.data.data;
     } catch (error: any) {
@@ -232,7 +232,7 @@ export const fetchInvestmentPartners = createAsyncThunk(
           params: { status, invitation_status, search },
         },
       );
-      console.log("✅ Investment partners:", response.data);
+
       return response.data.data as InvestmentPartner[];
     } catch (error: any) {
       return rejectWithValue(
@@ -255,7 +255,7 @@ export const addInvestmentPartner = createAsyncThunk(
         partnerData,
       );
 
-      console.log("✅ Partner invited:", response.data);
+  
 
       ToastAndroid.show(
         response.data.message || "Partner invited successfully",
@@ -283,7 +283,7 @@ export const fetchInvestmentsById = createAsyncThunk(
   "v1/investments/:id",
   async (id: number) => {
     const response = await api.get(API_ENDPOINTS.INVESTMENTS.DETAIL(id));
-    console.log("Investment detail is :", response.data);
+
     return response.data.data;
   },
 );
@@ -292,11 +292,11 @@ export const duplicateInvestment = createAsyncThunk(
   "v1/investments/:id/duplicate",
   async ({ investmentId }: { investmentId: number }, { rejectWithValue }) => {
     try {
-      console.log("Duplicate called for ID:", investmentId);
+ 
       const response = await api.post(
         API_ENDPOINTS.INVESTMENTS.DUPLICATE(investmentId),
       );
-      console.log("Investment Duplicated:", response.data);
+
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       return response.data.data;
     } catch (error: any) {
@@ -316,12 +316,12 @@ export const updateInvestment = createAsyncThunk(
     { rejectWithValue },
   ) => {
     try {
-      console.log("Update called");
+
       const response = await api.put(
         API_ENDPOINTS.INVESTMENTS.UPDATE(id),
         updatedData,
       );
-      console.log("📦 Investment Updated:", response.data);
+    
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       return response.data.data;
     } catch (error: any) {
@@ -337,7 +337,7 @@ export const deleteInvestment = createAsyncThunk(
       const response = await api.delete(
         API_ENDPOINTS.INVESTMENTS.DELETE(investmentId),
       );
-      console.log("Investment deleted successfully:", response.data);
+  
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       return investmentId;
     } catch (error: any) {
@@ -357,7 +357,7 @@ export const approveInvestmentPartner = createAsyncThunk(
         API_ENDPOINTS.INVESTMENTS.APPROVE_PARTNER(investmentId, partnerId),
       );
 
-      console.log("✅ Partner participation approved:", response.data);
+
 
       ToastAndroid.show(
         response.data?.message || "Partner participation approved",
@@ -391,7 +391,7 @@ export const removeInvestmentPartner = createAsyncThunk(
         },
       );
 
-      console.log("✅ Partner removed successfully:", response.data);
+ 
 
       ToastAndroid.show(
         response.data?.message || "Partner removed successfully",

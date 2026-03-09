@@ -125,10 +125,10 @@ export const fetchPayoutStats = createAsyncThunk<
 >("payouts/fetchStats", async (_, { rejectWithValue }) => {
   try {
     const response = await api.get(API_ENDPOINTS.PAYOUTS.STATISTICS);
-    console.log("Payouts stats: ", response.data);
+
     return response.data.data;
   } catch (error: any) {
-    console.log("Stats error:", error.message);
+
     return rejectWithValue(
       error.response?.data?.message || "Failed to fetch payout stats",
     );
@@ -144,7 +144,7 @@ export const fetchPayouts = createAsyncThunk<
     const response = await api.get(
       `${API_ENDPOINTS.PAYOUTS.LIST}?page=${page}`,
     );
-    console.log("Payouts API response:", response.data);
+
     const payouts = response.data?.data?.payouts || [];
     const pagination = response.data?.data?.pagination || {
       current_page: 1,
@@ -157,7 +157,7 @@ export const fetchPayouts = createAsyncThunk<
       pagination,
       page,
     });
-    console.log("Fetched payouts:", payouts);
+
     return { payouts, pagination, page };
   } catch (error: any) {
     const cached = await storage.getItem(StorageKeys.PAYOUTS_CACHE);
@@ -173,7 +173,7 @@ export const fetchPayoutsById = createAsyncThunk(
   "v1/payouts/managed/:id",
   async (id: number) => {
     const response = await api.get(API_ENDPOINTS.PAYOUTS.DETAIL(id));
-    console.log("Payout details is :", response.data);
+
     return response.data.data;
   },
 );
@@ -183,7 +183,7 @@ export const markPayoutAsPaid = createAsyncThunk(
   async ({ id, data }: { id: number; data: any }, { rejectWithValue }) => {
     try {
       const response = await api.put(API_ENDPOINTS.PAYOUTS.MARK_PAID(id), data);
-      console.log("Mark Payout as Paid response:", response.data);
+
       return response.data.data.payout;
     } catch (error: any) {
       ToastAndroid.show(error.message, ToastAndroid.SHORT);
@@ -211,7 +211,7 @@ export const bulkUpdatePayouts = createAsyncThunk(
         API_ENDPOINTS.PAYOUTS.BULK_MARK_PAID,
         payload,
       );
-      console.log("Bulk Update Payouts response:", response.data);
+
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       return response.data;
     } catch (error: any) {

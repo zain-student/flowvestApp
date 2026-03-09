@@ -53,9 +53,7 @@ api.interceptors.response.use(
     if (__DEV__ && response.config.metadata) {
       const duration =
         new Date().getTime() - response.config.metadata.startTime.getTime();
-      console.log(
-        `[API] ${response.config.method?.toUpperCase()} ${response.config.url} - ${duration}ms`,
-      );
+      
     }
 
     return response;
@@ -69,7 +67,7 @@ api.interceptors.response.use(
       if (originalRequest._retry) {
         // Refresh failed, logout user
         // await authService.logout(); // Will be implemented later
-        console.log("Token refresh failed, user needs to login again");
+
         return Promise.reject(error);
       }
 
@@ -82,7 +80,7 @@ api.interceptors.response.use(
           // const newToken = await authService.refreshToken(refreshToken); // Will be implemented later
 
           // For now, just log the attempt
-          console.log("Token refresh attempt with:", refreshToken);
+
 
           // Update token in storage (when auth service is ready)
           // await storage.setItem(TOKEN_KEY, newToken);
@@ -94,7 +92,7 @@ api.interceptors.response.use(
       } catch (refreshError) {
         // Refresh failed, logout user
         // await authService.logout(); // Will be implemented later
-        console.log("Token refresh failed:", refreshError);
+
         return Promise.reject(refreshError);
       }
     }

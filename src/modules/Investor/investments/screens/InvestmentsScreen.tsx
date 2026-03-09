@@ -76,7 +76,7 @@ export const InvestmentsScreen: React.FC = () => {
   // First page load
   useEffect(() => {
     dispatch(fetchInvestments({ page: 1 }));
-    console.log("Investments loaded", stats.total_investments);
+
   }, [dispatch]);
   const handleSearch = () => {
     // always start at page 1
@@ -206,10 +206,6 @@ export const InvestmentsScreen: React.FC = () => {
     </TouchableOpacity>
   );
 
-  console.log(
-    "Filtered investments IDs:",
-    filtered.map((i) => i.id),
-  );
   return (
     <DashboardLayout>
       <View style={styles.container}>

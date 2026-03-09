@@ -146,11 +146,11 @@ export const addPartners = createAsyncThunk(
         API_ENDPOINTS.ADMIN.PARTNERS.CREATE,
         newPartner,
       );
-      console.log("Add Partner response:", response.data);
+
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       return response.data.data;
     } catch (error: any) {
-      console.log("error", error.message);
+
       return rejectWithValue(error || "Failed to Add partner");
     }
   },
@@ -161,7 +161,7 @@ export const fetchPartners = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await api.get(API_ENDPOINTS.ADMIN.PARTNERS.LIST);
-      console.log("Partners api response: ", response.data);
+
       // ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       return response.data;
     } catch (error: any) {
@@ -175,7 +175,7 @@ export const fetchPartnerDetail = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     try {
       const response = await api.get(API_ENDPOINTS.ADMIN.PARTNERS.DETAIL(id));
-      console.log("Partner detail response:", response.data);
+
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       return response.data.data; // ✅ directly the partner object
     } catch (error: any) {
@@ -192,7 +192,7 @@ export const updatePartner = createAsyncThunk(
     { rejectWithValue },
   ) => {
     try {
-      console.log("Update Partner called");
+
 
       // 🔹 API call
       const response = await api.put(
@@ -200,7 +200,7 @@ export const updatePartner = createAsyncThunk(
         updatedData,
       );
 
-      console.log("📦 Partner Updated:", response.data);
+
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
 
       // return updated partner object
@@ -218,7 +218,6 @@ export const fetchPartnerInvestments = createAsyncThunk(
       const response = await api.get(
         API_ENDPOINTS.ADMIN.PARTNERS.INVESTMENTS(id),
       );
-      console.log("Partner investments response:", response.data.data);
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       return response.data.data; // ✅ directly the partner object
     } catch (error: any) {
@@ -234,7 +233,7 @@ export const fetchPartnerPayouts = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     try {
       const response = await api.get(API_ENDPOINTS.ADMIN.PARTNERS.PAYOUTS(id));
-      console.log("Partner payouts response:", response.data.data);
+
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       return response.data.data; // ✅ directly the partner object
     } catch (error: any) {
@@ -252,7 +251,7 @@ export const fetchPartnerPerformance = createAsyncThunk(
       const response = await api.get(
         API_ENDPOINTS.ADMIN.PARTNERS.PERFORMANCE(id),
       );
-      console.log("Partner performance response:", response.data.data);
+
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       return response.data.data; // ✅ directly performance data
     } catch (error: any) {
@@ -297,11 +296,11 @@ export const invitePartnerToInvestment = createAsyncThunk(
         },
       );
 
-      console.log("✅ Invite Partner Response:", response.data);
+
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       return response.data.data;
     } catch (error: any) {
-      console.log("❌ Invite Partner Error:", error);
+
       return rejectWithValue(error.message || "Failed to invite partner");
     }
   },

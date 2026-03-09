@@ -25,7 +25,7 @@ export const EditInvestments = () => {
   }, [id]);
 
   const handleUpdate = (data: any) => {
-    // console.log("Updating Investment with ID:", id, "Data:", data);
+
     dispatch(updateInvestment({ id: (id), updatedData: data }))
       .unwrap()
       .then(() => {

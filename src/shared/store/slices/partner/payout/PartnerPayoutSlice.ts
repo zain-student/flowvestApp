@@ -140,7 +140,7 @@ export const fetchPayouts = createAsyncThunk<
     const response = await api.get(
       `${API_ENDPOINTS.PAYOUTS.LIST}?page=${page}`,
     );
-    console.log("Payouts API response:", response.data);
+
     const payouts = response.data?.data?.payouts || [];
     const pagination = response.data?.data?.pagination || {
       current_page: 1,
@@ -169,7 +169,7 @@ export const fetchPayoutsById = createAsyncThunk(
   async (id: number) => {
     try {
       const response = await api.get(API_ENDPOINTS.PAYOUTS.DETAIL(id));
-      console.log("Payout details is :", response.data);
+
       return response.data.data;
     } catch (error: any) {
       throw new Error(
@@ -186,7 +186,7 @@ export const fetchPayoutStatistics = createAsyncThunk<
 >("v1/payouts/statistics/summary", async (_, { rejectWithValue }) => {
   try {
     const response = await api.get(API_ENDPOINTS.PAYOUTS.STATISTICS);
-    console.log("Payout statistics is :", response.data);
+
     return response.data.data as PayoutStatistics;
   } catch (error: any) {
     return rejectWithValue(

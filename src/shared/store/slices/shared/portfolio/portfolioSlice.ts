@@ -115,8 +115,6 @@ export const fetchPortfolio = createAsyncThunk<
 >("portfolio/fetchPortfolio", async (_, thunkAPI) => {
   try {
     const response = await api.get(API_ENDPOINTS.PORTFOLIO.INDEX);
-    // ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
-    console.log("Portfolio api response data:", response.data.data);
     return response.data;
   } catch (error: any) {
     return thunkAPI.rejectWithValue(

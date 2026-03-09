@@ -54,9 +54,7 @@ export const exportReport = createAsyncThunk<
         if (await Sharing.isAvailableAsync()) {
           await Sharing.shareAsync(fileUri);
         }
-        console.log("CSV data:", csvData);
         ToastAndroid.show("CSV exported successfully!", ToastAndroid.SHORT);
-        console.log("CSV saved to:", fileUri);
         return { fileUri, type: "csv" };
       }
 

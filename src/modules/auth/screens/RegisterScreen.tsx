@@ -212,7 +212,7 @@ export const RegisterScreen = () => {
                 : callback;
             setSelectedRole(newVal as "user" | "admin");
             dispatch(setReduxRole(newVal as "user" | "admin"));
-            console.log("Selected role (picker):", newVal);
+        
           }}
           items={accountTypeItems}
           setOpen={setAccountTypeOpen}
@@ -250,10 +250,7 @@ export const RegisterScreen = () => {
             email: reduxEmail,
             role: reduxRole as "user" | "admin",
           };
-          console.log(
-            "Dispatching checkEmailAndSendCode with payload:",
-            payload,
-          );
+         
           try {
             await dispatch(checkEmailAndSendCode(payload)).unwrap();
             ToastAndroid.show(
@@ -263,7 +260,6 @@ export const RegisterScreen = () => {
             //move to step 2 when verified
             dispatch(setReduxStep(2));
           } catch (err: any) {
-            console.log("Error sending code:", err);
             ToastAndroid.show(err, ToastAndroid.SHORT);
           }
         }}

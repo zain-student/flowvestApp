@@ -74,7 +74,7 @@ export const fetchPartnerDashboard = createAsyncThunk<
 >("partnerDashboard/fetchPartnerDashboard", async (_, { rejectWithValue }) => {
   try {
     const response = await api.get(API_ENDPOINTS.DASHBOARD.USER_DASHBOARD);
-    console.log("✅ Partner Dashboard Data:", response.data);
+
     return response.data.data; // assuming response.data = { success, message, data }
   } catch (error: any) {
     return rejectWithValue(

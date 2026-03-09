@@ -21,7 +21,7 @@ export const AddInvestments = () => {
         navigation.goBack();
       })
       .catch((err) => {
-        console.log("Backend error:", err);
+    
 
         if (err?.data) {
           Object.keys(err.data).forEach((field) => {

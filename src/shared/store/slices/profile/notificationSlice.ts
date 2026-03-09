@@ -86,7 +86,7 @@ export const fetchNotificationSettings = createAsyncThunk(
       const response = await api.get(
         API_ENDPOINTS.ADMIN.NOTIFICATIONS.SETTINGS,
       );
-      console.log("Fetched notification settings:", response.data);
+
       ToastAndroid.show("Notification settings loaded", ToastAndroid.SHORT);
       return response.data.data;
     } catch (err: any) {
@@ -105,7 +105,7 @@ export const updateNotificationSettings = createAsyncThunk(
         API_ENDPOINTS.ADMIN.NOTIFICATIONS.UPDATE_SETTINGS,
         payload,
       );
-      console.log("Updated notification settings:", response.data);
+  
       ToastAndroid.show("Notification settings updated", ToastAndroid.SHORT);
       return response.data.data;
     } catch (err: any) {
@@ -128,7 +128,6 @@ export const fetchNotifications = createAsyncThunk(
       );
 
       const { notifications, pagination } = response.data.data;
-      console.log("Fetched Notifications:", response.data);
       return { notifications, pagination, page };
     } catch (err: any) {
       return rejectWithValue(err.response?.data?.message);

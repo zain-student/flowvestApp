@@ -35,7 +35,7 @@ export const fetchNotificationTemplates = createAsyncThunk<
   try {
     const response = await api.get(API_ENDPOINTS.ADMIN.NOTIFICATIONS.TEMPLATES);
     const templates = response.data?.data?.templates || [];
-console.log("Fetched templates:", templates);
+
     return templates;
   } catch (error: any) {
 

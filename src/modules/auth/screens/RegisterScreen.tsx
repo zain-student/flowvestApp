@@ -212,7 +212,6 @@ export const RegisterScreen = () => {
                 : callback;
             setSelectedRole(newVal as "user" | "admin");
             dispatch(setReduxRole(newVal as "user" | "admin"));
-        
           }}
           items={accountTypeItems}
           setOpen={setAccountTypeOpen}
@@ -221,19 +220,41 @@ export const RegisterScreen = () => {
           listMode="SCROLLVIEW"
         />
       </View>
-
-      <TouchableOpacity
-        style={styles.termsContainer}
-        // onPress={() => setTermsAccepted(!termsAccepted)}
-        onPress={() => dispatch(setReduxTerms(!reduxTerms))}
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+        }}
       >
-        <View style={[styles.checkbox, reduxTerms && styles.checkboxChecked]}>
-          {reduxTerms && <Ionicons name="checkmark" size={16} color="#fff" />}
-        </View>
-        <Text style={styles.termsText}>
+        <TouchableOpacity
+          style={styles.termsContainer}
+          // onPress={() => setTermsAccepted(!termsAccepted)}
+          onPress={() => dispatch(setReduxTerms(!reduxTerms))}
+        >
+          <View style={[styles.checkbox, reduxTerms && styles.checkboxChecked]}>
+            {reduxTerms && <Ionicons name="checkmark" size={16} color="#fff" />}
+          </View>
+        </TouchableOpacity>
+        {/* <Text style={styles.termsText}>
           I agree to the Terms of Service and Privacy Policy
+        </Text>  */}
+        <Text style={styles.termsText}>
+          I agree to the{" "}
+          <Text
+            style={styles.linkText}
+            onPress={() => navigation.navigate("TermsOfService")}
+          >
+            Terms of Service
+          </Text>{" "}
+          and{" "}
+          <Text
+            style={styles.linkText}
+            onPress={() => navigation.navigate("PrivacyPolicy")}
+          >
+            Privacy Policy
+          </Text>
         </Text>
-      </TouchableOpacity>
+      </View>
       <Button
         title="Continue"
         fullWidth
@@ -250,7 +271,7 @@ export const RegisterScreen = () => {
             email: reduxEmail,
             role: reduxRole as "user" | "admin",
           };
-         
+
           try {
             await dispatch(checkEmailAndSendCode(payload)).unwrap();
             ToastAndroid.show(
@@ -535,7 +556,8 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: Colors.secondary,
   },
-
+  termsText: { flex: 1, fontSize: 14, color: "#333" },
+  linkText: { color: "#007AFF", textDecorationLine: "underline" },
   resendContainer: {
     alignItems: "flex-end",
     marginBottom: 16,
@@ -602,12 +624,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
     borderColor: Colors.primary,
   },
-  termsText: {
-    fontSize: 14,
-    color: Colors.secondary,
-    flex: 1,
-    lineHeight: 20,
-  },
+  // termsText: {
+  //   fontSize: 14,
+  //   color: Colors.secondary,
+  //   flex: 1,
+  //   lineHeight: 20,
+  // },
 
   footer: {
     flexDirection: "row",

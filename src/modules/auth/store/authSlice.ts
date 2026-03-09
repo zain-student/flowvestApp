@@ -218,7 +218,6 @@ export const getCurrentUser = createAsyncThunk<
     const status = error.status || 500;
 
     ToastAndroid.show(errMsg, ToastAndroid.SHORT);
-    console.error("❌ Get current user error:", errMsg);
 
     return rejectWithValue({ code, message: errMsg, status });
   }

@@ -3,7 +3,7 @@
  * Centralized error handling with user-friendly messages
  */
 
-import { AxiosError } from 'axios';
+import { AxiosError } from "axios";
 
 export interface ApiError {
   message: string;
@@ -24,30 +24,31 @@ class ErrorHandler {
     }
 
     // Handle validation errors
-    if (error.name === 'ValidationError') {
+    if (error.name === "ValidationError") {
       return this.handleValidationError(error);
     }
 
     // Handle network errors
-    if (error.code === 'NETWORK_ERROR') {
+    if (error.code === "NETWORK_ERROR") {
       return {
-        message: 'Please check your internet connection and try again.',
-        code: 'NETWORK_ERROR',
+        message: "Please check your internet connection and try again.",
+        code: "NETWORK_ERROR",
       };
     }
 
     // Handle timeout errors
-    if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
+    if (error.code === "ECONNABORTED" || error.message?.includes("timeout")) {
       return {
-        message: 'Request timed out. Please try again.',
-        code: 'TIMEOUT_ERROR',
+        message: "Request timed out. Please try again.",
+        code: "TIMEOUT_ERROR",
       };
     }
 
     // Default error
     return {
-      message: error.message || 'An unexpected error occurred. Please try again.',
-      code: 'UNKNOWN_ERROR',
+      message:
+        error.message || "An unexpected error occurred. Please try again.",
+      code: "UNKNOWN_ERROR",
     };
   }
 
@@ -62,38 +63,38 @@ class ErrorHandler {
     switch (status) {
       case 400:
         return {
-          message: data?.message || 'Invalid request. Please check your input.',
+          message: data?.message || "Invalid request. Please check your input.",
           status,
-          code: 'BAD_REQUEST',
+          code: "BAD_REQUEST",
           data,
         };
 
       case 401:
         return {
-          message: 'Your session has expired. Please log in again.',
+          message: "Your session has expired. Please log in again.",
           status,
-          code: 'UNAUTHORIZED',
+          code: "UNAUTHORIZED",
         };
 
       case 403:
         return {
-          message: 'You do not have permission to perform this action.',
+          message: "You do not have permission to perform this action.",
           status,
-          code: 'FORBIDDEN',
+          code: "FORBIDDEN",
         };
 
       case 404:
         return {
-          message: 'The requested resource was not found.',
+          message: "The requested resource was not found.",
           status,
-          code: 'NOT_FOUND',
+          code: "NOT_FOUND",
         };
 
       case 409:
         return {
-          message: data?.message || 'A conflict occurred. Please try again.',
+          message: data?.message || "A conflict occurred. Please try again.",
           status,
-          code: 'CONFLICT',
+          code: "CONFLICT",
           data,
         };
 
@@ -102,31 +103,31 @@ class ErrorHandler {
         if (data?.errors) {
           const firstError = Object.values(data.errors)[0] as string[];
           return {
-            message: firstError?.[0] || 'Validation failed.',
+            message: firstError?.[0] || "Validation failed.",
             status,
-            code: 'VALIDATION_ERROR',
+            code: "VALIDATION_ERROR",
             data: data.errors,
           };
         }
         return {
-          message: data?.message || 'Validation failed.',
+          message: data?.message || "Validation failed.",
           status,
-          code: 'VALIDATION_ERROR',
+          code: "VALIDATION_ERROR",
           data,
         };
 
       case 429:
         return {
-          message: 'Too many requests. Please wait a moment and try again.',
+          message: "Too many requests. Please wait a moment and try again.",
           status,
-          code: 'RATE_LIMIT',
+          code: "RATE_LIMIT",
         };
 
       case 500:
         return {
-          message: data?.message ||'Server error. Please try again later.',
+          message: data?.message || "Server error. Please try again later.",
           status,
-          code: data?.error_code || 'SERVER_ERROR',
+          code: data?.error_code || "SERVER_ERROR",
           data,
         };
 
@@ -134,16 +135,17 @@ class ErrorHandler {
       case 503:
       case 504:
         return {
-          message: 'Service temporarily unavailable. Please try again later.',
+          message: "Service temporarily unavailable. Please try again later.",
           status,
-          code: 'SERVICE_UNAVAILABLE',
+          code: "SERVICE_UNAVAILABLE",
         };
 
       default:
         return {
-          message: data?.message || error.message || 'An unexpected error occurred.',
+          message:
+            data?.message || error.message || "An unexpected error occurred.",
           status,
-          code: 'HTTP_ERROR',
+          code: "HTTP_ERROR",
           data,
         };
     }
@@ -154,8 +156,8 @@ class ErrorHandler {
    */
   private handleValidationError(error: any): ApiError {
     return {
-      message: error.message || 'Validation failed.',
-      code: 'VALIDATION_ERROR',
+      message: error.message || "Validation failed.",
+      code: "VALIDATION_ERROR",
       data: error.errors,
     };
   }
@@ -165,18 +167,18 @@ class ErrorHandler {
    */
   getUserFriendlyMessage(code: string): string {
     const messages: Record<string, string> = {
-      NETWORK_ERROR: 'Please check your internet connection.',
-      TIMEOUT_ERROR: 'Request timed out. Please try again.',
-      UNAUTHORIZED: 'Please log in again.',
-      FORBIDDEN: 'You do not have permission for this action.',
-      NOT_FOUND: 'Resource not found.',
-      VALIDATION_ERROR: 'Please check your input.',
-      RATE_LIMIT: 'Too many requests. Please wait.',
-      SERVER_ERROR: 'Server error. Please try again later.',
-      SERVICE_UNAVAILABLE: 'Service temporarily unavailable.',
+      NETWORK_ERROR: "Please check your internet connection.",
+      TIMEOUT_ERROR: "Request timed out. Please try again.",
+      UNAUTHORIZED: "Please log in again.",
+      FORBIDDEN: "You do not have permission for this action.",
+      NOT_FOUND: "Resource not found.",
+      VALIDATION_ERROR: "Please check your input.",
+      RATE_LIMIT: "Too many requests. Please wait.",
+      SERVER_ERROR: "Server error. Please try again later.",
+      SERVICE_UNAVAILABLE: "Service temporarily unavailable.",
     };
 
-    return messages[code] || 'An unexpected error occurred.';
+    return messages[code] || "An unexpected error occurred.";
   }
 
   /**
@@ -184,14 +186,14 @@ class ErrorHandler {
    */
   isRetryable(error: ApiError): boolean {
     const retryableCodes = [
-      'NETWORK_ERROR',
-      'TIMEOUT_ERROR',
-      'RATE_LIMIT',
-      'SERVER_ERROR',
-      'SERVICE_UNAVAILABLE',
+      "NETWORK_ERROR",
+      "TIMEOUT_ERROR",
+      "RATE_LIMIT",
+      "SERVER_ERROR",
+      "SERVICE_UNAVAILABLE",
     ];
 
-    return retryableCodes.includes(error.code || '');
+    return retryableCodes.includes(error.code || "");
   }
 
   /**
@@ -199,13 +201,11 @@ class ErrorHandler {
    */
   logError(error: any, context?: string): void {
     if (__DEV__) {
-      console.group(`🚨 Error ${context ? `(${context})` : ''}`);
-      console.error('Original error:', error);
-      console.error('Handled error:', this.handle(error));
+      console.group(`🚨 Error ${context ? `(${context})` : ""}`);
       console.groupEnd();
     }
   }
 }
 
 // Export singleton instance
-export const errorHandler = new ErrorHandler(); 
+export const errorHandler = new ErrorHandler();

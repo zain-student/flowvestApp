@@ -147,8 +147,6 @@ export const getCurrentUser = createAsyncThunk<
     const status = error?.response?.status || 500;
 
     ToastAndroid.show(errMsg, ToastAndroid.SHORT);
-    console.error("❌ Get current user error:", errMsg);
-
     return rejectWithValue({ code, message: errMsg, status });
   }
 });
@@ -247,8 +245,6 @@ export const updateUserProfileApi = createAsyncThunk<
   } catch (err: any) {
     const errMsg = err?.response?.data?.message || err?.message;
     ("Failed to update profile");
-
-    console.error("❌ Update profile error:", errMsg);
     ToastAndroid.show(errMsg, ToastAndroid.SHORT);
 
     return rejectWithValue(errMsg);

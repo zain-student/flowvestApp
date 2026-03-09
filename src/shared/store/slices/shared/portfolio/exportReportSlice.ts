@@ -100,7 +100,6 @@ export const exportReport = createAsyncThunk<
         return { fileUri, type: "pdf" };
       }
     } catch (error: any) {
-      console.error("Export report error: ", error);
       return rejectWithValue(
         error.response?.data?.message ||
           error.message ||

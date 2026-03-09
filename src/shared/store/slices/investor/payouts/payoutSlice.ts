@@ -215,7 +215,6 @@ export const bulkUpdatePayouts = createAsyncThunk(
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       return response.data;
     } catch (error: any) {
-      console.error("Bulk Update Payouts error:", error);
       return rejectWithValue(
         error.response?.data.message || "Failed to bulk update payouts",
       );

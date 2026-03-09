@@ -341,9 +341,6 @@ export const deleteInvestment = createAsyncThunk(
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       return investmentId;
     } catch (error: any) {
-      //  console.error("Full error object:", error);
-      // console.error("Error response:", error.message);
-
       return rejectWithValue(error || "Delete failed");
     }
   },

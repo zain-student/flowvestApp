@@ -12,7 +12,6 @@ export const storage = {
       const jsonValue = JSON.stringify(value);
       await AsyncStorage.setItem(key, jsonValue);
     } catch (error) {
-      console.error("Storage setItem error:", error);
       throw error;
     }
   },
@@ -23,7 +22,6 @@ export const storage = {
       const jsonValue = await AsyncStorage.getItem(key);
       return jsonValue ? JSON.parse(jsonValue) : null;
     } catch (error) {
-      console.error("Storage getItem error:", error);
       return null;
     }
   },
@@ -33,7 +31,6 @@ export const storage = {
     try {
       await AsyncStorage.removeItem(key);
     } catch (error) {
-      console.error("Storage removeItem error:", error);
       throw error;
     }
   },
@@ -43,7 +40,6 @@ export const storage = {
     try {
       await AsyncStorage.clear();
     } catch (error) {
-      console.error("Storage clear error:", error);
       throw error;
     }
   },
@@ -53,7 +49,6 @@ export const storage = {
     try {
       return [...(await AsyncStorage.getAllKeys())];
     } catch (error) {
-      console.error("Storage getAllKeys error:", error);
       return [];
     }
   },
@@ -64,7 +59,6 @@ export const storage = {
       const keys = await AsyncStorage.getAllKeys();
       return keys.includes(key);
     } catch (error) {
-      console.error("Storage hasKey error:", error);
       return false;
     }
   },
@@ -78,7 +72,6 @@ export const storage = {
       ]) as [string, string][];
       await AsyncStorage.multiSet(jsonPairs);
     } catch (error) {
-      console.error("Storage multiSet error:", error);
       throw error;
     }
   },
@@ -89,7 +82,6 @@ export const storage = {
       const raw = await AsyncStorage.multiGet(keys);
       return raw.map(([key, value]) => [key, value ? JSON.parse(value) : null]);
     } catch (error) {
-      console.error("Storage multiGet error:", error);
       return [];
     }
   },
@@ -99,7 +91,6 @@ export const storage = {
     try {
       await AsyncStorage.multiRemove(keys);
     } catch (error) {
-      console.error("Storage multiRemove error:", error);
       throw error;
     }
   },

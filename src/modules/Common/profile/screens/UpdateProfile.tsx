@@ -21,7 +21,7 @@ export const UpdateProfile = ({ navigation }: any) => {
     phone: "",
     company_name: "",
   });
-
+  const userRole = useAppSelector((state) => state.auth.user?.roles?.[0]);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleInputChange = (field: keyof typeof formData, value: string) => {
@@ -37,8 +37,6 @@ export const UpdateProfile = ({ navigation }: any) => {
     //  Client-side validation
     if (!formData.name.trim()) newErrors.name = "Name is required";
     if (!formData.phone.trim()) newErrors.phone = "Phone is required";
-    if (!formData.company_name.trim())
-      newErrors.company_name = "Company name is required";
 
     const phoneRegex = /^[0-9]{10,15}$/;
     if (formData.phone && !phoneRegex.test(formData.phone)) {
@@ -100,14 +98,16 @@ export const UpdateProfile = ({ navigation }: any) => {
           required
         />
 
-        <Input
-          label="Company Name"
-          placeholder="e.g. Scala Corp"
-          value={formData.company_name}
-          onChangeText={(value) => handleInputChange("company_name", value)}
-          error={errors.company_name}
-          required
-        />
+        {userRole === "admin" && (
+          <Input
+            label="Company Name"
+            placeholder="e.g. Scala Corp"
+            value={formData.company_name}
+            onChangeText={(value) => handleInputChange("company_name", value)}
+            error={errors.company_name}
+            required
+          />
+        )}
 
         <Button
           title="Update Profile"

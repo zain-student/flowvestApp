@@ -231,9 +231,6 @@ export const ProfileScreen: React.FC = () => {
           </View>
 
           <Text style={styles.profileName}>{user?.name}</Text>
-          <Text style={styles.profileRole}>
-            {capitalizeFirstLetter(user?.roles?.[0])}
-          </Text>
         </View>
 
         {/*  Account Info */}
@@ -409,13 +406,11 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   fullscreenImage: { width: "95%", height: "95%", borderRadius: 10 },
-  profileHeader: { alignItems: "center", paddingVertical: 4 },
+  profileHeader: { alignItems: "center", paddingVertical: 4, marginBottom: 8 },
   avatarWrapper: {
     width: AVATAR_SIZE,
     height: AVATAR_SIZE,
     borderRadius: AVATAR_SIZE / 2,
-    // alignItems: "center",
-    // justifyContent: "center",
   },
   editAvatarBtn: {
     position: "absolute",
@@ -434,7 +429,6 @@ const styles = StyleSheet.create({
     marginTop: 14,
     color: Colors.secondary,
   },
-  profileRole: { fontSize: 13, color: Colors.gray, marginTop: 4 },
   card: {
     backgroundColor: Colors.white,
     borderRadius: 16,

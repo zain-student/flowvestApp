@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: "Inter_700Bold",
     fontWeight: "600",
-    marginVertical: 2,
+    // marginVertical: 2,
     alignSelf: "flex-start",
   },
   balanceChangeDark: {
@@ -278,20 +278,22 @@ const styles = StyleSheet.create({
   balanceActionsRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: 8,
+
+    // paddingVertical: 8,
   },
   investmentsButton: {
     width: "90%",
     borderRadius: 22,
-    height: 10,
+    // height: 10,
     borderColor: "#FFEC8B",
+    marginTop: 5,
     // opacity: 0.9,
   },
 
   investmentsButtonText: {
     color: "#FFD700",
     fontWeight: "600",
-    fontSize: 13,
+    fontSize: 11,
   },
   mirror: {
     backgroundColor: Colors.mirror,

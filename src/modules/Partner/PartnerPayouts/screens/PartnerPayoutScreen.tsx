@@ -202,10 +202,8 @@ export const PartnerPayoutScreen: React.FC = () => {
               left: -150,
             }}
           />
-          {/* <View style={styles.balanceActionsRow}></View> */}
         </LinearGradient>
-        {/* <View style={styles.balanceActionsRow}></View> */}
-        {/* </View> */}
+
         <View style={styles.filterRow}>
           {FILTERS.map((f) => (
             <TouchableOpacity

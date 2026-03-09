@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   iconWrapper: {
-    marginHorizontal: 6,
+    marginHorizontal: 2,
   },
   // States
   disabled: {

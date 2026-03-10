@@ -173,7 +173,6 @@ export const fetchPartnerDetail = createAsyncThunk(
     try {
       const response = await api.get(API_ENDPOINTS.ADMIN.PARTNERS.DETAIL(id));
 
-      showToast(response.data.message);
       return response.data.data; // ✅ directly the partner object
     } catch (error: any) {
       return rejectWithValue(error.message || "Failed to fetch partner detail");
@@ -189,7 +188,6 @@ export const updatePartner = createAsyncThunk(
     { rejectWithValue },
   ) => {
     try {
-      // 🔹 API call
       const response = await api.put(
         API_ENDPOINTS.ADMIN.PARTNERS.UPDATE(id),
         updatedData,
@@ -212,9 +210,9 @@ export const fetchPartnerInvestments = createAsyncThunk(
       const response = await api.get(
         API_ENDPOINTS.ADMIN.PARTNERS.INVESTMENTS(id),
       );
-      showToast(response.data.message);
       return response.data.data; // ✅ directly the partner object
     } catch (error: any) {
+      showToast(error.message);
       return rejectWithValue(
         error.message || "Failed to fetch partner investments",
       );
@@ -227,10 +225,9 @@ export const fetchPartnerPayouts = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     try {
       const response = await api.get(API_ENDPOINTS.ADMIN.PARTNERS.PAYOUTS(id));
-
-      showToast(response.data.message);
       return response.data.data; // ✅ directly the partner object
     } catch (error: any) {
+      showToast(error.message);
       return rejectWithValue(
         error.message || "Failed to fetch partner payouts",
       );
@@ -246,9 +243,9 @@ export const fetchPartnerPerformance = createAsyncThunk(
         API_ENDPOINTS.ADMIN.PARTNERS.PERFORMANCE(id),
       );
 
-      showToast(response.data.message);
       return response.data.data; // ✅ directly performance data
     } catch (error: any) {
+      showToast(error.message);
       return rejectWithValue(
         error.message || "Failed to fetch partner performance",
       );

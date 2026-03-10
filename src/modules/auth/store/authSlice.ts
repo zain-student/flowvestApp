@@ -113,7 +113,6 @@ export const loginUser = createAsyncThunk(
         [StorageKeys.SESSION, JSON.stringify(session)],
         // [StorageKeys.REFRESH_TOKEN, token?.refresh_token],
       ]);
-      showToast(response.data.message);
       return {
         user,
         token: {

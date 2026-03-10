@@ -2,72 +2,94 @@
 
 import Colors from "@/shared/colors/Colors";
 import React from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Linking, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export const TermsOfServiceScreen = () => {
+  const handleEmailPress = (email: string) => {
+    Linking.openURL(`mailto:${email}`);
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>Terms of Service</Text>
 
-        <Text style={styles.lastUpdated}>Last Updated: March 9, 2026</Text>
+        <Text style={styles.lastUpdated}>Last Updated: March 10, 2026</Text>
 
         <Text style={styles.text}>
-          These Terms of Service ("Terms") govern your access to and use of the
-          InvstrHub mobile application and related services. By accessing or
-          using the application, you agree to be bound by these Terms. If you do
-          not agree with these Terms, you should discontinue use of the
-          application.
+          By using InvstrHub, you agree to these Terms. If you don't agree,
+          please don't use this app.
         </Text>
 
-        <Text style={styles.heading}>1. Use of the Application</Text>
+        <Text style={styles.heading}>1. Your Account</Text>
         <Text style={styles.text}>
-          You agree to use the application only for lawful purposes and in
-          compliance with all applicable laws and regulations. You must not use
-          the application in any way that could damage, disable, or impair the
-          service or interfere with other users.
+          Keep your password confidential and provide accurate information. You
+          are responsible for all activity on your account.
         </Text>
 
-        <Text style={styles.heading}>2. User Accounts</Text>
+        <Text style={styles.heading}>2. Investment Disclaimer</Text>
         <Text style={styles.text}>
-          When creating an account, you are responsible for maintaining the
-          confidentiality of your login credentials and for all activities that
-          occur under your account. You agree to provide accurate and complete
-          information during registration.
+          InvstrHub is for tracking and managing investments only. Information
+          is not financial advice. You are responsible for your investment
+          decisions. Consult professionals before making decisions.
         </Text>
 
-        <Text style={styles.heading}>
-          3. Investments and Financial Decisions
-        </Text>
+        <Text style={styles.heading}>3. Prohibited Activities</Text>
         <Text style={styles.text}>
-          InvstrHub provides tools that allow users to track and manage
-          investment-related activities. The information presented within the
-          application is for informational purposes only and should not be
-          considered financial advice. Users are solely responsible for their
-          financial decisions.
+          Do not violate laws, commit fraud, hack accounts, use bots, or engage
+          in illegal activities.
         </Text>
 
-        <Text style={styles.heading}>4. Limitation of Liability</Text>
+        <Text style={styles.heading}>4. Intellectual Property</Text>
         <Text style={styles.text}>
-          To the fullest extent permitted by law, InvstrHub and its affiliates
-          shall not be liable for any direct, indirect, incidental, or
-          consequential damages arising from the use or inability to use the
-          application or its services.
+          All app content is our property. Do not copy or distribute without
+          permission.
         </Text>
 
-        <Text style={styles.heading}>5. Changes to These Terms</Text>
+        <Text style={styles.heading}>5. No Warranties</Text>
         <Text style={styles.text}>
-          We reserve the right to modify or update these Terms at any time. When
-          changes are made, the "Last Updated" date at the top of this page will
-          be revised. Continued use of the application after changes means that
-          you accept the updated Terms.
+          The app is provided "as is" without guarantees. We're not liable for
+          damages from using or inability to use the app.
         </Text>
 
-        <Text style={styles.heading}>6. Contact Information</Text>
+        <Text style={styles.heading}>6. Account Termination</Text>
         <Text style={styles.text}>
-          If you have any questions about these Terms of Service, please contact
-          the InvstrHub support team through the application or official support
-          channels.
+          We may suspend or terminate your account if you violate these Terms.
+        </Text>
+
+        <Text style={styles.heading}>7. Privacy</Text>
+        <Text style={styles.text}>
+          Your use is governed by our Privacy Policy. Please review it.
+        </Text>
+
+        <Text style={styles.heading}>8. Updates to Terms</Text>
+        <Text style={styles.text}>
+          We may update these Terms anytime. Continued use means you accept the
+          changes.
+        </Text>
+
+        <Text style={styles.heading}>9. Contact Us</Text>
+        <Text style={styles.text}>Have questions? Contact us:</Text>
+
+        <Text style={[styles.text, { marginTop: 8 }]}>
+          <Text style={{ fontWeight: "600" }}>Support Team</Text>
+        </Text>
+        <Text
+          style={[styles.email, { marginBottom: 12 }]}
+          onPress={() => handleEmailPress("support@invstrhub.com")}
+        >
+          support@invstrhub.com
+        </Text>
+
+        <Text
+          style={[styles.email]}
+          onPress={() => handleEmailPress("legal@invstrhub.com")}
+        >
+          legal@invstrhub.com
+        </Text>
+
+        <Text style={[styles.text, { marginTop: 20, fontWeight: "500" }]}>
+          By using InvstrHub, you agree to these Terms of Service.
         </Text>
       </ScrollView>
     </View>
@@ -84,27 +106,38 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 26,
+    fontSize: 24,
     fontWeight: "700",
-    marginBottom: 6,
+    marginBottom: 8,
+    color: "#1a1a1a",
   },
 
   lastUpdated: {
-    fontSize: 13,
-    color: "#777",
+    fontSize: 12,
+    color: "#999",
     marginBottom: 16,
+    fontStyle: "italic",
   },
 
   heading: {
-    fontSize: 18,
-    fontWeight: "600",
-    marginTop: 16,
-    marginBottom: 6,
+    fontSize: 16,
+    fontWeight: "700",
+    marginTop: 14,
+    marginBottom: 8,
+    color: "#1a1a1a",
   },
 
   text: {
-    fontSize: 15,
-    lineHeight: 22,
-    color: "#444",
+    fontSize: 14,
+    lineHeight: 21,
+    color: "#555",
+    marginBottom: 6,
+  },
+
+  email: {
+    fontSize: 14,
+    color: "#0066cc",
+    fontWeight: "600",
+    textDecorationLine: "underline",
   },
 });

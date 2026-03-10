@@ -57,6 +57,7 @@ export const AddPartnerScreen = () => {
     control,
     handleSubmit,
     reset,
+    setError,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(addPartnerSchema),
@@ -103,7 +104,8 @@ export const AddPartnerScreen = () => {
           navigation.goBack();
         })
         .catch((error: any) => {
-          showToast("Update failed: " + error);
+          // setModalVisible(false);
+          // showToast("Update failed: " + error);
         });
     } else {
       const finalData = {
@@ -122,7 +124,11 @@ export const AddPartnerScreen = () => {
           setModalVisible(false);
         })
         .catch((error: any) => {
-          showToast("Failed: " + (error?.message || "Unknown error"));
+          setError("email", {
+            type: "server",
+            message: error?.message || "Email already registered",
+          });
+          // showToast("Failed: " + (error?.message || "Unknown error"));
         });
     }
   };
@@ -478,15 +484,17 @@ export const AddPartnerScreen = () => {
                   </View>
                 )}
                 {/* --- End Account Credentials Section --- */}
-                <Text
-                  style={{
-                    color: "red",
-                    marginBottom: 8,
-                    textAlign: "center",
-                  }}
-                >
-                  {error}
-                </Text>
+                {/* {error && (
+                  <Text
+                    style={{
+                      color: "red",
+                      marginBottom: 8,
+                      textAlign: "center",
+                    }}
+                  >
+                    {error}
+                  </Text>
+                )} */}
                 <Button
                   title={editingPartner ? "Update" : "Add"}
                   disabled={isLoading}

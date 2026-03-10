@@ -23,7 +23,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 type Props = NativeStackScreenProps<
   InvestmentStackParamList,
@@ -345,6 +345,7 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
               label="Amount to Invest"
               type="number"
               placeholder="Enter your investment amount"
+              placeholderTextColor={Colors.gray}
               value={amount}
               onChangeText={(v) => {
                 setAmount(v);
@@ -357,6 +358,7 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
               label="Notes (optional)"
               type="text"
               placeholder="Any notes for your investment"
+              placeholderTextColor={Colors.gray}
               value={notes}
               onChangeText={setNotes}
               // error={errors.email}

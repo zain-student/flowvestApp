@@ -145,6 +145,7 @@ export const AddPartnerScreen = () => {
           placeholder="Search partner..."
           value={search}
           onChangeText={setSearch}
+          placeholderTextColor={Colors.gray}
           style={styles.searchInput}
         />
 
@@ -235,6 +236,7 @@ export const AddPartnerScreen = () => {
                     <Input
                       label="Name"
                       placeholder="Enter full name"
+                      placeholderTextColor={Colors.gray}
                       value={field.value}
                       onChangeText={field.onChange}
                       error={errors.name?.message as string | undefined}
@@ -249,6 +251,7 @@ export const AddPartnerScreen = () => {
                     <Input
                       label="Email"
                       placeholder="Enter email"
+                      placeholderTextColor={Colors.gray}
                       value={field.value}
                       onChangeText={field.onChange}
                       autoCapitalize="none"
@@ -264,6 +267,7 @@ export const AddPartnerScreen = () => {
                     <Input
                       label="Phone"
                       placeholder="Enter Phone number"
+                      placeholderTextColor={Colors.gray}
                       value={field.value}
                       onChangeText={field.onChange}
                       error={errors.phone?.message as string | undefined}
@@ -464,6 +468,7 @@ export const AddPartnerScreen = () => {
                         <Input
                           label="Custom Password"
                           placeholder="Enter password (min 8 characters)"
+                          placeholderTextColor={Colors.gray}
                           secureTextEntry
                           value={customPassword}
                           onChangeText={setCustomPassword}

@@ -12,13 +12,7 @@ import { Input } from "@components/ui/Input";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 
-import {
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  View
-} from "react-native";
+import { ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
 
 export const ChangePasswordScreen: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -93,6 +87,7 @@ export const ChangePasswordScreen: React.FC = () => {
           label="Current Password"
           type="password"
           placeholder="********"
+          placeholderTextColor={Colors.gray}
           value={formData.current_password}
           onChangeText={(value) => handleInputChange("current_password", value)}
           error={errors.current_password}
@@ -103,6 +98,7 @@ export const ChangePasswordScreen: React.FC = () => {
           label="New Password"
           type="password"
           placeholder="********"
+          placeholderTextColor={Colors.gray}
           value={formData.password}
           onChangeText={(value) => handleInputChange("password", value)}
           error={errors.password}
@@ -113,6 +109,7 @@ export const ChangePasswordScreen: React.FC = () => {
           label="Confirm New Password"
           type="password"
           placeholder="********"
+          placeholderTextColor={Colors.gray}
           value={formData.password_confirmation}
           onChangeText={(value) =>
             handleInputChange("password_confirmation", value)

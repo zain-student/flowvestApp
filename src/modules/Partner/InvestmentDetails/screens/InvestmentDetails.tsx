@@ -218,6 +218,7 @@ export const InvestmentDetails = () => {
         <View style={styles.searchContainer}>
           <TextInput
             placeholder="Search investments..."
+            placeholderTextColor={Colors.gray}
             value={search}
             onChangeText={setSearch}
             style={styles.searchInput}

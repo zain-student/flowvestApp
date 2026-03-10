@@ -153,6 +153,7 @@ export const LoginScreen: React.FC = () => {
               type="email"
               placeholder="your.email@example.com"
               value={formData.email}
+              placeholderTextColor={Colors.gray}
               onChangeText={(value) => handleInputChange("email", value)}
               error={errors.email}
               leftIcon={
@@ -176,6 +177,7 @@ export const LoginScreen: React.FC = () => {
               label="Password"
               type="password"
               placeholder="********"
+              placeholderTextColor={Colors.gray}
               value={formData.password}
               onChangeText={(value) => handleInputChange("password", value)}
               error={errors.password}

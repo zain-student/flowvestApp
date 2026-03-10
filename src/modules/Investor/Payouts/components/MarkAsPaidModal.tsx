@@ -135,6 +135,7 @@ export const MarkAsPaidModal: React.FC<MarkAsPaidModalProps> = ({
             value={referenceNumber}
             onChangeText={setReferenceNumber}
             placeholder="Enter reference number (e.g PAY-2025-001)"
+            placeholderTextColor={Colors.gray}
             style={styles.input}
           />
 
@@ -144,6 +145,7 @@ export const MarkAsPaidModal: React.FC<MarkAsPaidModalProps> = ({
             value={notes}
             onChangeText={setNotes}
             placeholder="Enter any payment notes or confirmation details"
+            placeholderTextColor={Colors.gray}
             style={[styles.input, { height: 80 }]}
             multiline
           />

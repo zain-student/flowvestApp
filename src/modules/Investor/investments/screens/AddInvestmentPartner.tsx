@@ -18,7 +18,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 
 type AddPartnerRouteProp = RouteProp<InvestmentStackParamList, "AddPartner">;
@@ -77,7 +77,10 @@ export default function AddInvestmentPartner() {
       showToast("Partner invited successfully!");
       resetForm();
     } else {
-      showToast((result.payload as string) || "Failed to invite partner", "error");
+      showToast(
+        (result.payload as string) || "Failed to invite partner",
+        "error",
+      );
     }
   };
 
@@ -191,6 +194,7 @@ export default function AddInvestmentPartner() {
           <TextInput
             style={styles.input}
             placeholder="Investment Amount(Optional)"
+            placeholderTextColor={Colors.gray}
             keyboardType="numeric"
             value={investedAmount}
             onChangeText={setInvestedAmount}
@@ -198,18 +202,21 @@ export default function AddInvestmentPartner() {
           <TextInput
             style={styles.input}
             placeholder="Investment Notes(Optional)"
+            placeholderTextColor={Colors.gray}
             value={investmentNotes}
             onChangeText={setInvestmentNotes}
           />
           <TextInput
             style={styles.input}
             placeholder="Invitation Message(Optional)"
+            placeholderTextColor={Colors.gray}
             value={invitationMessage}
             onChangeText={setInvitationMessage}
           />
           <TextInput
             style={styles.input}
             placeholder="Min Experience(Optional)"
+            placeholderTextColor={Colors.gray}
             value={minExperience}
             onChangeText={setMinExperience}
           />

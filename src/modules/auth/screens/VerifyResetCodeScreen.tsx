@@ -110,6 +110,7 @@ export const VerifyResetCodeScreen = ({ route, navigation }: any) => {
           <Input
             label="Verification Code"
             placeholder="123456"
+            placeholderTextColor={Colors.gray}
             keyboardType="numeric"
             maxLength={6}
             value={code}

@@ -77,7 +77,6 @@ export const SharedInvestmentDetail: React.FC<Props> = ({
       navigation.goBack();
     } catch (err) {
       // Error toast already handled inside thunk
-
     }
   };
 
@@ -232,6 +231,7 @@ export const SharedInvestmentDetail: React.FC<Props> = ({
               label="Amount to Invest"
               type="number"
               placeholder="Enter your investment amount"
+              placeholderTextColor={Colors.gray}
               value={amount}
               onChangeText={(v) => {
                 setAmount(v);
@@ -245,6 +245,7 @@ export const SharedInvestmentDetail: React.FC<Props> = ({
               label="Notes (optional)"
               type="text"
               placeholder="Any notes for your investment"
+              placeholderTextColor={Colors.gray}
               value={notes}
               onChangeText={setNotes}
             />

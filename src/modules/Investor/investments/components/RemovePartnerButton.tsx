@@ -79,7 +79,7 @@ export const RemovePartnerButton = ({ item }: any) => {
               onChangeText={setReason}
               multiline
               placeholder="Enter reason..."
-              placeholderTextColor="#888"
+              placeholderTextColor={Colors.gray}
             />
 
             <View style={styles.modalActions}>

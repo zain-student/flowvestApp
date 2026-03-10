@@ -75,6 +75,7 @@ export const UpdateProfile = ({ navigation }: any) => {
         <Input
           label="Full Name"
           placeholder="e.g. John Doe"
+          placeholderTextColor={Colors.gray}
           value={formData.name}
           onChangeText={(value) => handleInputChange("name", value)}
           error={errors.name}
@@ -84,6 +85,7 @@ export const UpdateProfile = ({ navigation }: any) => {
         <Input
           label="Phone Number"
           placeholder="e.g. 08012345678"
+          placeholderTextColor={Colors.gray}
           keyboardType="phone-pad"
           value={formData.phone}
           onChangeText={(value) => handleInputChange("phone", value)}
@@ -95,6 +97,7 @@ export const UpdateProfile = ({ navigation }: any) => {
           <Input
             label="Company Name"
             placeholder="e.g. Scala Corp"
+            placeholderTextColor={Colors.gray}
             value={formData.company_name}
             onChangeText={(value) => handleInputChange("company_name", value)}
             error={errors.company_name}

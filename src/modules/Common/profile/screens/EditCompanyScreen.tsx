@@ -75,6 +75,7 @@ export const EditCompanyScreen = ({ navigation }: any) => {
           <Input
             label="Company Name"
             placeholder="Your company name"
+            placeholderTextColor={Colors.gray}
             value={form.name}
             onChangeText={(v) => handleChange("name", v)}
             required
@@ -83,6 +84,7 @@ export const EditCompanyScreen = ({ navigation }: any) => {
           <Input
             label="Description"
             placeholder="Short description about your company"
+            placeholderTextColor={Colors.gray}
             value={form.description}
             onChangeText={(v) => handleChange("description", v)}
             multiline
@@ -92,6 +94,7 @@ export const EditCompanyScreen = ({ navigation }: any) => {
           <Input
             label="Email"
             placeholder="company@example.com"
+            placeholderTextColor={Colors.gray}
             keyboardType="email-address"
             value={form.email}
             onChangeText={(v) => handleChange("email", v)}
@@ -101,6 +104,7 @@ export const EditCompanyScreen = ({ navigation }: any) => {
           <Input
             label="Phone Number"
             placeholder="+92 300 1234567"
+            placeholderTextColor={Colors.gray}
             keyboardType="phone-pad"
             value={form.phone}
             onChangeText={(v) => handleChange("phone", v)}
@@ -109,6 +113,7 @@ export const EditCompanyScreen = ({ navigation }: any) => {
           <Input
             label="Website"
             placeholder="https://www.example.com"
+            placeholderTextColor={Colors.gray}
             value={form.website}
             onChangeText={(v) => handleChange("website", v)}
             autoCapitalize="none"
@@ -120,6 +125,7 @@ export const EditCompanyScreen = ({ navigation }: any) => {
           <Input
             label="Street Address"
             placeholder="123 Business Road"
+            placeholderTextColor={Colors.gray}
             value={form.street}
             onChangeText={(v) => handleChange("street", v)}
           />
@@ -129,6 +135,7 @@ export const EditCompanyScreen = ({ navigation }: any) => {
               <Input
                 label="City"
                 placeholder="Islamabad"
+                placeholderTextColor={Colors.gray}
                 value={form.city}
                 onChangeText={(v) => handleChange("city", v)}
               />
@@ -137,6 +144,7 @@ export const EditCompanyScreen = ({ navigation }: any) => {
               <Input
                 label="State / Province"
                 placeholder="Punjab"
+                placeholderTextColor={Colors.gray}
                 value={form.state}
                 onChangeText={(v) => handleChange("state", v)}
               />
@@ -148,6 +156,7 @@ export const EditCompanyScreen = ({ navigation }: any) => {
               <Input
                 label="ZIP / Postal Code"
                 placeholder="44000"
+                placeholderTextColor={Colors.gray}
                 value={form.zip}
                 onChangeText={(v) => handleChange("zip", v)}
               />
@@ -156,6 +165,7 @@ export const EditCompanyScreen = ({ navigation }: any) => {
               <Input
                 label="Country"
                 placeholder="Pakistan"
+                placeholderTextColor={Colors.gray}
                 value={form.country}
                 onChangeText={(v) => handleChange("country", v)}
               />

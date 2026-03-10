@@ -62,6 +62,7 @@ export const NotificationTemplatesScreen: React.FC<{ navigation: any }> = ({
       <View style={styles.searchContainer}>
         <TextInput
           placeholder="Search templates..."
+          placeholderTextColor={Colors.gray}
           value={search}
           onChangeText={setSearch}
           style={styles.searchInput}

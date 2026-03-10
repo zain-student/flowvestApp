@@ -191,6 +191,7 @@ export const RegisterScreen = () => {
       <Input
         label="Email Address"
         placeholder="your.email@example.com"
+        placeholderTextColor={Colors.gray}
         type="email"
         value={reduxEmail}
         // onChangeText={setEmail}
@@ -292,6 +293,7 @@ export const RegisterScreen = () => {
       <Input
         label="Verification Code"
         placeholder="123456"
+        placeholderTextColor={Colors.gray}
         keyboardType="numeric"
         maxLength={6}
         value={reduxCode}
@@ -350,6 +352,7 @@ export const RegisterScreen = () => {
       <Input
         label="Password"
         placeholder="Create password"
+        placeholderTextColor={Colors.gray}
         type="password"
         value={password}
         onChangeText={setPassword}

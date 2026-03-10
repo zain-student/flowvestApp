@@ -85,6 +85,7 @@ export const ForgotPasswordEmailScreen = () => {
               label="Email Address"
               placeholder="your.email@example.com"
               keyboardType="email-address"
+              placeholderTextColor={Colors.gray}
               autoCapitalize="none"
               value={email}
               onChangeText={setEmail}

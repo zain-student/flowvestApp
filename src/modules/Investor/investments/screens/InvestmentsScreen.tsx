@@ -76,7 +76,6 @@ export const InvestmentsScreen: React.FC = () => {
   // First page load
   useEffect(() => {
     dispatch(fetchInvestments({ page: 1 }));
-
   }, [dispatch]);
   const handleSearch = () => {
     // always start at page 1
@@ -277,6 +276,7 @@ export const InvestmentsScreen: React.FC = () => {
         <View style={styles.searchContainer}>
           <TextInput
             placeholder="Search investments..."
+            placeholderTextColor={Colors.gray}
             value={search}
             onChangeText={setSearch}
             style={styles.searchInput}

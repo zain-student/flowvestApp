@@ -96,7 +96,7 @@ const InvestmentPartnersModal: React.FC<PartnersModalProps> = ({
             />
             <TextInput
               placeholder="Search by name or email"
-              placeholderTextColor="#888"
+              placeholderTextColor={Colors.gray}
               value={search}
               onChangeText={setSearch}
               style={styles.searchInput}

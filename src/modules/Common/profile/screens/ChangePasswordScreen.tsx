@@ -67,7 +67,7 @@ export const ChangePasswordScreen: React.FC = () => {
       // Navigate back after success
       navigation.goBack();
     } catch (err: any) {
-      showToast(err);
+      showToast(err, "error");
     }
   };
 

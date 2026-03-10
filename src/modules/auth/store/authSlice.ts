@@ -128,7 +128,7 @@ export const loginUser = createAsyncThunk(
       };
     } catch (error: any) {
       const errMsg = error.message || "Login failed";
-      showToast(errMsg);
+      showToast(errMsg, "error");
 
       return rejectWithValue(errMsg);
     }
@@ -209,7 +209,7 @@ export const getCurrentUser = createAsyncThunk<
     const errMsg = error.message || "Failed to get user profile";
     const code = error.code || "SERVER_ERROR";
     const status = error.status || 500;
-    showToast(errMsg);
+    showToast(errMsg, "error");
     return rejectWithValue({ code, message: errMsg, status });
   }
 });

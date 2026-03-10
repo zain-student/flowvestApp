@@ -46,7 +46,7 @@ export const sendResetCode = createAsyncThunk<
 
     showToast(res.data.message);
   } catch (error: any) {
-    showToast(error.message);
+    showToast(error.message, "error");
     return rejectWithValue(error.message || "Failed to send verification code");
   }
 });
@@ -71,7 +71,7 @@ export const verifyResetCode = createAsyncThunk<
         expiresAt: response.data.data.expires_at,
       };
     } catch (error: any) {
-      showToast(error.message);
+      showToast(error.message, "error");
 
       return rejectWithValue(error.message || "Invalid verification code");
     }
@@ -93,7 +93,7 @@ export const resetPassword = createAsyncThunk<
       });
       showToast(response.data.message);
     } catch (error: any) {
-      showToast(error.message || "Failed to reset password");
+      showToast(error.message || "Failed to reset password", "error");
       return rejectWithValue(error.message || "Failed to reset password");
     }
   },

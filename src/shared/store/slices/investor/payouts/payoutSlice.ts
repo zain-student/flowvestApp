@@ -185,7 +185,7 @@ export const markPayoutAsPaid = createAsyncThunk(
 
       return response.data.data.payout;
     } catch (error: any) {
-      showToast(error.message);
+      showToast(error.message, "error");
       return rejectWithValue(
         error.response?.data.message || "Failed to mark payout as paid",
       );

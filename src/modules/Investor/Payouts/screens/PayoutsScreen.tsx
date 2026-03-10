@@ -126,7 +126,7 @@ export const PayoutsScreen: React.FC = () => {
       dispatch(fetchPayouts(1)); // refresh list
       dispatch(fetchPayoutStats());
     } catch (error: any) {
-      showToast(error?.message || "Failed to mark payouts as paid.");
+      showToast(error?.message || "Failed to mark payouts as paid.", "error");
     }
   };
   const renderPayout = ({ item }: any) => {

@@ -22,7 +22,7 @@ export const EditInvestments = () => {
         .unwrap()
         .then((data) => setInvestment(data))
         .catch(() => {
-          showToast("Failed to load investment");
+          showToast("Failed to load investment", "error");
         });
     }
   }, [id]);
@@ -35,7 +35,7 @@ export const EditInvestments = () => {
         navigation.goBack();
       })
       .catch((error: any) => {
-        showToast(error.message);
+        showToast(error.message, "error");
       });
   };
   if (!investment) return null;

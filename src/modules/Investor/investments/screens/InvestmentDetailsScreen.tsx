@@ -83,7 +83,7 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
                 navigation.goBack();
               })
               .catch((error) => {
-                showToast("Delete failed! " + error.message);
+                showToast("Delete failed! " + error.message, "error");
               });
           },
         },
@@ -97,7 +97,7 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
         investmentId: currentInvestment.id,
       }),
     ).catch((error) => {
-      showToast("Duplication failed! " + error.message);
+      showToast("Duplication failed! " + error.message, "error");
     });
   };
   // using same thunk from partner slice for joining shared investment

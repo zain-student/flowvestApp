@@ -212,7 +212,7 @@ export const fetchPartnerInvestments = createAsyncThunk(
       );
       return response.data.data; // ✅ directly the partner object
     } catch (error: any) {
-      showToast(error.message);
+      showToast(error.message, "error");
       return rejectWithValue(
         error.message || "Failed to fetch partner investments",
       );
@@ -227,7 +227,7 @@ export const fetchPartnerPayouts = createAsyncThunk(
       const response = await api.get(API_ENDPOINTS.ADMIN.PARTNERS.PAYOUTS(id));
       return response.data.data; // ✅ directly the partner object
     } catch (error: any) {
-      showToast(error.message);
+      showToast(error.message, "error");
       return rejectWithValue(
         error.message || "Failed to fetch partner payouts",
       );
@@ -245,7 +245,7 @@ export const fetchPartnerPerformance = createAsyncThunk(
 
       return response.data.data; // ✅ directly performance data
     } catch (error: any) {
-      showToast(error.message);
+      showToast(error.message, "error");
       return rejectWithValue(
         error.message || "Failed to fetch partner performance",
       );
@@ -416,7 +416,7 @@ const partnerSlice = createSlice({
       .addCase(invitePartnerToInvestment.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
-        showToast(state.error || "Failed to invite partner");
+        showToast(state.error || "Failed to invite partner", "error");
       });
   },
 });

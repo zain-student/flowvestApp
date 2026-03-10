@@ -77,7 +77,7 @@ export default function AddInvestmentPartner() {
       showToast("Partner invited successfully!");
       resetForm();
     } else {
-      showToast((result.payload as string) || "Failed to invite partner");
+      showToast((result.payload as string) || "Failed to invite partner", "error");
     }
   };
 

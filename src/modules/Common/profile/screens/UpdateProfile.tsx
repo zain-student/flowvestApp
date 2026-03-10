@@ -51,7 +51,7 @@ export const UpdateProfile = ({ navigation }: any) => {
 
       navigation.goBack(); // optional navigation
     } catch (err: any) {
-      showToast("Failed to update profile");
+      showToast("Failed to update profile", "error");
     }
   };
 

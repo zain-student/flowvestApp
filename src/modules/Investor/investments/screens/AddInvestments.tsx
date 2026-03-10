@@ -29,7 +29,7 @@ export const AddInvestments = () => {
             });
           });
         } else {
-          showToast(err?.message || "Something went wrong");
+          showToast(err?.message || "Something went wrong", "error");
         }
       });
   };

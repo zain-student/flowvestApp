@@ -77,7 +77,7 @@ const adminDashboardSlice = createSlice({
       .addCase(fetchAdminDashboard.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
-        showToast(state.error);
+        showToast(state.error, "error");
       });
   },
 });

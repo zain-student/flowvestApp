@@ -269,7 +269,7 @@ export const joinInvestment = createAsyncThunk(
         error?.response?.data?.message ||
         error?.message ||
         "Failed to join investment";
-      showToast(errMsg);
+      showToast(errMsg, "error");
       return rejectWithValue(errMsg);
     }
   },
@@ -287,7 +287,7 @@ export const leaveInvestment = createAsyncThunk(
         err?.response?.data?.message ||
         err?.message ||
         "Failed to leave investment";
-      showToast(errMsg);
+      showToast(errMsg, "error");
       return rejectWithValue(errMsg);
     }
   },

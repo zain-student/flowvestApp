@@ -54,7 +54,7 @@ export const NotificationSettingsScreen: React.FC = () => {
       await dispatch(updateNotificationSettings(localSettings)).unwrap();
       showToast("Settings updated");
     } catch (err: any) {
-      showToast(err || "Failed to update");
+      showToast(err || "Failed to update", "error");
     } finally {
       setIsSaving(false);
     }

@@ -255,7 +255,7 @@ export const addInvestmentPartner = createAsyncThunk(
 
       return response.data.data;
     } catch (error: any) {
-      showToast(error?.response?.data?.message || "Failed to invite partner");
+      showToast(error?.response?.data?.message || "Failed to invite partner", "error");
       return rejectWithValue(error?.response?.data?.message || "Invite failed");
     }
   },
@@ -287,7 +287,7 @@ export const duplicateInvestment = createAsyncThunk(
       showToast(response.data.message);
       return response.data.data;
     } catch (error: any) {
-      showToast(error.message || "Duplication failed");
+      showToast(error.message || "Duplication failed", "error");
       return rejectWithValue(error || "Duplication failed");
     }
   },
@@ -345,7 +345,7 @@ export const approveInvestmentPartner = createAsyncThunk(
       return response.data.data.participant;
     } catch (error: any) {
       const message = error.message || "Failed to approve partner";
-      showToast(message);
+      showToast(message, "error");
       return rejectWithValue(message);
     }
   },
@@ -374,7 +374,7 @@ export const removeInvestmentPartner = createAsyncThunk(
       return { partnerId };
     } catch (error: any) {
       const message = error.message || "Failed to remove partner";
-      showToast(message);
+      showToast(message, "error");
       return rejectWithValue(message);
     }
   },

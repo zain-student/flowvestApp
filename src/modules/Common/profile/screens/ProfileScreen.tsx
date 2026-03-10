@@ -93,7 +93,7 @@ export const ProfileScreen: React.FC = () => {
 
       showToast("Profile photo updated");
     } catch (err) {
-      showToast("Failed to upload avatar. Please try again.");
+      showToast("Failed to upload avatar. Please try again.", "error");
     }
   }, [dispatch]);
 
@@ -136,7 +136,7 @@ export const ProfileScreen: React.FC = () => {
         dispatch(getPreferences());
       })
       .catch(() => {
-        showToast("Failed to update currency preference.");
+        showToast("Failed to update currency preference.", "error");
       });
   };
   const Avatar = ({

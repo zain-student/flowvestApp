@@ -146,7 +146,7 @@ export const getCurrentUser = createAsyncThunk<
     const code = error?.response?.data?.code || "SERVER_ERROR";
     const status = error?.response?.status || 500;
 
-    showToast(errMsg);
+    showToast(errMsg, "error");
     return rejectWithValue({ code, message: errMsg, status });
   }
 });
@@ -242,7 +242,7 @@ export const updateUserProfileApi = createAsyncThunk<
   } catch (err: any) {
     const errMsg = err?.response?.data?.message || err?.message;
     ("Failed to update profile");
-    showToast(errMsg);
+    showToast(errMsg, "error");
 
     return rejectWithValue(errMsg);
   }
@@ -290,7 +290,7 @@ export const getCompanyInfo = createAsyncThunk<
       error?.message ||
       "Failed to fetch company info";
 
-    showToast(msg);
+    showToast(msg, "error");
     return rejectWithValue(msg);
   }
 });
@@ -315,7 +315,7 @@ export const updateCompanyInfo = createAsyncThunk<
       error?.message ||
       "Failed to update company";
 
-    showToast(msg);
+    showToast(msg, "error");
     return rejectWithValue(msg);
   }
 });

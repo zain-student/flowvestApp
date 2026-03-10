@@ -274,7 +274,7 @@ export const RegisterScreen = () => {
             //move to step 2 when verified
             dispatch(setReduxStep(2));
           } catch (err: any) {
-            showToast(err);
+            showToast(err, "error");
           }
         }}
       />
@@ -313,7 +313,7 @@ export const RegisterScreen = () => {
             showToast("Verification code resent");
             startResendTimer();
           } catch (err: any) {
-            showToast(err);
+            showToast(err, "error");
           }
         }}
       >
@@ -333,7 +333,7 @@ export const RegisterScreen = () => {
             ).unwrap();
             dispatch(setReduxStep(3)); // move to password step
           } catch (err: any) {
-            showToast(err);
+            showToast(err, "error");
           }
         }}
       />
@@ -388,7 +388,7 @@ export const RegisterScreen = () => {
             // Alert.alert("Account created!");
             // navigation.navigate("Login"); // or wherever
           } catch (err: any) {
-            showToast(err);
+            showToast(err, "error");
           }
         }}
       />

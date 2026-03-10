@@ -127,7 +127,7 @@ const exportReportSlice = createSlice({
       .addCase(exportReport.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Failed to export report";
-        showToast(state.error);
+        showToast(state.error, "error");
       });
   },
 });

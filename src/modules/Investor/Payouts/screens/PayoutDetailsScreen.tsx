@@ -53,7 +53,7 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
     try {
       await dispatch(cancelPayout(payouts.id)).unwrap();
     } catch (err) {
-      showToast("Failed to cancel payout");
+      showToast("Failed to cancel payout", "error");
     }
   };
   const handleSubmitPayment = async (data: any) => {
@@ -63,7 +63,7 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
       setShowPayModal(false);
       navigation.goBack();
     } catch (err) {
-      showToast("Failed to mark payout as paid");
+      showToast("Failed to mark payout as paid", "error");
     }
   };
 

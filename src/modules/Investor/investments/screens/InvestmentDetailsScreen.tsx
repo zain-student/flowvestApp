@@ -134,7 +134,7 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
 
         <View style={styles.summaryCard}>
           {/* 3 Dots Button */}
-          {!showJoinForm && (
+          {/* {!showJoinForm && (
             <TouchableOpacity
               style={styles.menuBtn}
               onPress={() => setShowMenu((prev) => !prev)}
@@ -145,9 +145,9 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
                 color={Colors.secondary}
               />
             </TouchableOpacity>
-          )}
+          )} */}
           {/* Simple Dropdown */}
-          {showMenu && (
+          {/* {showMenu && (
             <TouchableOpacity
               activeOpacity={1}
               style={styles.overlay}
@@ -163,7 +163,7 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
                 </TouchableOpacity>
               </View>
             </TouchableOpacity>
-          )}
+          )} */}
 
           <Text style={styles.label}>Amount Invested</Text>
           <Text style={styles.valueInv}>

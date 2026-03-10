@@ -1,9 +1,9 @@
 // store/partnerInvestmentSlice.ts
 import { API_ENDPOINTS } from "@/config/env";
+import { showToast } from "@/modules/auth/utils/showToast";
 import { StorageKeys, storage } from "@/shared/services/storage";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "@shared/services/api"; // Axios instance
-import { ToastAndroid } from "react-native";
 
 export interface PartnerInvestment {
   id: number;
@@ -253,7 +253,6 @@ export const joinInvestment = createAsyncThunk(
     { rejectWithValue },
   ) => {
     try {
-     
       const response = await api.post(
         API_ENDPOINTS.INVESTMENTS.JOIN(investmentId), // ✅ clean call
         { amount, notes },
@@ -262,10 +261,7 @@ export const joinInvestment = createAsyncThunk(
       if (!joined) {
         return rejectWithValue("Join investment failed: No data returned");
       }
-      ToastAndroid.show(
-        response.data?.message || "Investment joined successfully",
-        ToastAndroid.SHORT,
-      );
+      showToast(response.data?.message || "Investment joined successfully");
 
       return joined;
     } catch (error: any) {
@@ -273,7 +269,7 @@ export const joinInvestment = createAsyncThunk(
         error?.response?.data?.message ||
         error?.message ||
         "Failed to join investment";
-      ToastAndroid.show(errMsg, ToastAndroid.SHORT);
+      showToast(errMsg);
       return rejectWithValue(errMsg);
     }
   },
@@ -284,17 +280,14 @@ export const leaveInvestment = createAsyncThunk(
     try {
       // Assuming the API endpoint for leaving an investment is as follows:
       const res = await api.delete(API_ENDPOINTS.INVESTMENTS.LEAVE(id));
-      ToastAndroid.show(
-        res.data?.message || "Successfully left the investment",
-        ToastAndroid.SHORT,
-      );
+      showToast(res.data?.message || "Successfully left the investment");
       return { id, message: res.data.message };
     } catch (err: any) {
       const errMsg =
         err?.response?.data?.message ||
         err?.message ||
         "Failed to leave investment";
-      ToastAndroid.show(errMsg, ToastAndroid.SHORT);
+      showToast(errMsg);
       return rejectWithValue(errMsg);
     }
   },

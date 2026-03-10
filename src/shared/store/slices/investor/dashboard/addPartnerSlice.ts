@@ -1,8 +1,8 @@
 // store/addPartnerSlice.ts
 import { API_ENDPOINTS } from "@/config/env";
+import { showToast } from "@/modules/auth/utils/showToast";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "@shared/services/api"; // Axios instance
-import { ToastAndroid } from "react-native";
 
 // For creating a partner (request body)
 export interface CreatePartnerPayload {
@@ -147,10 +147,9 @@ export const addPartners = createAsyncThunk(
         newPartner,
       );
 
-      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+      showToast(response.data.message);
       return response.data.data;
     } catch (error: any) {
-
       return rejectWithValue(error || "Failed to Add partner");
     }
   },
@@ -161,8 +160,6 @@ export const fetchPartners = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await api.get(API_ENDPOINTS.ADMIN.PARTNERS.LIST);
-
-      // ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.message || "Failed to fetch Partners");
@@ -176,7 +173,7 @@ export const fetchPartnerDetail = createAsyncThunk(
     try {
       const response = await api.get(API_ENDPOINTS.ADMIN.PARTNERS.DETAIL(id));
 
-      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+      showToast(response.data.message);
       return response.data.data; // ✅ directly the partner object
     } catch (error: any) {
       return rejectWithValue(error.message || "Failed to fetch partner detail");
@@ -192,16 +189,13 @@ export const updatePartner = createAsyncThunk(
     { rejectWithValue },
   ) => {
     try {
-
-
       // 🔹 API call
       const response = await api.put(
         API_ENDPOINTS.ADMIN.PARTNERS.UPDATE(id),
         updatedData,
       );
 
-
-      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+      showToast(response.data.message);
 
       // return updated partner object
       return response.data.data;
@@ -218,7 +212,7 @@ export const fetchPartnerInvestments = createAsyncThunk(
       const response = await api.get(
         API_ENDPOINTS.ADMIN.PARTNERS.INVESTMENTS(id),
       );
-      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+      showToast(response.data.message);
       return response.data.data; // ✅ directly the partner object
     } catch (error: any) {
       return rejectWithValue(
@@ -234,7 +228,7 @@ export const fetchPartnerPayouts = createAsyncThunk(
     try {
       const response = await api.get(API_ENDPOINTS.ADMIN.PARTNERS.PAYOUTS(id));
 
-      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+      showToast(response.data.message);
       return response.data.data; // ✅ directly the partner object
     } catch (error: any) {
       return rejectWithValue(
@@ -252,7 +246,7 @@ export const fetchPartnerPerformance = createAsyncThunk(
         API_ENDPOINTS.ADMIN.PARTNERS.PERFORMANCE(id),
       );
 
-      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+      showToast(response.data.message);
       return response.data.data; // ✅ directly performance data
     } catch (error: any) {
       return rejectWithValue(
@@ -296,11 +290,9 @@ export const invitePartnerToInvestment = createAsyncThunk(
         },
       );
 
-
-      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+      showToast(response.data.message);
       return response.data.data;
     } catch (error: any) {
-
       return rejectWithValue(error.message || "Failed to invite partner");
     }
   },
@@ -423,15 +415,11 @@ const partnerSlice = createSlice({
       })
       .addCase(invitePartnerToInvestment.fulfilled, (state) => {
         state.isLoading = false;
-        // ToastAndroid.show("Partner invited successfully!", ToastAndroid.SHORT);
       })
       .addCase(invitePartnerToInvestment.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
-        ToastAndroid.show(
-          state.error || "Failed to invite partner",
-          ToastAndroid.SHORT,
-        );
+        showToast(state.error || "Failed to invite partner");
       });
   },
 });

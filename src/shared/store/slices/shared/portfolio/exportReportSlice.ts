@@ -1,9 +1,9 @@
 import { API_ENDPOINTS } from "@/config/env";
+import { showToast } from "@/modules/auth/utils/showToast";
 import { api } from "@/shared/services/api";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
-import { ToastAndroid } from "react-native";
 
 interface ExportReportState {
   loading: boolean;
@@ -54,7 +54,7 @@ export const exportReport = createAsyncThunk<
         if (await Sharing.isAvailableAsync()) {
           await Sharing.shareAsync(fileUri);
         }
-        ToastAndroid.show("CSV exported successfully!", ToastAndroid.SHORT);
+        showToast("CSV exported successfully!");
         return { fileUri, type: "csv" };
       }
 
@@ -80,10 +80,7 @@ export const exportReport = createAsyncThunk<
                 await Sharing.shareAsync(fileUri);
               }
 
-              ToastAndroid.show(
-                "PDF exported successfully!",
-                ToastAndroid.SHORT,
-              );
+              showToast("PDF exported successfully!");
               resolve();
             } catch (err) {
               reject(err);
@@ -130,7 +127,7 @@ const exportReportSlice = createSlice({
       .addCase(exportReport.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Failed to export report";
-        ToastAndroid.show(state.error, ToastAndroid.LONG);
+        showToast(state.error);
       });
   },
 });

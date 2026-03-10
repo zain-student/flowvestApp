@@ -1,3 +1,4 @@
+import { showToast } from "@/modules/auth/utils/showToast";
 import { PayoutStackParamList } from "@/navigation/InvestorStacks/PayoutStack";
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
@@ -19,9 +20,8 @@ import {
   Image,
   StyleSheet,
   Text,
-  ToastAndroid,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { DashboardLayout } from "../../../Common/components/DashboardLayout";
 import { MarkAsPaidModal } from "../components/MarkAsPaidModal";
@@ -126,10 +126,7 @@ export const PayoutsScreen: React.FC = () => {
       dispatch(fetchPayouts(1)); // refresh list
       dispatch(fetchPayoutStats());
     } catch (error: any) {
-      ToastAndroid.show(
-        error?.message || "Failed to mark payouts as paid.",
-        ToastAndroid.SHORT,
-      );
+      showToast(error?.message || "Failed to mark payouts as paid.");
     }
   };
   const renderPayout = ({ item }: any) => {

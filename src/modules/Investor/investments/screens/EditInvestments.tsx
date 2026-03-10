@@ -1,8 +1,11 @@
+import { showToast } from "@/modules/auth/utils/showToast";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import { fetchInvestmentsById, updateInvestment } from "@/shared/store/slices/investor/investments/investmentSlice";
+import {
+  fetchInvestmentsById,
+  updateInvestment,
+} from "@/shared/store/slices/investor/investments/investmentSlice";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { ToastAndroid } from "react-native";
 import { InvestmentForm } from "../components/InvestmentForm";
 
 export const EditInvestments = () => {
@@ -19,21 +22,20 @@ export const EditInvestments = () => {
         .unwrap()
         .then((data) => setInvestment(data))
         .catch(() => {
-          ToastAndroid.show("Failed to load investment", ToastAndroid.SHORT);
+          showToast("Failed to load investment");
         });
     }
   }, [id]);
 
   const handleUpdate = (data: any) => {
-
-    dispatch(updateInvestment({ id: (id), updatedData: data }))
+    dispatch(updateInvestment({ id: id, updatedData: data }))
       .unwrap()
       .then(() => {
-        ToastAndroid.show("Investment updated successfully", ToastAndroid.SHORT);
+        showToast("Investment updated successfully");
         navigation.goBack();
       })
-      .catch((error:any) => {
-        ToastAndroid.show( error.message , ToastAndroid.SHORT);
+      .catch((error: any) => {
+        showToast(error.message);
       });
   };
   if (!investment) return null;

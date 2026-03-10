@@ -1,8 +1,8 @@
+import { showToast } from "@/modules/auth/utils/showToast";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { addInvestments } from "@/shared/store/slices/investor/investments/investmentSlice";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { ToastAndroid } from "react-native";
 import { InvestmentForm } from "../components/InvestmentForm";
 
 export const AddInvestments = () => {
@@ -21,8 +21,6 @@ export const AddInvestments = () => {
         navigation.goBack();
       })
       .catch((err) => {
-    
-
         if (err?.data) {
           Object.keys(err.data).forEach((field) => {
             setError(field as any, {
@@ -31,10 +29,7 @@ export const AddInvestments = () => {
             });
           });
         } else {
-          ToastAndroid.show(
-            err?.message || "Something went wrong",
-            ToastAndroid.LONG,
-          );
+          showToast(err?.message || "Something went wrong");
         }
       });
   };

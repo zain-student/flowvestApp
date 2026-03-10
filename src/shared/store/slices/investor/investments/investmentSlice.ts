@@ -1,9 +1,9 @@
 // store/investmentSlice.ts
 import { API_ENDPOINTS } from "@/config/env";
+import { showToast } from "@/modules/auth/utils/showToast";
 import { StorageKeys, storage } from "@/shared/services/storage";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "@shared/services/api"; // Axios instance
-import { ToastAndroid } from "react-native";
 
 export interface Investment {
   id: number;
@@ -160,13 +160,9 @@ export const addInvestments = createAsyncThunk(
         newInvestment,
       );
 
-      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+      showToast(response.data.message);
       return response.data.data;
     } catch (error: any) {
-      // ToastAndroid.show(
-      //   error.message || "Failed to create investment",
-      //   ToastAndroid.SHORT,
-      // );
       return rejectWithValue(error || "Create failed");
     }
   },
@@ -255,19 +251,11 @@ export const addInvestmentPartner = createAsyncThunk(
         partnerData,
       );
 
-  
-
-      ToastAndroid.show(
-        response.data.message || "Partner invited successfully",
-        ToastAndroid.SHORT,
-      );
+      showToast(response.data.message || "Partner invited successfully");
 
       return response.data.data;
     } catch (error: any) {
-      ToastAndroid.show(
-        error?.response?.data?.message || "Failed to invite partner",
-        ToastAndroid.SHORT,
-      );
+      showToast(error?.response?.data?.message || "Failed to invite partner");
       return rejectWithValue(error?.response?.data?.message || "Invite failed");
     }
   },
@@ -292,18 +280,14 @@ export const duplicateInvestment = createAsyncThunk(
   "v1/investments/:id/duplicate",
   async ({ investmentId }: { investmentId: number }, { rejectWithValue }) => {
     try {
- 
       const response = await api.post(
         API_ENDPOINTS.INVESTMENTS.DUPLICATE(investmentId),
       );
 
-      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+      showToast(response.data.message);
       return response.data.data;
     } catch (error: any) {
-      ToastAndroid.show(
-        error.message || "Duplication failed",
-        ToastAndroid.SHORT,
-      );
+      showToast(error.message || "Duplication failed");
       return rejectWithValue(error || "Duplication failed");
     }
   },
@@ -316,13 +300,12 @@ export const updateInvestment = createAsyncThunk(
     { rejectWithValue },
   ) => {
     try {
-
       const response = await api.put(
         API_ENDPOINTS.INVESTMENTS.UPDATE(id),
         updatedData,
       );
-    
-      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+
+      showToast(response.data.message);
       return response.data.data;
     } catch (error: any) {
       return rejectWithValue(error || "Update failed");
@@ -337,8 +320,8 @@ export const deleteInvestment = createAsyncThunk(
       const response = await api.delete(
         API_ENDPOINTS.INVESTMENTS.DELETE(investmentId),
       );
-  
-      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+
+      showToast(response.data.message);
       return investmentId;
     } catch (error: any) {
       return rejectWithValue(error || "Delete failed");
@@ -357,17 +340,12 @@ export const approveInvestmentPartner = createAsyncThunk(
         API_ENDPOINTS.INVESTMENTS.APPROVE_PARTNER(investmentId, partnerId),
       );
 
-
-
-      ToastAndroid.show(
-        response.data?.message || "Partner participation approved",
-        ToastAndroid.SHORT,
-      );
+      showToast(response.data?.message || "Partner participation approved");
 
       return response.data.data.participant;
     } catch (error: any) {
       const message = error.message || "Failed to approve partner";
-      ToastAndroid.show(message, ToastAndroid.SHORT);
+      showToast(message);
       return rejectWithValue(message);
     }
   },
@@ -391,17 +369,12 @@ export const removeInvestmentPartner = createAsyncThunk(
         },
       );
 
- 
-
-      ToastAndroid.show(
-        response.data?.message || "Partner removed successfully",
-        ToastAndroid.SHORT,
-      );
+      showToast(response.data?.message || "Partner removed successfully");
 
       return { partnerId };
     } catch (error: any) {
       const message = error.message || "Failed to remove partner";
-      ToastAndroid.show(message, ToastAndroid.SHORT);
+      showToast(message);
       return rejectWithValue(message);
     }
   },
@@ -417,7 +390,7 @@ const investmentSlice = createSlice({
       state.meta.pagination.current_page = 1;
       state.meta.pagination.has_more_pages = true;
     },
-    // ✅ Reset partners when modal is closed
+    // Reset partners when modal is closed
     resetPartner(state) {
       state.partners = {
         data: [],

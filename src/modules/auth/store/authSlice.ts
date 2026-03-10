@@ -7,9 +7,9 @@ import { API_ENDPOINTS } from "@/config/env";
 import { api } from "@/shared/services/api";
 import { storage, StorageKeys } from "@/shared/services/storage";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Alert, ToastAndroid } from "react-native";
 import { UserRole } from "../../../config/roles";
 import type { RootState } from "../../../shared/store";
+import { showToast } from "../utils/showToast";
 // const TOKEN_KEY = '@invstrhub:token';
 // const REFRESH_TOKEN_KEY = '@invstrhub:refresh_token';
 // const SESSION_KEY = '@invstrhub:session';
@@ -98,7 +98,7 @@ export const loginUser = createAsyncThunk(
       const token = response.data?.data?.token;
       const user = response.data?.data?.user;
       const session = response.data?.data?.session; // Assuming session is returned
-    
+
       if (!token || !user || !session) {
         return rejectWithValue(
           "Login failed: No token or user data or session returned",
@@ -113,8 +113,7 @@ export const loginUser = createAsyncThunk(
         [StorageKeys.SESSION, JSON.stringify(session)],
         // [StorageKeys.REFRESH_TOKEN, token?.refresh_token],
       ]);
-      // ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
-     
+      showToast(response.data.message);
       return {
         user,
         token: {
@@ -130,9 +129,8 @@ export const loginUser = createAsyncThunk(
       };
     } catch (error: any) {
       const errMsg = error.message || "Login failed";
-      // ToastAndroid.show(errMsg, ToastAndroid.SHORT);
-      Alert.alert(errMsg);
-     
+      showToast(errMsg);
+
       return rejectWithValue(errMsg);
     }
   },
@@ -154,10 +152,8 @@ export const logoutUser = createAsyncThunk("/v1/auth/logout", async () => {
 
   // Clear Redux state
 
-
-
   // Show success message
-  // ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+  showToast(response.data.message);
 
   return;
 });
@@ -214,9 +210,7 @@ export const getCurrentUser = createAsyncThunk<
     const errMsg = error.message || "Failed to get user profile";
     const code = error.code || "SERVER_ERROR";
     const status = error.status || 500;
-
-    ToastAndroid.show(errMsg, ToastAndroid.SHORT);
-
+    showToast(errMsg);
     return rejectWithValue({ code, message: errMsg, status });
   }
 });

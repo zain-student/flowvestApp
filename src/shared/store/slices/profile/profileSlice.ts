@@ -1,9 +1,9 @@
 import { API_ENDPOINTS } from "@/config/env";
+import { showToast } from "@/modules/auth/utils/showToast";
 import { api } from "@/shared/services/api";
 import { storage, StorageKeys } from "@/shared/services/storage";
 import type { RootState } from "@/shared/store";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ToastAndroid } from "react-native";
 // import { User } from "../../../../modules/auth/store/authSlice"; // Reuse the User interface
 
 // Types
@@ -135,7 +135,7 @@ export const getCurrentUser = createAsyncThunk<
   try {
     const response = await api.get(API_ENDPOINTS.PROFILE.GET);
     const user = response?.data?.data;
- 
+
     await storage.setItem(StorageKeys.USER_DATA, JSON.stringify(user));
     return user;
   } catch (error: any) {
@@ -146,7 +146,7 @@ export const getCurrentUser = createAsyncThunk<
     const code = error?.response?.data?.code || "SERVER_ERROR";
     const status = error?.response?.status || 500;
 
-    ToastAndroid.show(errMsg, ToastAndroid.SHORT);
+    showToast(errMsg);
     return rejectWithValue({ code, message: errMsg, status });
   }
 });
@@ -228,7 +228,6 @@ export const updateUserProfileApi = createAsyncThunk<
   try {
     const response = await api.put(API_ENDPOINTS.PROFILE.UPDATE, payload);
 
-
     const updatedUser = response.data?.data;
     const message = response.data?.message || "Profile updated successfully";
 
@@ -239,13 +238,11 @@ export const updateUserProfileApi = createAsyncThunk<
     // Update local storage
     await storage.setItem(StorageKeys.USER_DATA, JSON.stringify(updatedUser));
 
-    // ToastAndroid.show(message, ToastAndroid.SHORT);
-
     return updatedUser;
   } catch (err: any) {
     const errMsg = err?.response?.data?.message || err?.message;
     ("Failed to update profile");
-    ToastAndroid.show(errMsg, ToastAndroid.SHORT);
+    showToast(errMsg);
 
     return rejectWithValue(errMsg);
   }
@@ -269,7 +266,7 @@ export const uploadUserAvatar = createAsyncThunk(
           headers: { "Content-Type": "multipart/form-data" },
         },
       );
-      
+
       // Backend returns { data: { avatar_url: "https://..." } }
       return response.data.data.avatar_url;
     } catch (err: any) {
@@ -293,7 +290,7 @@ export const getCompanyInfo = createAsyncThunk<
       error?.message ||
       "Failed to fetch company info";
 
-    ToastAndroid.show(msg, ToastAndroid.SHORT);
+    showToast(msg);
     return rejectWithValue(msg);
   }
 });
@@ -309,10 +306,7 @@ export const updateCompanyInfo = createAsyncThunk<
       payload,
     );
 
-    ToastAndroid.show(
-      response.data.message || "Company updated",
-      ToastAndroid.SHORT,
-    );
+    showToast(response.data.message || "Company updated");
 
     return response.data.data;
   } catch (error: any) {
@@ -321,7 +315,7 @@ export const updateCompanyInfo = createAsyncThunk<
       error?.message ||
       "Failed to update company";
 
-    ToastAndroid.show(msg, ToastAndroid.SHORT);
+    showToast(msg);
     return rejectWithValue(msg);
   }
 });
@@ -409,7 +403,7 @@ const profileSlice = createSlice({
         } else {
           state.user = action.payload;
         }
-        ToastAndroid.show("Profile updated successfully", ToastAndroid.SHORT);
+        showToast("Profile updated successfully");
       })
       .addCase(updateUserProfileApi.rejected, (state, action) => {
         state.isLoading = false;

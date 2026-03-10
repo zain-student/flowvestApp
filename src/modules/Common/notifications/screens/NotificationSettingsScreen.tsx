@@ -1,3 +1,4 @@
+import { showToast } from "@/modules/auth/utils/showToast";
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import {
@@ -12,9 +13,8 @@ import {
   Switch,
   Text,
   TextInput,
-  ToastAndroid,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 
 export const NotificationSettingsScreen: React.FC = () => {
@@ -52,9 +52,9 @@ export const NotificationSettingsScreen: React.FC = () => {
 
     try {
       await dispatch(updateNotificationSettings(localSettings)).unwrap();
-      ToastAndroid.show("Settings updated", ToastAndroid.SHORT);
+      showToast("Settings updated");
     } catch (err: any) {
-      ToastAndroid.show(err || "Failed to update", ToastAndroid.SHORT);
+      showToast(err || "Failed to update");
     } finally {
       setIsSaving(false);
     }

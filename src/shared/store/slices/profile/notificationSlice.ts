@@ -1,8 +1,8 @@
 import { API_ENDPOINTS } from "@/config/env";
+import { showToast } from "@/modules/auth/utils/showToast";
 import { api } from "@/shared/services/api";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "@store/index";
-import { ToastAndroid } from "react-native";
 interface NotificationItem {
   id: number;
   type: string;
@@ -87,7 +87,7 @@ export const fetchNotificationSettings = createAsyncThunk(
         API_ENDPOINTS.ADMIN.NOTIFICATIONS.SETTINGS,
       );
 
-      ToastAndroid.show("Notification settings loaded", ToastAndroid.SHORT);
+      showToast("Notification settings loaded");
       return response.data.data;
     } catch (err: any) {
       return rejectWithValue(
@@ -105,8 +105,8 @@ export const updateNotificationSettings = createAsyncThunk(
         API_ENDPOINTS.ADMIN.NOTIFICATIONS.UPDATE_SETTINGS,
         payload,
       );
-  
-      ToastAndroid.show("Notification settings updated", ToastAndroid.SHORT);
+
+      showToast("Notification settings updated");
       return response.data.data;
     } catch (err: any) {
       return rejectWithValue(

@@ -142,7 +142,7 @@ export const PartnersDashboard = () => {
               }
               onPress={() => navigation.navigate("RecentPayouts")}
               variant="outline"
-              style={styles.investmentsButton}
+              style={styles.investmentsButton1}
               textStyle={styles.investmentsButtonText}
             />
             <Button
@@ -281,12 +281,22 @@ const styles = StyleSheet.create({
 
     // paddingVertical: 8,
   },
+  investmentsButton1: {
+    width: "90%",
+    borderRadius: 22,
+    // height: 10,
+    borderColor: "#FFEC8B",
+    marginTop: 5,
+    // opacity: 0.9,
+  },
+
   investmentsButton: {
     width: "90%",
     borderRadius: 22,
     // height: 10,
     borderColor: "#FFEC8B",
     marginTop: 5,
+    alignSelf: "flex-end",
     // opacity: 0.9,
   },
 

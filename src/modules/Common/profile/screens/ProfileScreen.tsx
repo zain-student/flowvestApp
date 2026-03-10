@@ -14,11 +14,11 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  ToastAndroid,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 
+import { showToast } from "@/modules/auth/utils/showToast";
 import { ProfileStackParamList } from "@/navigation/ProfileStacks/ProfileStack";
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
@@ -91,12 +91,9 @@ export const ProfileScreen: React.FC = () => {
 
       await dispatch(uploadUserAvatar(result.assets[0].uri)).unwrap();
 
-      ToastAndroid.show("Profile photo updated", ToastAndroid.SHORT);
+      showToast("Profile photo updated");
     } catch (err) {
-      ToastAndroid.show(
-        "Failed to upload avatar. Please try again.",
-        ToastAndroid.SHORT,
-      );
+      showToast("Failed to upload avatar. Please try again.");
     }
   }, [dispatch]);
 
@@ -135,14 +132,11 @@ export const ProfileScreen: React.FC = () => {
     )
       .unwrap()
       .then(() => {
-        ToastAndroid.show("Currency updated successfully!", ToastAndroid.SHORT);
+        showToast("Currency updated successfully!");
         dispatch(getPreferences());
       })
       .catch(() => {
-        ToastAndroid.show(
-          "Failed to update currency preference.",
-          ToastAndroid.SHORT,
-        );
+        showToast("Failed to update currency preference.");
       });
   };
   const Avatar = ({

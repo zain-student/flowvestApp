@@ -1,3 +1,4 @@
+import { showToast } from "@/modules/auth/utils/showToast";
 import { InvestmentStackParamList } from "@/navigation/InvestorStacks/InvestmentStack";
 import Colors from "@/shared/colors/Colors";
 import { Button, Input } from "@/shared/components/ui";
@@ -21,9 +22,8 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  ToastAndroid,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 type Props = NativeStackScreenProps<
   InvestmentStackParamList,
@@ -83,11 +83,7 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
                 navigation.goBack();
               })
               .catch((error) => {
-
-                ToastAndroid.show(
-                  "Delete failed! " + error.message,
-                  ToastAndroid.SHORT,
-                );
+                showToast("Delete failed! " + error.message);
               });
           },
         },
@@ -95,18 +91,13 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
     );
   };
   const handleDuplicate = () => {
-
     setShowMenu(false);
     dispatch(
       duplicateInvestment({
         investmentId: currentInvestment.id,
       }),
     ).catch((error) => {
-
-      ToastAndroid.show(
-        "Duplication failed! " + error.message,
-        ToastAndroid.SHORT,
-      );
+      showToast("Duplication failed! " + error.message);
     });
   };
   // using same thunk from partner slice for joining shared investment
@@ -129,10 +120,7 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
         dispatch(fetchInvestments({ page: 1 }));
         navigation.goBack();
       }
-    } catch (err) {
-
-
-    }
+    } catch (err) {}
   };
 
   return (

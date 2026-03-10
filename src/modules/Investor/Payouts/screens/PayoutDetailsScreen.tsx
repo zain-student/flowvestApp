@@ -1,3 +1,4 @@
+import { showToast } from "@/modules/auth/utils/showToast";
 import { PayoutStackParamList } from "@/navigation/InvestorStacks/PayoutStack";
 import Colors from "@/shared/colors/Colors";
 import { Button } from "@/shared/components/ui";
@@ -19,9 +20,8 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  ToastAndroid,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { MarkAsPaidModal } from "../components/MarkAsPaidModal";
 type Props = NativeStackScreenProps<PayoutStackParamList, "PayoutDetails">;
@@ -53,17 +53,17 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
     try {
       await dispatch(cancelPayout(payouts.id)).unwrap();
     } catch (err) {
-      ToastAndroid.show("Failed to cancel payout", ToastAndroid.SHORT);
+      showToast("Failed to cancel payout");
     }
   };
   const handleSubmitPayment = async (data: any) => {
     try {
       await dispatch(markPayoutAsPaid({ id: payouts.id, data })).unwrap();
-      ToastAndroid.show("✅ Payout marked as paid", ToastAndroid.SHORT);
+      showToast("Payout marked as paid");
       setShowPayModal(false);
       navigation.goBack();
     } catch (err) {
-      ToastAndroid.show("❌ Failed to mark payout as paid", ToastAndroid.SHORT);
+      showToast("Failed to mark payout as paid");
     }
   };
 

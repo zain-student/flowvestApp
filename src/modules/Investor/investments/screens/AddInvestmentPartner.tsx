@@ -1,3 +1,4 @@
+import { showToast } from "@/modules/auth/utils/showToast";
 import { InvestmentStackParamList } from "@/navigation/InvestorStacks/InvestmentStack";
 import Colors from "@/shared/colors/Colors";
 import { Button } from "@/shared/components/ui";
@@ -16,9 +17,8 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  ToastAndroid,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 
 type AddPartnerRouteProp = RouteProp<InvestmentStackParamList, "AddPartner">;
@@ -58,7 +58,7 @@ export default function AddInvestmentPartner() {
       !selectedPartner
       // || !investedAmount
     ) {
-      ToastAndroid.show("Please select a partner first!.", ToastAndroid.SHORT);
+      showToast("Please select a partner first!.");
       return;
     }
 
@@ -74,13 +74,10 @@ export default function AddInvestmentPartner() {
     );
 
     if (invitePartnerToInvestment.fulfilled.match(result)) {
-      ToastAndroid.show("Partner invited successfully!", ToastAndroid.SHORT);
+      showToast("Partner invited successfully!");
       resetForm();
     } else {
-      ToastAndroid.show(
-        (result.payload as string) || "Failed to invite partner",
-        ToastAndroid.SHORT,
-      );
+      showToast((result.payload as string) || "Failed to invite partner");
     }
   };
 

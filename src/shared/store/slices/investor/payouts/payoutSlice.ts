@@ -1,9 +1,9 @@
 // @features/payout/payoutSlice.ts
 import { API_ENDPOINTS } from "@/config/env";
+import { showToast } from "@/modules/auth/utils/showToast";
 import { storage, StorageKeys } from "@/shared/services/storage";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "@shared/services/api"; // Adjust the path as per your structure
-import { ToastAndroid } from "react-native";
 
 export interface CalculationBase {
   method: string; // "fixed" | "percentage"
@@ -128,7 +128,6 @@ export const fetchPayoutStats = createAsyncThunk<
 
     return response.data.data;
   } catch (error: any) {
-
     return rejectWithValue(
       error.response?.data?.message || "Failed to fetch payout stats",
     );
@@ -186,7 +185,7 @@ export const markPayoutAsPaid = createAsyncThunk(
 
       return response.data.data.payout;
     } catch (error: any) {
-      ToastAndroid.show(error.message, ToastAndroid.SHORT);
+      showToast(error.message);
       return rejectWithValue(
         error.response?.data.message || "Failed to mark payout as paid",
       );
@@ -212,7 +211,7 @@ export const bulkUpdatePayouts = createAsyncThunk(
         payload,
       );
 
-      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+      showToast(response.data.message);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -238,7 +237,7 @@ export const cancelPayout = createAsyncThunk<
       );
     }
 
-    ToastAndroid.show("Payout Cancelled successfully", ToastAndroid.SHORT);
+    showToast("Payout Cancelled successfully");
     return { id: payoutId };
   } catch (error: any) {
     return rejectWithValue(

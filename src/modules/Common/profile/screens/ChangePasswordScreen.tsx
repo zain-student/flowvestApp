@@ -1,8 +1,9 @@
 import {
-    ChangePasswordFormData,
-    changePasswordSchema,
-    validateFormData,
+  ChangePasswordFormData,
+  changePasswordSchema,
+  validateFormData,
 } from "@/modules/auth/utils/authValidation"; // adjust path if needed
+import { showToast } from "@/modules/auth/utils/showToast";
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { changePassword } from "@/shared/store/slices/profile/profileSlice"; // or wherever you put it
@@ -12,21 +13,18 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 
 import {
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    ToastAndroid,
-    View,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View
 } from "react-native";
 
 export const ChangePasswordScreen: React.FC = () => {
   const dispatch = useAppDispatch();
   const { isLoading, error } = useAppSelector((state) => state.profile);
   const navigation = useNavigation();
-  useEffect(() => {
-
-  }, [error]);
+  useEffect(() => {}, [error]);
   const [formData, setFormData] = useState({
     current_password: "",
     password: "",
@@ -53,7 +51,6 @@ export const ChangePasswordScreen: React.FC = () => {
     }
 
     setErrors({});
- 
 
     try {
       const res = await dispatch(
@@ -64,15 +61,13 @@ export const ChangePasswordScreen: React.FC = () => {
         }),
       ).unwrap();
 
-
-
       // Show toast here if you want
-      ToastAndroid.show(res.message, ToastAndroid.SHORT);
+      showToast(res.message);
 
       // Navigate back after success
       navigation.goBack();
     } catch (err: any) {
-      ToastAndroid.show(err, ToastAndroid.SHORT);
+      showToast(err);
     }
   };
 

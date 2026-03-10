@@ -6,7 +6,7 @@
 import { API_ENDPOINTS } from "@/config/env";
 import { api } from "@/shared/services/api";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ToastAndroid } from "react-native";
+import { showToast } from "../utils/showToast";
 // --------------------
 // Types
 // --------------------
@@ -38,17 +38,15 @@ export const sendResetCode = createAsyncThunk<
   { email: string },
   { rejectValue: string }
 >("forgotPassword/sendResetCode", async ({ email }, { rejectWithValue }) => {
-
   try {
     const res = await api.post(API_ENDPOINTS.AUTH.SEND_VERIFICATION_CODE, {
       email,
       type: "password_reset",
     });
 
-    ToastAndroid.show(res.data.message, ToastAndroid.SHORT);
+    showToast(res.data.message);
   } catch (error: any) {
-
-    ToastAndroid.show(error.message, ToastAndroid.SHORT);
+    showToast(error.message);
     return rejectWithValue(error.message || "Failed to send verification code");
   }
 });
@@ -60,7 +58,6 @@ export const verifyResetCode = createAsyncThunk<
 >(
   "forgotPassword/verifyResetCode",
   async ({ email, code }, { rejectWithValue }) => {
-
     try {
       const response = await api.post(API_ENDPOINTS.AUTH.VERIFY_CODE, {
         email,
@@ -68,13 +65,13 @@ export const verifyResetCode = createAsyncThunk<
         type: "password_reset",
       });
 
-      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+      showToast(response.data.message);
       return {
         token: response.data.data.token,
         expiresAt: response.data.data.expires_at,
       };
     } catch (error: any) {
-      ToastAndroid.show(error.message, ToastAndroid.SHORT);
+      showToast(error.message);
 
       return rejectWithValue(error.message || "Invalid verification code");
     }
@@ -88,19 +85,15 @@ export const resetPassword = createAsyncThunk<
 >(
   "forgotPassword/resetPassword",
   async ({ token, password, confirmPassword }, { rejectWithValue }) => {
-
     try {
       const response = await api.post(API_ENDPOINTS.AUTH.RESET_PASSWORD, {
         token,
         new_password: password,
         new_password_confirmation: confirmPassword,
       });
-      ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+      showToast(response.data.message);
     } catch (error: any) {
-      ToastAndroid.show(
-        error.message || "Failed to reset password",
-        ToastAndroid.SHORT,
-      );
+      showToast(error.message || "Failed to reset password");
       return rejectWithValue(error.message || "Failed to reset password");
     }
   },
@@ -162,7 +155,6 @@ const forgotPasswordSlice = createSlice({
         return initialState; // clear everything after success
       })
       .addCase(resetPassword.rejected, (state, action) => {
-
         state.loading = false;
         state.error = action.payload || null;
       });

@@ -24,13 +24,13 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  ToastAndroid,
   TouchableOpacity,
   View,
 } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AuthStackParamList } from "../../../navigation/AuthStack";
+import { showToast } from "../utils/showToast";
 type RegisterScreenNavigationProp = NativeStackNavigationProp<
   AuthStackParamList,
   "Register"
@@ -260,13 +260,9 @@ export const RegisterScreen = () => {
         fullWidth
         onPress={async () => {
           if (!reduxEmail || !reduxRole) {
-            return ToastAndroid.show(
-              "Please enter email and select account type",
-              ToastAndroid.SHORT,
-            );
+            return showToast("Please enter email and select account type");
           }
-          if (!reduxTerms)
-            return ToastAndroid.show("Please accept terms", ToastAndroid.SHORT);
+          if (!reduxTerms) return showToast("Please accept terms");
           const payload = {
             email: reduxEmail,
             role: reduxRole as "user" | "admin",
@@ -274,14 +270,11 @@ export const RegisterScreen = () => {
 
           try {
             await dispatch(checkEmailAndSendCode(payload)).unwrap();
-            ToastAndroid.show(
-              "Verification code sent! Check your email.",
-              ToastAndroid.SHORT,
-            );
+            showToast("Verification code sent! Check your email.");
             //move to step 2 when verified
             dispatch(setReduxStep(2));
           } catch (err: any) {
-            ToastAndroid.show(err, ToastAndroid.SHORT);
+            showToast(err);
           }
         }}
       />
@@ -317,10 +310,10 @@ export const RegisterScreen = () => {
               }),
             ).unwrap();
 
-            ToastAndroid.show("Verification code resent", ToastAndroid.SHORT);
+            showToast("Verification code resent");
             startResendTimer();
           } catch (err: any) {
-            ToastAndroid.show(err, ToastAndroid.SHORT);
+            showToast(err);
           }
         }}
       >
@@ -333,18 +326,14 @@ export const RegisterScreen = () => {
         fullWidth
         disabled={!isCodeValid || loading}
         onPress={async () => {
-          if (!reduxCode)
-            return ToastAndroid.show(
-              "Enter verification code",
-              ToastAndroid.SHORT,
-            );
+          if (!reduxCode) return showToast("Enter verification code");
           try {
             await dispatch(
               verifyEmailCode({ email: reduxEmail, code: reduxCode }),
             ).unwrap();
             dispatch(setReduxStep(3)); // move to password step
           } catch (err: any) {
-            ToastAndroid.show(err, ToastAndroid.SHORT);
+            showToast(err);
           }
         }}
       />
@@ -381,12 +370,9 @@ export const RegisterScreen = () => {
         disabled={loading}
         onPress={async () => {
           if (!password || !confirmPassword)
-            return ToastAndroid.show("Enter passwords", ToastAndroid.SHORT);
+            return showToast("Enter passwords");
           if (password !== confirmPassword)
-            return ToastAndroid.show(
-              "Passwords do not match",
-              ToastAndroid.SHORT,
-            );
+            return showToast("Passwords do not match");
 
           try {
             await dispatch(
@@ -402,7 +388,7 @@ export const RegisterScreen = () => {
             // Alert.alert("Account created!");
             // navigation.navigate("Login"); // or wherever
           } catch (err: any) {
-            ToastAndroid.show(err, ToastAndroid.SHORT);
+            showToast(err);
           }
         }}
       />

@@ -1,7 +1,7 @@
 import { API_ENDPOINTS } from "@/config/env";
+import { showToast } from "@/modules/auth/utils/showToast";
 import { api } from "@/shared/services/api";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ToastAndroid } from "react-native";
 
 interface DashboardStats {
   total_managed_portfolio: number;
@@ -53,10 +53,10 @@ export const fetchAdminDashboard = createAsyncThunk(
       return response.data.data;
     } catch (error: any) {
       return rejectWithValue(
-        error?.response?.data?.message || "Failed to load dashboard data"
+        error?.response?.data?.message || "Failed to load dashboard data",
       );
     }
-  }
+  },
 );
 
 const adminDashboardSlice = createSlice({
@@ -77,7 +77,7 @@ const adminDashboardSlice = createSlice({
       .addCase(fetchAdminDashboard.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
-        ToastAndroid.show(state.error, ToastAndroid.SHORT);
+        showToast(state.error);
       });
   },
 });

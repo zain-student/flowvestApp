@@ -1,5 +1,6 @@
 // src/screens/PartnerDropdownScreen.tsx
 import { addPartnerSchema } from "@/modules/auth/utils/authValidation";
+import { showToast } from "@/modules/auth/utils/showToast";
 import { InvestorDashboardStackParamList } from "@/navigation/InvestorStacks/InvestorDashboardStack";
 import { Button, Input } from "@/shared/components/ui";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
@@ -24,7 +25,6 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  ToastAndroid,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -98,12 +98,12 @@ export const AddPartnerScreen = () => {
       dispatch(updatePartner({ id: editingPartner.id, updatedData: data }))
         .unwrap()
         .then(() => {
-          ToastAndroid.show("Partner Updated Successfully", ToastAndroid.SHORT);
+          showToast("Partner Updated Successfully");
           setModalVisible(false);
           navigation.goBack();
         })
         .catch((error: any) => {
-          ToastAndroid.show("Update failed: " + error, ToastAndroid.LONG);
+          showToast("Update failed: " + error);
         });
     } else {
       const finalData = {
@@ -115,8 +115,6 @@ export const AddPartnerScreen = () => {
       dispatch(addPartners(finalData)) // from addPartnerSlice
         .unwrap()
         .then(() => {
-          // ToastAndroid.show("Partner created successfully", ToastAndroid.SHORT);
-   
           reset();
           setCustomPassword("");
           setIsAutoPassword(true);
@@ -124,11 +122,7 @@ export const AddPartnerScreen = () => {
           setModalVisible(false);
         })
         .catch((error: any) => {
-          // ToastAndroid.show(`Error: ${error}`, ToastAndroid.LONG);
-          ToastAndroid.show(
-            "Failed: " + (error?.message || "Unknown error"),
-            ToastAndroid.LONG,
-          );
+          showToast("Failed: " + (error?.message || "Unknown error"));
         });
     }
   };

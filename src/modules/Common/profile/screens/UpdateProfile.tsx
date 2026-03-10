@@ -1,17 +1,11 @@
+import { showToast } from "@/modules/auth/utils/showToast";
 import Colors from "@/shared/colors/Colors";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
 import { Button } from "@components/ui/Button";
 import { Input } from "@components/ui/Input";
 import { updateUserProfileApi } from "@shared/store/slices/profile/profileSlice";
 import React, { useState } from "react";
-import {
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  ToastAndroid,
-  View,
-} from "react-native";
+import { ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
 
 export const UpdateProfile = ({ navigation }: any) => {
   const dispatch = useAppDispatch();
@@ -48,7 +42,6 @@ export const UpdateProfile = ({ navigation }: any) => {
     //  Stop if any errors exist
     if (Object.keys(newErrors).length > 0) {
       const firstError = Object.values(newErrors)[0];
-      // ToastAndroid.show(firstError, ToastAndroid.SHORT);
       return;
     }
 
@@ -58,7 +51,7 @@ export const UpdateProfile = ({ navigation }: any) => {
 
       navigation.goBack(); // optional navigation
     } catch (err: any) {
-      ToastAndroid.show("Failed to update profile", ToastAndroid.SHORT);
+      showToast("Failed to update profile");
     }
   };
 

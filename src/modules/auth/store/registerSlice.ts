@@ -33,15 +33,13 @@ export const checkEmailAndSendCode = createAsyncThunk<
 >(
   "register/checkEmailAndSendCode",
   async ({ email, role }, { rejectWithValue }) => {
-
     try {
       const checkRes = await api.post(API_ENDPOINTS.AUTH.CHECK_EMAIL, {
         email,
         role,
       });
-  
-      if (checkRes.data.exists && !checkRes.data.can_register) {
 
+      if (checkRes.data.exists && !checkRes.data.can_register) {
         return rejectWithValue("Email already registered");
       }
 
@@ -52,7 +50,6 @@ export const checkEmailAndSendCode = createAsyncThunk<
           type: "registration",
         },
       );
-
     } catch (error: any) {
       return rejectWithValue(error.message || "Something went wrong");
     }
@@ -67,14 +64,12 @@ export const verifyEmailCode = createAsyncThunk<
   { email: string; code: string },
   { rejectValue: string }
 >("register/verifyEmailCode", async ({ email, code }, { rejectWithValue }) => {
-
   try {
     const checkRes = await api.post(API_ENDPOINTS.AUTH.VERIFY_CODE, {
       email,
       code,
       type: "registration",
     });
-
   } catch (error: any) {
     return rejectWithValue(error.message || "Invalid verification code");
   }
@@ -94,7 +89,6 @@ export const registerUser = createAsyncThunk<
   },
   { rejectValue: string }
 >("register/registerUser", async (payload, { rejectWithValue, dispatch }) => {
-
   try {
     const res = await api.post(API_ENDPOINTS.AUTH.REGISTER, {
       email: payload.email,
@@ -105,17 +99,13 @@ export const registerUser = createAsyncThunk<
       terms_accepted: payload.termsAccepted,
     });
 
-
     // Auto login after registration
     await dispatch(
       loginUser({ email: payload.email, password: payload.password }),
     ).unwrap();
 
-
     return res.data;
   } catch (error: any) {
-
-    // ToastAndroid.show(error.message,ToastAndroid.SHORT);
     return rejectWithValue(error.message || "Registration failed");
   }
 });
@@ -182,7 +172,6 @@ const registerSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state) => {
         state.loading = false;
-        // ToastAndroid.show("Registration Successful!", ToastAndroid.SHORT);
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;

@@ -146,29 +146,33 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
           )}
         />
         {/* Investment Type */}
-        <Text style={styles.labelText}>Investment Type</Text>
-        <View style={{ flexDirection: "row", marginBottom: 12 }}>
-          <TouchableOpacity
-            style={[styles.typeBtn, !isShared && styles.selected]}
-            onPress={() => {
-              setIsShared(false);
-              setValue("type", "solo");
-              setValue("is_shared", false);
-            }}
-          >
-            <Text style={{ fontSize: 16 }}>Solo</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.typeBtn, isShared && styles.selected]}
-            onPress={() => {
-              setIsShared(true);
-              setValue("type", "shared");
-              setValue("is_shared", true);
-            }}
-          >
-            <Text>Shared</Text>
-          </TouchableOpacity>
-        </View>
+        {mode == "add" ? (
+          <>
+            <Text style={styles.labelText}>Investment Type</Text>
+            <View style={{ flexDirection: "row", marginBottom: 12 }}>
+              <TouchableOpacity
+                style={[styles.typeBtn, !isShared && styles.selected]}
+                onPress={() => {
+                  setIsShared(false);
+                  setValue("type", "solo");
+                  setValue("is_shared", false);
+                }}
+              >
+                <Text style={{ fontSize: 16 }}>Solo</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.typeBtn, isShared && styles.selected]}
+                onPress={() => {
+                  setIsShared(true);
+                  setValue("type", "shared");
+                  setValue("is_shared", true);
+                }}
+              >
+                <Text>Shared</Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        ) : null}
 
         {!isShared && (
           <>
@@ -296,21 +300,26 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
         <View style={{ height: 16 }} />
         {/* Start Date */}
         {/* <View style={{ flexDirection: "row", gap: 10 }}> */}
-        <View style={{ flex: 1, zIndex: 2 }}>
-          <Controller
-            control={control}
-            name="start_date"
-            render={({ field, fieldState }) => (
-              <DatePicker
-                type="start"
-                value={field.value}
-                onChange={field.onChange}
-                error={fieldState.error?.message}
-                otherDate={watch("end_date")}
+
+        {mode == "add" ? (
+          <>
+            <View style={{ flex: 1, zIndex: 2 }}>
+              <Controller
+                control={control}
+                name="start_date"
+                render={({ field, fieldState }) => (
+                  <DatePicker
+                    type="start"
+                    value={field.value}
+                    onChange={field.onChange}
+                    error={fieldState.error?.message}
+                    otherDate={watch("end_date")}
+                  />
+                )}
               />
-            )}
-          />
-        </View>
+            </View>
+          </>
+        ) : null}
         {/* End Date */}
         <View style={{ flex: 1, zIndex: 1 }}>
           <Controller
@@ -468,6 +477,8 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
         </View>
         <View style={{ height: 16 }} />
         {/* Return Type */}
+        {/* {mode == "add" ? (
+          <> */}
         <Controller
           control={control}
           name="return_type"
@@ -482,23 +493,52 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
             return (
               <View style={{ zIndex: 3000 }}>
                 <Text style={styles.labelText}>Return Type *</Text>
-                <DropDownPicker
-                  open={open}
-                  value={field.value}
-                  items={items}
-                  setOpen={setOpen}
-                  setValue={(callback) => field.onChange(callback(field.value))}
-                  setItems={setItems}
-                  placeholder="Select Return Type"
-                  placeholderStyle={{ color: Colors.gray, fontSize: 16 }}
-                  listMode="SCROLLVIEW"
-                  dropDownDirection="TOP"
-                  style={[
-                    styles.textInput,
-                    fieldState.error && { borderColor: Colors.error },
-                  ]}
-                  dropDownContainerStyle={{ borderColor: "#ccc" }}
-                />
+                {mode == "edit" ? (
+                  <>
+                    <DropDownPicker
+                      open={open}
+                      value={field.value}
+                      items={items}
+                      setOpen={setOpen}
+                      disabled
+                      setValue={(callback) =>
+                        field.onChange(callback(field.value))
+                      }
+                      setItems={setItems}
+                      placeholder="Select Return Type"
+                      placeholderStyle={{ color: Colors.gray, fontSize: 16 }}
+                      listMode="SCROLLVIEW"
+                      dropDownDirection="TOP"
+                      style={[
+                        styles.textInput,
+                        fieldState.error && { borderColor: Colors.error },
+                      ]}
+                      dropDownContainerStyle={{ borderColor: "#ccc" }}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <DropDownPicker
+                      open={open}
+                      value={field.value}
+                      items={items}
+                      setOpen={setOpen}
+                      setValue={(callback) =>
+                        field.onChange(callback(field.value))
+                      }
+                      setItems={setItems}
+                      placeholder="Select Return Type"
+                      placeholderStyle={{ color: Colors.gray, fontSize: 16 }}
+                      listMode="SCROLLVIEW"
+                      dropDownDirection="TOP"
+                      style={[
+                        styles.textInput,
+                        fieldState.error && { borderColor: Colors.error },
+                      ]}
+                      dropDownContainerStyle={{ borderColor: "#ccc" }}
+                    />
+                  </>
+                )}
                 {fieldState.error?.message && (
                   <Text style={styles.error}>{fieldState.error.message}</Text>
                 )}
@@ -552,6 +592,8 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
             );
           }}
         />
+        {/* </>
+        ) : null} */}
         <View style={{ height: 16 }} />
         {/* Solo Fields */}
         {!isShared && (

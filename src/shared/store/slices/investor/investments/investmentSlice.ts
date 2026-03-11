@@ -12,6 +12,7 @@ export interface Investment {
   type: string;
   frequency: string;
   expected_return_rate: string;
+  fixed_return_amount: number;
   start_date: string;
   end_date: string;
   status: string;

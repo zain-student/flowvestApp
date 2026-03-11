@@ -21,7 +21,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { MarkAsPaidModal } from "../components/MarkAsPaidModal";
 type Props = NativeStackScreenProps<PayoutStackParamList, "PayoutDetails">;
@@ -93,9 +93,14 @@ export const PayoutDetailsScreen = ({ navigation }: Props) => {
               </Text>
             </View>
             <View>
-              <Text style={styles.label}>Investment ROI</Text>
+              <Text style={styles.label}>Returns</Text>
               <Text style={styles.valueRoi}>
-                {Number(payouts.investment_roi).toFixed(1)}%
+                {payouts.investment_roi > "0"
+                  ? `${parseFloat(payouts.investment_roi).toFixed(1)}%`
+                  : formatInvestmentCurrency(
+                      payouts.fixed_return_amount,
+                      payouts.currency.code,
+                    )}
               </Text>
             </View>
             <View style={styles.statusBadge}>

@@ -193,11 +193,13 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
               <Text style={styles.label}>Returns</Text>
               <Text style={styles.returns}>
                 {currentInvestment.expected_return_rate != null
-                  ? parseFloat(currentInvestment.expected_return_rate).toFixed(
-                      1,
-                    )
-                  : "--"}
-                %
+                  ? `${parseFloat(
+                      currentInvestment.expected_return_rate,
+                    ).toFixed(1)}%`
+                  : formatInvestmentCurrency(
+                      currentInvestment.fixed_return_amount,
+                      currentInvestment.currency.code,
+                    )}
               </Text>
             </View>
             <View>

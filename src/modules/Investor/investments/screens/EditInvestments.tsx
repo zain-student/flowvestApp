@@ -27,18 +27,27 @@ export const EditInvestments = () => {
     }
   }, [id]);
 
-  const handleUpdate = (data: any) => {
+  const handleUpdate = (data: any, setError: any) => {
     dispatch(updateInvestment({ id: id, updatedData: data }))
       .unwrap()
       .then(() => {
         showToast("Investment updated successfully");
         navigation.goBack();
       })
-      .catch((error: any) => {
-        showToast(error.message, "error");
+      .catch((err: any) => {
+        if (err?.data) {
+          Object.keys(err.data).forEach((field) => {
+            setError(field as any, {
+              type: "server",
+              message: err.data[field][0], // first validation message
+            });
+          });
+        } else {
+          showToast(err?.message || "Something went wrong", "error");
+        }
       });
   };
-  if (!investment) return null;
+  // if (!investment) return null;
 
   return (
     <InvestmentForm

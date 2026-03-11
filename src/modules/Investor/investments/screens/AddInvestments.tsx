@@ -14,7 +14,6 @@ export const AddInvestments = () => {
       ...data,
       is_shared: data.type === "shared",
     };
-
     dispatch(addInvestments(payload))
       .unwrap()
       .then(() => {

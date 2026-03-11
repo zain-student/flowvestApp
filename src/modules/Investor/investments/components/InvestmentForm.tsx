@@ -75,6 +75,7 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
       frequency: "monthly",
       status: "active",
       expected_return_rate: "",
+      fixed_return_amount: "",
       initial_amount: "",
       notes: "",
       total_target_amount: "",
@@ -381,25 +382,7 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
           </>
         )}
 
-        <View style={{ height: 6 }} />
-        {/* Expected Return Rate */}
-
-        <Controller
-          control={control}
-          name="expected_return_rate"
-          render={({ field, fieldState }) => (
-            <Input
-              label="Expected Return Rate (%)"
-              keyboardType="numeric"
-              value={String(field.value || "")}
-              placeholder="0.00"
-              placeholderTextColor={Colors.gray}
-              onChangeText={(v) => field.onChange(parseFloat(v) || "")}
-              error={fieldState.error?.message}
-              required
-            />
-          )}
-        />
+        {/* <View style={{ height: 6 }} /> */}
 
         {/* Frequency & Status Row */}
         <View style={styles.rowContainer}>
@@ -493,7 +476,7 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
             const [items, setItems] = React.useState([
               { label: "Fixed", value: "fixed" },
               { label: "Percentage", value: "percentage" },
-              { label: "Custom", value: "custom" },
+              // { label: "Custom", value: "custom" },
             ]);
 
             return (
@@ -514,12 +497,56 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
                     styles.textInput,
                     fieldState.error && { borderColor: Colors.error },
                   ]}
-                  dropDownContainerStyle={{
-                    borderColor: "#ccc",
-                  }}
+                  dropDownContainerStyle={{ borderColor: "#ccc" }}
                 />
                 {fieldState.error?.message && (
                   <Text style={styles.error}>{fieldState.error.message}</Text>
+                )}
+
+                {/* Conditionally render Expected Return Rate */}
+                {field.value === "percentage" && (
+                  <View style={{ marginTop: 16 }}>
+                    <Controller
+                      control={control}
+                      name="expected_return_rate"
+                      render={({ field, fieldState }) => (
+                        <Input
+                          label="Expected Return Rate (%)"
+                          keyboardType="numeric"
+                          value={String(field.value || "")}
+                          placeholder="0.00"
+                          placeholderTextColor={Colors.gray}
+                          onChangeText={(v) =>
+                            field.onChange(parseFloat(v) || "")
+                          }
+                          error={fieldState.error?.message}
+                          required
+                        />
+                      )}
+                    />
+                  </View>
+                )}
+                {field.value === "fixed" && (
+                  <View style={{ marginTop: 16 }}>
+                    <Controller
+                      control={control}
+                      name="fixed_return_amount"
+                      render={({ field, fieldState }) => (
+                        <Input
+                          label="Fixed Return Amount"
+                          keyboardType="numeric"
+                          value={String(field.value || "")}
+                          placeholder="0.00"
+                          placeholderTextColor={Colors.gray}
+                          onChangeText={(v) =>
+                            field.onChange(parseFloat(v) || "")
+                          }
+                          error={fieldState.error?.message}
+                          required
+                        />
+                      )}
+                    />
+                  </View>
                 )}
               </View>
             );
@@ -566,38 +593,29 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
-    // paddingHorizontal: 20,
-    // paddingBottom: 80,
     paddingTop: 10,
-    // paddingBottom: 70,
   },
   rowContainer: {
     flexDirection: "row",
-    gap: 12, // if not supported use marginRight
-    // marginTop: 16,
-    // marginBottom: 16,
+    gap: 12,
     zIndex: 2000,
   },
 
   halfWidth: {
     flex: 1,
-    // zIndex: 2000,
   },
 
   innerContainer: {
-    paddingHorizontal: 12, // ✅ move it here
+    paddingHorizontal: 12,
     paddingTop: 10,
-    // paddingBottom: 40,
   },
   title: {
     fontSize: 22,
     fontWeight: "600",
-    // marginBottom: 20,
     color: Colors.secondary,
   },
   subText: {
     fontSize: 14,
-    // fontWeight: "500",
     marginBottom: 20,
     color: Colors.gray,
   },
@@ -617,12 +635,10 @@ const styles = StyleSheet.create({
     borderColor: "#D1D5DB",
     padding: 12,
     borderRadius: 8,
-    // marginBottom: 16,
     backgroundColor: Colors.white,
   },
   typeBtn: {
     flex: 1,
-    // padding: 12,
     paddingVertical: 12,
     paddingHorizontal: 12,
     borderWidth: 1,

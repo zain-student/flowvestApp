@@ -159,10 +159,10 @@ export const addInvestments = createAsyncThunk(
         API_ENDPOINTS.INVESTMENTS.CREATE,
         newInvestment,
       );
-
       showToast(response.data.message);
       return response.data.data;
     } catch (error: any) {
+      showToast(error.message, "error");
       return rejectWithValue(error || "Create failed");
     }
   },
@@ -255,7 +255,10 @@ export const addInvestmentPartner = createAsyncThunk(
 
       return response.data.data;
     } catch (error: any) {
-      showToast(error?.response?.data?.message || "Failed to invite partner", "error");
+      showToast(
+        error?.response?.data?.message || "Failed to invite partner",
+        "error",
+      );
       return rejectWithValue(error?.response?.data?.message || "Invite failed");
     }
   },
@@ -271,7 +274,7 @@ export const fetchInvestmentsById = createAsyncThunk(
   "v1/investments/:id",
   async (id: number) => {
     const response = await api.get(API_ENDPOINTS.INVESTMENTS.DETAIL(id));
-
+    console.log("Investment Detail:", response.data);
     return response.data.data;
   },
 );

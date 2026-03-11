@@ -16,7 +16,10 @@ export type InvestmentStackParamList = {
   InvestmentScreen: undefined;
   InvestmentDetails: { id: number; showJoinForm?: String };
   AddInvestments: undefined;
-  EditInvestments: { id: number; mode: string };
+  EditInvestments: {
+    investmentDet: any;
+    mode: string;
+  };
   AddPartner: { id: number };
   MyInvestments: undefined;
   JoinedInvestmentDetail: { id: number };

@@ -133,46 +133,8 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
         {/* <Text style={styles.descriptionText}>{currentInvestment.description}</Text> */}
 
         <View style={styles.summaryCard}>
-          {/* 3 Dots Button */}
-          {/* {!showJoinForm && (
-            <TouchableOpacity
-              style={styles.menuBtn}
-              onPress={() => setShowMenu((prev) => !prev)}
-            >
-              <Ionicons
-                name="ellipsis-vertical"
-                size={20}
-                color={Colors.secondary}
-              />
-            </TouchableOpacity>
-          )} */}
-          {/* Simple Dropdown */}
-          {/* {showMenu && (
-            <TouchableOpacity
-              activeOpacity={1}
-              style={styles.overlay}
-              onPress={() => setShowMenu(false)} // close menu when tapping outside
-            >
-              <View style={styles.dropdown}>
-                <TouchableOpacity
-                  onPress={handleDuplicate}
-                  style={styles.dropdownItem}
-                >
-                  <Ionicons name="copy-outline" size={18} color="black" />
-                  <Text style={styles.dropdownText}>Duplicate Investment</Text>
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>
-          )} */}
-
           <Text style={styles.label}>Amount Invested</Text>
           <Text style={styles.valueInv}>
-            {/* {currentInvestment.currency.name}{" "}
-            {Number(
-              currentInvestment.type.toLowerCase() === "shared"
-                ? currentInvestment.current_total_invested
-                : currentInvestment.initial_amount,
-            )} */}
             {formatInvestmentCurrency(
               Number(
                 currentInvestment.type.toLowerCase() === "shared"
@@ -216,8 +178,6 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
               <View>
                 <Text style={styles.label}>Max: </Text>
                 <Text style={styles.value}>
-                  {/* {currentInvestment.currency.symbol}{" "}
-                  {Number(currentInvestment.max_investment_amount)} */}
                   {formatInvestmentCurrency(
                     Number(currentInvestment.max_investment_amount),
                     currentInvestment.currency.code,
@@ -279,7 +239,8 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
                 }
                 onPress={() => {
                   navigation.navigate("EditInvestments", {
-                    id: currentInvestment.id,
+                    // id: currentInvestment.id,
+                    investmentDet: currentInvestment,
                     mode: "edit",
                   });
                 }}

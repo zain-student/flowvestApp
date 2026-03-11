@@ -91,11 +91,11 @@ export const InvestmentForm: React.FC<InvestmentFormProps> = ({
     (c: any) => c.id === selectedCurrencyId,
   );
   useEffect(() => {
-    dispatch(getCurrencies());
     if (defaultValues) {
       reset(defaultValues);
       setIsShared(defaultValues.type === "shared");
     }
+    dispatch(getCurrencies());
   }, [defaultValues, reset, dispatch]);
   return (
     <SafeAreaView style={styles.container}>

@@ -1,11 +1,8 @@
 import { showToast } from "@/modules/auth/utils/showToast";
 import { useAppDispatch, useAppSelector } from "@/shared/store";
-import {
-  fetchInvestmentsById,
-  updateInvestment,
-} from "@/shared/store/slices/investor/investments/investmentSlice";
+import { updateInvestment } from "@/shared/store/slices/investor/investments/investmentSlice";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { InvestmentForm } from "../components/InvestmentForm";
 
 export const EditInvestments = () => {
@@ -13,22 +10,14 @@ export const EditInvestments = () => {
   const navigation = useNavigation();
   const { isLoading } = useAppSelector((s) => s.investments);
   const route = useRoute<any>();
-  const { id } = route.params || {};
-  const [investment, setInvestment] = useState<any>(null);
+  const { investmentDet } = route.params;
 
-  useEffect(() => {
-    if (id) {
-      dispatch(fetchInvestmentsById(id))
-        .unwrap()
-        .then((data) => setInvestment(data))
-        .catch(() => {
-          showToast("Failed to load investment", "error");
-        });
-    }
-  }, [id]);
-
+  const formattedInvestment = {
+    ...investmentDet,
+    currency_id: investmentDet.currency?.id,
+  };
   const handleUpdate = (data: any, setError: any) => {
-    dispatch(updateInvestment({ id: id, updatedData: data }))
+    dispatch(updateInvestment({ id: investmentDet.id, updatedData: data }))
       .unwrap()
       .then(() => {
         showToast("Investment updated successfully");
@@ -53,7 +42,7 @@ export const EditInvestments = () => {
     <InvestmentForm
       mode="edit"
       isLoading={isLoading}
-      defaultValues={investment}
+      defaultValues={formattedInvestment}
       onSubmit={handleUpdate}
     />
   );

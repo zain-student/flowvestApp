@@ -32,13 +32,7 @@ export const Stack = createNativeStackNavigator<InvestmentStackParamList>();
 
 export const InvestmentStack = () => {
   return (
-    <Stack.Navigator
-      initialRouteName="InvestmentScreen"
-      //   screenOptions={{
-      //     headerShown: false,
-      //     animation: 'slide_from_right',
-      //   }}
-    >
+    <Stack.Navigator initialRouteName="InvestmentScreen">
       <Stack.Screen
         name="InvestmentScreen"
         component={InvestmentsScreen}

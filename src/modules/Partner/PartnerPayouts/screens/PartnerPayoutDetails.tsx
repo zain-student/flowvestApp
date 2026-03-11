@@ -60,9 +60,17 @@ export const PartnerPayoutDetails = ({ navigation }: Props) => {
               </Text>
             </View>
             <View>
-              <Text style={styles.label}>ROI%</Text>
-              <Text style={styles.valueRoi}>
+              <Text style={styles.label}>ROI</Text>
+              {/* <Text style={styles.valueRoi}>
                 {Number(payouts.investment_roi).toFixed(1)}%
+              </Text> */}
+              <Text style={styles.valueRoi}>
+                {payouts.investment_roi > "0"
+                  ? `${Number(payouts.investment_roi).toFixed(1)}%`
+                  : formatInvestmentCurrency(
+                      payouts.fixed_return_amount,
+                      payouts.currency.code,
+                    )}
               </Text>
             </View>
             <View style={styles.statusBadge}>

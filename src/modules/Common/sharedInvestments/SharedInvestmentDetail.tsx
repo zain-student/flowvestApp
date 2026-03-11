@@ -159,8 +159,16 @@ export const SharedInvestmentDetail: React.FC<Props> = ({
               value={`${currentInvestment.total_participants ?? 0}`}
             />
             <MetaItem
-              label="Expected Returns"
-              value={`${parseFloat(currentInvestment.expected_return_rate).toFixed(1)}%`}
+              label="Expected ROI"
+              value={
+                // `${Number(currentInvestment.expected_return_rate).toFixed(1)}%`
+                currentInvestment.expected_return_rate != null
+                  ? `${Number(currentInvestment.expected_return_rate).toFixed(1)}%`
+                  : formatInvestmentCurrency(
+                      currentInvestment.fixed_return_amount,
+                      currentInvestment.currency.code,
+                    )
+              }
               positive
             />
           </View>

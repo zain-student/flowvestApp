@@ -89,7 +89,14 @@ export const JoinedInvestmentDetail: React.FC<Props> = ({
             />
             <MetaItem
               label="Expected Returns"
-              value={`${parseFloat(currentInvestment.expected_return_rate).toFixed(1)}%`}
+              value={
+                currentInvestment.expected_return_rate != null
+                  ? `${Number(currentInvestment.expected_return_rate).toFixed(1)}%`
+                  : formatInvestmentCurrency(
+                      currentInvestment.fixed_return_amount,
+                      currentInvestment.currency.code,
+                    )
+              }
               positive
             />
           </View>

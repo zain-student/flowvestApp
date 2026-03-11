@@ -177,7 +177,10 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
             ROI:{" "}
             {item.expected_return_rate != null
               ? `${Number(item.expected_return_rate).toFixed(1)}%`
-              : "N/A"}
+              : formatInvestmentCurrency(
+                  item.fixed_return_amount,
+                  item.currency.code,
+                )}
           </Text>
           <Text style={styles.metaText}>
             Participants: {item.total_participants ?? "N/A"}
@@ -236,13 +239,6 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
         ListHeaderComponent={renderSummary}
-        // refreshControl={
-        //   <RefreshControl
-        //     refreshing={refreshing}
-        //     onRefresh={handleRefresh}
-        //     tintColor={Colors.secondary}
-        //   />
-        // }
         refreshing={isLoading}
         onRefresh={handleRefresh}
         onEndReachedThreshold={0.5}

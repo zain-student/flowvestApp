@@ -35,6 +35,7 @@ export interface Payout {
   notes: string | null;
   created_at: string;
   investment_roi: string; // backend sends as string
+  fixed_return_amount: string;
   participant_investment: number;
   participant_share: number;
   calculation_base: CalculationBase;

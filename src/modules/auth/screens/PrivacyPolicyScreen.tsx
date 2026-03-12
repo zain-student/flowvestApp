@@ -56,9 +56,9 @@ export const PrivacyPolicyScreen = () => {
           in a portable format. To exercise these rights, contact us at{" "}
           <Text
             style={styles.email}
-            onPress={() => handleEmailPress("privacy@invstrhub.com")}
+            onPress={() => handleEmailPress("support@invstrhub.com")}
           >
-            privacy@invstrhub.com
+            support@invstrhub.com
           </Text>
           .
         </Text>
@@ -78,13 +78,6 @@ export const PrivacyPolicyScreen = () => {
         <Text style={[styles.text, { marginTop: 8 }]}>
           <Text style={{ fontWeight: "600" }}>Privacy Team</Text>
         </Text>
-        <Text
-          style={[styles.email, { marginBottom: 12 }]}
-          onPress={() => handleEmailPress("privacy@invstrhub.com")}
-        >
-          privacy@invstrhub.com
-        </Text>
-
         <Text
           style={[styles.email]}
           onPress={() => handleEmailPress("support@invstrhub.com")}

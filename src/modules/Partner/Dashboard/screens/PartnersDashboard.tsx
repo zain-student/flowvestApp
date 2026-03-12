@@ -109,7 +109,7 @@ export const PartnersDashboard = () => {
             <View
               style={{
                 alignSelf: "flex-end",
-                backgroundColor: "#0AFF5C47",
+                // backgroundColor: "#0AFF5C47",
                 borderRadius: 8,
                 height: 29,
                 width: 75,
@@ -304,20 +304,6 @@ const styles = StyleSheet.create({
     color: "#FFD700",
     fontWeight: "600",
     fontSize: 11,
-  },
-  mirror: {
-    backgroundColor: Colors.mirror,
-    width: "47%",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 18,
-    paddingVertical: 6,
-    paddingHorizontal: 6,
-    borderWidth: 0.3,
-    borderColor: Colors.white,
-    opacity: 0.7,
-    marginHorizontal: 6,
   },
   balanceActionTextDark: {
     color: Colors.yellow,

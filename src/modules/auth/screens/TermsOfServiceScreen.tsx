@@ -51,24 +51,35 @@ export const TermsOfServiceScreen = () => {
           The app is provided "as is" without guarantees. We're not liable for
           damages from using or inability to use the app.
         </Text>
-
-        <Text style={styles.heading}>6. Account Termination</Text>
+        <Text style={styles.heading}>6. Investment Risk Disclosure</Text>
+        <Text style={styles.text}>
+          Investments involve risk, including potential loss of capital.
+          InvstrHub only provides tools for managing and tracking investment
+          information. We do not provide financial, legal, or investment advice.
+        </Text>
+        <Text style={styles.heading}>7. Data Accuracy Disclaimer</Text>
+        <Text style={styles.text}>
+          InvstrHub relies on information provided by users. We do not guarantee
+          the accuracy, completeness, or reliability of the data stored in the
+          application.
+        </Text>
+        <Text style={styles.heading}>8. Account Termination</Text>
         <Text style={styles.text}>
           We may suspend or terminate your account if you violate these Terms.
         </Text>
 
-        <Text style={styles.heading}>7. Privacy</Text>
+        <Text style={styles.heading}>9. Privacy</Text>
         <Text style={styles.text}>
           Your use is governed by our Privacy Policy. Please review it.
         </Text>
 
-        <Text style={styles.heading}>8. Updates to Terms</Text>
+        <Text style={styles.heading}>10. Updates to Terms</Text>
         <Text style={styles.text}>
           We may update these Terms anytime. Continued use means you accept the
           changes.
         </Text>
 
-        <Text style={styles.heading}>9. Contact Us</Text>
+        <Text style={styles.heading}>11. Contact Us</Text>
         <Text style={styles.text}>Have questions? Contact us:</Text>
 
         <Text style={[styles.text, { marginTop: 8 }]}>
@@ -79,13 +90,6 @@ export const TermsOfServiceScreen = () => {
           onPress={() => handleEmailPress("support@invstrhub.com")}
         >
           support@invstrhub.com
-        </Text>
-
-        <Text
-          style={[styles.email]}
-          onPress={() => handleEmailPress("legal@invstrhub.com")}
-        >
-          legal@invstrhub.com
         </Text>
 
         <Text style={[styles.text, { marginTop: 20, fontWeight: "500" }]}>

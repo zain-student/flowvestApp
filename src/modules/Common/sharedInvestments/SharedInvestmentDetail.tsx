@@ -162,7 +162,7 @@ export const SharedInvestmentDetail: React.FC<Props> = ({
               label="Expected ROI"
               value={
                 // `${Number(currentInvestment.expected_return_rate).toFixed(1)}%`
-                currentInvestment.expected_return_rate != null
+                currentInvestment.return_type === "percentage"
                   ? `${Number(currentInvestment.expected_return_rate).toFixed(1)}%`
                   : formatInvestmentCurrency(
                       currentInvestment.fixed_return_amount,

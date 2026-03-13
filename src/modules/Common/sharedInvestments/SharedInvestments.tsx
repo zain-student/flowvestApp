@@ -175,7 +175,7 @@ export const SharedInvestments: React.FC = ({ navigation }: any) => {
         <View style={styles.metaRow}>
           <Text style={styles.metaText}>
             ROI:{" "}
-            {item.expected_return_rate != null
+            {item.return_type === "percentage"
               ? `${Number(item.expected_return_rate).toFixed(1)}%`
               : formatInvestmentCurrency(
                   item.fixed_return_amount,

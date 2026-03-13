@@ -192,7 +192,7 @@ export const InvestmentDetailsScreen = ({ navigation }: Props) => {
             <View>
               <Text style={styles.label}>Returns</Text>
               <Text style={styles.returns}>
-                {currentInvestment.expected_return_rate != null
+                {currentInvestment.return_type === "percentage"
                   ? `${parseFloat(
                       currentInvestment.expected_return_rate,
                     ).toFixed(1)}%`

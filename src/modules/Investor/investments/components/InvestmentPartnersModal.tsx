@@ -5,6 +5,7 @@ import {
   fetchInvestmentPartners,
   resetPartner,
 } from "@/shared/store/slices/investor/investments/investmentSlice";
+import { useInvestmentCurrencyFormatter } from "@/shared/utils/formatInvestmentCurrency";
 import { useCurrencyFormatter } from "@/shared/utils/useCurrencyFormatter";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
@@ -37,6 +38,7 @@ const InvestmentPartnersModal: React.FC<PartnersModalProps> = ({
     error,
   } = useAppSelector((state) => state.investments.partners);
   const { formatCurrency } = useCurrencyFormatter();
+  const { formatInvestmentCurrency } = useInvestmentCurrencyFormatter();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState<string | undefined>();
   const [invitationStatus, setInvitationStatus] = useState<
@@ -151,7 +153,10 @@ const InvestmentPartnersModal: React.FC<PartnersModalProps> = ({
                     {item.user?.name || "Unknown"}
                   </Text>
                   <Text style={styles.amount}>
-                    {formatCurrency(Number(item.invested_amount))}
+                    {formatInvestmentCurrency(
+                      item.invested_amount,
+                      item.currency.code,
+                    )}
                   </Text>
                 </View>
                 <Text style={styles.email}>{item.user?.email}</Text>

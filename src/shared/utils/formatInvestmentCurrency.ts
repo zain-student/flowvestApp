@@ -20,8 +20,13 @@ export const useInvestmentCurrencyFormatter = () => {
 
     if (!selectedCurrency) return normalized.toString();
 
+    // ✅ Force Latin digits for iOS compatibility
+    const locale = selectedCurrency.locale?.startsWith("ar")
+      ? "en"
+      : selectedCurrency.locale || "en";
     const formattedNumber = new Intl.NumberFormat(
-      `${selectedCurrency.locale}-u-nu-latn`,
+      locale,
+      // `${selectedCurrency.locale}-u-nu-latn`,
       {
         minimumFractionDigits: selectedCurrency.decimal_places,
         maximumFractionDigits: selectedCurrency.decimal_places,

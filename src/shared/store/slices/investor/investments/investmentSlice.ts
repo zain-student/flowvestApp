@@ -76,6 +76,14 @@ export interface InvestmentPartner {
   id: number;
   investment_id: number;
   invested_amount: string;
+  currency: {
+    id: number;
+    code: string;
+    symbol: string;
+    name: string;
+    locale: string;
+    decimal_places: number;
+  };
   joined_at: string;
   status: string;
   invitation_status: string;

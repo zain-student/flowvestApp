@@ -166,46 +166,36 @@ export const PartnerDetailScreen = () => {
         <Text style={styles.detail}>
           ROI %: {partner.roi_percentage?.toFixed(1)}
         </Text>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginBottom: 4,
-          }}
-        >
+        <View style={styles.row}>
           <TouchableOpacity
-            style={styles.investmentButton}
+            style={[styles.actionButton, { marginRight: 8 }]}
             onPress={() =>
               navigation.navigate("PartnerInvestment", { id: partner.id })
             }
           >
-            <Ionicons name="eye-outline" size={23} />
-            <Text style={{ marginLeft: 5, fontSize: 16, fontWeight: "500" }}>
-              Investments
-            </Text>
+            <Ionicons name="eye-outline" size={20} />
+            <Text style={styles.buttonText}>Investments</Text>
           </TouchableOpacity>
+
           <TouchableOpacity
-            style={styles.payoutButton}
+            style={[styles.actionButton, { marginLeft: 8 }]}
             onPress={() =>
               navigation.navigate("PartnerPayout", { id: partner.id })
             }
           >
-            <Ionicons name="eye-outline" size={23} />
-            <Text style={{ marginLeft: 5, fontSize: 16, fontWeight: "500" }}>
-              Payouts
-            </Text>
+            <Ionicons name="eye-outline" size={20} />
+            <Text style={styles.buttonText}>Payouts</Text>
           </TouchableOpacity>
         </View>
+
         <TouchableOpacity
-          style={styles.performanceButton}
+          style={[styles.actionButton, { marginTop: 8 }]}
           onPress={() =>
             navigation.navigate("PartnerPerformance", { id: partner.id })
           }
         >
           <Ionicons name="stats-chart-outline" size={20} />
-          <Text style={{ marginLeft: 5, fontSize: 16, fontWeight: "500" }}>
-            Performance
-          </Text>
+          <Text style={styles.buttonText}>Performance</Text>
         </TouchableOpacity>
       </View>
 
@@ -267,55 +257,32 @@ const styles = StyleSheet.create({
   },
   detailLabel: { fontSize: 14, color: Colors.gray, marginBottom: 4 },
   detail: { fontSize: 14, color: Colors.secondary, marginBottom: 4 },
-  activityRow: {
+  row: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 6,
+    marginTop: 8,
   },
-  activityText: { fontSize: 14, color: Colors.secondary },
-  investmentButton: {
+
+  actionButton: {
+    flex: 1,
     flexDirection: "row",
-    backgroundColor: Colors.background,
-    width: "46%",
-    height: 40,
-    justifyContent: "center",
     alignItems: "center",
-    borderRadius: 12,
+    justifyContent: "center",
+    paddingVertical: 10,
+    backgroundColor: "#F2F2F2",
+    borderRadius: 8,
+
     shadowColor: "#000",
-    shadowOpacity: 0.05,
+    shadowOpacity: 0.12, // increase for visibility
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
-    elevation: 2,
+
+    elevation: 1.5, // Android shadow
   },
-  payoutButton: {
-    flexDirection: "row",
-    backgroundColor: Colors.background,
-    width: "46%",
-    height: 40,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 12,
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  performanceButton: {
-    flexDirection: "row",
-    alignSelf: "center",
-    backgroundColor: Colors.background,
-    width: "46%",
-    height: 40,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 3,
-    borderRadius: 12,
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    elevation: 2,
+  buttonText: {
+    marginLeft: 6,
+    fontSize: 16,
+    fontWeight: "500",
   },
   button: {
     backgroundColor: "#007bff",
@@ -325,5 +292,5 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 20,
   },
-  buttonText: { color: "#fff", fontSize: 16, fontWeight: "600" },
+  // buttonText: { color: "#fff", fontSize: 16, fontWeight: "600" },
 });
